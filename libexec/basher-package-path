@@ -5,11 +5,6 @@
 
 set -e
 
-# TAG completions
-if [ "$1" == "--complete" ]; then
-  exec basher-list
-fi
-
 if [ "$#" -ne 1 ]; then
   basher-help package-path
   exit 1

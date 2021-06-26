@@ -26,7 +26,6 @@ shopt -s nullglob
 source "$BASHER_PACKAGES_PATH/$package/package.sh"
 IFS=: read -a deps <<< "$DEPS"
 
-for dep in "${deps[@]}"
-do
+for dep in "${deps[@]}"; do
   basher-install "$dep"
 done

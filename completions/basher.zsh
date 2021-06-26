@@ -2,9 +2,9 @@ if [[ ! -o interactive ]]; then
     return
 fi
 
-compctl -K _basher basher
+compctl -K _neobasher neobasher
 
-_basher() {
+_neobasher() {
   local words completions
   read -cA words
 

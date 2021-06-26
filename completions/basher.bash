@@ -1,4 +1,4 @@
-_basher() {
+_neobasher() {
   COMPREPLY=()
   local word="${COMP_WORDS[COMP_CWORD]}"
 
@@ -13,4 +13,4 @@ _basher() {
   fi
 }
 
-complete -F _basher basher
+complete -F _neobasher neobasher
