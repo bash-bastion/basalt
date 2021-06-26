@@ -12,6 +12,8 @@
 # The remainder of the comment block is displayed as extended
 # documentation.
 
+source basher-_util
+
 command_path() {
   local command="$1"
   command -v basher-"$command" || true
@@ -89,14 +91,8 @@ print_summary() {
   eval "$(documentation_for "$command")"
 
   if [ -n "$summary" ]; then
-    printf "   %-9s   %s\n" "$command" "$summary"
+    printf "   %-12s   %s\n" "$command" "$summary"
   fi
-}
-
-print_summaries() {
-  for command; do
-    print_summary "$command"
-  done
 }
 
 print_help() {
@@ -145,7 +141,9 @@ if [ -z "$1" ] || [ "$1" == "basher" ]; then
   [ -z "$usage" ] || exit
   echo
   echo "Some useful basher commands are:"
-  print_summaries help commands init new-command
+  for command in $(util.get_basher_subcommands) new-command; do
+    print_summary "$command"
+  done
   echo
   echo "See 'basher help <command>' for information on a specific command."
 else
