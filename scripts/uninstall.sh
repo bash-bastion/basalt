@@ -9,7 +9,10 @@ die() {
 xdg_basher_dir="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
 
 ## stop if basher is not installed
-[[ -d "$HOME/.basher" || -d "$xdg_basher_dir" ]] || die "basher doesn't seem to be installed on [$HOME/.basher] or [$xdg_basher_dir]"
+if ! [[ -d "$HOME/.basher" || -d "$xdg_basher_dir" ]]; then
+  die "basher doesn't seem to be installed on [$HOME/.basher] or [$xdg_basher_dir]"
+fi
+
 echo ". remove basher code and installed packages"
 basher list
 sleep 2

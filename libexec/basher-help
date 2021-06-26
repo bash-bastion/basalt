@@ -16,7 +16,9 @@ source basher-_util
 
 command_path() {
   local command="$1"
-  command -v basher-"$command" || true
+  if ! command -v basher-"$command"; then
+    :
+  fi
 }
 
 extract_initial_comment_block() {
@@ -99,7 +101,9 @@ print_help() {
   local command="$1"
   local summary usage help
   eval "$(documentation_for "$command")"
-  [ -n "$help" ] || help="$summary"
+  if [ -z "$help" ]; then
+    help="$summary"
+  fi
 
   if [ -n "$usage" -o -n "$summary" ]; then
     if [ -n "$usage" ]; then
@@ -122,7 +126,9 @@ print_usage() {
   local command="$1"
   local summary usage help
   eval "$(documentation_for "$command")"
-  [ -z "$usage" ] || echo "$usage"
+  if [ -n "$usage" ]; then
+    echo "$usage"
+  fi
 }
 
 unset usage
@@ -131,9 +137,12 @@ if [ "$1" = "--usage" ]; then
   shift
 fi
 
-if [ -z "$1" ] || [ "$1" == "basher" ]; then
+if [[ -z "$1" || "$1" == "basher" ]]; then
   echo "Usage: basher <command> [<args>]"
-  [ -z "$usage" ] || exit
+  if [ -n "$usage" ]; then
+    exit
+  fi
+
   echo
   echo "Some useful basher commands are:"
   for command in $(util.get_basher_subcommands) new-command; do

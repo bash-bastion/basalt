@@ -2,8 +2,6 @@
 # Summary: Upgrades a package
 # Usage: basher upgrade <package>
 
-set -e
-
 if [ "$#" -ne 1 ]; then
   basher-help upgrade
   exit 1

@@ -3,7 +3,6 @@
 # Summary: List installed packages
 # Usage: basher list
 
-set -e
 shopt -s nullglob
 
 source basher-_util

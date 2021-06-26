@@ -3,8 +3,6 @@
 # Usage: eval "$(basher init -)"
 
 basher-init() {
-  set -e
-
   shell="$1"
 
   if [ -z "$shell" ]; then

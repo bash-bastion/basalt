@@ -4,6 +4,8 @@
 #
 # Usage: basher <command> [<args>]
 
+set -e
+
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
 }
@@ -13,13 +15,13 @@ abs_dirname() {
   local path="$1"
 
   while [ -n "$path" ]; do
-    cd "${path%/*}" || exit
+    cd "${path%/*}"
     local name="${path##*/}"
-    path="$(resolve_link "$name" || true)"
+    path="$(resolve_link "$name")"
   done
 
   printf "%s" "$PWD"
-  cd "$cwd" || exit
+  cd "$cwd"
 }
 
 basher_main() {

@@ -3,8 +3,6 @@
 # Summary: Displays a list of outdated packages
 # Usage: basher outdated
 
-set -e
-
 shopt -s nullglob
 
 IFS=$'\r\n' packages=($(basher list))

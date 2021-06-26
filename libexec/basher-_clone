@@ -4,8 +4,6 @@
 #
 # Usage: basher _clone <use_ssh> <site> <package> [<ref>]
 
-set -e
-
 if [ "$#" -ne 3 -a "$#" -ne 4 ]; then
   basher-help _clone
   exit 1

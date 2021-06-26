@@ -81,7 +81,10 @@ hasShell() {
 }
 
 @test "is sh-compatible" {
-  hasShell sh || skip "sh was not found in path."
+  if ! hasShell sh; then
+    skip "sh was not found in path."
+  fi
+
   run sh -ec 'eval "$(basher init - sh)"'
   assert_success
 }

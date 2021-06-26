@@ -2,8 +2,6 @@
 # Summary: Installs a local directory as a basher package
 # Usage: basher link [--no-deps] <directory> <package>
 
-set -e
-
 resolve_link() {
   if type -p realpath >/dev/null; then
     realpath "$1"

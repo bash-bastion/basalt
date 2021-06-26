@@ -13,7 +13,9 @@ xdg_basher_dir="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
 [[ -d "$xdg_basher_dir" ]] && die "basher is already installed on [$xdg_basher_dir]"
 
 ## stop if git is not installed
-git version >/dev/null 2>&1 || die "git is not installed on this machine"
+if ! git version >/dev/null 2>&1; then
+  die "git is not installed on this machine"
+fi
 
 ## install the scripts on ~/.basher
 echo ". download basher code to ~/.basher"

@@ -4,8 +4,6 @@
 #
 # Usage: basher install [--ssh] [site]/<package>[@ref]
 
-set -e
-
 use_ssh="false"
 
 case $1 in

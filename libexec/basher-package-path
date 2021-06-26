@@ -3,8 +3,6 @@
 # Summary: Outputs the path for a package
 # Usage: source "$(basher package-path <package>)/file.sh"
 
-set -e
-
 if [ "$#" -ne 1 ]; then
   basher-help package-path
   exit 1

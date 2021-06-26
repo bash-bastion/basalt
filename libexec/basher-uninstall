@@ -2,8 +2,6 @@
 # Summary: Uninstalls a package
 # Usage: basher uninstall <package>
 
-set -e
-
 if [ "$#" -ne 1 ]; then
   basher-help uninstall
   exit 1

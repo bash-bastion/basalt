@@ -2,8 +2,6 @@
 # Summary: Perform a completion for a particular comment
 #
 
-set -e
-
 source basher-_util
 
 basher_complete_main() {
