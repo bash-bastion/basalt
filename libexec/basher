@@ -4,18 +4,18 @@
 #
 # Usage: basher <command> [<args>]
 
-resolve_link() {
+z_resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
 }
 
-abs_dirname() {
+z_abs_dirname() {
   local cwd="$PWD"
   local path="$1"
 
   while [ -n "$path" ]; do
     cd "${path%/*}" || exit
     local name="${path##*/}"
-    path="$(resolve_link "$name" || true)"
+    path="$(z_resolve_link "$name" || true)"
   done
 
   printf "%s" "$PWD"
@@ -36,22 +36,25 @@ basher_main() {
   export BASHER_INSTALL_BIN="${BASHER_INSTALL_BIN:-"$BASHER_PREFIX/bin"}"
   export BASHER_INSTALL_MAN="${BASHER_INSTALL_MAN:-"$BASHER_PREFIX/man"}"
 
-  bin_path="$(abs_dirname "$0")"
+  export bin_path="$(z_abs_dirname "$0")"
   export PATH="$bin_path:$PATH"
 
-  local command="$1"
+  for f in "$bin_path"/subcommands/?*.sh; do
+    source "$f"
+  done
 
-  case "$command" in
+  local subcommand="$1"
+  case "$subcommand" in
   '')
-    echo "basher: no command given"
+    echo "basher: no subcommand given"
     basher-help
     ;;
   *)
-    if command -v "basher-$command" >/dev/null 2>&1; then
+    if [ -f "$bin_path/subcommands/basher-$subcommand.sh" ]; then
       shift
-      exec "basher-$command" "$@"
+      "basher-$subcommand" "$@"
     else
-      echo "basher: no such command '$command'" >&2
+      echo "basher: no such subcommand '$subcommand'" >&2
       exit 1
     fi
     ;;

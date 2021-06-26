@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#
 # Summary: Display help for a command
 #
 # Usage: basher help [--usage] COMMAND
@@ -15,8 +14,9 @@
 source basher-_util
 
 command_path() {
-  local command="$1"
-  command -v basher-"$command" || true
+  local path="$bin_path/subcommands/basher-$1.sh"
+  path="${path/%.sh.sh/.sh}"
+  printf "%s" "$path"
 }
 
 extract_initial_comment_block() {
@@ -80,6 +80,7 @@ collect_documentation() {
 
 documentation_for() {
   local filename="$(command_path "$1")"
+
   if [ -n "$filename" ]; then
     extract_initial_comment_block < "$filename" | collect_documentation
   fi
@@ -88,10 +89,10 @@ documentation_for() {
 print_summary() {
   local command="$1"
   local summary usage help
+  echo
   eval "$(documentation_for "$command")"
-
   if [ -n "$summary" ]; then
-    printf "   %-12s   %s\n" "$command" "$summary"
+    printf "   %-12s   %s\n" "${command%.*}" "$summary"
   fi
 }
 
@@ -99,9 +100,11 @@ print_help() {
   local command="$1"
   local summary usage help
   eval "$(documentation_for "$command")"
-  [ -n "$help" ] || help="$summary"
+  if [ -z "$help" ]; then
+    help="$summary"
+  fi
 
-  if [ -n "$usage" -o -n "$summary" ]; then
+  if [[ -n "$usage" || -n "$summary" ]]; then
     if [ -n "$usage" ]; then
       echo "$usage"
     else
@@ -118,39 +121,33 @@ print_help() {
   fi
 }
 
-print_usage() {
-  local command="$1"
-  local summary usage help
-  eval "$(documentation_for "$command")"
-  [ -z "$usage" ] || echo "$usage"
-}
+basher-help() {
+  # Print 'Basher' help
+  if [[ -z "$1" || "$1" == "basher" ]]; then
+    local buf=
+    for command in $(util.get_basher_subcommands); do
+      buf+="$(print_summary "$command")"
+    done
 
-unset usage
-if [ "$1" = "--usage" ]; then
-  usage="1"
-  shift
-fi
+    cat <<EOF
+Usage: basher <command> [<args>]
 
-if [ -z "$1" ] || [ "$1" == "basher" ]; then
-  echo "Usage: basher <command> [<args>]"
-  [ -z "$usage" ] || exit
-  echo
-  echo "Some useful basher commands are:"
-  for command in $(util.get_basher_subcommands) new-command; do
-    print_summary "$command"
-  done
-  echo
-  echo "See 'basher help <command>' for information on a specific command."
-else
-  command="$1"
-  if [ -n "$(command_path "$command")" ]; then
-    if [ -n "$usage" ]; then
-      print_usage "$command"
-    else
-      print_help "$command"
-    fi
+Some useful basher commands are:
+$buf
+See 'basher help <command>' for information on a specific command.
+EOF
+  # Print help for specific subcommand
   else
-    echo "basher: no such command '$command'" >&2
-    exit 1
+    command="$1"
+    if [ -n "$(command_path "$command")" ]; then
+      if [ -n "$usage" ]; then
+        print_usage "$command"
+      else
+        print_help "$command"
+      fi
+    else
+      echo "basher: no such command '$command'" >&2
+      exit 1
+    fi
   fi
-fi
+}
