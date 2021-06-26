@@ -1,6 +1,6 @@
 # neobasher
 
-Like the great [basher](basherpm/basher), but refactored and updated
+Like the great [basher](basherpm/basher), but refactored and updated. The goals are to improve ease of use, provide better feedback to the user, and add many new features
 
 A package manager for shell scripts and functions.
 
