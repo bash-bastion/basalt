@@ -15,7 +15,7 @@ load test_helper
 }
 
 @test "shows help for a specific command" {
-  cat > "${BASHER_TEST_DIR}/bin/basher-hello" <<SH
+  cat > "$BASHER_TEST_DIR/bin/basher-hello" <<SH
 #!shebang
 # Usage: basher hello <world>
 # Summary: Says "hello" to you, from basher
@@ -33,7 +33,7 @@ SH
 }
 
 @test "replaces missing extended help with summary text" {
-  cat > "${BASHER_TEST_DIR}/bin/basher-hello" <<SH
+  cat > "$BASHER_TEST_DIR/bin/basher-hello" <<SH
 #!shebang
 # Usage: basher hello <world>
 # Summary: Says "hello" to you, from basher
@@ -50,7 +50,7 @@ SH
 }
 
 @test "extracts only usage" {
-  cat > "${BASHER_TEST_DIR}/bin/basher-hello" <<SH
+  cat > "$BASHER_TEST_DIR/bin/basher-hello" <<SH
 #!shebang
 # Usage: basher hello <world>
 # Summary: Says "hello" to you, from basher
@@ -63,7 +63,7 @@ SH
 }
 
 @test "multiline usage section" {
-  cat > "${BASHER_TEST_DIR}/bin/basher-hello" <<SH
+  cat > "$BASHER_TEST_DIR/bin/basher-hello" <<SH
 #!shebang
 # Usage: basher hello <world>
 #        basher hi [everybody]
@@ -85,7 +85,7 @@ SH
 }
 
 @test "multiline extended help section" {
-  cat > "${BASHER_TEST_DIR}/bin/basher-hello" <<SH
+  cat > "$BASHER_TEST_DIR/bin/basher-hello" <<SH
 #!shebang
 # Usage: basher hello <world>
 # Summary: Says "hello" to you, from basher

@@ -12,8 +12,8 @@ load test_helper
   run basher-_link-bins username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "${BASHER_PACKAGES_PATH}/username/package/package_bin/exec1" ]
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" = "${BASHER_PACKAGES_PATH}/username/package/package_bin/exec2.sh" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/package_bin/exec1" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" = "$BASHER_PACKAGES_PATH/username/package/package_bin/exec2.sh" ]
 }
 
 @test "links each file inside bin folder to install bin" {
@@ -26,8 +26,8 @@ load test_helper
   run basher-_link-bins username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "${BASHER_PACKAGES_PATH}/username/package/bin/exec1" ]
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" = "${BASHER_PACKAGES_PATH}/username/package/bin/exec2.sh" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec2.sh" ]
 }
 
 @test "links each exec file in package root to install bin" {
@@ -40,8 +40,8 @@ load test_helper
   run basher-_link-bins username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec3)" = "${BASHER_PACKAGES_PATH}/username/package/exec3" ]
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec4.sh)" = "${BASHER_PACKAGES_PATH}/username/package/exec4.sh" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec3)" = "$BASHER_PACKAGES_PATH/username/package/exec3" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec4.sh)" = "$BASHER_PACKAGES_PATH/username/package/exec4.sh" ]
 }
 
 @test "doesn't link root bins if there is a bin folder" {
@@ -54,7 +54,7 @@ load test_helper
   run basher-_link-bins username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "${BASHER_PACKAGES_PATH}/username/package/bin/exec1" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec2)" ]
 }
 
@@ -71,7 +71,7 @@ load test_helper
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec1)" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec2)" ]
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec3)" = "${BASHER_PACKAGES_PATH}/username/package/package_bin/exec3" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec3)" = "$BASHER_PACKAGES_PATH/username/package/package_bin/exec3" ]
 }
 
 @test "does not fail if there are no binaries" {
@@ -95,8 +95,8 @@ load test_helper
   run basher-_link-bins username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "${BASHER_PACKAGES_PATH}/username/package/bin/exec1" ]
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2)" = "${BASHER_PACKAGES_PATH}/username/package/bin/exec2.sh" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec2.sh" ]
 }
 
 @test "does not remove extension if REMOVE_EXTENSION is false" {
@@ -110,8 +110,8 @@ load test_helper
   run basher-_link-bins username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "${BASHER_PACKAGES_PATH}/username/package/bin/exec1" ]
-  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" = "${BASHER_PACKAGES_PATH}/username/package/bin/exec2.sh" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
+  assert [ "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec2.sh" ]
 }
 
 @test "does not symlink package itself as bin when linked with basher link" {
@@ -119,5 +119,5 @@ load test_helper
   # implicit call to basher-_link-bins
   run basher-link package username/package
   assert_success
-  assert [ ! -e "${BASHER_PREFIX}/bin/package" ]
+  assert [ ! -e "$BASHER_PREFIX/bin/package" ]
 }

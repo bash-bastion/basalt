@@ -12,6 +12,6 @@ load test_helper
   run basher-_link-man username/package
 echo "$output"
   assert_success
-  assert [ "$(readlink $BASHER_INSTALL_MAN/man1/exec.1)" = "${BASHER_PACKAGES_PATH}/username/package/man/exec.1" ]
-  assert [ "$(readlink $BASHER_INSTALL_MAN/man2/exec.2)" = "${BASHER_PACKAGES_PATH}/username/package/man/exec.2" ]
+  assert [ "$(readlink $BASHER_INSTALL_MAN/man1/exec.1)" = "$BASHER_PACKAGES_PATH/username/package/man/exec.1" ]
+  assert [ "$(readlink $BASHER_INSTALL_MAN/man2/exec.2)" = "$BASHER_PACKAGES_PATH/username/package/man/exec.2" ]
 }

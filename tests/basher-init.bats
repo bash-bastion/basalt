@@ -34,7 +34,7 @@ For more information, check this PR: https://github.com/basherpm/basher/pull/77
 @test "adds cellar/bin to path" {
   run basher-init - bash
   assert_success
-  assert_line -n 4 'if [ "${PATH#*$BASHER_ROOT/cellar/bin}" = "${PATH}" ]; then'
+  assert_line -n 4 'if [ "${PATH#*$BASHER_ROOT/cellar/bin}" = "$PATH" ]; then'
   assert_line -n 5 '  export PATH="$BASHER_ROOT/cellar/bin:$PATH"'
   assert_line -n 6 'fi'
 }

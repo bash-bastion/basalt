@@ -11,7 +11,7 @@ load test_helper
   run basher-_link-completions username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_PREFIX/completions/bash/comp.bash)" = "${BASHER_PACKAGES_PATH}/username/package/completions/comp.bash" ]
+  assert [ "$(readlink $BASHER_PREFIX/completions/bash/comp.bash)" = "$BASHER_PACKAGES_PATH/username/package/completions/comp.bash" ]
 }
 
 @test "links zsh compsys completions to prefix/completions" {
@@ -23,7 +23,7 @@ load test_helper
   run basher-_link-completions username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_PREFIX/completions/zsh/compsys/_exec)" = "${BASHER_PACKAGES_PATH}/username/package/completions/_exec" ]
+  assert [ "$(readlink $BASHER_PREFIX/completions/zsh/compsys/_exec)" = "$BASHER_PACKAGES_PATH/username/package/completions/_exec" ]
 }
 
 @test "links zsh compctl completions to prefix/completions" {
@@ -35,7 +35,7 @@ load test_helper
   run basher-_link-completions username/package
 
   assert_success
-  assert [ "$(readlink $BASHER_PREFIX/completions/zsh/compctl/exec)" = "${BASHER_PACKAGES_PATH}/username/package/completions/exec" ]
+  assert [ "$(readlink $BASHER_PREFIX/completions/zsh/compctl/exec)" = "$BASHER_PACKAGES_PATH/username/package/completions/exec" ]
 }
 
 @test "does not fail if package doesn't have any completions" {

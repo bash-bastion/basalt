@@ -51,20 +51,20 @@ if [ -z "$name" ]; then
   exit 1
 fi
 
-if [ -d "${BASHER_PACKAGES_PATH}/$package" ]; then
+if [ -d "$BASHER_PACKAGES_PATH/$package" ]; then
   echo "Package '$package' is already present"
   exit 1
 fi
 
 # Make sure the namespace directory exists before linking
-if [ ! -d "${BASHER_PACKAGES_PATH}/$namespace" ]; then
-  mkdir -p "${BASHER_PACKAGES_PATH}/$namespace"
+if [ ! -d "$BASHER_PACKAGES_PATH/$namespace" ]; then
+  mkdir -p "$BASHER_PACKAGES_PATH/$namespace"
 fi
 
 # Resolve local package path
 directory="$(resolve_link "$directory")"
 
-ln -s "$directory" "${BASHER_PACKAGES_PATH}/$package"
+ln -s "$directory" "$BASHER_PACKAGES_PATH/$package"
 
 basher-_link-bins "$package"
 basher-_link-completions "$package"

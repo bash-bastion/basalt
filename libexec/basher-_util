@@ -22,7 +22,7 @@ util.get_basher_subcommands() {
     shopt -s nullglob
 
     for path in "${paths[@]}"; do
-      for command in "${path}/basher-"*; do
+      for command in "$path/basher-"*; do
         command="${command##*basher-}"
         if [[ ! "$command" == _* ]]; then
           printf "%s\n" "$command"
