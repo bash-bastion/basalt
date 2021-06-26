@@ -15,11 +15,7 @@ util.show_help_if_flag_passed() {
 }
 
 util.get_basher_subcommands() {
-
     IFS=: paths=($PATH)
-
-    # TODO and containing subshell
-    shopt -s nullglob
 
     for path in "${paths[@]}"; do
       for command in "$path/basher-"*; do

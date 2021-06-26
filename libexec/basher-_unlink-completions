@@ -6,8 +6,6 @@ if [ ! -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
   exit
 fi
 
-shopt -s nullglob
-
 source "$BASHER_PACKAGES_PATH/$package/package.sh" # TODO: make this secure?
 IFS=: read -a bash_completions <<< "$BASH_COMPLETIONS"
 IFS=: read -a zsh_completions <<< "$ZSH_COMPLETIONS"

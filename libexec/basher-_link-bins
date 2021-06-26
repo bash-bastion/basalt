@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 package="$1"
-shopt -s nullglob
 
 if [ -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
   source "$BASHER_PACKAGES_PATH/$package/package.sh"

@@ -26,8 +26,6 @@ if [ -z "$name" ]; then
   exit 1
 fi
 
-shopt -s nullglob
-
 if [ ! -d "$BASHER_PACKAGES_PATH/$package" ]; then
   echo "Package '$package' is not installed"
   exit 1

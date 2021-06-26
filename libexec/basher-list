@@ -3,8 +3,6 @@
 # Summary: List installed packages
 # Usage: basher list
 
-shopt -s nullglob
-
 source basher-_util
 
 util.show_help_if_flag_passed 'list' "$@"

@@ -8,4 +8,7 @@ for f in "$bin_path"/subcmds/?*.sh; do
   source "$f"
 done
 
+set -e
+shopt -s nullglob
+
 source "basher-$command" "$@"

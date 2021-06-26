@@ -2,8 +2,6 @@
 
 package="$1"
 
-shopt -s nullglob
-
 files=($BASHER_PACKAGES_PATH/$package/man/*)
 files=("${files[@]##*/}")
 

@@ -5,6 +5,7 @@
 # Usage: basher <command> [<args>]
 
 set -e
+shopt -s nullglob
 
 resolve_link() {
   $(type -p greadlink readlink | head -1) "$1"
