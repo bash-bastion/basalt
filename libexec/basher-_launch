@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Transition layer between
+
+command="$1"
+shift
+
+for f in "$bin_path"/subcmds/?*.sh; do
+  source "$f"
+done
+
+source "basher-$command" "$@"

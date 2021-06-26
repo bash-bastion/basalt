@@ -2,6 +2,22 @@
 
 Like the great [basher](basherpm/basher), but refactored and updated. The goals are to improve ease of use, provide better feedback to the user, and add many new features
 
+## Breaking Changes
+
+### `basher init`
+
+Instead of
+
+```sh
+basher init - bash
+```
+
+do the following
+
+```sh
+basher init bash
+```
+
 A package manager for shell scripts and functions.
 
 Basher allows you to quickly install shell packages directly from github (or
@@ -32,7 +48,7 @@ $ brew install bash coreutils
 
     ~~~ sh
     export PATH="$HOME/.basher/bin:$PATH"
-    eval "$(basher init - bash)" # replace `bash` with `zsh` if you use zsh
+    eval "$(basher init bash)" # replace `bash` with `zsh` if you use zsh
     ~~~
 
     **Fish**: Use the following commands instead:
@@ -42,7 +58,7 @@ $ brew install bash coreutils
       set basher ~/.basher/bin
     end
     set -gx PATH $basher $PATH
-    status --is-interactive; and . (basher init - fish|psub)
+    status --is-interactive; and . (basher init fish|psub)
     ~~~
 
 or in 1 line, automatically (this will install basher and add it to your .bashrc/.zshrc file - in a way that can automatically be uninstalled later)):
