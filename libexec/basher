@@ -47,6 +47,12 @@ basher_main() {
     basher-help
     ;;
   *)
+    # TODO: hardcoded for test
+    if [ "$command" = echo ]; then
+      eval "echo \$$2"
+      exit
+    fi
+
     if command -v "basher-$command" >/dev/null 2>&1; then
       shift
       exec "basher-$command" "$@"

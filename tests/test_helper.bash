@@ -15,7 +15,6 @@ export BASHER_PACKAGES_PATH="$BASHER_PREFIX/packages"
 
 export FIXTURES_DIR="${BATS_TEST_DIRNAME}/fixtures"
 
-export PATH="${BATS_TEST_DIRNAME}/libexec:$PATH"
 export PATH="${BATS_TEST_DIRNAME}/../libexec:$PATH"
 export PATH="${BASHER_TMP_BIN}:$PATH"
 
