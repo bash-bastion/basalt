@@ -2,9 +2,9 @@
 
 load test_helper
 
-@test "with arguments shows usage" {
-  run basher-list a_arg
-  assert_failure
+@test "with help shows usage" {
+  run basher-list --help
+  assert_success
   assert_line "Usage: basher list"
 }
 

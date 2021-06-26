@@ -9,64 +9,53 @@ resolve_link() {
 }
 
 abs_dirname() {
-  local cwd="$(pwd)"
+  local cwd="$PWD"
   local path="$1"
 
   while [ -n "$path" ]; do
-    cd "${path%/*}"
+    cd "${path%/*}" || exit
     local name="${path##*/}"
     path="$(resolve_link "$name" || true)"
   done
 
-  pwd
-  cd "$cwd"
+  printf "%s" "$PWD"
+  cd "$cwd" || exit
 }
 
-if [ -z "$BASHER_ROOT" ]; then
-  BASHER_ROOT="$HOME/.basher"
+basher_main() {
+  if [ -z "$BASHER_ROOT" ]; then
+    BASHER_ROOT="$HOME/.basher"
 
-  if [ -d "${XDG_DATA_HOME:-$HOME/.local/share}/basher" ]; then
-    BASHER_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
+    if [ -d "${XDG_DATA_HOME:-$HOME/.local/share}/basher" ]; then
+      BASHER_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
+    fi
   fi
-fi
-export BASHER_ROOT
+  export BASHER_ROOT
+  export BASHER_PREFIX="${BASHER_PREFIX:-"$BASHER_ROOT/cellar"}"
+  export BASHER_PACKAGES_PATH="${BASHER_PACKAGES_PATH:-"$BASHER_PREFIX/packages"}"
+  export BASHER_INSTALL_BIN="${BASHER_INSTALL_BIN:-"$BASHER_PREFIX/bin"}"
+  export BASHER_INSTALL_MAN="${BASHER_INSTALL_MAN:-"$BASHER_PREFIX/man"}"
 
-if [ -z "$BASHER_PREFIX" ]; then
-  BASHER_PREFIX="$BASHER_ROOT/cellar"
-fi
-export BASHER_PREFIX
+  bin_path="$(abs_dirname "$0")"
+  export PATH="$bin_path:$PATH"
 
-if [ -z "$BASHER_PACKAGES_PATH" ]; then
-  BASHER_PACKAGES_PATH="$BASHER_PREFIX/packages"
-fi
-export BASHER_PACKAGES_PATH
+  local command="$1"
 
-if [ -z "$BASHER_INSTALL_BIN" ]; then
-  BASHER_INSTALL_BIN="$BASHER_PREFIX/bin"
-fi
-export BASHER_INSTALL_BIN
+  case "$command" in
+  '')
+    echo "basher: no command given"
+    basher-help
+    ;;
+  *)
+    if command -v "basher-$command" >/dev/null 2>&1; then
+      shift
+      exec "basher-$command" "$@"
+    else
+      echo "basher: no such command '$command'" >&2
+      exit 1
+    fi
+    ;;
+  esac
+}
 
-if [ -z "$BASHER_INSTALL_MAN" ]; then
-  BASHER_INSTALL_MAN="$BASHER_PREFIX/man"
-fi
-export BASHER_INSTALL_MAN
-
-bin_path="$(abs_dirname "$0")"
-export PATH="${bin_path}:${PATH}"
-
-command="$1"
-case "$command" in
-"")
-  basher-help
-  ;;
-* )
-  command_path="$(command -v "basher-$command" || true)"
-  if [ -z "$command_path" ]; then
-    echo "basher: no such command '$command'" >&2
-    exit 1
-  fi
-
-  shift 1
-  exec "$command_path" "$@"
-  ;;
-esac
+basher_main "$@"

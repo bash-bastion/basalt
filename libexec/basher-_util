@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Summary: Utility functions for all subcommands
+
+util.show_help_if_flag_passed() {
+  local subcommand="$1"; shift
+
+  local arg=
+  for arg; do
+    if [ "$arg" == --help ]; then
+      basher-help "$subcommand"
+      exit
+    fi
+  done
+}
