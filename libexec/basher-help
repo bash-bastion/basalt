@@ -133,7 +133,8 @@ fi
 
 # TAG completions
 if [ "$1" == "--complete" ]; then
-  exec basher-commands
+  util.get_basher_subcommands
+  exit
 fi
 
 if [ -z "$1" ] || [ "$1" == "basher" ]; then
