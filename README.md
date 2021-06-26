@@ -1,4 +1,6 @@
-# basher
+# neobasher
+
+Like the great [basher](basherpm/basher), but refactored and updated
 
 A package manager for shell scripts and functions.
 
@@ -45,7 +47,7 @@ $ brew install bash coreutils
 
 or in 1 line, automatically (this will install basher and add it to your .bashrc/.zshrc file - in a way that can automatically be uninstalled later)):
 
-	curl -s https://raw.githubusercontent.com/basherpm/basher/master/install.sh | bash
+	curl -s https://raw.githubusercontent.com/basherpm/basher/master/scripts/install.sh | bash
 
 ## Updating
 
@@ -157,3 +159,12 @@ A list of working packages can be found on https://basher.gitparade.com/. There
 you can also find a badge if you want to include it in your readme:
 
 [![basher install](https://img.shields.io/badge/basher-install-white?logo=gnu-bash&style=flat)](https://basher.gitparade.com/package/)
+
+## Contributing
+
+```sh
+git clone https://github.com/eankeen/neobasher
+cd neobasher
+git submodule update --init
+make test
+```
