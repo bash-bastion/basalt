@@ -17,13 +17,21 @@ util.show_help_if_flag_passed() {
 util.get_basher_subcommands() {
     IFS=: paths=($PATH)
 
-    for path in "${paths[@]}"; do
-      for command in "$path/basher-"*; do
-        command="${command##*basher-}"
-        if [[ ! "$command" == _* ]]; then
-          printf "%s\n" "$command"
-        fi
+    {
+      for path in "${paths[@]}"; do
+        for command in "$path/basher-"*; do
+          command="${command##*basher-}"
+          if [[ ! "$command" == _* ]]; then
+            printf "%s\n" "$command"
+          fi
+        done
       done
-    done | sort | uniq
+
+      for file in "$bin_path"/subcmds/*; do
+        file="${file##*/}"
+        local command="${file%.sh}"
+        printf "%s\n" "$command"
+      done
+    } | sort | uniq
 
 }

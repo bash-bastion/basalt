@@ -1,5 +1,5 @@
 # shellcheck shell=bash
 
 basher-echo() {
-  eval "echo \$$2"
+  eval "echo \$$1"
 }

@@ -2,26 +2,19 @@
 # Summary: Perform a completion for a particular comment
 #
 
-source basher-_util
-
-basher_complete_main() {
+basher-complete() {
   case "$1" in
     help)
       util.get_basher_subcommands
       ;;
     package-path)
-      # TODO: directly execute
-      source basher-list
+      basher-_launch list
       ;;
     basher-uninstall)
-      # TODO: directly execute
-      source basher-list
+      basher-_launch list
       ;;
     basher-upgrade)
-      # TODO: directly execute
-      source basher-list
+      basher-_launch list
       ;;
   esac
 }
-
-basher_complete_main "$@"

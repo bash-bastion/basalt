@@ -4,7 +4,7 @@
 #
 # Usage: basher <command> [<args>]
 
-set -e
+set -eo pipefail # -ET
 shopt -s nullglob
 
 resolve_link() {
@@ -55,12 +55,22 @@ basher_main() {
     done
 
     case "$command" in
+      complete)
+        shift
+        basher-complete "$@"
+        exit
+        ;;
       echo)
+        shift
         basher-echo "$@"
         exit
         ;;
       init)
         basher-init "$@"
+        exit
+        ;;
+      install)
+        basher-install "$@"
         exit
         ;;
     esac
