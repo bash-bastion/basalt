@@ -7,6 +7,7 @@
 # DEPS= variable on package.sh.
 #
 # Example: DEPS=username/repo1:otheruser/repo2
+source "$bin_path/subcmds/help.sh"
 
 if [ "$#" -ne 1 ]; then
   basher-help _deps

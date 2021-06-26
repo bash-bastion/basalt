@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "$bin_path/subcmds/help.sh"
+
 package="$1"
 
 if [ -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then

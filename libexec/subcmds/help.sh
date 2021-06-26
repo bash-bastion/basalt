@@ -140,42 +140,44 @@ print_usage() {
   fi
 }
 
-unset usage
-if [ "$1" = "--usage" ]; then
-  usage="1"
-  shift
-fi
-
-if [[ -z "$1" || "$1" == "basher" ]]; then
-  echo "Usage: basher <command> [<args>]"
-  if [ -n "$usage" ]; then
-    exit
+basher-help() {
+  unset usage
+  if [ "$1" = "--usage" ]; then
+    usage="1"
+    shift
   fi
 
-  echo
-  echo "Some useful basher commands are:"
-  for command in $(util.get_basher_subcommands) new-command; do
-    print_summary "$command"
-  done
-  echo
-  echo "See 'basher help <command>' for information on a specific command."
-else
-  command="$1"
+  if [[ -z "$1" || "$1" == "basher" ]]; then
+    echo "Usage: basher <command> [<args>]"
+    if [ -n "$usage" ]; then
+      exit
+    fi
 
-  if [ -n "$(command_path "$command")" ]; then
-    if [ -n "$usage" ]; then
-      print_usage "$command"
-    else
-      print_help "$command"
-    fi
-  elif [ -f "$bin_path/subcmds/$command.sh" ]; then
-    if [ -n "$usage" ]; then
-      print_usage "$command"
-    else
-      print_help "$command"
-    fi
+    echo
+    echo "Some useful basher commands are:"
+    for command in $(util.get_basher_subcommands) new-command; do
+      print_summary "$command"
+    done
+    echo
+    echo "See 'basher help <command>' for information on a specific command."
   else
-    echo "basher: help: no such command '$command'" >&2
-    exit 1
+    command="$1"
+
+    if [ -n "$(command_path "$command")" ]; then
+      if [ -n "$usage" ]; then
+        print_usage "$command"
+      else
+        print_help "$command"
+      fi
+    elif [ -f "$bin_path/subcmds/$command.sh" ]; then
+      if [ -n "$usage" ]; then
+        print_usage "$command"
+      else
+        print_help "$command"
+      fi
+    else
+      echo "basher: help: no such command '$command'" >&2
+      exit 1
+    fi
   fi
-fi
+}

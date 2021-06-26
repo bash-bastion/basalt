@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$bin_path/subcmds/help.sh"
 
 package="$1"
 

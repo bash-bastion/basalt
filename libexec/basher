@@ -65,12 +65,48 @@ basher_main() {
         basher-echo "$@"
         exit
         ;;
+      help)
+        shift
+        basher-help "$@"
+        exit
+        ;;
       init)
+        shift
         basher-init "$@"
         exit
         ;;
       install)
         basher-install "$@"
+        exit
+        ;;
+      link)
+        shift
+        basher-link "$@"
+        exit
+        ;;
+      list)
+        shift
+        basher-list "$@"
+        exit
+        ;;
+      oudated)
+        shift
+        basher-outdated "$@"
+        exit
+        ;;
+      package-path)
+        shift
+        basher-package-path "$@"
+        exit
+        ;;
+      uninstall)
+        shift
+        basher-uninstall "$@"
+        exit
+        ;;
+      upgrade)
+        shift
+        basher-upgrade "$@"
         exit
         ;;
     esac

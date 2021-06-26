@@ -8,13 +8,13 @@ basher-complete() {
       util.get_basher_subcommands
       ;;
     package-path)
-      basher-_launch list
+      basher-list
       ;;
     basher-uninstall)
-      basher-_launch list
+      basher-list
       ;;
     basher-upgrade)
-      basher-_launch list
+      basher-list
       ;;
   esac
 }

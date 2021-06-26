@@ -15,7 +15,7 @@ basher-install() {
   esac
 
   if [ "$#" -ne 1 ]; then
-    basher-_launch help install
+    basher-help install
     exit 1
   fi
 
@@ -28,19 +28,19 @@ basher-install() {
   fi
 
   if [ -z "$package" ]; then
-    basher-_launch help install
+    basher-help install
     exit 1
   fi
 
   IFS=/ read -r user name <<< "$package"
 
   if [ -z "$user" ]; then
-    basher-_launch help install
+    basher-help install
     exit 1
   fi
 
   if [ -z "$name" ]; then
-    basher-_launch help install
+    basher-help install
     exit 1
   fi
 
