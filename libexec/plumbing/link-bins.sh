@@ -3,11 +3,12 @@
 basher-_link-bins() {
   util.test_mock
 
-  package="$1"
+  local package="$1"
 
+  local bins
   if [ -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
     source "$BASHER_PACKAGES_PATH/$package/package.sh"
-    IFS=: read -a bins <<< "$BINS"
+    IFS=: read -ra bins <<< "$BINS"
   fi
 
   if [ -z "$bins" ]; then

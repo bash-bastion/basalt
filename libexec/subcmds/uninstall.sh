@@ -38,5 +38,5 @@ basher-uninstall() {
   basher-_unlink-bins "$package"
   basher-_unlink-completions "$package"
 
-  rm -rf "$BASHER_PACKAGES_PATH/$package"
+  rm -rf "${BASHER_PACKAGES_PATH:?}/$package"
 }

@@ -3,11 +3,12 @@
 basher-_unlink-bins() {
   util.test_mock
 
-  package="$1"
+  local package="$1"
 
+  local bins
   if [ -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
     source "$BASHER_PACKAGES_PATH/$package/package.sh"
-    IFS=: read -a bins <<< "$BINS"
+    IFS=: read -ra bins <<< "$BINS"
   fi
 
   if [ -z "$bins" ]; then
@@ -21,9 +22,8 @@ basher-_unlink-bins() {
     fi
   fi
 
-  for bin in "${bins[@]}"
-  do
-    name="${bin##*/}"
+  for bin in "${bins[@]}"; do
+    local name="${bin##*/}"
     if ${REMOVE_EXTENSION:-false}; then
       name="${name%%.*}"
     fi

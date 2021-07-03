@@ -17,22 +17,20 @@ util.show_help_if_flag_passed() {
 util.get_basher_subcommands() {
     IFS=: paths=($PATH)
 
-    {
-      for path in "${paths[@]}"; do
-        for command in "$path/basher-"*; do
-          command="${command##*basher-}"
-          if [[ ! "$command" == _* ]]; then
-            printf "%s\n" "$command"
-          fi
-        done
+    for path in "${paths[@]}"; do
+      for command in "$path/basher-"*; do
+        command="${command##*basher-}"
+        if [[ ! "$command" == _* ]]; then
+          printf "%s\n" "$command"
+        fi
       done
+    done
 
-      for file in "$bin_path"/subcmds/*; do
-        file="${file##*/}"
-        local command="${file%.sh}"
-        printf "%s\n" "$command"
-      done
-    } | sort | uniq
+    for file in "$bin_path"/subcmds/*; do
+      file="${file##*/}"
+      local command="${file%.sh}"
+      printf "%s\n" "$command"
+    done | sort | uniq
 
 }
 
@@ -84,9 +82,9 @@ util.test_mock() {
 
   if [ -n "${MOCK_CLONE+x}" ]; then
     basher-_clone() {
-      use_ssh="$1"
-      site="$2"
-      package="$3"
+      local use_ssh="$1"
+      local site="$2"
+      local package="$3"
 
       git clone "$BASHER_ORIGIN_DIR/$package" "$BASHER_PACKAGES_PATH/$package"
     }

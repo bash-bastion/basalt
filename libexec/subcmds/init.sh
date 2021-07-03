@@ -5,7 +5,7 @@
 basher-init() {
   util.test_mock
 
-  shell="$1"
+  local shell="$1"
 
   if [ -z "$shell" ]; then
     cat <<"EOF"

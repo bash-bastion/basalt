@@ -16,14 +16,14 @@ basher-_deps() {
     exit 1
   fi
 
-  package="$1"
+  local package="$1"
 
   if [ ! -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
     exit
   fi
 
   source "$BASHER_PACKAGES_PATH/$package/package.sh"
-  IFS=: read -a deps <<< "$DEPS"
+  IFS=: read -ra deps <<< "$DEPS"
 
   for dep in "${deps[@]}"; do
     basher-install "$dep"

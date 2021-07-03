@@ -6,15 +6,15 @@
 basher-_clone() {
   util.test_mock
 
-  if [ "$#" -ne 3 -a "$#" -ne 4 ]; then
+  if [[ "$#" -ne 3 && "$#" -ne 4 ]]; then
     basher-help _clone
     exit 1
   fi
 
-  use_ssh="$1"
-  site="$2"
-  package="$3"
-  ref="$4"
+  local use_ssh="$1"
+  local site="$2"
+  local package="$3"
+  local ref="$4"
 
   if [ -z "$use_ssh" ]; then
     basher-help _clone

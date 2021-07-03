@@ -11,7 +11,7 @@ basher-package-path() {
     exit 1
   fi
 
-  package="$1"
+  local package="$1"
 
   echo "$BASHER_PACKAGES_PATH/$package"
 }
