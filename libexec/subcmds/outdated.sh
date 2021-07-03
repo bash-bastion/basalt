@@ -7,7 +7,7 @@ basher-outdated() {
   util.test_mock
   shopt -s nullglob
 
-  IFS=$'\r\n' packages=($(basher-list))
+  IFS=$'\n' packages=($(basher-list))
 
   for package in "${packages[@]}"; do
     package_path="$BASHER_PACKAGES_PATH/$package"

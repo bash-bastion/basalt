@@ -1,7 +1,8 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
+# TODO?
 resolve_link() {
   if type -p realpath >/dev/null; then
     realpath "$1"

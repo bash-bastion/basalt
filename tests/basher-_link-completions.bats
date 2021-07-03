@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "links bash completions to prefix/completions" {
   create_package username/package

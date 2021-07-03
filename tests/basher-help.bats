@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "without args shows summary of common commands" {
   run basher-help

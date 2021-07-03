@@ -1,4 +1,22 @@
+# shellcheck shell=bash
+
+# @description This mocks a command by creating a function for it, which
+# prints all the arguments to the command, in addition to the command name
+mock.command_abstract() {
+  # eval "$1() { printf "%s" \"$1 \$@\"; }"
+  # TODO
+  eval "$1() { echo \"$1 \$@\"; }"
+}
+
+mock.command() {
+  mock.command_abstract "$@"
+}
 mock_command() {
+  if [[ "$1" =~ /(git)/ ]]; then
+    mock.command "$@"
+    return
+  fi
+
   case "$1" in
     git) export MOCK_GIT=; return ;;
     basher-install) export MOCK_BASHER_INSTALL=; return ;;
@@ -14,8 +32,6 @@ mock_command() {
 }
 
 mock_clone() {
-  export MOCK_CLONE=
-
   basher-_clone() {
     use_ssh="$1"
     site="$2"

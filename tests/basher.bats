@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "default BASHER_ROOT" {
   BASHER_ROOT= run basher echo BASHER_ROOT

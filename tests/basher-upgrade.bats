@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "without arguments shows usage" {
   run basher-upgrade

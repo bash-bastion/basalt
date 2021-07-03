@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "links each file on the BINS config on package.sh to the install bin" {
   create_package username/package

@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "removes each binary in BINS config from the install bin" {
   create_package username/package

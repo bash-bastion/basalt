@@ -1,5 +1,9 @@
-load vendor/bats-core/load
-load vendor/bats-assert/load
+# shellcheck shell=bash
+
+load 'vendor/bats-core/load'
+load 'vendor/bats-assert/load'
+load 'util/mocks.sh'
+load 'util/package_helpers.sh'
 
 export BASHER_TEST_DIR="$BATS_TMPDIR/basher"
 export BASHER_ORIGIN_DIR="$BASHER_TEST_DIR/origin"
@@ -26,13 +30,10 @@ for f in "$BASHER_ROOT/libexec"/{subcmds,plumbing,util}/?*.sh; do
 done
 
 setup() {
-  cd $BASHER_CWD
+  # shellcheck disable=SC2164
+  cd "$BASHER_CWD"
 }
 
 teardown() {
   rm -rf "$BASHER_TEST_DIR"
 }
-
-load lib/mocks
-load lib/package_helpers
-load lib/commands

@@ -80,13 +80,12 @@ util.test_mock() {
     util.mock baher-_unlink_man
   fi
 
-  if [ -n "${MOCK_CLONE+x}" ]; then
-    basher-_clone() {
-      local use_ssh="$1"
-      local site="$2"
-      local package="$3"
-
-      git clone "$BASHER_ORIGIN_DIR/$package" "$BASHER_PACKAGES_PATH/$package"
+  if [ -n "${MOCK_GIT_2+x}" ]; then
+    git() {
+      if [ "$1" = "symbolic-ref" ]; then
+        exit 128
+      fi
     }
   fi
+
 }

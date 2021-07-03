@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "unlinks bash completions from prefix/completions" {
   create_package username/package

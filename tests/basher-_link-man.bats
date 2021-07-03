@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load test_helper
+load 'util/init.sh'
 
 @test "links each man page to install-man under correct subdirectory" {
   create_package username/package
@@ -10,7 +10,7 @@ load test_helper
   basher-_clone false site username/package
 
   run basher-_link-man username/package
-echo "$output"
+  echo "$output"
   assert_success
   assert [ "$(readlink $BASHER_INSTALL_MAN/man1/exec.1)" = "$BASHER_PACKAGES_PATH/username/package/man/exec.1" ]
   assert [ "$(readlink $BASHER_INSTALL_MAN/man2/exec.2)" = "$BASHER_PACKAGES_PATH/username/package/man/exec.2" ]

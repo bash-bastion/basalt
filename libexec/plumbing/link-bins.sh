@@ -22,15 +22,12 @@ basher-_link-bins() {
     fi
   fi
 
-  for bin in "${bins[@]}"
-  do
+  for bin in "${bins[@]}"; do
     name="${bin##*/}"
     if ${REMOVE_EXTENSION:-false}; then
       name="${name%%.*}"
     fi
     mkdir -p "$BASHER_INSTALL_BIN"
-    # echo ls -al /tmp/basher/prefix/bin >&3
-    # echo ln -sf "$BASHER_PACKAGES_PATH/$package/$bin" "$BASHER_INSTALL_BIN/$name" >&3
     ln -sf "$BASHER_PACKAGES_PATH/$package/$bin" "$BASHER_INSTALL_BIN/$name"
     chmod +x "$BASHER_INSTALL_BIN/$name"
   done

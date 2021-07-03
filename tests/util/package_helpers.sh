@@ -1,3 +1,6 @@
+# shellcheck shell=bash
+# shellcheck disable=SC2164
+
 create_package() {
   local package="$1"
   mkdir -p "$BASHER_ORIGIN_DIR/$package"
@@ -40,7 +43,7 @@ create_package_exec() {
   local exec="package_bin/$2"
   cd "$BASHER_ORIGIN_DIR/$package"
   mkdir -p package_bin
-  touch $exec
+  touch "$exec"
 
   touch "package.sh"
 
@@ -53,7 +56,7 @@ create_package_exec() {
 
   git add .
   git commit -m "Add package exec: $exec"
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
 
 create_exec() {
@@ -61,23 +64,23 @@ create_exec() {
   local exec="$2"
   cd "$BASHER_ORIGIN_DIR/$package"
   mkdir -p bin
-  touch bin/$exec
+  touch "bin/$exec"
 
   git add .
   git commit -m "Add $exec"
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
 
 create_root_exec() {
   local package="$1"
   local exec="$2"
   cd "$BASHER_ORIGIN_DIR/$package"
-  touch $exec
+  touch "$exec"
   chmod +x "$exec"
 
   git add .
   git commit -m "Add root exec: $exec"
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
 
 set_remove_extension() {
@@ -96,7 +99,7 @@ set_remove_extension() {
 
   git add .
   git commit -m "Set REMOVE_EXTENSION to $remove_extension."
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
 
 create_dep() {
@@ -115,7 +118,7 @@ create_dep() {
 
   git add .
   git commit -m "Add dependency on $dep"
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
 
 create_bash_completions() {
@@ -123,7 +126,7 @@ create_bash_completions() {
   local comp="$2"
   cd "$BASHER_ORIGIN_DIR/$package"
   mkdir -p completions
-  touch completions/$comp
+  touch "completions/$comp"
 
   touch "package.sh"
 
@@ -136,7 +139,7 @@ create_bash_completions() {
 
   git add .
   git commit -m "Add bash completions"
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
 
 create_zsh_compsys_completions() {
@@ -144,7 +147,7 @@ create_zsh_compsys_completions() {
   local comp="$2"
   cd "$BASHER_ORIGIN_DIR/$package"
   mkdir -p completions
-  echo "#compdef $2" > completions/$comp
+  echo "#compdef \"$2\"" > "completions/$comp"
 
   touch "package.sh"
 
@@ -152,12 +155,12 @@ create_zsh_compsys_completions() {
     sed -e "/^ZSH_COMPLETIONS=/ s/$/:completions\/$comp/" package.sh > package.sh.tmp
     mv package.sh.tmp package.sh
   else
-    echo "ZSH_COMPLETIONS=completions/$comp" >> package.sh
+    echo "ZSH_COMPLETIONS=\"completions/$comp\"" >> package.sh
   fi
 
   git add .
   git commit -m "Add bash completions"
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
 
 create_zsh_compctl_completions() {
@@ -165,7 +168,7 @@ create_zsh_compctl_completions() {
   local comp="$2"
   cd "$BASHER_ORIGIN_DIR/$package"
   mkdir -p completions
-  touch completions/$comp
+  touch "completions/$comp"
 
   touch "package.sh"
 
@@ -178,5 +181,5 @@ create_zsh_compctl_completions() {
 
   git add .
   git commit -m "Add bash completions"
-  cd $BASHER_CWD
+  cd "$BASHER_CWD"
 }
