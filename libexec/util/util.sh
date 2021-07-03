@@ -42,47 +42,47 @@ util.mock() {
 }
 
 util.test_mock() {
-  if [[ -v MOCK_GIT ]]; then
+  if [ -n "${MOCK_GIT+x}" ]; then
     util.mock git
   fi
 
-  if [[ -v MOCK_BASHER_INSTALL ]]; then
+  if [ -n "${MOCK_BASHER_INSTALL+x}" ]; then
     util.mock basher-install
   fi
 
-  if [[ -v MOCK_BASHER__CLONE ]]; then
+  if [ -n "${MOCK_BASHER__CLONE+x}" ]; then
     util.mock basher-_clone
   fi
 
-  if [[ -v MOCK_BASHER__DEPS ]]; then
+  if [ -n "${MOCK_BASHER__DEPS+x}" ]; then
     util.mock basher-_deps
   fi
 
-  if [[ -v MOCK_BASHER__LINK_BINS ]]; then
+  if [ -n "${MOCK_BASHER__LINK_BINS+x}" ]; then
     util.mock basher-_link-bins
   fi
 
-  if [[ -v MOCK_BASHER__LINK_COMPLETIONS ]]; then
+  if [ -n "${MOCK_BASHER__LINK_COMPLETIONS+x}" ]; then
     util.mock basher-_link-completions
   fi
 
-  if [[ -v MOCK_BASHER__LINK_MAN ]]; then
+  if [ -n "${MOCK_BASHER__LINK_MAN+x}" ]; then
     util.mock basher-_link-man
   fi
 
-  if [[ -v MOCK_BASHER__UNLINK_BINS ]]; then
+  if [ -n "${MOCK_BASHER__UNLINK_BINS+x}" ]; then
     util.mock basher-_unlink-bins
   fi
 
-  if [[ -v MOCK_BASHER__UNLINK_COMPLETIONS ]]; then
+  if [ -n "${MOCK_BASHER__UNLINK_COMPLETIONS+x}" ]; then
     util.mock basher-_unlink-completions
   fi
 
-  if [[ -v MOCK_BASHER__UNLINK_MAN ]]; then
+  if [ -n "${MOCK_BASHER__UNLINK_MAN+x}" ]; then
     util.mock baher-_unlink_man
   fi
 
-  if [[ -v MOCK_CLONE ]]; then
+  if [ -n "${MOCK_CLONE+x}" ]; then
     basher-_clone() {
       use_ssh="$1"
       site="$2"

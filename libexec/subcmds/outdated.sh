@@ -5,6 +5,7 @@
 
 basher-outdated() {
   util.test_mock
+  shopt -s nullglob
 
   IFS=$'\r\n' packages=($(basher-list))
 
