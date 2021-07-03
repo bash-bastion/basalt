@@ -4,6 +4,8 @@
 # Usage: basher outdated
 
 basher-outdated() {
+  util.test_mock
+
   # TODO: temporary
   shopt -s nullglob
 

@@ -11,6 +11,8 @@ resolve_link() {
 }
 
 basher-link() {
+  util.test_mock
+
   no_deps="false"
 
   case $1 in

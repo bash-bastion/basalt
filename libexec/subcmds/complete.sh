@@ -3,6 +3,8 @@
 #
 
 basher-complete() {
+  util.test_mock
+
   case "$1" in
     help)
       util.get_basher_subcommands

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Transition layer between
-
+source "$bin_path/basher-_util"
+util.test_mock
 command="$1"
 shift
 

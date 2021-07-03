@@ -6,6 +6,8 @@
 source basher-_util
 
 basher-list() {
+  util.test_mock
+
   util.show_help_if_flag_passed 'list' "$@"
 
   for package_path in "$BASHER_PACKAGES_PATH"/*/*; do

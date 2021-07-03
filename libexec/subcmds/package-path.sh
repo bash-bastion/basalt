@@ -4,6 +4,8 @@
 # Usage: source "$(basher package-path <package>)/file.sh"
 
 basher-package-path() {
+  util.test_mock
+
   if [ "$#" -ne 1 ]; then
     basher-help package-path
     exit 1

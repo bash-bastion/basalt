@@ -141,6 +141,8 @@ print_usage() {
 }
 
 basher-help() {
+  util.test_mock
+
   unset usage
   if [ "$1" = "--usage" ]; then
     usage="1"

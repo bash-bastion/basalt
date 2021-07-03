@@ -13,8 +13,6 @@ export BASHER_INSTALL_BIN="$BASHER_PREFIX/bin"
 export BASHER_INSTALL_MAN="$BASHER_PREFIX/man"
 export BASHER_PACKAGES_PATH="$BASHER_PREFIX/packages"
 
-export FIXTURES_DIR="$BATS_TEST_DIRNAME/fixtures"
-
 export PATH="$BATS_TEST_DIRNAME/../libexec:$PATH"
 export PATH="$BASHER_TMP_BIN:$PATH"
 
@@ -32,6 +30,10 @@ done
 
 setup() {
   cd $BASHER_CWD
+  for f in "$bin_path"/subcmds/?*.sh; do
+    source "$f"
+  done
+  source "$bin_path/basher-_util"
 }
 
 teardown() {

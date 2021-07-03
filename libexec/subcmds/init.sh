@@ -3,6 +3,8 @@
 # Usage: eval "$(basher init -)"
 
 basher-init() {
+  util.test_mock
+
   shell="$1"
 
   if [ -z "$shell" ]; then

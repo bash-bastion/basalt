@@ -35,3 +35,50 @@ util.get_basher_subcommands() {
     } | sort | uniq
 
 }
+
+# TODO: temp
+util.mock() {
+  eval "$1() { echo \"$1 \$@\"; }"
+}
+
+util.test_mock() {
+  if [[ -v MOCK_GIT ]]; then
+    util.mock git
+  fi
+
+  if [[ -v MOCK_BASHER_INSTALL ]]; then
+    util.mock basher-install
+  fi
+
+  if [[ -v MOCK_BASHER__CLONE ]]; then
+    util.mock basher-_clone
+  fi
+
+  if [[ -v MOCK_BASHER__DEPS ]]; then
+    util.mock basher-_deps
+  fi
+
+  if [[ -v MOCK_BASHER__LINK_BINS ]]; then
+    util.mock basher-_link-bins
+  fi
+
+  if [[ -v MOCK_BASHER__LINK_COMPLETIONS ]]; then
+    util.mock basher-_link-completions
+  fi
+
+  if [[ -v MOCK_BASHER__LINK_MAN ]]; then
+    util.mock basher-_link-man
+  fi
+
+  if [[ -v MOCK_BASHER__UNLINK_BINS ]]; then
+    util.mock basher-_unlink-bins
+  fi
+
+  if [[ -v MOCK_BASHER__UNLINK_COMPLETIONS ]]; then
+    util.mock basher-_unlink-completions
+  fi
+
+  if [[ -v MOCK_BASHER__UNLINK_MAN ]]; then
+    util.mock baher-_unlink_man
+  fi
+}
