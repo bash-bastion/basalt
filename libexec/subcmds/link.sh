@@ -11,7 +11,6 @@ resolve_link() {
 }
 
 basher-link() {
-  util.test_mock
 
   local no_deps="false"
 

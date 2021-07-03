@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "links bash completions to prefix/completions" {
   create_package username/package
   create_bash_completions username/package comp.bash
-  mock_clone
+  mock.command _clone
   basher-_clone false site username/package
 
   run basher-_link-completions username/package
@@ -17,7 +17,7 @@ load 'util/init.sh'
 @test "links zsh compsys completions to prefix/completions" {
   create_package username/package
   create_zsh_compsys_completions username/package _exec
-  mock_clone
+  mock.command _clone
   basher-_clone false site username/package
 
   run basher-_link-completions username/package
@@ -29,7 +29,7 @@ load 'util/init.sh'
 @test "links zsh compctl completions to prefix/completions" {
   create_package username/package
   create_zsh_compctl_completions username/package exec
-  mock_clone
+  mock.command _clone
   basher-_clone false site username/package
 
   run basher-_link-completions username/package
@@ -40,7 +40,7 @@ load 'util/init.sh'
 
 @test "does not fail if package doesn't have any completions" {
   create_package username/package
-  mock_clone
+  mock.command _clone
   basher-_clone false site username/package
 
   run basher-_link-completions username/package

@@ -3,7 +3,6 @@
 # Usage: basher uninstall <package>
 
 basher-uninstall() {
-  util.test_mock
 
   if [ "$#" -ne 1 ]; then
     basher-help uninstall

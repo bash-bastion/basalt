@@ -3,7 +3,6 @@
 # Usage: eval "$(basher init -)"
 
 basher-init() {
-  util.test_mock
 
   local shell="$1"
 

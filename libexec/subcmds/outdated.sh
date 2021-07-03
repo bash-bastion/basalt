@@ -4,8 +4,7 @@
 # Usage: basher outdated
 
 basher-outdated() {
-  util.test_mock
-  shopt -s nullglob
+    shopt -s nullglob
 
   IFS=$'\n' packages=($(basher-list))
 

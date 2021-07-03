@@ -21,7 +21,7 @@ load 'util/init.sh'
 }
 
 @test "upgrades a package to the latest version" {
-  mock_clone
+  mock.command _clone
   create_package username/package
   basher-install username/package
   create_exec username/package "second"

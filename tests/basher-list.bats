@@ -9,7 +9,7 @@ load 'util/init.sh'
 }
 
 @test "list installed packages" {
-  mock_clone
+  mock.command _clone
   create_package username/p1
   create_package username2/p2
   create_package username2/p3

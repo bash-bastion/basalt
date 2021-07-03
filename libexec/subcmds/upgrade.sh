@@ -3,7 +3,6 @@
 # Usage: basher upgrade <package>
 
 basher-upgrade() {
-  util.test_mock
 
   if [ "$#" -ne 1 ]; then
     basher-help upgrade

@@ -9,8 +9,6 @@
 # Example: DEPS=username/repo1:otheruser/repo2
 
 basher-_deps() {
-  util.test_mock
-
   if [ "$#" -ne 1 ]; then
     basher-help _deps
     exit 1

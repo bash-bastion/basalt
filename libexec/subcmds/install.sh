@@ -5,7 +5,6 @@
 # Usage: basher install [--ssh] [site]/<package>[@ref]
 
 basher-install() {
-  util.test_mock
 
   local use_ssh="false"
 

@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
 basher-_unlink-man() {
-  util.test_mock
 
   local package="$1"
 

@@ -9,7 +9,7 @@ load 'util/init.sh'
 }
 
 @test "displays outdated packages" {
-  mock_clone
+  mock.command _clone
   create_package username/outdated
   create_package username/uptodate
   basher-install username/outdated

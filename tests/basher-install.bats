@@ -21,11 +21,11 @@ load 'util/init.sh'
 }
 
 @test "executes install steps in right order" {
-  mock_command basher-_clone
-  mock_command basher-_deps
-  mock_command basher-_link-bins
-  mock_command basher-_link-man
-  mock_command basher-_link-completions
+  mock.command basher-_clone
+  mock.command basher-_deps
+  mock.command basher-_link-bins
+  mock.command basher-_link-man
+  mock.command basher-_link-completions
 
   run basher-install username/package
   assert_success "basher-_clone false github.com username/package
@@ -36,11 +36,11 @@ basher-_link-completions username/package"
 }
 
 @test "with site, overwrites site" {
-  mock_command basher-_clone
-  mock_command basher-_deps
-  mock_command basher-_link-bins
-  mock_command basher-_link-man
-  mock_command basher-_link-completions
+  mock.command basher-_clone
+  mock.command basher-_deps
+  mock.command basher-_link-bins
+  mock.command basher-_link-man
+  mock.command basher-_link-completions
 
   run basher-install site/username/package
 
@@ -48,11 +48,11 @@ basher-_link-completions username/package"
 }
 
 @test "without site, uses github as default site" {
-  mock_command basher-_clone
-  mock_command basher-_deps
-  mock_command basher-_link-bins
-  mock_command basher-_link-man
-  mock_command basher-_link-completions
+  mock.command basher-_clone
+  mock.command basher-_deps
+  mock.command basher-_link-bins
+  mock.command basher-_link-man
+  mock.command basher-_link-completions
 
   run basher-install username/package
 
@@ -60,11 +60,11 @@ basher-_link-completions username/package"
 }
 
 @test "using ssh protocol" {
-  mock_command basher-_clone
-  mock_command basher-_deps
-  mock_command basher-_link-bins
-  mock_command basher-_link-man
-  mock_command basher-_link-completions
+  mock.command basher-_clone
+  mock.command basher-_deps
+  mock.command basher-_link-bins
+  mock.command basher-_link-man
+  mock.command basher-_link-completions
 
   run basher-install --ssh username/package
 
@@ -72,11 +72,11 @@ basher-_link-completions username/package"
 }
 
 @test "installs with custom version" {
-  mock_command basher-_clone
-  mock_command basher-_deps
-  mock_command basher-_link-bins
-  mock_command basher-_link-man
-  mock_command basher-_link-completions
+  mock.command basher-_clone
+  mock.command basher-_deps
+  mock.command basher-_link-bins
+  mock.command basher-_link-man
+  mock.command basher-_link-completions
 
   run basher-install username/package@v1.2.3
 
@@ -84,11 +84,11 @@ basher-_link-completions username/package"
 }
 
 @test "empty version is ignored" {
-  mock_command basher-_clone
-  mock_command basher-_deps
-  mock_command basher-_link-bins
-  mock_command basher-_link-man
-  mock_command basher-_link-completions
+  mock.command basher-_clone
+  mock.command basher-_deps
+  mock.command basher-_link-bins
+  mock.command basher-_link-man
+  mock.command basher-_link-completions
 
   run basher-install username/package@
 
@@ -97,7 +97,7 @@ basher-_link-completions username/package"
 
 @test "doesn't fail" {
   create_package username/package
-  mock_clone
+  mock.command _clone
 
   run basher-install username/package
   assert_success

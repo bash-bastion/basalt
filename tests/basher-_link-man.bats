@@ -6,7 +6,7 @@ load 'util/init.sh'
   create_package username/package
   create_man username/package exec.1
   create_man username/package exec.2
-  mock_clone
+  mock.command _clone
   basher-_clone false site username/package
 
   run basher-_link-man username/package

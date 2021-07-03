@@ -3,7 +3,6 @@
 #
 
 basher-complete() {
-  util.test_mock
 
   case "$1" in
   help)

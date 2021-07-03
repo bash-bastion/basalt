@@ -12,8 +12,8 @@ load 'util/init.sh'
 }
 
 @test "without dependencies, does nothing" {
-  mock_clone
-  mock_command basher-install
+  mock.command _clone
+  mock.command basher-install
   create_package "user/main"
   basher-_clone false site user/main
 
@@ -23,8 +23,8 @@ load 'util/init.sh'
 }
 
 @test "installs dependencies" {
-  mock_clone
-  mock_command basher-install
+  mock.command _clone
+  mock.command basher-install
   create_package "user/main"
   create_dep "user/main" "user/dep1"
   create_dep "user/main" "user/dep2"

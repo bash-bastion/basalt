@@ -4,8 +4,6 @@
 # Usage: basher _clone <use_ssh> <site> <package> [<ref>]
 
 basher-_clone() {
-  util.test_mock
-
   if [[ "$#" -ne 3 && "$#" -ne 4 ]]; then
     basher-help _clone
     exit 1
