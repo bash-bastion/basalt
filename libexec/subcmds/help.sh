@@ -82,8 +82,8 @@ documentation_for() {
   local filename
 
   # test for file first, since we don't want command -v to return a function
-  if [ -f "$bin_path/subcmds/$command.sh" ]; then
-    filename="$bin_path/subcmds/$command.sh"
+  if [ -f "$BASHER_ROOT/libexec/subcmds/$command.sh" ]; then
+    filename="$BASHER_ROOT/libexec/subcmds/$command.sh"
   elif command -v basher-"$command" &>/dev/null; then
     filename="$(command -v basher-"$command")"
   fi
@@ -120,7 +120,7 @@ print_help() {
     help="$summary"
   fi
 
-  if [ -n "$usage" -o -n "$summary" ]; then
+  if [[ -n "$usage" || -n "$summary" ]]; then
     if [ -n "$usage" ]; then
       echo "$usage"
     else
@@ -177,7 +177,7 @@ basher-help() {
       else
         print_help "$command"
       fi
-    elif [ -f "$bin_path/subcmds/$command.sh" ]; then
+    elif [ -f "$BASHER_ROOT/libexec/subcmds/$command.sh" ]; then
       if [ -n "$usage" ]; then
         print_usage "$command"
       else

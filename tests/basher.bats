@@ -4,7 +4,7 @@ load test_helper
 
 @test "default BASHER_ROOT" {
   BASHER_ROOT= run basher echo BASHER_ROOT
-  assert_output "$HOME/.basher"
+  assert_output "$HOME/.local/share/neobasher"
 }
 
 @test "inherited BASHER_ROOT" {
@@ -12,21 +12,9 @@ load test_helper
   assert_output "/tmp/basher"
 }
 
-@test "inherited XDG_DATA_HOME" {
-  mkdir -p "/tmp/local/share/basher"
-  BASHER_ROOT= XDG_DATA_HOME=/tmp/local/share run basher echo BASHER_ROOT
-  assert_output "/tmp/local/share/basher"
-}
-
-@test "inherited XDG_DATA_PREFIX overriden by inherited BASHER_ROOT" {
-  mkdir -p "/tmp/local/share/basher"
-  BASHER_ROOT=/tmp/basher XDG_DATA_HOME=/tmp/local/share run basher echo BASHER_ROOT
-  assert_output "/tmp/basher"
-}
-
 @test "default BASHER_PREFIX" {
   BASHER_ROOT= BASHER_PREFIX= run basher echo BASHER_PREFIX
-  assert_output "$HOME/.basher/cellar"
+  assert_output "$HOME/.local/share/neobasher/cellar"
 }
 
 @test "inherited BASHER_PREFIX" {
@@ -51,7 +39,7 @@ load test_helper
 
 @test "default BASHER_INSTALL_BIN" {
   BASHER_ROOT= BASHER_PREFIX= BASHER_INSTALL_BIN= run basher echo BASHER_INSTALL_BIN
-  assert_output "$HOME/.basher/cellar/bin"
+  assert_output "$HOME/.local/share/neobasher/cellar/bin"
 }
 
 @test "inherited BASHER_INSTALL_BIN" {
@@ -66,7 +54,7 @@ load test_helper
 
 @test "default BASHER_INSTALL_MAN" {
   BASHER_ROOT= BASHER_PREFIX= BASHER_INSTALL_MAN= run basher echo BASHER_INSTALL_MAN
-  assert_output "$HOME/.basher/cellar/man"
+  assert_output "$HOME/.local/share/neobasher/cellar/man"
 }
 
 @test "inherited BASHER_INSTALL_MAN" {

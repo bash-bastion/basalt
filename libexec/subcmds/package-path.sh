@@ -13,5 +13,5 @@ basher-package-path() {
 
   local package="$1"
 
-  echo "$BASHER_PACKAGES_PATH/$package"
+  printf "%s" "$BASHER_PACKAGES_PATH/$package"
 }

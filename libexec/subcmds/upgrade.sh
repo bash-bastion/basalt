@@ -29,6 +29,6 @@ basher-upgrade() {
     exit 1
   fi
 
-  cd "$BASHER_PACKAGES_PATH/$package"
+  ensure.cd "$BASHER_PACKAGES_PATH/$package"
   git pull
 }

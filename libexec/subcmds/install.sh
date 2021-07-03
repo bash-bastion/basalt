@@ -9,7 +9,7 @@ basher-install() {
 
   local use_ssh="false"
 
-  case $1 in
+  case "$1" in
     --ssh)
       use_ssh="true"
       shift
@@ -57,6 +57,7 @@ basher-install() {
   else
     basher-_clone "$use_ssh" "$site" "$package" "$ref"
   fi
+
   basher-_deps "$package"
   basher-_link-bins "$package"
   basher-_link-man "$package"

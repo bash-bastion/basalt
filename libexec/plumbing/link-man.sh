@@ -16,5 +16,4 @@ basher-_link-man() {
       ln -sf "$BASHER_PACKAGES_PATH/$package/man/$file" "$BASHER_INSTALL_MAN/man$n/$file"
     fi
   done
-
 }

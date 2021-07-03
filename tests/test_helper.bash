@@ -18,22 +18,15 @@ export PATH="$BASHER_TMP_BIN:$PATH"
 
 mkdir -p "$BASHER_TMP_BIN"
 mkdir -p "$BASHER_TEST_DIR/path"
-
 mkdir -p "$BASHER_ORIGIN_DIR"
-
 mkdir -p "$BASHER_CWD"
 
-export bin_path="$BATS_TEST_DIRNAME/../libexec"
-for f in "$bin_path"/{subcmds,plumbing}/?*.sh; do
+for f in "$BASHER_ROOT/libexec"/{subcmds,plumbing,util}/?*.sh; do
   source "$f"
 done
 
 setup() {
   cd $BASHER_CWD
-  for f in "$bin_path"/{subcmds,plumbing}/?*.sh; do
-    source "$f"
-  done
-  source "$bin_path/util/util.sh"
 }
 
 teardown() {

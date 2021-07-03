@@ -26,7 +26,7 @@ util.get_basher_subcommands() {
       done
     done
 
-    for file in "$bin_path"/subcmds/*; do
+    for file in "$BASHER_ROOT/libexec"/subcmds/*; do
       file="${file##*/}"
       local command="${file%.sh}"
       printf "%s\n" "$command"

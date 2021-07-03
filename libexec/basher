@@ -4,122 +4,81 @@
 #
 # Usage: basher <command> [<args>]
 
-set -eo pipefail # -ET
-shopt -s nullglob
+set -ETeo pipefail
+shopt -s nullglob extglob
 
-resolve_link() {
-  $(type -p greadlink readlink | head -1) "$1"
-}
-
-abs_dirname() {
-  local cwd="$PWD"
-  local path="$1"
-
-  while [ -n "$path" ]; do
-    cd "${path%/*}"
-    local name="${path##*/}"
-    path="$(resolve_link "$name")"
-  done
-
-  printf "%s" "$PWD"
-  cd "$cwd"
-}
-
-basher_main() {
-  if [ -z "$BASHER_ROOT" ]; then
-    BASHER_ROOT="$HOME/.basher"
-
-    if [ -d "${XDG_DATA_HOME:-$HOME/.local/share}/basher" ]; then
-      BASHER_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
-    fi
-  fi
-  export BASHER_ROOT
+main() {
+  export BASHER_ROOT="${BASHER_ROOT:-"${XDG_DATA_HOME:-$HOME/.local/share}/neobasher"}"
   export BASHER_PREFIX="${BASHER_PREFIX:-"$BASHER_ROOT/cellar"}"
   export BASHER_PACKAGES_PATH="${BASHER_PACKAGES_PATH:-"$BASHER_PREFIX/packages"}"
   export BASHER_INSTALL_BIN="${BASHER_INSTALL_BIN:-"$BASHER_PREFIX/bin"}"
   export BASHER_INSTALL_MAN="${BASHER_INSTALL_MAN:-"$BASHER_PREFIX/man"}"
 
-  export bin_path="$(abs_dirname "$0")"
-  export PATH="$bin_path:$PATH"
+  for f in "$BASHER_ROOT"/libexec/{plumbing,subcmds,util}/?*.sh; do
+    source "$f"
+  done
 
-  local command="$1"
-
-  case "$command" in
-  '')
-    echo "basher: no command given"
-    basher-help
+  case "$1" in
+  complete)
+    shift
+    basher-complete "$@"
+    exit
+    ;;
+  echo)
+    shift
+    # TODO: move to file
+    eval "echo \$$1"
+    exit
+    ;;
+  help)
+    shift
+    basher-help "$@"
+    exit
+    ;;
+  init)
+    shift
+    basher-init "$@"
+    exit
+    ;;
+  install)
+    basher-install "$@"
+    exit
+    ;;
+  link)
+    shift
+    basher-link "$@"
+    exit
+    ;;
+  list)
+    shift
+    basher-list "$@"
+    exit
+    ;;
+  oudated)
+    shift
+    basher-outdated "$@"
+    exit
+    ;;
+  package-path)
+    shift
+    basher-package-path "$@"
+    exit
+    ;;
+  uninstall)
+    shift
+    basher-uninstall "$@"
+    exit
+    ;;
+  upgrade)
+    shift
+    basher-upgrade "$@"
+    exit
     ;;
   *)
-    for f in "$bin_path"/subcmds/?*.sh; do
-      source "$f"
-    done
-
-    case "$command" in
-      complete)
-        shift
-        basher-complete "$@"
-        exit
-        ;;
-      echo)
-        shift
-        basher-echo "$@"
-        exit
-        ;;
-      help)
-        shift
-        basher-help "$@"
-        exit
-        ;;
-      init)
-        shift
-        basher-init "$@"
-        exit
-        ;;
-      install)
-        basher-install "$@"
-        exit
-        ;;
-      link)
-        shift
-        basher-link "$@"
-        exit
-        ;;
-      list)
-        shift
-        basher-list "$@"
-        exit
-        ;;
-      oudated)
-        shift
-        basher-outdated "$@"
-        exit
-        ;;
-      package-path)
-        shift
-        basher-package-path "$@"
-        exit
-        ;;
-      uninstall)
-        shift
-        basher-uninstall "$@"
-        exit
-        ;;
-      upgrade)
-        shift
-        basher-upgrade "$@"
-        exit
-        ;;
-    esac
-
-    if command -v "basher-$command" >/dev/null 2>&1; then
-      shift
-      source "basher-$command" "$@"
-    else
-      echo "basher: no such command '$command'" >&2
-      exit 1
-    fi
+    echo "basher: no command given"
+    basher-help
     ;;
   esac
 }
 
-basher_main "$@"
+main "$@"

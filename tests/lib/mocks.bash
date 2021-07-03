@@ -15,6 +15,7 @@ mock_command() {
 
 mock_clone() {
   export MOCK_CLONE=
+
   basher-_clone() {
     use_ssh="$1"
     site="$2"
