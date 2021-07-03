@@ -113,10 +113,6 @@ basher_main() {
 
     if command -v "basher-$command" >/dev/null 2>&1; then
       shift
-      for f in "$bin_path"/subcmds/?*.sh; do
-        source "$f"
-      done
-
       source "basher-$command" "$@"
     else
       echo "basher: no such command '$command'" >&2

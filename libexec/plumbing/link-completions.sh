@@ -1,9 +1,8 @@
 # shellcheck shell=bash
 
 basher-_link-completions() {
-  source "$bin_path/basher-_util"
   util.test_mock
-  source "$bin_path/subcmds/help.sh"
+
   package="$1"
 
   if [ ! -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then

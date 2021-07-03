@@ -6,9 +6,6 @@
 basher-outdated() {
   util.test_mock
 
-  # TODO: temporary
-  shopt -s nullglob
-
   IFS=$'\r\n' packages=($(basher-list))
 
   for package in "${packages[@]}"

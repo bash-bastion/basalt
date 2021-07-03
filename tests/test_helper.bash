@@ -33,7 +33,7 @@ setup() {
   for f in "$bin_path"/{subcmds,plumbing}/?*.sh; do
     source "$f"
   done
-  source "$bin_path/basher-_util"
+  source "$bin_path/util/util.sh"
 }
 
 teardown() {

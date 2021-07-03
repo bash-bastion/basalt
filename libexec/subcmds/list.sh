@@ -3,8 +3,6 @@
 # Summary: List installed packages
 # Usage: basher list
 
-source basher-_util
-
 basher-list() {
   util.test_mock
 

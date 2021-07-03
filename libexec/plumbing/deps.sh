@@ -9,8 +9,6 @@
 # Example: DEPS=username/repo1:otheruser/repo2
 
 basher-_deps() {
-  source "$bin_path/subcmds/help.sh"
-  source "$bin_path/basher-_util"
   util.test_mock
 
   if [ "$#" -ne 1 ]; then

@@ -11,12 +11,6 @@
 # span multiple lines as long as subsequent lines are indented.
 # The remainder of the comment block is displayed as extended
 # documentation.
-for f in "$bin_path"/plumbing/?*.sh; do
-  source "$f"
-done
-source "$bin_path/plumbing/clone.sh"
-
-source basher-_util
 
 command_path() {
   local command="$1"

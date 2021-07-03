@@ -1,9 +1,7 @@
 # shellcheck shell=bash
 
 basher-_unlink-man() {
-  source "$bin_path/basher-_util"
   util.test_mock
-  source "$bin_path/subcmds/help.sh"
 
   package="$1"
 
