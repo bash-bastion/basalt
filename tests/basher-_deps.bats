@@ -3,6 +3,8 @@
 load test_helper
 
 @test "without arguments, prints usage" {
+  skip
+
   run basher-_deps
 
   assert_failure

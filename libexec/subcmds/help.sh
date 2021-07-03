@@ -11,6 +11,10 @@
 # span multiple lines as long as subsequent lines are indented.
 # The remainder of the comment block is displayed as extended
 # documentation.
+for f in "$bin_path"/plumbing/?*.sh; do
+  source "$f"
+done
+source "$bin_path/plumbing/clone.sh"
 
 source basher-_util
 
@@ -92,7 +96,15 @@ documentation_for() {
 
 
   if [ -n "$filename" ]; then
-    extract_initial_comment_block < "$filename" | collect_documentation
+    if [ "$(type -t "$filename")" = "function" ]; then
+      # TODO
+      # doesn't work because bash does not include comments in functions
+      extract_initial_comment_block < <(
+        type "$filename" | sed '$ d' | sed '1d' | sed '1d' | sed '1d' | sed 's/^    //' \
+      ) | collect_documentation
+    else
+      extract_initial_comment_block < "$filename" | collect_documentation
+    fi
   fi
 }
 

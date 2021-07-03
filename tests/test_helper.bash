@@ -24,13 +24,13 @@ mkdir -p "$BASHER_ORIGIN_DIR"
 mkdir -p "$BASHER_CWD"
 
 export bin_path="$BATS_TEST_DIRNAME/../libexec"
-for f in "$bin_path"/subcmds/?*.sh; do
+for f in "$bin_path"/{subcmds,plumbing}/?*.sh; do
   source "$f"
 done
 
 setup() {
   cd $BASHER_CWD
-  for f in "$bin_path"/subcmds/?*.sh; do
+  for f in "$bin_path"/{subcmds,plumbing}/?*.sh; do
     source "$f"
   done
   source "$bin_path/basher-_util"

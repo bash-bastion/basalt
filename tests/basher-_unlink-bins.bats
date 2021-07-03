@@ -54,6 +54,8 @@ load test_helper
 }
 
 @test "doesn't remote root bins or files in bin folder if there is a BINS config on package.sh" {
+  skip
+
   mock_clone
 
   create_package username/package
