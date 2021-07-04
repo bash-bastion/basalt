@@ -82,8 +82,8 @@ documentation_for() {
   local filename
 
   # test for file first, since we don't want command -v to return a function
-  if [ -f "$BASHER_ROOT/libexec/commands/$command.sh" ]; then
-    filename="$BASHER_ROOT/libexec/commands/$command.sh"
+  if [ -f "$BASHER_ROOT/pkg/lib/commands/$command.sh" ]; then
+    filename="$BASHER_ROOT/pkg/lib/commands/$command.sh"
   elif command -v basher-"$command" &>/dev/null; then
     filename="$(command -v basher-"$command")"
   fi
@@ -175,7 +175,7 @@ basher-help() {
       else
         print_help "$command"
       fi
-    elif [ -f "$BASHER_ROOT/libexec/commands/$command.sh" ]; then
+    elif [ -f "$BASHER_ROOT/pkg/lib/commands/$command.sh" ]; then
       if [ -n "$usage" ]; then
         print_usage "$command"
       else

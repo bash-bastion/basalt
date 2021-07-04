@@ -17,7 +17,7 @@ export BASHER_INSTALL_BIN="$BASHER_PREFIX/bin"
 export BASHER_INSTALL_MAN="$BASHER_PREFIX/man"
 export BASHER_PACKAGES_PATH="$BASHER_PREFIX/packages"
 
-export PATH="$BATS_TEST_DIRNAME/../libexec:$PATH"
+export PATH="$BATS_TEST_DIRNAME/../pkg/bin:$PATH"
 export PATH="$BASHER_TMP_BIN:$PATH"
 
 mkdir -p "$BASHER_TMP_BIN"
@@ -25,7 +25,7 @@ mkdir -p "$BASHER_TEST_DIR/path"
 mkdir -p "$BASHER_ORIGIN_DIR"
 mkdir -p "$BASHER_CWD"
 
-for f in "$BASHER_ROOT/libexec"/{commands,util}/?*.sh; do
+for f in "$BASHER_ROOT"/pkg/lib/{commands,util}/?*.sh; do
   source "$f"
 done
 
