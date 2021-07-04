@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 #
 # Summary: A package manager for shell scripts
 #
@@ -14,7 +14,7 @@ main() {
   export BASHER_INSTALL_BIN="${BASHER_INSTALL_BIN:-"$BASHER_PREFIX/bin"}"
   export BASHER_INSTALL_MAN="${BASHER_INSTALL_MAN:-"$BASHER_PREFIX/man"}"
 
-  for f in "$BASHER_ROOT"/libexec/{commands,util}/?*.sh; do
+  for f in "$PROGRAM_LIB_DIR"/{commands,util}/?*.sh; do
     source "$f"
   done
 
@@ -75,7 +75,7 @@ main() {
     exit
     ;;
   *)
-    echo "basher: no command given"
+    echo "basher: no command given" >&2
     basher-help
     ;;
   esac
