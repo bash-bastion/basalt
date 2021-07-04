@@ -26,7 +26,7 @@ load 'util/init.sh'
 @test "when file doesn't exist, prints an error" {
   create_package username/repo
   mock.command _clone
-  basher-_clone false site username/repo
+  basher-plumbing-clone false site username/repo
 
   eval "$(basher-init sh)"
   run include username/repo non_existent
@@ -38,7 +38,7 @@ load 'util/init.sh'
   create_package username/repo
   create_file username/repo function.sh "func_name() { echo DONE; }"
   mock.command _clone
-  basher-_clone false site username/repo
+  basher-plumbing-clone false site username/repo
 
   eval "$(basher-init sh)"
   include username/repo function.sh

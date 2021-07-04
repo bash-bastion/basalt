@@ -21,78 +21,78 @@ load 'util/init.sh'
 }
 
 @test "executes install steps in right order" {
-  mock.command basher-_clone
-  mock.command basher-_deps
-  mock.command basher-_link-bins
-  mock.command basher-_link-man
-  mock.command basher-_link-completions
+  mock.command basher-plumbing-clone
+  mock.command basher-plumbing-deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
 
   run basher-install username/package
-  assert_success "basher-_clone false github.com username/package
-basher-_deps username/package
-basher-_link-bins username/package
-basher-_link-man username/package
-basher-_link-completions username/package"
+  assert_success "basher-plumbing-clone false github.com username/package
+basher-plumbing-deps username/package
+basher-plumbing-link-bins username/package
+basher-plumbing-link-completions username/package
+basher-plumbing-link-completions username/package"
 }
 
 @test "with site, overwrites site" {
-  mock.command basher-_clone
-  mock.command basher-_deps
-  mock.command basher-_link-bins
-  mock.command basher-_link-man
-  mock.command basher-_link-completions
+  mock.command basher-plumbing-clone
+  mock.command basher-plumbing-deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
 
   run basher-install site/username/package
 
-  assert_line "basher-_clone false site username/package"
+  assert_line "basher-plumbing-clone false site username/package"
 }
 
 @test "without site, uses github as default site" {
-  mock.command basher-_clone
-  mock.command basher-_deps
-  mock.command basher-_link-bins
-  mock.command basher-_link-man
-  mock.command basher-_link-completions
+  mock.command basher-plumbing-clone
+  mock.command basher-plumbing-deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
 
   run basher-install username/package
 
-  assert_line "basher-_clone false github.com username/package"
+  assert_line "basher-plumbing-clone false github.com username/package"
 }
 
 @test "using ssh protocol" {
-  mock.command basher-_clone
-  mock.command basher-_deps
-  mock.command basher-_link-bins
-  mock.command basher-_link-man
-  mock.command basher-_link-completions
+  mock.command basher-plumbing-clone
+  mock.command basher-plumbing-deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
 
   run basher-install --ssh username/package
 
-  assert_line "basher-_clone true github.com username/package"
+  assert_line "basher-plumbing-clone true github.com username/package"
 }
 
 @test "installs with custom version" {
-  mock.command basher-_clone
-  mock.command basher-_deps
-  mock.command basher-_link-bins
-  mock.command basher-_link-man
-  mock.command basher-_link-completions
+  mock.command basher-plumbing-clone
+  mock.command basher-plumbing-deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
 
   run basher-install username/package@v1.2.3
 
-  assert_line "basher-_clone false github.com username/package v1.2.3"
+  assert_line "basher-plumbing-clone false github.com username/package v1.2.3"
 }
 
 @test "empty version is ignored" {
-  mock.command basher-_clone
-  mock.command basher-_deps
-  mock.command basher-_link-bins
-  mock.command basher-_link-man
-  mock.command basher-_link-completions
+  mock.command basher-plumbing-clone
+  mock.command basher-plumbing-deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
 
   run basher-install username/package@
 
-  assert_line "basher-_clone false github.com username/package"
+  assert_line "basher-plumbing-clone false github.com username/package"
 }
 
 @test "doesn't fail" {

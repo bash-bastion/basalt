@@ -11,7 +11,6 @@ resolve_link() {
 }
 
 basher-link() {
-
   local no_deps="false"
 
   case $1 in
@@ -66,11 +65,11 @@ basher-link() {
 
   ln -s "$directory" "$BASHER_PACKAGES_PATH/$package"
 
-  basher-_link-bins "$package"
-  basher-_link-completions "$package"
-  basher-_link-man "$package"
+  basher-plumbing-link-bins "$package"
+  basher-plumbing-link-completions "$package"
+  basher-plumbing-link-completions "$package"
 
   if [ "$no_deps" = "false" ]; then
-    basher-_deps "$package"
+    basher-plumbing-deps "$package"
   fi
 }

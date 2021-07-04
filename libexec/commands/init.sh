@@ -3,7 +3,6 @@
 # Usage: eval "$(basher init -)"
 
 basher-init() {
-
   local shell="$1"
 
   if [ -z "$shell" ]; then

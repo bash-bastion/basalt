@@ -8,7 +8,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-completions username/package
+  run basher-plumbing-unlink-completions username/package
   assert_success
   assert [ ! -e "$($BASHER_PREFIX/completions/bash/comp.bash)" ]
 }
@@ -19,7 +19,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-completions username/package
+  run basher-plumbing-unlink-completions username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_PREFIX/completions/zsh/compsys/_exec)" ]
 }
@@ -30,7 +30,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-completions username/package
+  run basher-plumbing-unlink-completions username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_PREFIX/completions/zsh/compctl/exec)" ]
 }

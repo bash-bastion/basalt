@@ -25,7 +25,7 @@ mkdir -p "$BASHER_TEST_DIR/path"
 mkdir -p "$BASHER_ORIGIN_DIR"
 mkdir -p "$BASHER_CWD"
 
-for f in "$BASHER_ROOT/libexec"/{subcmds,plumbing,util}/?*.sh; do
+for f in "$BASHER_ROOT/libexec"/{commands,util}/?*.sh; do
   source "$f"
 done
 

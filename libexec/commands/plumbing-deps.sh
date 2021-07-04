@@ -8,7 +8,7 @@
 #
 # Example: DEPS=username/repo1:otheruser/repo2
 
-basher-_deps() {
+basher-plumbing-deps() {
   if [ "$#" -ne 1 ]; then
     basher-help _deps
     exit 1

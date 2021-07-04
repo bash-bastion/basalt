@@ -4,7 +4,6 @@
 # Usage: basher list
 
 basher-list() {
-
   util.show_help_if_flag_passed 'list' "$@"
 
   local username= package=

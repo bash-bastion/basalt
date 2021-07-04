@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
-basher-_unlink-completions() {
-
+basher-plumbing-unlink-completions() {
   local package="$1"
 
   if [ ! -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then

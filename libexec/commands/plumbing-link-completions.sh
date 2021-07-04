@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
-basher-_link-completions() {
-
+basher-plumbing-link-completions() {
   local package="$1"
 
   if [ ! -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
@@ -12,14 +11,12 @@ basher-_link-completions() {
   IFS=: read -ra bash_completions <<< "$BASH_COMPLETIONS"
   IFS=: read -ra zsh_completions <<< "$ZSH_COMPLETIONS"
 
-  for completion in "${bash_completions[@]}"
-  do
+  for completion in "${bash_completions[@]}"; do
     mkdir -p "$BASHER_PREFIX/completions/bash"
     ln -sf "$BASHER_PACKAGES_PATH/$package/$completion" "$BASHER_PREFIX/completions/bash/${completion##*/}"
   done
 
-  for completion in "${zsh_completions[@]}"
-  do
+  for completion in "${zsh_completions[@]}"; do
     target="$BASHER_PACKAGES_PATH/$package/$completion"
     if grep -q "#compdef" "$target"; then
       mkdir -p "$BASHER_PREFIX/completions/zsh/compsys"

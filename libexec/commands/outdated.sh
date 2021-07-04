@@ -4,7 +4,8 @@
 # Usage: basher outdated
 
 basher-outdated() {
-    shopt -s nullglob
+  # TODO
+  shopt -s nullglob
 
   IFS=$'\n' packages=($(basher-list))
 

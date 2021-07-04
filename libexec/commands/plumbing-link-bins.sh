@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
-basher-_link-bins() {
-
+basher-plumbing-link-bins() {
   local package="$1"
 
   local bins

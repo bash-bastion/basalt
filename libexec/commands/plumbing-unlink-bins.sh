@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
-basher-_unlink-bins() {
-
+basher-plumbing-unlink-bins() {
   local package="$1"
 
   local bins

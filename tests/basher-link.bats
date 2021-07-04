@@ -53,10 +53,10 @@ resolve_link() {
 }
 
 @test "links the package to packages under the correct namespace" {
-  mock.command basher-_link-bins
-  mock.command basher-_link-completions
-  mock.command basher-_link-man
-  mock.command basher-_deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-deps
   mkdir package1
   run basher-link package1 namespace1/package1
   assert_success
@@ -64,35 +64,35 @@ resolve_link() {
 }
 
 @test "calls link-bins, link-completions, link-man and deps" {
-  mock.command basher-_link-bins
-  mock.command basher-_link-completions
-  mock.command basher-_link-man
-  mock.command basher-_deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-deps
   mkdir package2
   run basher-link package2 namespace2/package2
   assert_success
-  assert_line "basher-_link-bins namespace2/package2"
-  assert_line "basher-_link-completions namespace2/package2"
-  assert_line "basher-_link-man namespace2/package2"
-  assert_line "basher-_deps namespace2/package2"
+  assert_line "basher-plumbing-link-bins namespace2/package2"
+  assert_line "basher-plumbing-link-completions namespace2/package2"
+  assert_line "basher-plumbing-link-completions namespace2/package2"
+  assert_line "basher-plumbing-deps namespace2/package2"
 }
 
 @test "respects --no-deps option" {
-  mock.command basher-_link-bins
-  mock.command basher-_link-completions
-  mock.command basher-_link-man
-  mock.command basher-_deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-deps
   mkdir package2
   run basher-link --no-deps package2 namespace2/package2
   assert_success
-  refute_line "basher-_deps namespace2/package2"
+  refute_line "basher-plumbing-deps namespace2/package2"
 }
 
 @test "resolves current directory (dot) path" {
-  mock.command basher-_link-bins
-  mock.command basher-_link-completions
-  mock.command basher-_link-man
-  mock.command basher-_deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-deps
   mkdir package3
   cd package3
   run basher-link . namespace3/package3
@@ -101,10 +101,10 @@ resolve_link() {
 }
 
 @test "resolves parent directory (dotdot) path" {
-  mock.command basher-_link-bins
-  mock.command basher-_link-completions
-  mock.command basher-_link-man
-  mock.command basher-_deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-deps
   mkdir package3
   cd package3
   run basher-link ../package3 namespace3/package3
@@ -113,10 +113,10 @@ resolve_link() {
 }
 
 @test "resolves arbitrary complex relative path" {
-  mock.command basher-_link-bins
-  mock.command basher-_link-completions
-  mock.command basher-_link-man
-  mock.command basher-_deps
+  mock.command basher-plumbing-link-bins
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-link-completions
+  mock.command basher-plumbing-deps
   mkdir package3
   run basher-link ./package3/.././package3 namespace3/package3
   assert_success

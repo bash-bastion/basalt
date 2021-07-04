@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "without arguments prints usage" {
   skip
 
-  run basher-_clone
+  run basher-plumbing-clone
   assert_failure
   assert_line "Usage: basher _clone <use_ssh> <site> <package> [<ref>]"
 }
@@ -13,7 +13,7 @@ load 'util/init.sh'
 @test "invalid package prints usage" {
   skip
 
-  run basher-_clone false github.com invalid_package
+  run basher-plumbing-clone false github.com invalid_package
   assert_failure
   assert_line "Usage: basher _clone <use_ssh> <site> <package> [<ref>]"
 }
@@ -21,7 +21,7 @@ load 'util/init.sh'
 @test "too many arguments prints usage" {
   skip
 
-  run basher-_clone false site a/b ref fourth_arg
+  run basher-plumbing-clone false site a/b ref fourth_arg
   assert_failure
   assert_line "Usage: basher _clone <use_ssh> <site> <package> [<ref>]"
 }
@@ -29,7 +29,7 @@ load 'util/init.sh'
 @test "install a specific version" {
   mock.command git
 
-  run basher-_clone false site username/package version
+  run basher-plumbing-clone false site username/package version
   assert_success
   assert_output "git clone --depth=1 -b version --recursive https://site/username/package.git $BASHER_PACKAGES_PATH/username/package"
 }
@@ -37,7 +37,7 @@ load 'util/init.sh'
 @test "does nothing if package is already present" {
   mkdir -p "$BASHER_PACKAGES_PATH/username/package"
 
-  run basher-_clone false github.com username/package
+  run basher-plumbing-clone false github.com username/package
 
   assert_success
   assert_output "Package 'username/package' is already present"
@@ -46,7 +46,7 @@ load 'util/init.sh'
 @test "using a different site" {
   mock.command git
 
-  run basher-_clone false site username/package
+  run basher-plumbing-clone false site username/package
   assert_success
   assert_output "git clone --depth=1 --recursive https://site/username/package.git $BASHER_PACKAGES_PATH/username/package"
 }
@@ -55,7 +55,7 @@ load 'util/init.sh'
   export BASHER_FULL_CLONE=
   mock.command git
 
-  run basher-_clone false github.com username/package
+  run basher-plumbing-clone false github.com username/package
   assert_success
   assert_output "git clone --depth=1 --recursive https://github.com/username/package.git $BASHER_PACKAGES_PATH/username/package"
 }
@@ -64,7 +64,7 @@ load 'util/init.sh'
   export BASHER_FULL_CLONE=true
   mock.command git
 
-  run basher-_clone false github.com username/package
+  run basher-plumbing-clone false github.com username/package
   assert_success
   assert_output "git clone --recursive https://github.com/username/package.git $BASHER_PACKAGES_PATH/username/package"
 }
@@ -73,7 +73,7 @@ load 'util/init.sh'
   export BASHER_FULL_CLONE=false
   mock.command git
 
-  run basher-_clone false github.com username/package
+  run basher-plumbing-clone false github.com username/package
   assert_success
   assert_output "git clone --depth=1 --recursive https://github.com/username/package.git $BASHER_PACKAGES_PATH/username/package"
 }
@@ -81,7 +81,7 @@ load 'util/init.sh'
 @test "using ssh protocol" {
   mock.command git
 
-  run basher-_clone true site username/package
+  run basher-plumbing-clone true site username/package
   assert_success
   assert_output "git clone --depth=1 --recursive git@site:username/package.git $BASHER_PACKAGES_PATH/username/package"
 }

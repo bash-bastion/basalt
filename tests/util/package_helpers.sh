@@ -139,6 +139,7 @@ create_bash_completions() {
 
   git add .
   git commit -m "Add bash completions"
+
   cd "$BASHER_CWD"
 }
 

@@ -9,7 +9,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec1)" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" ]
@@ -22,7 +22,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec1)" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" ]
@@ -35,7 +35,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec3)" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec4.sh)" ]
@@ -48,7 +48,7 @@ load 'util/init.sh'
   basher-install username/package
   mkdir "$BASHER_PACKAGES_PATH/username/package/bin"
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
   assert_success
   assert [ -e "$(readlink $BASHER_INSTALL_BIN/exec3)" ]
 }
@@ -73,7 +73,7 @@ load 'util/init.sh'
   create_exec username/package3 exec3
   basher-install username/package3
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
 
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec1)" ]
@@ -86,7 +86,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
 
   assert_success
 }
@@ -99,7 +99,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec1)" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec2)" ]
@@ -113,7 +113,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-bins username/package
+  run basher-plumbing-unlink-bins username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec1)" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec2.sh)" ]

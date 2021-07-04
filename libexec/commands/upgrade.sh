@@ -3,7 +3,6 @@
 # Usage: basher upgrade <package>
 
 basher-upgrade() {
-
   if [ "$#" -ne 1 ]; then
     basher-help upgrade
     exit 1

@@ -5,7 +5,6 @@
 # Usage: basher install [--ssh] [site]/<package>[@ref]
 
 basher-install() {
-
   local use_ssh="false"
 
   case "$1" in
@@ -52,13 +51,13 @@ basher-install() {
   fi
 
   if [ -z "$ref" ]; then
-    basher-_clone "$use_ssh" "$site" "$package"
+    basher-plumbing-clone "$use_ssh" "$site" "$package"
   else
-    basher-_clone "$use_ssh" "$site" "$package" "$ref"
+    basher-plumbing-clone "$use_ssh" "$site" "$package" "$ref"
   fi
 
-  basher-_deps "$package"
-  basher-_link-bins "$package"
-  basher-_link-man "$package"
-  basher-_link-completions "$package"
+  basher-plumbing-deps "$package"
+  basher-plumbing-link-bins "$package"
+  basher-plumbing-link-completions "$package"
+  basher-plumbing-link-completions "$package"
 }

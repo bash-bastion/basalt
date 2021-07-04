@@ -14,7 +14,7 @@ main() {
   export BASHER_INSTALL_BIN="${BASHER_INSTALL_BIN:-"$BASHER_PREFIX/bin"}"
   export BASHER_INSTALL_MAN="${BASHER_INSTALL_MAN:-"$BASHER_PREFIX/man"}"
 
-  for f in "$BASHER_ROOT"/libexec/{plumbing,subcmds,util}/?*.sh; do
+  for f in "$BASHER_ROOT"/libexec/{commands,util}/?*.sh; do
     source "$f"
   done
 

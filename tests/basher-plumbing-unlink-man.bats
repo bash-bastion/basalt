@@ -9,7 +9,7 @@ load 'util/init.sh'
   mock.command _clone
   basher-install username/package
 
-  run basher-_unlink-man username/package
+  run basher-plumbing-unlink-man username/package
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_MAN/man1/exec.1)" ]
   assert [ ! -e "$(readlink $BASHER_INSTALL_MAN/man2/exec.2)" ]

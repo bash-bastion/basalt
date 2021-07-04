@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "without arguments, prints usage" {
   skip
 
-  run basher-_deps
+  run basher-plumbing-deps
 
   assert_failure
   assert_line "Usage: basher _deps <package>"
@@ -15,9 +15,9 @@ load 'util/init.sh'
   mock.command _clone
   mock.command basher-install
   create_package "user/main"
-  basher-_clone false site user/main
+  basher-plumbing-clone false site user/main
 
-  run basher-_deps user/main
+  run basher-plumbing-deps user/main
 
   assert_success ""
 }
@@ -28,9 +28,9 @@ load 'util/init.sh'
   create_package "user/main"
   create_dep "user/main" "user/dep1"
   create_dep "user/main" "user/dep2"
-  basher-_clone false site user/main
+  basher-plumbing-clone false site user/main
 
-  run basher-_deps user/main
+  run basher-plumbing-deps user/main
 
   assert_success
   assert_line "basher-install user/dep1"

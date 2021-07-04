@@ -7,9 +7,9 @@ load 'util/init.sh'
   create_package_exec username/package exec1
   create_package_exec username/package exec2.sh
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
   assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/package_bin/exec1" ]
@@ -21,9 +21,9 @@ load 'util/init.sh'
   create_exec username/package exec1
   create_exec username/package exec2.sh
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
   assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -35,9 +35,9 @@ load 'util/init.sh'
   create_root_exec username/package exec3
   create_root_exec username/package exec4.sh
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
   assert [ "$(readlink $BASHER_INSTALL_BIN/exec3)" = "$BASHER_PACKAGES_PATH/username/package/exec3" ]
@@ -49,9 +49,9 @@ load 'util/init.sh'
   create_exec username/package exec1
   create_root_exec username/package exec2
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
   assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -64,9 +64,9 @@ load 'util/init.sh'
   create_root_exec username/package exec2
   create_package_exec username/package exec3
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
   assert [ ! -e "$(readlink $BASHER_INSTALL_BIN/exec1)" ]
@@ -77,9 +77,9 @@ load 'util/init.sh'
 @test "does not fail if there are no binaries" {
   create_package username/package
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
 }
@@ -90,9 +90,9 @@ load 'util/init.sh'
   create_exec username/package exec2.sh
   set_remove_extension username/package true
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
   assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -105,9 +105,9 @@ load 'util/init.sh'
   create_exec username/package exec2.sh
   set_remove_extension username/package false
   mock.command _clone
-  basher-_clone false site username/package
+  basher-plumbing-clone false site username/package
 
-  run basher-_link-bins username/package
+  run basher-plumbing-link-bins username/package
 
   assert_success
   assert [ "$(readlink $BASHER_INSTALL_BIN/exec1)" = "$BASHER_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -116,7 +116,7 @@ load 'util/init.sh'
 
 @test "does not symlink package itself as bin when linked with basher link" {
   mkdir package
-  # implicit call to basher-_link-bins
+  # implicit call to basher-plumbing-link-bins
   run basher-link package username/package
   assert_success
   assert [ ! -e "$BASHER_PREFIX/bin/package" ]

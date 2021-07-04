@@ -3,7 +3,6 @@
 # Usage: basher uninstall <package>
 
 basher-uninstall() {
-
   if [ "$#" -ne 1 ]; then
     basher-help uninstall
     exit 1
@@ -33,9 +32,9 @@ basher-uninstall() {
     exit 1
   fi
 
-  basher-_unlink-man "$package"
-  basher-_unlink-bins "$package"
-  basher-_unlink-completions "$package"
+  basher-plumbing-unlink-man "$package"
+  basher-plumbing-unlink-bins "$package"
+  basher-plumbing-unlink-completions "$package"
 
   rm -rf "${BASHER_PACKAGES_PATH:?}/$package"
 }

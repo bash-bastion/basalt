@@ -5,7 +5,7 @@
 mock.command() {
   case "$1" in
   _clone)
-    basher-_clone() {
+    basher-plumbing-clone() {
       local use_ssh="$1"
       local site="$2"
       local package="$3"
