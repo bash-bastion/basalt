@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 die() {
-  echo "!! $1 " >&2
-  echo "!! -----------------------------" >&2
-  exit 1
+	echo "!! $1 " >&2
+	echo "!! -----------------------------" >&2
+	exit 1
 }
 
 xdg_basher_dir="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
@@ -14,7 +14,7 @@ xdg_basher_dir="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
 
 ## stop if git is not installed
 if ! git version >/dev/null 2>&1; then
-  die "git is not installed on this machine"
+	die "git is not installed on this machine"
 fi
 
 ## install the scripts on ~/.basher
@@ -41,22 +41,22 @@ basher_keyword="basher5ea843"
 ## now add the basher initialisation lines to the user's startup script
 echo ". add basher initialisation to [$startup_script]"
 if [[ "$startup_type" == "simple" ]]; then
-  (
-    echo "export PATH=\"\$HOME/.basher/bin:\$PATH\"   ##$basher_keyword"
-    # shellcheck disable=SC2086
-    echo "eval \"\$(basher init - $shell_type)\"             ##$basher_keyword"
-  ) >>"$startup_script"
+	(
+		echo "export PATH=\"\$HOME/.basher/bin:\$PATH\"   ##$basher_keyword"
+		# shellcheck disable=SC2086
+		echo "eval \"\$(basher init - $shell_type)\"             ##$basher_keyword"
+	) >>"$startup_script"
 elif [[ "$startup_type" == "fish" ]]; then
-  (
-    echo "if test -d ~/.basher          ##$basher_keyword"
-    echo "  set basher ~/.basher/bin    ##$basher_keyword"
-    echo "end                           ##$basher_keyword"
-    # shellcheck disable=SC2154
-    echo "set -gx PATH \$basher \$PATH    ##$basher_keyword"
-    echo "status --is-interactive; and . (basher init - $shell_type | psub)    ##$basher_keyword"
-  ) >>"$startup_script"
+	(
+		echo "if test -d ~/.basher          ##$basher_keyword"
+		echo "  set basher ~/.basher/bin    ##$basher_keyword"
+		echo "end                           ##$basher_keyword"
+		# shellcheck disable=SC2154
+		echo "set -gx PATH \$basher \$PATH    ##$basher_keyword"
+		echo "status --is-interactive; and . (basher init - $shell_type | psub)    ##$basher_keyword"
+	) >>"$startup_script"
 else
-  die "unknown shell [$shell_type] - can't initialise"
+	die "unknown shell [$shell_type] - can't initialise"
 fi
 
 ## script is finished

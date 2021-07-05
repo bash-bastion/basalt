@@ -3,20 +3,20 @@
 load 'util/init.sh'
 
 @test "displays nothing if there are no packages" {
-  run basher-outdated
-  assert_success
-  assert_output ""
+	run basher-outdated
+	assert_success
+	assert_output ""
 }
 
 @test "displays outdated packages" {
-  mock.command _clone
-  create_package username/outdated
-  create_package username/uptodate
-  basher-install username/outdated
-  basher-install username/uptodate
-  create_exec username/outdated "second"
+	mock.command _clone
+	create_package username/outdated
+	create_package username/uptodate
+	basher-install username/outdated
+	basher-install username/uptodate
+	create_exec username/outdated "second"
 
-  run basher-outdated
-  assert_success
-  assert_output username/outdated
+	run basher-outdated
+	assert_success
+	assert_output username/outdated
 }

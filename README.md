@@ -72,26 +72,26 @@ $ brew install bash coreutils
 
 1. Checkout basher on `~/.basher`
 
-    ~~~ sh
-    $ git clone --depth=1 https://github.com/basherpm/basher.git ~/.basher
-    ~~~
+	~~~ sh
+	$ git clone --depth=1 https://github.com/basherpm/basher.git ~/.basher
+	~~~
 
 2. Initialize basher in your shell initialization
 
-    ~~~ sh
-    export PATH="$HOME/.basher/bin:$PATH"
-    eval "$(basher init bash)" # replace `bash` with `zsh` if you use zsh
-    ~~~
+	~~~ sh
+	export PATH="$HOME/.basher/bin:$PATH"
+	eval "$(basher init bash)" # replace `bash` with `zsh` if you use zsh
+	~~~
 
-    **Fish**: Use the following commands instead:
+	**Fish**: Use the following commands instead:
 
-    ~~~ sh
-    if test -d ~/.basher
-      set basher ~/.basher/bin
-    end
-    set -gx PATH $basher $PATH
-    status --is-interactive; and . (basher init fish|psub)
-    ~~~
+	~~~ sh
+	if test -d ~/.basher
+	set basher ~/.basher/bin
+	end
+	set -gx PATH $basher $PATH
+	status --is-interactive; and . (basher init fish|psub)
+	~~~
 
 or in 1 line, automatically (this will install basher and add it to your .bashrc/.zshrc file - in a way that can automatically be uninstalled later)):
 

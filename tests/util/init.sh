@@ -30,14 +30,14 @@ mkdir -p "$BASHER_CWD"
 mkdir -p "$BASHER_TMP_BIN"
 
 for f in "$BASHER_ROOT"/pkg/lib/{commands,util}/?*.sh; do
-  source "$f"
+	source "$f"
 done
 
 setup() {
-  # shellcheck disable=SC2164
-  cd "$BASHER_CWD"
+	# shellcheck disable=SC2164
+	cd "$BASHER_CWD"
 }
 
 teardown() {
-  rm -rf "$BASHER_TEST_DIR"
+	rm -rf "$BASHER_TEST_DIR"
 }

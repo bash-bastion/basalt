@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 die() {
-  echo "!! $1 " >&2
-  echo "!! -----------------------------" >&2
-  exit 1
+	echo "!! $1 " >&2
+	echo "!! -----------------------------" >&2
+	exit 1
 }
 
 xdg_basher_dir="${XDG_DATA_HOME:-$HOME/.local/share}/basher"
 
 ## stop if basher is not installed
 if ! [[ -d "$HOME/.basher" || -d "$xdg_basher_dir" ]]; then
-  die "basher doesn't seem to be installed on [$HOME/.basher] or [$xdg_basher_dir]"
+	die "basher doesn't seem to be installed on [$HOME/.basher] or [$xdg_basher_dir]"
 fi
 
 echo ". remove basher code and installed packages"
@@ -39,17 +39,17 @@ echo ". following basher folders are in your path:"
 echo $PATH | tr ':' "\n" | grep basher
 
 if grep -q "$basher_keyword" "$startup_script" ; then
-  echo ". remove basher from startup script [$startup_script]"
-  sleep 1
-  temp_file="$startup_script.temp"
-  cp "$startup_script" "$temp_file"
-  < "$temp_file" grep -v "$basher_keyword" > "$startup_script"
-  rm "$temp_file"
+	echo ". remove basher from startup script [$startup_script]"
+	sleep 1
+	temp_file="$startup_script.temp"
+	cp "$startup_script" "$temp_file"
+	< "$temp_file" grep -v "$basher_keyword" > "$startup_script"
+	rm "$temp_file"
 elif grep -q basher "$startup_script" ; then
-    grep basher "$startup_script"
-    die "Can't auto-remove the lines from $(basename $startup_script) - please do so manually "
+		grep basher "$startup_script"
+		die "Can't auto-remove the lines from $(basename $startup_script) - please do so manually "
 else
-    die "Can't find initialisation commands for basher"
+		die "Can't find initialisation commands for basher"
 fi
 
 ## script is finished
