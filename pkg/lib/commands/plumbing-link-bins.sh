@@ -7,8 +7,11 @@ basher-plumbing-link-bins() {
 
 	local -a bins=()
 	if [ -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
-		source "$BPM_PACKAGES_PATH/$package/package.sh"
-		IFS=: read -ra bins <<< "$BINS"
+		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BINS'
+		IFS=':' read -ra bins <<< "$REPLY"
+
+		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'REMOVE_EXTENSION'
+		local REMOVE_EXTENSION="$REPLY"
 	fi
 
 	if ((${#bins} == 0)); then
@@ -25,7 +28,7 @@ basher-plumbing-link-bins() {
 	for bin in "${bins[@]}"; do
 		local name="${bin##*/}"
 
-		if ${REMOVE_EXTENSION:-false}; then
+		if "${REMOVE_EXTENSION:-false}"; then
 			name="${name%%.*}"
 		fi
 

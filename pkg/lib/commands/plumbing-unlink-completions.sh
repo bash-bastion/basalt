@@ -9,9 +9,12 @@ basher-plumbing-unlink-completions() {
 		return
 	fi
 
-	source "$BPM_PACKAGES_PATH/$package/package.sh" # TODO: make this secure?
-	IFS=: read -ra bash_completions <<< "$BASH_COMPLETIONS"
-	IFS=: read -ra zsh_completions <<< "$ZSH_COMPLETIONS"
+	local bash_completions zsh_completions
+	util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BASH_COMPLETIONS'
+		IFS=':' read -ra bash_completions <<< "$REPLY"
+
+	util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'ZSH_COMPLETIONS'
+		IFS=':' read -ra zsh_completions <<< "$REPLY"
 
 	for completion in "${bash_completions[@]}"; do
 		rm -f "$BPM_PREFIX/completions/bash/${completion##*/}"

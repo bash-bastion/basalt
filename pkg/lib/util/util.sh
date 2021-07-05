@@ -44,6 +44,108 @@ util.resolve_link() {
 	fi
 }
 
+# TODO: extract to own repo
+# @description Retrieve a string key from a toml file
+util.get_toml_string() {
+	REPLY=
+	local tomlFile="$1"
+	local keyName="$2"
+
+	if [ ! -f "$tomlFile" ]; then
+		die "File '$tomlFile' not found"
+	fi
+
+	local grepLine=
+	while IFS= read -r line; do
+		if [[ $line == *"$keyName"*=* ]]; then
+			grepLine="$line"
+			break
+		fi
+	done < "$tomlFile"
+
+	# If the grepLine is empty, it means the key wasn't found, and we continue to
+	# the next configuration file. We need the intermediary grep check because
+	# we don't want to set the value to an empty string if it the config key is
+	# not found in the file (since piping to sed would result in something indistinguishable
+	# from setting the key to an empty string value)
+	if [ -z "$grepLine" ]; then
+		REPLY=''
+		return 1
+	fi
+
+	local regex="[ \t]*${keyName}[ \t]*=[ \t]*['\"](.*)['\"]"
+	if [[ $grepLine =~ $regex ]]; then
+		REPLY="${BASH_REMATCH[1]}"
+	else
+		die "Value for key '$keyName' not valid"
+	fi
+}
+
+# @description Retrieve an array key from a TOML file
+util.get_toml_array() {
+	declare -ga REPLIES=()
+	local tomlFile="$1"
+	local keyName="$2"
+
+	local grepLine=
+	while IFS= read -r line; do
+		if [[ $line == *"$keyName"*=* ]]; then
+			grepLine="$line"
+			break
+		fi
+	done < "$tomlFile"
+
+	# If the grepLine is empty, it means the key wasn't found, and we continue to
+	# the next configuration file. We need the intermediary grep check because
+	# we don't want to set the value to an empty string if it the config key is
+	# not found in the file (since piping to sed would result in something indistinguishable
+	# from setting the key to an empty string value)
+	if [ -z "$grepLine" ]; then
+		REPLY=''
+		return 1
+	fi
+
+	local regex="[ \t]*${keyName}[ \t]*=[ \t]*\[[ \t]*(.*)[ \t]*\]"
+	if [[ "$grepLine" =~ $regex ]]; then
+		local -r arrayString="${BASH_REMATCH[1]}"
+
+		IFS=',' read -ra REPLIES <<< "$arrayString"
+		for i in "${!REPLIES[@]}"; do
+			# Treat all TOML strings the same; there shouldn't be
+			# any escape characters anyways
+			local regex="[ \t]*['\"](.*)['\"]"
+			if [[ ${REPLIES[$i]} =~ $regex ]]; then
+				REPLIES[$i]="${BASH_REMATCH[1]}"
+			else
+				die "Array for key '$keyName' not valid"
+			fi
+		done
+	else
+		die "Key '$keyName' in file '$cfgFile' must be set to an array that spans one line"
+	fi
+}
+
+# @description Extract a shell variable from a shell file. Of course, this doesn't
+# properly account for esacape characters and the such, but that shouldn't be included
+# in this string in the first place
+util.extract_shell_variable() {
+	REPLY=
+
+	local shellFile="$1"
+	local variableName="$2"
+
+	if [ ! -f "$shellFile" ]; then
+		die "File '$shellFile' not found"
+	fi
+
+	ensure.nonZero 'variableName' "$variableName"
+
+	local regex="^[ \t]*(declare.*? |typeset.*? )?$variableName=[\"']?([^('|\")]*)"
+	if [[ "$(<"$shellFile")" =~ $regex ]]; then
+		REPLY="${BASH_REMATCH[2]}"
+	fi
+}
+
 util.show_help() {
 	cat <<"EOF"
 Usage:

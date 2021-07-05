@@ -1,8 +1,8 @@
 # bpm
 
-Originally a fork of [basher](basherpm/basher), `bpm` is a package manager for Bash repositories.
+Originally a fork of [basher](https://github.com/basherpm/basher), `bpm` is a package manager for Bash repositories.
 
-> Instead of looking for specific install instructions for each package and messing with your path, [neo]basher will create a central location for all packages and manage their binaries for you
+> Instead of looking for specific install instructions for each package and messing with your path, [bpm] will create a central location for all packages and manage their binaries for you
 
 More specifically, when `bpm` is given a repository to install, it will automatically
 
