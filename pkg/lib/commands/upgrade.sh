@@ -12,6 +12,6 @@ basher-upgrade() {
 
 		log.info "Upgrading '$repoSpec'"
 
-		git -C "$NEOBASHER_PACKAGES_PATH/$user/$repository" pull
+		git -C "$BPM_PACKAGES_PATH/$user/$repository" pull
 	done
 }

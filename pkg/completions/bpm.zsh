@@ -2,9 +2,9 @@ if [[ ! -o interactive ]]; then
 		return
 fi
 
-compctl -K _neobasher neobasher
+compctl -K _bpm bpm
 
-_neobasher() {
+_bpm() {
 	local words completions
 	read -cA words
 

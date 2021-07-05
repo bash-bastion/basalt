@@ -11,11 +11,11 @@ basher-plumbing-deps() {
 
 	ensure.nonZero 'package' "$package"
 
-	if [ ! -f "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
+	if [ ! -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
 		return
 	fi
 
-	source "$NEOBASHER_PACKAGES_PATH/$package/package.sh"
+	source "$BPM_PACKAGES_PATH/$package/package.sh"
 	IFS=: read -ra deps <<< "$DEPS"
 
 	for dep in "${deps[@]}"; do

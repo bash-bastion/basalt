@@ -2,67 +2,67 @@
 
 load 'util/init.sh'
 
-@test "default NEOBASHER_ROOT" {
-	NEOBASHER_ROOT= run neobasher echo NEOBASHER_ROOT
-	assert_output "$HOME/.local/share/neobasher"
+@test "default BPM_ROOT" {
+	BPM_ROOT= run bpm echo BPM_ROOT
+	assert_output "$HOME/.local/share/bpm"
 }
 
-@test "inherited NEOBASHER_ROOT" {
-	NEOBASHER_ROOT=/tmp/basher run neobasher echo NEOBASHER_ROOT
+@test "inherited BPM_ROOT" {
+	BPM_ROOT=/tmp/basher run bpm echo BPM_ROOT
 	assert_output "/tmp/basher"
 }
 
-@test "default NEOBASHER_PREFIX" {
-	NEOBASHER_ROOT= NEOBASHER_PREFIX= run neobasher echo NEOBASHER_PREFIX
-	assert_output "$HOME/.local/share/neobasher/cellar"
+@test "default BPM_PREFIX" {
+	BPM_ROOT= BPM_PREFIX= run bpm echo BPM_PREFIX
+	assert_output "$HOME/.local/share/bpm/cellar"
 }
 
-@test "inherited NEOBASHER_PREFIX" {
-	NEOBASHER_PREFIX=/usr/local run neobasher echo NEOBASHER_PREFIX
+@test "inherited BPM_PREFIX" {
+	BPM_PREFIX=/usr/local run bpm echo BPM_PREFIX
 	assert_output "/usr/local"
 }
 
-@test "NEOBASHER_PREFIX based on NEOBASHER_ROOT" {
-	NEOBASHER_ROOT=/tmp/basher NEOBASHER_PREFIX= run neobasher echo NEOBASHER_PREFIX
+@test "BPM_PREFIX based on BPM_ROOT" {
+	BPM_ROOT=/tmp/basher BPM_PREFIX= run bpm echo BPM_PREFIX
 	assert_output "/tmp/basher/cellar"
 }
 
-@test "inherited NEOBASHER_PACKAGES_PATH" {
-	NEOBASHER_PACKAGES_PATH=/usr/local/packages run neobasher echo NEOBASHER_PACKAGES_PATH
+@test "inherited BPM_PACKAGES_PATH" {
+	BPM_PACKAGES_PATH=/usr/local/packages run bpm echo BPM_PACKAGES_PATH
 	assert_output "/usr/local/packages"
 }
 
-@test "NEOBASHER_PACKAGES_PATH based on NEOBASHER_PREFIX" {
-	NEOBASHER_PREFIX=/tmp/basher NEOBASHER_PACKAGES_PATH= run neobasher echo NEOBASHER_PACKAGES_PATH
+@test "BPM_PACKAGES_PATH based on BPM_PREFIX" {
+	BPM_PREFIX=/tmp/basher BPM_PACKAGES_PATH= run bpm echo BPM_PACKAGES_PATH
 	assert_output "/tmp/basher/packages"
 }
 
-@test "default NEOBASHER_INSTALL_BIN" {
-	NEOBASHER_ROOT= NEOBASHER_PREFIX= NEOBASHER_INSTALL_BIN= run neobasher echo NEOBASHER_INSTALL_BIN
-	assert_output "$HOME/.local/share/neobasher/cellar/bin"
+@test "default BPM_INSTALL_BIN" {
+	BPM_ROOT= BPM_PREFIX= BPM_INSTALL_BIN= run bpm echo BPM_INSTALL_BIN
+	assert_output "$HOME/.local/share/bpm/cellar/bin"
 }
 
-@test "inherited NEOBASHER_INSTALL_BIN" {
-	NEOBASHER_INSTALL_BIN=/opt/bin run neobasher echo NEOBASHER_INSTALL_BIN
+@test "inherited BPM_INSTALL_BIN" {
+	BPM_INSTALL_BIN=/opt/bin run bpm echo BPM_INSTALL_BIN
 	assert_output "/opt/bin"
 }
 
-@test "NEOBASHER_INSTALL_BIN based on NEOBASHER_PREFIX" {
-	NEOBASHER_INSTALL_BIN= NEOBASHER_ROOT=/tmp/basher NEOBASHER_PREFIX=/usr/local run neobasher echo NEOBASHER_INSTALL_BIN
+@test "BPM_INSTALL_BIN based on BPM_PREFIX" {
+	BPM_INSTALL_BIN= BPM_ROOT=/tmp/basher BPM_PREFIX=/usr/local run bpm echo BPM_INSTALL_BIN
 	assert_output "/usr/local/bin"
 }
 
-@test "default NEOBASHER_INSTALL_MAN" {
-	NEOBASHER_ROOT= NEOBASHER_PREFIX= NEOBASHER_INSTALL_MAN= run neobasher echo NEOBASHER_INSTALL_MAN
-	assert_output "$HOME/.local/share/neobasher/cellar/man"
+@test "default BPM_INSTALL_MAN" {
+	BPM_ROOT= BPM_PREFIX= BPM_INSTALL_MAN= run bpm echo BPM_INSTALL_MAN
+	assert_output "$HOME/.local/share/bpm/cellar/man"
 }
 
-@test "inherited NEOBASHER_INSTALL_MAN" {
-	NEOBASHER_INSTALL_MAN=/opt/man run neobasher echo NEOBASHER_INSTALL_MAN
+@test "inherited BPM_INSTALL_MAN" {
+	BPM_INSTALL_MAN=/opt/man run bpm echo BPM_INSTALL_MAN
 	assert_output "/opt/man"
 }
 
-@test "NEOBASHER_INSTALL_MAN based on NEOBASHER_PREFIX" {
-	NEOBASHER_INSTALL_MAN= NEOBASHER_PREFIX=/usr/local run neobasher echo NEOBASHER_INSTALL_MAN
+@test "BPM_INSTALL_MAN based on BPM_PREFIX" {
+	BPM_INSTALL_MAN= BPM_PREFIX=/usr/local run bpm echo BPM_INSTALL_MAN
 	assert_output "/usr/local/man"
 }

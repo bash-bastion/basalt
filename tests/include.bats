@@ -31,7 +31,7 @@ load 'util/init.sh'
 #   eval "$(basher-init sh)"
 #   run include username/repo non_existent
 #   assert_failure
-#   assert_output "File not found: $NEOBASHER_PREFIX/packages/username/repo/non_existent"
+#   assert_output "File not found: $BPM_PREFIX/packages/username/repo/non_existent"
 # }
 
 # @test "sources a file into the current shell" {

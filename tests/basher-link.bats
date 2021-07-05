@@ -23,7 +23,7 @@ load 'util/init.sh'
 	mkdir package1
 	run basher-link package1
 	assert_success
-	assert [ "$(test_util.resolve_link $NEOBASHER_PACKAGES_PATH/neobasher-local/package1)" = "$(test_util.resolve_link "$(pwd)/package1")" ]
+	assert [ "$(test_util.resolve_link $BPM_PACKAGES_PATH/bpm-local/package1)" = "$(test_util.resolve_link "$(pwd)/package1")" ]
 }
 
 @test "calls link-bins, link-completions, link-man and deps" {
@@ -34,10 +34,10 @@ load 'util/init.sh'
 	mkdir package2
 	run basher-link package2
 	assert_success
-	assert_line "basher-plumbing-link-bins neobasher-local/package2"
-	assert_line "basher-plumbing-link-completions neobasher-local/package2"
-	assert_line "basher-plumbing-link-completions neobasher-local/package2"
-	assert_line "basher-plumbing-deps neobasher-local/package2"
+	assert_line "basher-plumbing-link-bins bpm-local/package2"
+	assert_line "basher-plumbing-link-completions bpm-local/package2"
+	assert_line "basher-plumbing-link-completions bpm-local/package2"
+	assert_line "basher-plumbing-deps bpm-local/package2"
 }
 
 @test "respects --no-deps option" {
@@ -48,7 +48,7 @@ load 'util/init.sh'
 	mkdir package2
 	run basher-link --no-deps package2
 	assert_success
-	refute_line "basher-plumbing-deps neobasher-local/package2"
+	refute_line "basher-plumbing-deps bpm-local/package2"
 }
 
 @test "resolves current directory (dot) path" {
@@ -60,7 +60,7 @@ load 'util/init.sh'
 	cd package3
 	run basher-link .
 	assert_success
-	assert [ "$(test_util.resolve_link "$NEOBASHER_PACKAGES_PATH/neobasher-local/package3")" = "$(test_util.resolve_link "$(pwd)")" ]
+	assert [ "$(test_util.resolve_link "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(test_util.resolve_link "$(pwd)")" ]
 }
 
 @test "resolves parent directory (dotdot) path" {
@@ -72,7 +72,7 @@ load 'util/init.sh'
 	cd package3
 	run basher-link ../package3
 	assert_success
-	assert [ "$(test_util.resolve_link "$NEOBASHER_PACKAGES_PATH/neobasher-local/package3")" = "$(test_util.resolve_link "$(pwd)")" ]
+	assert [ "$(test_util.resolve_link "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(test_util.resolve_link "$(pwd)")" ]
 }
 
 @test "resolves arbitrary complex relative path" {
@@ -83,5 +83,5 @@ load 'util/init.sh'
 	mkdir package3
 	run basher-link ./package3/.././package3
 	assert_success
-	assert [ "$(test_util.resolve_link "$NEOBASHER_PACKAGES_PATH/neobasher-local/package3")" = "$(test_util.resolve_link "$(pwd)/package3")" ]
+	assert [ "$(test_util.resolve_link "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(test_util.resolve_link "$(pwd)/package3")" ]
 }

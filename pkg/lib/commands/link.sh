@@ -19,17 +19,17 @@ basher-link() {
 	directory="$(util.resolve_link "$directory")"
 
 
-	local namespace="neobasher-local"
+	local namespace="bpm-local"
 	local repository="${directory##*/}"
 	local package="$namespace/$repository"
 
-	if [ -d "$NEOBASHER_PACKAGES_PATH/$package" ]; then
+	if [ -d "$BPM_PACKAGES_PATH/$package" ]; then
 		die "Package '$package' is already present"
 	fi
 
 
-	mkdir -p "$NEOBASHER_PACKAGES_PATH/$namespace"
-	ln -s "$directory" "$NEOBASHER_PACKAGES_PATH/$package"
+	mkdir -p "$BPM_PACKAGES_PATH/$namespace"
+	ln -s "$directory" "$BPM_PACKAGES_PATH/$package"
 
 	if [ "$no_deps" = "false" ]; then
 		basher-plumbing-deps "$package"

@@ -5,5 +5,5 @@ basher-package-path() {
 
 	ensure.nonZero 'package' "$package"
 
-	printf "%s\n" "$NEOBASHER_PACKAGES_PATH/$package"
+	printf "%s\n" "$BPM_PACKAGES_PATH/$package"
 }

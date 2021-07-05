@@ -8,5 +8,5 @@ load 'util/init.sh'
 	basher-install username/package
 
 	run basher-package-path username/package
-	assert_success "$NEOBASHER_PACKAGES_PATH/username/package"
+	assert_success "$BPM_PACKAGES_PATH/username/package"
 }

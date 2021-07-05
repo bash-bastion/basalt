@@ -13,17 +13,17 @@ export BASHER_ORIGIN_DIR="$BASHER_TEST_DIR/origin"
 export BASHER_CWD="$BASHER_TEST_DIR/cwd"
 export XDG_DATA_HOME=
 
-export NEOBASHER_ROOT="$BATS_TEST_DIRNAME/.."
-export NEOBASHER_PREFIX="$BASHER_TEST_DIR/cellar"
-export NEOBASHER_PACKAGES_PATH="$NEOBASHER_PREFIX/packages"
-export NEOBASHER_INSTALL_BIN="$NEOBASHER_PREFIX/bin"
-export NEOBASHER_INSTALL_MAN="$NEOBASHER_PREFIX/man"
+export BPM_ROOT="$BATS_TEST_DIRNAME/.."
+export BPM_PREFIX="$BASHER_TEST_DIR/cellar"
+export BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
+export BPM_INSTALL_BIN="$BPM_PREFIX/bin"
+export BPM_INSTALL_MAN="$BPM_PREFIX/man"
 
 mkdir -p "$BASHER_TEST_DIR" "$BASHER_ORIGIN_DIR" "$BASHER_CWD"
 
-export PATH="$NEOBASHER_ROOT/pkg/bin:$PATH"
+export PATH="$BPM_ROOT/pkg/bin:$PATH"
 
-for f in "$NEOBASHER_ROOT"/pkg/lib/{commands,util}/?*.sh; do
+for f in "$BPM_ROOT"/pkg/lib/{commands,util}/?*.sh; do
 	source "$f"
 done
 

@@ -1,10 +1,10 @@
-# neobasher
+# bpm
 
-Originally a fork of [basher](basherpm/basher), `neobasher` is a package manager for Bash repositories.
+Originally a fork of [basher](basherpm/basher), `bpm` is a package manager for Bash repositories.
 
 > Instead of looking for specific install instructions for each package and messing with your path, [neo]basher will create a central location for all packages and manage their binaries for you
 
-More specifically, when `neobasher` is given a repository to install, it will automatically
+More specifically, when `bpm` is given a repository to install, it will automatically
 
 - Detect shell-specific completion scripts, and symlink them to a common directory
 - Detect executable scripts and symlink them to a common directory
@@ -14,7 +14,7 @@ Since the completions and executables are in a common directory, it's much easie
 
 ## Alternatives Comparison
 
-### Compared to `bpkg`, `neobasher`
+### Compared to `bpkg`, `bpm`
 
 - Can install multiple packages at once
 - Does not use a `package.json` that clobbers with NPM's
@@ -23,13 +23,13 @@ Since the completions and executables are in a common directory, it's much easie
 - Respects XDG
 - Is likely faster
 
-### Compared to `basher`, `neobasher`
+### Compared to `basher`, `bpm`
 
 - Can install multiple packages at once
 - Has an improved help output
 - Prints why a command failed (rather than just showing the help menu)
 - Has more modern code
-- Better neobasher completion scripts
+- Better bpm completion scripts
 - Is faster (less exec'ing Bash processes and subshell creations)
 - Does not source `package.sh` which allows for arbitrary command execution
 - More flexible parsing of command line arguments
@@ -50,7 +50,7 @@ brew install bash coreutils
 1. Clone Neobasher
 
 ```sh
-git clone https://github.com/basherpm/basher "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source"
+git clone https://github.com/basherpm/basher "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
 ```
 
 2. Initialize Neobasher in your shell initialization
@@ -58,14 +58,14 @@ git clone https://github.com/basherpm/basher "${XDG_DATA_HOME:-$HOME/.local/shar
 For `bash`, `zsh`, `sh`
 
 ```sh
-export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source/pkg/bin:$PATH"
+export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin:$PATH"
 eval "$(basher init bash)" # replace 'bash' with your shell
 ```
 
 For `fish`
 
 ```fish
-set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source/pkg/bin" $PATH
+set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin" $PATH
 status --is-interactive; and . (basher init fish | psub)
 ```
 
@@ -74,7 +74,7 @@ status --is-interactive; and . (basher init fish | psub)
 Go to the directory where you cloned Neoasher and pull the latest changes
 
 ```sh
-cd "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source"
+cd "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
 git pull
 ```
 
@@ -83,7 +83,7 @@ git pull
 ### Installing packages from Github
 
 ```sh
-neobasher install sstephenson/bats
+bpm install sstephenson/bats
 ```
 
 This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin` to the `PATH`.
@@ -91,7 +91,7 @@ This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin
 ### Installing packages from other sites
 
 ```sh
-neobasher install bitbucket.org/user/repo_name
+bpm install bitbucket.org/user/repo_name
 ```
 
 This will install `repo_name` from https://bitbucket.org/user/repo_name
@@ -102,7 +102,7 @@ If you develop a package locally and want to try it through Basher,
 use the `link` subcommand
 
 ```sh
-neobasher link ./directory my_namespace/my_package
+bpm link ./directory my_namespace/my_package
 ```
 
 The `link` command will install the dependencies of the local package.
@@ -122,9 +122,9 @@ include username/repo lib/file.sh
 To change the behavior of basher, you can set the following variables either
 globally or before each command:
 
-- `NEOBASHER_ROOT` - The location of the root Neobasher folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.local/share}/neobasher"`
-- `NEOBASHER_FULL_CLONE=true` - Clones the full repo history instead of only the last commit (useful for package development)
-- `NEOBASHER_PREFIX` - set the installation and package checkout prefix (default is `$NEOBASHER_ROOT/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`.  This allows you to manage "global packages", distinct from individual user packages.
+- `BPM_ROOT` - The location of the root Neobasher folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.local/share}/bpm"`
+- `BPM_FULL_CLONE=true` - Clones the full repo history instead of only the last commit (useful for package development)
+- `BPM_PREFIX` - set the installation and package checkout prefix (default is `$BPM_ROOT/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`.  This allows you to manage "global packages", distinct from individual user packages.
 
 ## Packages
 
@@ -152,8 +152,8 @@ BINS specified in this fashion have higher precedence then the inference rules a
 ## Contributing
 
 ```sh
-git clone https://github.com/eankeen/neobasher
-cd neobasher
+git clone https://github.com/eankeen/bpm
+cd bpm
 git submodule update --init
 make test
 ```

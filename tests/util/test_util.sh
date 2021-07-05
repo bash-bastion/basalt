@@ -11,7 +11,7 @@ test_util.mock_command() {
 			local user="$3"
 			local repository="$4"
 
-			git clone "$BASHER_ORIGIN_DIR/$user/$repository" "$NEOBASHER_PACKAGES_PATH/$user/$repository"
+			git clone "$BASHER_ORIGIN_DIR/$user/$repository" "$BPM_PACKAGES_PATH/$user/$repository"
 		}
 		;;
 	*)

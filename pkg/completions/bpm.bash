@@ -1,4 +1,4 @@
-_neobasher() {
+_bpm() {
 	local -ra listPreSubcommandOptions=(--help --version)
 	local -ra listSubcommands=(echo init install link list package-path uninstall upgrade)
 
@@ -56,7 +56,7 @@ _neobasher() {
 		local -a subcommandOptions=()
 		case "$subcommand" in
 			echo)
-				subcommandOptions=(NEOBASHER_ROOT NEOBASHER_PREFIX)
+				subcommandOptions=(BPM_ROOT BPM_PREFIX)
 				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			init)
@@ -72,13 +72,13 @@ _neobasher() {
 				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			package-path)
-				mapfile -t subcommandOptions < <(neobasher complete package-path)
+				mapfile -t subcommandOptions < <(bpm complete package-path)
 				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			uninstall)
 				;;
 			upgrade)
-				mapfile -t subcommandOptions < <(neobasher complete package-path)
+				mapfile -t subcommandOptions < <(bpm complete package-path)
 				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 		esac
@@ -87,4 +87,4 @@ _neobasher() {
 	return 0
 }
 
-complete -F _neobasher neobasher
+complete -F _bpm bpm

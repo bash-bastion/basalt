@@ -17,7 +17,7 @@ basher-plumbing-clone() {
 
 	local package="$user/$repository"
 
-	if [ -e "$NEOBASHER_PACKAGES_PATH/$package" ]; then
+	if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
 		log.info "Package '$package' is already present"
 		exit
 	fi
@@ -40,7 +40,7 @@ basher-plumbing-clone() {
 		gitArgs+=("https://$site/$package.git")
 	fi
 
-	gitArgs+=("$NEOBASHER_PACKAGES_PATH/$package")
+	gitArgs+=("$BPM_PACKAGES_PATH/$package")
 
 	git clone "${gitArgs[@]}"
 }

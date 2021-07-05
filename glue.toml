@@ -1,8 +1,8 @@
 using = ['Bash']
-gitRepoName = 'neobasher'
+gitRepoName = 'bpm'
 
 name = 'Edwin Kofler'
 email = 'edwin@kofler.dev'
-project = 'neobasher'
+project = 'bpm'
 description = 'A Bash package manager'
 license = 'MIT'

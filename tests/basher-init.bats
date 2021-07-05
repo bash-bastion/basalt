@@ -4,27 +4,27 @@ load './util/init.sh'
 
 # TODO: test effect rather than output
 
-@test "exports NEOBASHER_ROOT" {
-	NEOBASHER_ROOT=/lol run basher-init bash
+@test "exports BPM_ROOT" {
+	BPM_ROOT=/lol run basher-init bash
 	assert_success
-	assert_line -n 0 'export NEOBASHER_ROOT="/lol"'
+	assert_line -n 0 'export BPM_ROOT="/lol"'
 }
 
-@test "exports NEOBASHER_PREFIX" {
-	NEOBASHER_PREFIX=/lol run basher-init bash
+@test "exports BPM_PREFIX" {
+	BPM_PREFIX=/lol run basher-init bash
 	assert_success
-	assert_line -n 1 'export NEOBASHER_PREFIX="/lol"'
+	assert_line -n 1 'export BPM_PREFIX="/lol"'
 }
 
-@test "exports NEOBASHER_PACKAGES_PATH" {
-	NEOBASHER_PACKAGES_PATH=/lol/packages run basher-init bash
+@test "exports BPM_PACKAGES_PATH" {
+	BPM_PACKAGES_PATH=/lol/packages run basher-init bash
 	assert_success
-	assert_line -n 2 'export NEOBASHER_PACKAGES_PATH="/lol/packages"'
+	assert_line -n 2 'export BPM_PACKAGES_PATH="/lol/packages"'
 }
 
 @test "doesn't setup include function if it doesn't exist" {
 	run basher-init fakesh
-	refute_line 'source "$NEOBASHER_ROOT/lib/include.fakesh"'
+	refute_line 'source "$BPM_ROOT/lib/include.fakesh"'
 }
 
 @test "does not setup basher completions if not available" {
@@ -42,6 +42,6 @@ hasShell() {
 		skip "sh was not found in path."
 	fi
 
-	run sh -ec 'eval "$(neobasher init - sh)"'
+	run sh -ec 'eval "$(bpm init - sh)"'
 	assert_success
 }

@@ -47,7 +47,7 @@ util.resolve_link() {
 util.show_help() {
 	cat <<"EOF"
 Usage:
-  neobasher [--help|--version] <command> [args...]
+  bpm [--help|--version] <command> [args...]
 
 Subcommands:
   init <shell>
@@ -61,7 +61,7 @@ Subcommands:
 
   link [--no-deps] <directory>
     Installs a local directory as a basher package. These show up with
-    a namespace of 'neobasher-local'
+    a namespace of 'bpm-local'
 
   list [--outdated]
     List installed packages
@@ -79,8 +79,8 @@ Subcommands:
     Echo a particular internal variable. Used by the testing suite
 
 Examples:
-  neobasher install tj/git-extras
-  neobasher install github.com/tj/git-extras
-  neobasher install https://github.com/tj/git-extras
+  bpm install tj/git-extras
+  bpm install github.com/tj/git-extras
+  bpm install https://github.com/tj/git-extras
 EOF
 }

@@ -10,7 +10,7 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-completions username/package
 	assert_success
-	assert [ ! -e "$($NEOBASHER_PREFIX/completions/bash/comp.bash)" ]
+	assert [ ! -e "$($BPM_PREFIX/completions/bash/comp.bash)" ]
 }
 
 @test "unlinks zsh compsys completions from prefix/completions" {
@@ -21,7 +21,7 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-completions username/package
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_PREFIX/completions/zsh/compsys/_exec)" ]
+	assert [ ! -e "$(readlink $BPM_PREFIX/completions/zsh/compsys/_exec)" ]
 }
 
 @test "unlinks zsh compctl completions from prefix/completions" {
@@ -32,5 +32,5 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-completions username/package
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_PREFIX/completions/zsh/compctl/exec)" ]
+	assert [ ! -e "$(readlink $BPM_PREFIX/completions/zsh/compctl/exec)" ]
 }

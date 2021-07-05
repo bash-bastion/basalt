@@ -14,7 +14,7 @@ basher-list() {
 		readarray -t packages < <(basher-list)
 
 		for package in "${packages[@]}"; do
-			package_path="$NEOBASHER_PACKAGES_PATH/$package"
+			package_path="$BPM_PACKAGES_PATH/$package"
 			if [ ! -L "$package_path" ]; then
 				ensure.cd "$package_path"
 				git remote update > /dev/null 2>&1
@@ -27,7 +27,7 @@ basher-list() {
 		done
 	else
 		local username= package=
-		for package_path in "$NEOBASHER_PACKAGES_PATH"/*/*; do
+		for package_path in "$BPM_PACKAGES_PATH"/*/*; do
 			username="${package_path%/*}"; username="${username##*/}"
 			package="${package_path##*/}"
 			printf "%s\n" "$username/$package"

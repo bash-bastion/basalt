@@ -5,7 +5,7 @@ basher-plumbing-unlink-man() {
 
 	ensure.nonZero 'package' "$package"
 
-	local files=("$NEOBASHER_PACKAGES_PATH/$package"/man/*)
+	local files=("$BPM_PACKAGES_PATH/$package"/man/*)
 	files=("${files[@]##*/}")
 
 	local regex="\.([1-9])\$"
@@ -13,7 +13,7 @@ basher-plumbing-unlink-man() {
 		if [[ "$file" =~ $regex ]]; then
 			local n="${BASH_REMATCH[1]}"
 
-			rm -f "$NEOBASHER_INSTALL_MAN/man$n/$file"
+			rm -f "$BPM_INSTALL_MAN/man$n/$file"
 		fi
 	done
 }

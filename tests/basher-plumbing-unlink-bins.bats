@@ -11,8 +11,8 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-bins username/package
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec2.sh)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
 }
 
 @test "removes each binary from the install bin" {
@@ -24,8 +24,8 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-bins username/package
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec2.sh)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
 }
 
 @test "removes root binaries from the install bin" {
@@ -37,8 +37,8 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-bins username/package
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec3)" ]
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec4.sh)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec3)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec4.sh)" ]
 }
 
 @test "doesn't remove root binaries if there is a bin folder" {
@@ -46,11 +46,11 @@ load 'util/init.sh'
 	create_root_exec username/package exec3
 	test_util.mock_command _clone
 	basher-install username/package
-	mkdir "$NEOBASHER_PACKAGES_PATH/username/package/bin"
+	mkdir "$BPM_PACKAGES_PATH/username/package/bin"
 
 	run basher-plumbing-unlink-bins username/package
 	assert_success
-	assert [ -e "$(readlink $NEOBASHER_INSTALL_BIN/exec3)" ]
+	assert [ -e "$(readlink $BPM_INSTALL_BIN/exec3)" ]
 }
 
 @test "doesn't remote root bins or files in bin folder if there is a BINS config on package.sh" {
@@ -76,9 +76,9 @@ load 'util/init.sh'
 	run basher-plumbing-unlink-bins username/package
 
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec1)" ]
-	assert [ -e "$(readlink $NEOBASHER_INSTALL_BIN/exec2)" ]
-	assert [ -e "$(readlink $NEOBASHER_INSTALL_BIN/exec3)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
+	assert [ -e "$(readlink $BPM_INSTALL_BIN/exec2)" ]
+	assert [ -e "$(readlink $BPM_INSTALL_BIN/exec3)" ]
 }
 
 @test "does not fail if there are no binaries" {
@@ -101,8 +101,8 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-bins username/package
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec2)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2)" ]
 }
 
 @test "removes binary when REMOVE_EXTENSION is false" {
@@ -115,6 +115,6 @@ load 'util/init.sh'
 
 	run basher-plumbing-unlink-bins username/package
 	assert_success
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $NEOBASHER_INSTALL_BIN/exec2.sh)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
 }

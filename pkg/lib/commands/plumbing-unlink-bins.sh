@@ -6,18 +6,18 @@ basher-plumbing-unlink-bins() {
 	ensure.nonZero 'package' "$package"
 
 	local -a bins=()
-	if [ -f "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
-		source "$NEOBASHER_PACKAGES_PATH/$package/package.sh"
+	if [ -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
+		source "$BPM_PACKAGES_PATH/$package/package.sh"
 		IFS=: read -ra bins <<< "$BINS"
 	fi
 
 	if ((${#bins} == 0)); then
-		if [ -e "$NEOBASHER_PACKAGES_PATH/$package/bin" ]; then
-			bins=("$NEOBASHER_PACKAGES_PATH/$package"/bin/*)
+		if [ -e "$BPM_PACKAGES_PATH/$package/bin" ]; then
+			bins=("$BPM_PACKAGES_PATH/$package"/bin/*)
 			bins=("${bins[@]##*/}")
 			bins=("${bins[@]/#/bin/}")
 		else
-			readarray -t bins < <(find "$NEOBASHER_PACKAGES_PATH/$package" -maxdepth 1 -perm -u+x -type f -or -type l)
+			readarray -t bins < <(find "$BPM_PACKAGES_PATH/$package" -maxdepth 1 -perm -u+x -type f -or -type l)
 			bins=("${bins[@]##*/}")
 		fi
 	fi
@@ -29,6 +29,6 @@ basher-plumbing-unlink-bins() {
 			name="${name%%.*}"
 		fi
 
-		rm -f "$NEOBASHER_INSTALL_BIN/$name"
+		rm -f "$BPM_INSTALL_BIN/$name"
 	done
 }
