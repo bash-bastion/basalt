@@ -21,6 +21,6 @@ ensure.nonZero() {
 	fi
 
 	if [ -z "$varValue" ]; then
-		die "Internal: Variable '$varName' must be non-zero"
+		die "Variable '$varName' must be non-zero. Please check the validity of your passed arguments"
 	fi
 }
