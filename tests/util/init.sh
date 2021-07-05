@@ -2,8 +2,8 @@
 
 load 'vendor/bats-core/load'
 load 'vendor/bats-assert/load'
-load 'util/mocks.sh'
 load 'util/package_helpers.sh'
+load 'util/test_util.sh'
 
 set -ETeo pipefail
 shopt -s nullglob extglob

@@ -8,6 +8,7 @@ More specifically, when `neobasher` is given a repository to install, it will au
 
 - Detect shell-specific completion scripts, and symlink them to a common directory
 - Detect executable scripts and symlink them to a common directory
+- Detect man pages and symlink them to a common directory
 
 Since the completions and executables are in a common directory, it's much easier to make PATH / completion modifications
 
@@ -30,10 +31,7 @@ Since the completions and executables are in a common directory, it's much easie
 - Has more modern code
 - Better neobasher completion scripts
 - Is faster (less exec'ing Bash processes and subshell creations)
-
-A package manager for shell scripts and functions.
-
-
+- Does not source `package.sh` which allows for arbitrary command execution
 
 Even though it is called basher, it also works with zsh and fish.
 
@@ -51,7 +49,7 @@ brew install bash coreutils
 1. Clone Neobasher
 
 ```sh
-$ git clone https://github.com/basherpm/basher "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source"
+git clone https://github.com/basherpm/basher "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source"
 ```
 
 2. Initialize Neobasher in your shell initialization
@@ -60,7 +58,7 @@ For `bash`, `zsh`, `sh`
 
 ```sh
 export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source/pkg/bin:$PATH"
-eval "$(basher init bash)"
+eval "$(basher init bash)" # replace 'bash' with your shell
 ```
 
 For `fish`
@@ -87,7 +85,7 @@ git pull
 neobasher install sstephenson/bats
 ```
 
-This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin/bats` to the `PATH`.
+This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin` to the `PATH`.
 
 ### Installing packages from other sites
 

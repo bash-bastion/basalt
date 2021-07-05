@@ -18,16 +18,12 @@ load 'util/init.sh'
 }
 
 @test "displays nothing if there are no packages" {
-	skip
-
 	run basher-list --outdated
 	assert_success
 	assert_output ""
 }
 
 @test "displays outdated packages" {
-	skip
-
 	test_util.mock_command _clone
 	create_package username/outdated
 	create_package username/uptodate

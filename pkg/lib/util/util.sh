@@ -3,6 +3,39 @@
 # @file util.sh
 # @brief Utility functions for all subcommands
 
+# @description Given input of a particular package on the internet
+# parse it into its components
+util.parse_package_full() {
+	local repoSpec="$1"
+
+	if [ -z "$repoSpec" ]; then
+		die "Must supply a repository"
+	fi
+
+	# Remove any http(s) prefixes
+	repoSpec="${repoSpec#http?(s)://}"
+
+	local site user repository
+	if [[ "$repoSpec" = */*/* ]]; then
+		IFS='/' read -r site user repository <<< "$repoSpec"
+	elif [[ "$repoSpec" = */* ]]; then
+		site="github.com"
+		IFS='/' read -r user repository <<< "$repoSpec"
+	fi
+
+	if [[ "$repository" = *@* ]]; then
+		IFS='@' read -r repository ref <<< "$repository"
+	else
+		ref=""
+	fi
+
+	ensure.nonZero 'site' "$site"
+	ensure.nonZero 'user' "$user"
+	ensure.nonZero 'repository' "$repository"
+
+	REPLY="$site:$user:$repository:$ref"
+}
+
 util.resolve_link() {
 	if type -p realpath >/dev/null; then
 		realpath "$1"
@@ -45,6 +78,8 @@ Subcommands:
 		Echo a particular internal variable. Used by the testing suite
 
 Examples:
-	neobasher install eankeen/neobasher
+	neobasher install tj/git-extras
+	neobasher install github.com/tj/git-extras
+	neobasher install https://github.com/tj/git-extras
 EOF
 }

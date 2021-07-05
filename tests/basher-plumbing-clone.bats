@@ -16,7 +16,7 @@ load 'util/init.sh'
 	run basher-plumbing-clone false github.com username/package
 
 	assert_success
-	assert_output "Package 'username/package' is already present"
+	assert_output -e "Package 'username/package' is already present"
 }
 
 @test "using a different site" {
