@@ -7,19 +7,19 @@ load './util/init.sh'
 @test "exports NEOBASHER_ROOT" {
 	NEOBASHER_ROOT=/lol run basher-init bash
 	assert_success
-	assert_line -n 1 'export NEOBASHER_ROOT=/lol'
+	assert_line -n 0 'export NEOBASHER_ROOT="/lol"'
 }
 
 @test "exports NEOBASHER_PREFIX" {
 	NEOBASHER_PREFIX=/lol run basher-init bash
 	assert_success
-	assert_line -n 2 'export NEOBASHER_PREFIX=/lol'
+	assert_line -n 1 'export NEOBASHER_PREFIX="/lol"'
 }
 
 @test "exports NEOBASHER_PACKAGES_PATH" {
 	NEOBASHER_PACKAGES_PATH=/lol/packages run basher-init bash
 	assert_success
-	assert_line -n 3 'export NEOBASHER_PACKAGES_PATH=/lol/packages'
+	assert_line -n 2 'export NEOBASHER_PACKAGES_PATH="/lol/packages"'
 }
 
 @test "doesn't setup include function if it doesn't exist" {
@@ -29,9 +29,8 @@ load './util/init.sh'
 
 @test "does not setup basher completions if not available" {
 	run basher-init fakesh
-	assert_success
-	refute_line 'source "$NEOBASHER_ROOT/completions/basher.fakesh"'
-	refute_line 'source "$NEOBASHER_ROOT/completions/basher.other"'
+	assert_failure
+	assert_line -e "Shell 'fakesh' is not a valid shell"
 }
 
 hasShell() {

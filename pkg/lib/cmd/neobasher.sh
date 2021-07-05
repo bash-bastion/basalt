@@ -18,16 +18,16 @@ main() {
 
 	for arg; do
 		case "$arg" in
-			--help)
+		--help)
 			util.show_help
 			exit
 			;;
-			--version)
+		--version)
 			cat <<-EOF
 			Version: $PROGRAM_VERSION
 			EOF
 			exit
-			;;
+		;;
 		esac
 	done
 
