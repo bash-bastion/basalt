@@ -1,184 +1,130 @@
 # neobasher
 
-Originally a fork of the very useful [basher](basherpm/basher), `neobasher` is a package manager for Bash repositories.
+Originally a fork of [basher](basherpm/basher), `neobasher` is a package manager for Bash repositories.
 
-Instead of looking for specific install instructions for each package and messing with your path, basher will create a central location for all packages and manage their binaries for you.
+> Instead of looking for specific install instructions for each package and messing with your path, [neo]basher will create a central location for all packages and manage their binaries for you
 
-Given a repository to install, `neobasher`, will automatically
+More specifically, when `neobasher` is given a repository to install, it will automatically
+
 - Detect shell-specific completion scripts, and symlink them to a common directory
 - Detect executable scripts and symlink them to a common directory
 
-With these common directories, you can add them to the PATH (executable scripts), or
-source the files in them (completion scripts)
+Since the completions and executables are in a common directory, it's much easier to make PATH / completion modifications
 
-STATUS: IN DEVELOPMENT
+## Alternatives Comparison
 
-## Improvements over Alternatives
-
-### With `bpkg`
+### Compared to `bpkg`, `neobasher`
 
 - Can install multiple packages at once
-- Does not use a `package.json` that clobber's with NPM's
+- Does not use a `package.json` that clobbers with NPM's
 - Does not automatically invoke `make install` commands on your behalf
-- Able to install more repositories (probably, not verified)
+- Probably is able to install more repositories (not verified)
 - Respects XDG
-- Likely faster
+- Is likely faster
 
-### With `basher`
+### Compared to `basher`, `neobasher`
 
 - Can install multiple packages at once
-- Improved help menus
+- Has an improved help output
 - Prints why a command failed (rather than just showing the help menu)
-- Few commands (similar subcommands have been merged)
-- More modular code
-- Substantially less exec'ing Bash processes and subshell creation
-- Better Bash completion, etc.
-- Faster
-
-## Breaking Changes
-
-### `basher init`
-
-Instead of
-
-```sh
-neobasher init - bash
-```
-
-do the following
-
-```sh
-neobasher init bash
-```
-
-TODO: fixme
+- Has more modern code
+- Better neobasher completion scripts
+- Is faster (less exec'ing Bash processes and subshell creations)
 
 A package manager for shell scripts and functions.
 
-Basher allows you to quickly install shell packages directly from github (or
-other sites). Instead of looking for specific install instructions for each
-package and messing with your path, basher will create a central location for
-all packages and manage their binaries for you.
+
 
 Even though it is called basher, it also works with zsh and fish.
 
-[![Build Status](https://travis-ci.org/basherpm/basher.svg?branch=master)](https://travis-ci.org/basherpm/basher)
-
 ## Installation
 
-Basher requires `bash >= 4`, and the `realpath` utility from `coreutils`. On
+STATUS: IN DEVELOPMENT
+
+Neobasher requires `bash >= 4`, and the `realpath` utility from `coreutils`. On
 osx you can install both with brew:
 
+```sh
+brew install bash coreutils
 ```
-$ brew install bash coreutils
+
+1. Clone Neobasher
+
+```sh
+$ git clone https://github.com/basherpm/basher "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source"
 ```
 
-1. Checkout basher on `~/.basher`
+2. Initialize Neobasher in your shell initialization
 
-	~~~ sh
-	$ git clone --depth=1 https://github.com/basherpm/basher.git ~/.basher
-	~~~
+For `bash`, `zsh`, `sh`
 
-2. Initialize basher in your shell initialization
+```sh
+export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source/pkg/bin:$PATH"
+eval "$(basher init bash)"
+```
 
-	~~~ sh
-	export PATH="$HOME/.basher/bin:$PATH"
-	eval "$(basher init bash)" # replace `bash` with `zsh` if you use zsh
-	~~~
+For `fish`
 
-	**Fish**: Use the following commands instead:
-
-	~~~ sh
-	if test -d ~/.basher
-	set basher ~/.basher/bin
-	end
-	set -gx PATH $basher $PATH
-	status --is-interactive; and . (basher init fish|psub)
-	~~~
-
-or in 1 line, automatically (this will install basher and add it to your .bashrc/.zshrc file - in a way that can automatically be uninstalled later)):
-
-	curl -s https://raw.githubusercontent.com/basherpm/basher/master/scripts/install.sh | bash
+```fish
+set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source/pkg/bin" $PATH
+status --is-interactive; and . (basher init fish | psub)
+```
 
 ## Updating
 
-Go to the directory where you cloned basher and pull the latest changes:
+Go to the directory where you cloned Neoasher and pull the latest changes
 
-~~~ sh
-$ cd ~/.basher
-$ git pull
-~~~
+```sh
+cd "${XDG_DATA_HOME:-$HOME/.local/share}/neobasher/source"
+git pull
+```
 
 ## Usage
 
 ### Installing packages from Github
 
-~~~ sh
-$ basher install sstephenson/bats
-~~~
+```sh
+neobasher install sstephenson/bats
+```
 
-This will install bats from https://github.com/sstephenson/bats and add `bin/bats` to the PATH.
+This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin/bats` to the `PATH`.
 
 ### Installing packages from other sites
 
-~~~ sh
-$ basher install bitbucket.org/user/repo_name
-~~~
+```sh
+neobasher install bitbucket.org/user/repo_name
+```
 
 This will install `repo_name` from https://bitbucket.org/user/repo_name
 
-### Using ssh instead of https
-
-If you want to do local development on installed packages and you have ssh
-access to the site, use `--ssh` to override the protocol:
-
-~~~ sh
-$ basher install --ssh juanibiapina/gg
-~~~
-
 ### Installing a local package
 
-If you develop a package locally and want to try it through basher,
-use the `link` command:
+If you develop a package locally and want to try it through Basher,
+use the `link` subcommand
 
-~~~ sh
-$ basher link directory my_namespace/my_package
-~~~
+```sh
+neobasher link ./directory my_namespace/my_package
+```
 
 The `link` command will install the dependencies of the local package.
-You can prevent that with the `--no-deps` option:
-
-~~~ sh
-$ basher link --no-deps directory my_namespace/my_package
-~~~
+You can prevent that with the `--no-deps` option
 
 ### Sourcing files from a package into current shell
 
-Basher provides an `include` function that allows sourcing files into the
+Neobasher provides an `include` function that allows sourcing files into the
 current shell. After installing a package, you can run:
 
-```
+```sh
 include username/repo lib/file.sh
 ```
-
-This will source a file `lib/file.sh` under the package `username/repo`.
-
-### Command summary
-
-- `basher commands` - List commands
-- `basher help <command>` - Display help for a command
-- `basher uninstall <package>` - Uninstall a package
-- `basher list` - List installed packages
-- `basher outdated` - List packages which are not in the latest version
-- `basher upgrade <package>` - Upgrade a package to the latest version
 
 ### Configuration options
 
 To change the behavior of basher, you can set the following variables either
 globally or before each command:
 
-- If `$XDG_DATA_HOME` is set, and `$XDG_DATA_HOME/basher` is a directory, then `$NEOBASHER_ROOT` will be set to `$XDG_DATA_HOME/basher` instead of the usual `$HOME/.basher`. If `$XDG_DATA_HOME` is not explicitly set, then it defaults to `~/.local/share`.
-- `BASHER_FULL_CLONE=true` - Clones the full repo history instead of only the last commit (useful for package development)
+- `NEOBASHER_ROOT` - The location of the root Neobasher folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.local/share}/neobasher"`
+- `NEOBASHER_FULL_CLONE=true` - Clones the full repo history instead of only the last commit (useful for package development)
 - `NEOBASHER_PREFIX` - set the installation and package checkout prefix (default is `$NEOBASHER_ROOT/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`.  This allows you to manage "global packages", distinct from individual user packages.
 
 ## Packages
@@ -195,22 +141,14 @@ to the manpath.
 Optionally, a repo might contain a `package.sh` file which specifies binaries,
 dependencies and completions in the following format:
 
-~~~ sh
-BINS=folder/file1:folder/file2.sh
-DEPS=user1/repo1:user2/repo2
-BASH_COMPLETIONS=completions/package
-ZSH_COMPLETIONS=completions/_package
-~~~
+```sh
+BINS="folder/file1:folder/file2.sh"
+DEPS="user1/repo1:user2/repo2"
+BASH_COMPLETIONS="completions/package"
+ZSH_COMPLETIONS="completions/_package"
+```
 
-BINS specified in this fashion have higher precedence then the inference rules
-above.
-
-### Package Directory
-
-A list of working packages can be found on https://basher.gitparade.com/. There
-you can also find a badge if you want to include it in your readme:
-
-[![basher install](https://img.shields.io/badge/basher-install-white?logo=gnu-bash&style=flat)](https://basher.gitparade.com/package/)
+BINS specified in this fashion have higher precedence then the inference rules above
 
 ## Contributing
 
