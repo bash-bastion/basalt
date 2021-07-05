@@ -6,6 +6,7 @@ basher-list() {
 	for arg; do
 		if [ "$arg" == --outdated ]; then
 			shouldShowOutdated=true
+			shift
 		fi
 	done
 

@@ -10,6 +10,6 @@ load 'util/init.sh'
 
 	basher-upgrade username/package
 
-	run basher-outdated
+	run basher-list --outdated
 	assert_output ""
 }
