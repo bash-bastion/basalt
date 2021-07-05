@@ -2,9 +2,6 @@
 
 basher-complete() {
 	case "$1" in
-	help)
-		util.get_basher_subcommands
-		;;
 	package-path)
 		basher-list
 		;;

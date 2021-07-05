@@ -11,8 +11,7 @@ basher-install() {
 	esac
 
 	if [ "$#" -ne 1 ]; then
-		basher-help install
-		exit 1
+		die "Must supply repository"
 	fi
 
 	if [[ "$1" = */*/* ]]; then
@@ -24,20 +23,17 @@ basher-install() {
 	fi
 
 	if [ -z "$package" ]; then
-		basher-help install
-		exit 1
+		die "Package must be nonZero"
 	fi
 
 	IFS=/ read -r user name <<< "$package"
 
 	if [ -z "$user" ]; then
-		basher-help install
-		exit 1
+		die "User must be nonZero"
 	fi
 
 	if [ -z "$name" ]; then
-		basher-help install
-		exit 1
+		die "Name must be nonZero"
 	fi
 
 	if [[ "$package" = */*@* ]]; then

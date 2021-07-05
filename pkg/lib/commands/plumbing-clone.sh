@@ -5,8 +5,7 @@
 
 basher-plumbing-clone() {
 	if [[ "$#" -ne 3 && "$#" -ne 4 ]]; then
-		basher-help _clone
-		exit 1
+		die "Wrong arguments to basher-plumbing-clone"
 	fi
 
 	local use_ssh="$1"
@@ -15,18 +14,15 @@ basher-plumbing-clone() {
 	local ref="$4"
 
 	if [ -z "$use_ssh" ]; then
-		basher-help _clone
-		exit 1
+		die "Wrong arguments to basher-plumbing-clone"
 	fi
 
 	if [ -z "$site" ]; then
-		basher-help _clone
-		exit 1
+		die "Wrong arguments to basher-plumbing-clone"
 	fi
 
 	if [ -z "$package" ]; then
-		basher-help _clone
-		exit 1
+		die "Wrong arguments to basher-plumbing-clone"
 	fi
 
 	if [ -z "$ref" ]; then
@@ -38,18 +34,16 @@ basher-plumbing-clone() {
 	IFS=/ read -r user name <<< "$package"
 
 	if [ -z "$user" ]; then
-		basher-help _clone
-		exit 1
+		die "Wrong arguments to basher-plumbing-clone"
 	fi
 
 	if [ -z "$name" ]; then
-		basher-help _clone
-		exit 1
+		die "Wrong arguments to basher-plumbing-clone"
 	fi
 
 	if [ -e "$BASHER_PACKAGES_PATH/$package" ]; then
-		echo "Package '$package' is already present"
-		exit 0
+		printf "%s" "Package '$package' is already present"
+		exit
 	fi
 
 	if [ "$BASHER_FULL_CLONE" = "true" ]; then

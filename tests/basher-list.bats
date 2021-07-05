@@ -2,12 +2,6 @@
 
 load 'util/init.sh'
 
-@test "with help shows usage" {
-  run basher-list --help
-  assert_success
-  assert_line "Usage: basher list"
-}
-
 @test "list installed packages" {
   mock.command _clone
   create_package username/p1

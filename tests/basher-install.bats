@@ -2,26 +2,6 @@
 
 load 'util/init.sh'
 
-@test "without arguments prints usage" {
-  skip
-
-  run basher-install
-  assert_failure
-  assert_line "Usage: basher install [--ssh] [site]/<package>[@ref]"
-}
-
-@test "incorrect argument prints usage" {
-  run basher-install first_arg
-  assert_failure
-  assert_line "Usage: basher install [--ssh] [site]/<package>[@ref]"
-}
-
-@test "too many arguments prints usage" {
-  run basher-install a/b wrong
-  assert_failure
-  assert_line "Usage: basher install [--ssh] [site]/<package>[@ref]"
-}
-
 @test "executes install steps in right order" {
   mock.command basher-plumbing-clone
   mock.command basher-plumbing-deps

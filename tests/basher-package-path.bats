@@ -2,12 +2,6 @@
 
 load 'util/init.sh'
 
-@test "without arguments, prints usage" {
-  run basher-package-path
-  assert_failure
-  assert_line "Usage: source \"\$(basher package-path <package>)/file.sh\""
-}
-
 @test "outputs the package path" {
   mock.command _clone
   create_package username/package

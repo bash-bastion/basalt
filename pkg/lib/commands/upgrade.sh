@@ -3,27 +3,23 @@
 
 basher-upgrade() {
 	if [ "$#" -ne 1 ]; then
-		basher-help upgrade
-		exit 1
+		die "Must supply arguments"
 	fi
 
 	package="$1"
 
 	if [ -z "$package" ]; then
-		basher-help upgrade
-		exit 1
+		die "Package must be nonZero"
 	fi
 
 	IFS=/ read -r user name <<< "$package"
 
 	if [ -z "$user" ]; then
-		basher-help upgrade
-		exit 1
+		die "User must be nonZero"
 	fi
 
 	if [ -z "$name" ]; then
-		basher-help upgrade
-		exit 1
+		die "Name must be nonZero"
 	fi
 
 	ensure.cd "$BASHER_PACKAGES_PATH/$package"

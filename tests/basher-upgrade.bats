@@ -2,24 +2,6 @@
 
 load 'util/init.sh'
 
-@test "without arguments shows usage" {
-  run basher-upgrade
-  assert_failure
-  assert_line "Usage: basher upgrade <package>"
-}
-
-@test "with invalid argument, shows usage" {
-  run basher-upgrade lol
-  assert_failure
-  assert_line "Usage: basher upgrade <package>"
-}
-
-@test "with too many arguments, shows usage" {
-  run basher-upgrade a/b wrong
-  assert_failure
-  assert_line "Usage: basher upgrade <package>"
-}
-
 @test "upgrades a package to the latest version" {
   mock.command _clone
   create_package username/package

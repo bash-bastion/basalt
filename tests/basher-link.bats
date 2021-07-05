@@ -11,31 +11,17 @@ resolve_link() {
   fi
 }
 
-@test "without arguments prints usage" {
-  skip
-
-  run basher-link
-  assert_failure
-  assert_line "Usage: basher link [--no-deps] <directory> <package>"
-}
-
-@test "fails with only one argument" {
-  run basher-link invalid
-  assert_failure
-  assert_line "Usage: basher link [--no-deps] <directory> <package>"
-}
-
 @test "fails with an invalid path" {
   run basher-link invalid namespace/name
   assert_failure
-  assert_output "Directory 'invalid' not found."
+  assert_output -e "Directory 'invalid' not found"
 }
 
 @test "fails with a file path instead of a directory path" {
   touch file1
   run basher-link file1 namespace/name
   assert_failure
-  assert_output "Directory 'file1' not found."
+  assert_output -e "Directory 'file1' not found."
 }
 
 @test "fails with an invalid package name" {
@@ -43,15 +29,15 @@ resolve_link() {
 
   run basher-link package1 invalid
   assert_failure
-  assert_line "Usage: basher link [--no-deps] <directory> <package>"
+  assert_line -e nonZero
 
   run basher-link package1 namespace1/
   assert_failure
-  assert_line "Usage: basher link [--no-deps] <directory> <package>"
+  assert_line -e nonZero
 
   run basher-link package1 /package1
   assert_failure
-  assert_line "Usage: basher link [--no-deps] <directory> <package>"
+  assert_line -e nonZero
 }
 
 @test "links the package to packages under the correct namespace" {

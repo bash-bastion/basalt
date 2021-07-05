@@ -19,38 +19,35 @@ basher-link() {
 	esac
 
 	if [ "$#" -ne 2 ]; then
-		basher-help link
-		exit 1
+		# TODO
+		die "Must supply repository and alias"
 	fi
 
 	directory="$1"
 	package="$2"
 
 	if [ ! -d "$directory" ]; then
-		echo "Directory '$directory' not found."
-		exit 1
+		die "Directory '$directory' not found"
 	fi
 
 	if [ -z "$package" ]; then
-		basher-help link
-		exit 1
+		die "Package must be nonZero"
 	fi
 
 	IFS=/ read -r namespace name <<< "$package"
 
 	if [ -z "$namespace" ]; then
-		basher-help link
+		die "Namespace must be nonZero"
 		exit 1
 	fi
 
 	if [ -z "$name" ]; then
-		basher-help link
+		die "Name must be nonZero"
 		exit 1
 	fi
 
 	if [ -d "$BASHER_PACKAGES_PATH/$package" ]; then
-		echo "Package '$package' is already present"
-		exit 1
+		die "Package '$package' is already present"
 	fi
 
 	# Make sure the namespace directory exists before linking

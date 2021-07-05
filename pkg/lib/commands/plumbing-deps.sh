@@ -8,8 +8,7 @@
 
 basher-plumbing-deps() {
 	if [ "$#" -ne 1 ]; then
-		basher-help _deps
-		exit 1
+		die "Wrong arguments to basher-plumbing-deps"
 	fi
 
 	local package="$1"

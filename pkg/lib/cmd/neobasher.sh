@@ -1,8 +1,4 @@
 # shellcheck shell=bash
-#
-# Summary: A package manager for shell scripts
-#
-# Usage: basher <command> [<args>]
 
 set -ETeo pipefail
 shopt -s nullglob extglob

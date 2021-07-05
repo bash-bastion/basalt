@@ -22,16 +22,6 @@ load './util/init.sh'
   assert_line -n 3 'export BASHER_PACKAGES_PATH=/lol/packages'
 }
 
-@test "adds cellar/bin to path" {
-  skip
-
-  run basher-init bash
-  assert_success
-  assert_line -n 4 'if [ "${PATH#*$BASHER_ROOT/cellar/bin}" = "$PATH" ]; then'
-  assert_line -n 5 '  export PATH="$BASHER_ROOT/cellar/bin:$PATH"'
-  assert_line -n 6 'fi'
-}
-
 @test "doesn't setup include function if it doesn't exist" {
   run basher-init fakesh
   refute_line 'source "$BASHER_ROOT/lib/include.fakesh"'
@@ -53,6 +43,6 @@ hasShell() {
     skip "sh was not found in path."
   fi
 
-  run sh -ec 'eval "$(basher init - sh)"'
+  run sh -ec 'eval "$(neobasher init - sh)"'
   assert_success
 }

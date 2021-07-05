@@ -2,8 +2,7 @@
 
 basher-package-path() {
 	if [ "$#" -ne 1 ]; then
-		basher-help package-path
-		exit 1
+		die "Must supply package"
 	fi
 
 	local package="$1"

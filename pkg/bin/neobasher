@@ -59,4 +59,4 @@ else
 fi
 
 # shellcheck disable=SC1091
-source "$PROGRAM_LIB_DIR/cmd/basher.sh"
+source "$PROGRAM_LIB_DIR/cmd/neobasher.sh"

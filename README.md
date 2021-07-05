@@ -19,6 +19,7 @@ source the files in them (completion scripts)
 - Does not use a `package.json` that clobber's with NPM's
 - Does not automatically invoke `make install` commands on your behalf
 - Able to install more repositories (probably, not verified)
+- Respects XDG
 - Likely faster
 
 ### With `basher`
@@ -27,6 +28,8 @@ source the files in them (completion scripts)
 - Improved help menus
 - Prints why a command failed (rather than just showing the help menu)
 - Few commands (similar subcommands have been merged)
+- More modular code
+- Substantially less exec'ing Bash processes and subshell creation
 - Faster
 
 ## Breaking Changes
