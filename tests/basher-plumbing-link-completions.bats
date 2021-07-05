@@ -6,7 +6,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_bash_completions username/package comp.bash
 	test_util.mock_command _clone
-	basher-plumbing-clone false site username/package
+	basher-plumbing-clone false site username package
 
 
 	run basher-plumbing-link-completions username/package
@@ -19,7 +19,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_zsh_compsys_completions username/package _exec
 	test_util.mock_command _clone
-	basher-plumbing-clone false site username/package
+	basher-plumbing-clone false site username package
 
 	run basher-plumbing-link-completions username/package
 
@@ -31,7 +31,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_zsh_compctl_completions username/package exec
 	test_util.mock_command _clone
-	basher-plumbing-clone false site username/package
+	basher-plumbing-clone false site username package
 
 	run basher-plumbing-link-completions username/package
 
@@ -42,7 +42,7 @@ load 'util/init.sh'
 @test "does not fail if package doesn't have any completions" {
 	create_package username/package
 	test_util.mock_command _clone
-	basher-plumbing-clone false site username/package
+	basher-plumbing-clone false site username package
 
 	run basher-plumbing-link-completions username/package
 

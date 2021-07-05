@@ -7,7 +7,7 @@ load 'util/init.sh'
 	create_man username/package exec.1
 	create_man username/package exec.2
 	test_util.mock_command _clone
-	basher-plumbing-clone false site username/package
+	basher-plumbing-clone false site username package
 
 	run basher-plumbing-link-man username/package
 	echo "$output"

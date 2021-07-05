@@ -6,22 +6,16 @@
 basher-plumbing-clone() {
 	local useSsh="$1"
 	local site="$2"
-	local package="$3"
-	local ref="$4"
+	local user="$3"
+	local repository="$4"
+	local ref="$5"
 
 	ensure.nonZero 'useSsh' "$useSsh"
 	ensure.nonZero 'site' "$site"
-	ensure.nonZero 'package' "$package"
+	ensure.nonZero 'user' "$user"
+	ensure.nonZero 'repository' "$repository"
 
-	IFS=/ read -r user name <<< "$package"
-
-	if [ -z "$user" ]; then
-		die "Wrong arguments to basher-plumbing-clone 4"
-	fi
-
-	if [ -z "$name" ]; then
-		die "Wrong arguments to basher-plumbing-clone 5"
-	fi
+	local package="$user/$repository"
 
 	if [ -e "$NEOBASHER_PACKAGES_PATH/$package" ]; then
 		log.info "Package '$package' is already present"

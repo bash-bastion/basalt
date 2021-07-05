@@ -8,9 +8,10 @@ test_util.mock_command() {
 		basher-plumbing-clone() {
 			local use_ssh="$1"
 			local site="$2"
-			local package="$3"
+			local user="$3"
+			local repository="$4"
 
-			git clone "$BASHER_ORIGIN_DIR/$package" "$NEOBASHER_PACKAGES_PATH/$package"
+			git clone "$BASHER_ORIGIN_DIR/$user/$repository" "$NEOBASHER_PACKAGES_PATH/$user/$repository"
 		}
 		;;
 	*)

@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "install a specific version" {
 	test_util.mock_command git
 
-	run basher-plumbing-clone false site username/package version
+	run basher-plumbing-clone false site username package version
 	assert_success
 	assert_output "git clone --depth=1 -b version --recursive https://site/username/package.git $NEOBASHER_PACKAGES_PATH/username/package"
 }
@@ -13,7 +13,7 @@ load 'util/init.sh'
 @test "does nothing if package is already present" {
 	mkdir -p "$NEOBASHER_PACKAGES_PATH/username/package"
 
-	run basher-plumbing-clone false github.com username/package
+	run basher-plumbing-clone false github.com username package
 
 	assert_success
 	assert_output -e "Package 'username/package' is already present"
@@ -22,7 +22,7 @@ load 'util/init.sh'
 @test "using a different site" {
 	test_util.mock_command git
 
-	run basher-plumbing-clone false site username/package
+	run basher-plumbing-clone false site username package
 	assert_success
 	assert_output "git clone --depth=1 --recursive https://site/username/package.git $NEOBASHER_PACKAGES_PATH/username/package"
 }
@@ -31,7 +31,7 @@ load 'util/init.sh'
 	export BASHER_FULL_CLONE=
 	test_util.mock_command git
 
-	run basher-plumbing-clone false github.com username/package
+	run basher-plumbing-clone false github.com username package
 	assert_success
 	assert_output "git clone --depth=1 --recursive https://github.com/username/package.git $NEOBASHER_PACKAGES_PATH/username/package"
 }
@@ -40,7 +40,7 @@ load 'util/init.sh'
 	export BASHER_FULL_CLONE=true
 	test_util.mock_command git
 
-	run basher-plumbing-clone false github.com username/package
+	run basher-plumbing-clone false github.com username package
 	assert_success
 	assert_output "git clone --recursive https://github.com/username/package.git $NEOBASHER_PACKAGES_PATH/username/package"
 }
@@ -49,7 +49,7 @@ load 'util/init.sh'
 	export BASHER_FULL_CLONE=false
 	test_util.mock_command git
 
-	run basher-plumbing-clone false github.com username/package
+	run basher-plumbing-clone false github.com username package
 	assert_success
 	assert_output "git clone --depth=1 --recursive https://github.com/username/package.git $NEOBASHER_PACKAGES_PATH/username/package"
 }
@@ -57,7 +57,7 @@ load 'util/init.sh'
 @test "using ssh protocol" {
 	test_util.mock_command git
 
-	run basher-plumbing-clone true site username/package
+	run basher-plumbing-clone true site username package
 	assert_success
 	assert_output "git clone --depth=1 --recursive git@site:username/package.git $NEOBASHER_PACKAGES_PATH/username/package"
 }
