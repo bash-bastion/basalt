@@ -3,6 +3,14 @@
 # @file util.sh
 # @brief Utility functions for all subcommands
 
+util.resolve_link() {
+	if type -p realpath >/dev/null; then
+		realpath "$1"
+	else
+		readlink -f "$1"
+	fi
+}
+
 util.show_help() {
 	cat <<"EOF"
 Usage:

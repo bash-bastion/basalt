@@ -32,7 +32,7 @@ STATUS: IN DEVELOPMENT
 - Few commands (similar subcommands have been merged)
 - More modular code
 - Substantially less exec'ing Bash processes and subshell creation
-- Better Bash, Zsh/Fish(TODO) completion
+- Better Bash completion, etc.
 - Faster
 
 ## Breaking Changes

@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "outputs the package path" {
-	mock.command _clone
+	test_util.mock_command _clone
 	create_package username/package
 	basher-install username/package
 

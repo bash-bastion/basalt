@@ -9,7 +9,7 @@ load 'util/init.sh'
 }
 
 @test "removes package directory" {
-	mock.command _clone
+	test_util.mock_command _clone
 	create_package username/package
 	basher-install username/package
 
@@ -19,7 +19,7 @@ load 'util/init.sh'
 }
 
 @test "removes binaries" {
-	mock.command _clone
+	test_util.mock_command _clone
 	create_package username/package
 	create_exec username/package exec1
 	basher-install username/package
@@ -30,7 +30,7 @@ load 'util/init.sh'
 }
 
 @test "does not remove other package directories and binaries" {
-	mock.command _clone
+	test_util.mock_command _clone
 	create_package username/package1
 	create_exec username/package1 exec1
 	create_package username/package2

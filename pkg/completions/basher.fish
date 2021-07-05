@@ -19,7 +19,6 @@ end
 complete -f -c basher -n '__fish_neobasher_needs_command
 ' -a '(basher commands)'
 
-# TODO
 for cmd in (basher commands)
 	complete -f -c basher -n "__fish_neobasher_using_command $cmd" -a "(basher completions $cmd)"
 end

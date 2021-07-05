@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "install a specific version" {
-	mock.command git
+	test_util.mock_command git
 
 	run basher-plumbing-clone false site username/package version
 	assert_success
@@ -20,7 +20,7 @@ load 'util/init.sh'
 }
 
 @test "using a different site" {
-	mock.command git
+	test_util.mock_command git
 
 	run basher-plumbing-clone false site username/package
 	assert_success
@@ -29,7 +29,7 @@ load 'util/init.sh'
 
 @test "without setting BASHER_FULL_CLONE, clones a package with depth option" {
 	export BASHER_FULL_CLONE=
-	mock.command git
+	test_util.mock_command git
 
 	run basher-plumbing-clone false github.com username/package
 	assert_success
@@ -38,7 +38,7 @@ load 'util/init.sh'
 
 @test "setting BASHER_FULL_CLONE to true, clones a package without depth option" {
 	export BASHER_FULL_CLONE=true
-	mock.command git
+	test_util.mock_command git
 
 	run basher-plumbing-clone false github.com username/package
 	assert_success
@@ -47,7 +47,7 @@ load 'util/init.sh'
 
 @test "setting BASHER_FULL_CLONE to false, clones a package with depth option" {
 	export BASHER_FULL_CLONE=false
-	mock.command git
+	test_util.mock_command git
 
 	run basher-plumbing-clone false github.com username/package
 	assert_success
@@ -55,7 +55,7 @@ load 'util/init.sh'
 }
 
 @test "using ssh protocol" {
-	mock.command git
+	test_util.mock_command git
 
 	run basher-plumbing-clone true site username/package
 	assert_success

@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "unlinks bash completions from prefix/completions" {
 	create_package username/package
 	create_bash_completions username/package comp.bash
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-completions username/package
@@ -16,7 +16,7 @@ load 'util/init.sh'
 @test "unlinks zsh compsys completions from prefix/completions" {
 	create_package username/package
 	create_zsh_compsys_completions username/package _exec
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-completions username/package
@@ -27,7 +27,7 @@ load 'util/init.sh'
 @test "unlinks zsh compctl completions from prefix/completions" {
 	create_package username/package
 	create_zsh_compctl_completions username/package exec
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-completions username/package

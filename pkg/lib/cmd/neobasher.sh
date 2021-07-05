@@ -23,7 +23,9 @@ main() {
 			exit
 			;;
 			--version)
-			# TODO
+			cat <<-EOF
+			Version: $PROGRAM_VERSION
+			EOF
 			exit
 			;;
 		esac

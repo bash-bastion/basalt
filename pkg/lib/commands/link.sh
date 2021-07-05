@@ -1,13 +1,5 @@
 # shellcheck shell=bash
 
-resolve_link() {
-	if type -p realpath >/dev/null; then
-		realpath "$1"
-	else
-		readlink -f "$1"
-	fi
-}
-
 basher-link() {
 	local no_deps="false"
 
@@ -19,8 +11,7 @@ basher-link() {
 	esac
 
 	if [ "$#" -ne 2 ]; then
-		# TODO
-		die "Must supply repository and alias"
+		die "Must supply repository and directory"
 	fi
 
 	directory="$1"
@@ -56,7 +47,7 @@ basher-link() {
 	fi
 
 	# Resolve local package path
-	directory="$(resolve_link "$directory")"
+	directory="$(util.resolve_link "$directory")"
 
 	ln -s "$directory" "$NEOBASHER_PACKAGES_PATH/$package"
 

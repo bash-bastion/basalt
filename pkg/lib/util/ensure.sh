@@ -8,20 +8,19 @@ ensure.cd() {
 	ensure.nonZero 'dir' "$dir"
 
 	if ! cd "$1"; then
-		die "basher: internal: Could not cd to directory '$1'"
+		die "Could not cd to directory '$1'"
 	fi
 }
 
-# TODO: error message
 ensure.nonZero() {
 	local varName="$1"
 	local varValue="$2"
 
 	if [ -z "$varName" ] || [ $# -ne 2 ]; then
-		die "basher: internal: Incorrect arguments passed to 'ensure.nonZero'"
+		die "Internal: Incorrect arguments passed to 'ensure.nonZero'"
 	fi
 
 	if [ -z "$varValue" ]; then
-		die "basher: internal: Variable '$varName' must be non-zero"
+		die "Internal: Variable '$varName' must be non-zero"
 	fi
 }

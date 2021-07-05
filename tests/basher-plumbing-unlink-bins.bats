@@ -6,7 +6,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_package_exec username/package exec1
 	create_package_exec username/package exec2.sh
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-bins username/package
@@ -19,7 +19,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-bins username/package
@@ -32,7 +32,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_root_exec username/package exec3
 	create_root_exec username/package exec4.sh
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-bins username/package
@@ -44,7 +44,7 @@ load 'util/init.sh'
 @test "doesn't remove root binaries if there is a bin folder" {
 	create_package username/package
 	create_root_exec username/package exec3
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 	mkdir "$NEOBASHER_PACKAGES_PATH/username/package/bin"
 
@@ -56,7 +56,7 @@ load 'util/init.sh'
 @test "doesn't remote root bins or files in bin folder if there is a BINS config on package.sh" {
 	skip
 
-	mock.command _clone
+	test_util.mock_command _clone
 
 	create_package username/package
 	create_package_exec username/package exec1
@@ -83,7 +83,7 @@ load 'util/init.sh'
 
 @test "does not fail if there are no binaries" {
 	create_package username/package
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-bins username/package
@@ -96,7 +96,7 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package true
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-bins username/package
@@ -110,7 +110,7 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package false
-	mock.command _clone
+	test_util.mock_command _clone
 	basher-install username/package
 
 	run basher-plumbing-unlink-bins username/package
