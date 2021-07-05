@@ -1,6 +1,6 @@
 _neobasher() {
 	local -ra listPreSubcommandOptions=(--help --version)
-	local -ra listSubcommands=(echo init install link list outdated package-path uninstall upgrade)
+	local -ra listSubcommands=(echo init install link list package-path uninstall upgrade)
 
 	local -r currentWord="${COMP_WORDS[COMP_CWORD]}"
 
@@ -68,8 +68,8 @@ _neobasher() {
 			link)
 				;;
 			list)
-				;;
-			outdated)
+				subcommandOptions=(--outdated)
+				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			package-path)
 				mapfile -t subcommandOptions < <(neobasher complete package-path)

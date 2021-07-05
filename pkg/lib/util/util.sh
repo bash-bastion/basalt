@@ -21,11 +21,8 @@ Subcommands:
 	link [--no-deps] <directory> <package>
 		Installs a local directory as a basher package
 
-	list
+	list [--outdated]
 		List installed packages
-
-	outdated
-		Displays a list of outdated packages
 
 	package-path <package>
 		Outputs the path for a package

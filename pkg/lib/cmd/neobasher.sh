@@ -46,6 +46,7 @@ main() {
 		exit
 		;;
 	install)
+		shift
 		basher-install "$@"
 		exit
 		;;
