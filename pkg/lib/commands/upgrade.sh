@@ -10,6 +10,8 @@ basher-upgrade() {
 		util.parse_package_full "$repoSpec"
 		IFS=':' read -r site user repository ref <<< "$REPLY"
 
+		log.info "Upgrading '$repoSpec'"
+
 		git -C "$NEOBASHER_PACKAGES_PATH/$user/$repository" pull
 	done
 }

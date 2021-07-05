@@ -47,39 +47,40 @@ util.resolve_link() {
 util.show_help() {
 	cat <<"EOF"
 Usage:
-	neobasher [--help|--version] <command> [args...]
+  neobasher [--help|--version] <command> [args...]
 
 Subcommands:
-	init <shell>
-		Configure the shell environment for Basher
+  init <shell>
+    Configure the shell environment for Basher
 
-	install [--ssh] [site]/<package>[@ref]
-		Installs a package from GitHub (or a custom site)
+  install [--ssh] [site]/<package>[@ref]
+    Installs a package from GitHub (or a custom site)
 
-	uninstall <package>
-		Uninstalls a package
+  uninstall <package>
+    Uninstalls a package
 
-	link [--no-deps] <directory> <package>
-		Installs a local directory as a basher package
+  link [--no-deps] <directory>
+    Installs a local directory as a basher package. These show up with
+    a namespace of 'neobasher-local'
 
-	list [--outdated]
-		List installed packages
+  list [--outdated]
+    List installed packages
 
-	package-path <package>
-		Outputs the path for a package
+  package-path <package>
+    Outputs the path for a package
 
-	upgrade <package>
-		Upgrades a package
+  upgrade <package>
+    Upgrades a package
 
-	complete <command>
-		Perform the completion for a particular subcommand. Used by the completion scripts
+  complete <command>
+    Perform the completion for a particular subcommand. Used by the completion scripts
 
-	echo <variable>
-		Echo a particular internal variable. Used by the testing suite
+  echo <variable>
+    Echo a particular internal variable. Used by the testing suite
 
 Examples:
-	neobasher install tj/git-extras
-	neobasher install github.com/tj/git-extras
-	neobasher install https://github.com/tj/git-extras
+  neobasher install tj/git-extras
+  neobasher install github.com/tj/git-extras
+  neobasher install https://github.com/tj/git-extras
 EOF
 }
