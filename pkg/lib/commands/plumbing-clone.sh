@@ -1,6 +1,6 @@
 # shellcheck shell=bash
-# Summary: Clones a package from a site, but doesn't install it
-#
+
+# @summary Clones a package from a site, but doesn't install it
 # Usage: basher _clone <use_ssh> <site> <package> [<ref>]
 
 basher-plumbing-clone() {

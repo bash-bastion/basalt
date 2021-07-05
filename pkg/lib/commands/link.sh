@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-# Summary: Installs a local directory as a basher package
-# Usage: basher link [--no-deps] <directory> <package>
+# shellcheck shell=bash
 
 resolve_link() {
   if type -p realpath >/dev/null; then

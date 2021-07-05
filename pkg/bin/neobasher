@@ -49,8 +49,8 @@ realpath.absolute() {
 realpath.location "${BASH_SOURCE[0]}"
 REPLY="${REPLY/%\/}"
 REPLY="${REPLY%/*}"
-if [ -d "$REPLY/lib/basher" ]; then
-	PROGRAM_LIB_DIR="$REPLY/lib/basher"
+if [ -d "$REPLY/lib/neobasher" ]; then
+	PROGRAM_LIB_DIR="$REPLY/lib/neobasher"
 elif [ -d "$REPLY/lib" ]; then
 	PROGRAM_LIB_DIR="$REPLY/lib"
 else

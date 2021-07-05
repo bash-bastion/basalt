@@ -1,5 +1,8 @@
 # shellcheck shell=bash
 
+# @file ensure.sh
+# @brief Ensure particular behavior at runtime
+
 ensure.cd() {
   local dir="$1"
   ensure.nonZero 'dir' "$dir"

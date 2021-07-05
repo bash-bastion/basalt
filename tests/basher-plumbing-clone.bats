@@ -2,30 +2,6 @@
 
 load 'util/init.sh'
 
-@test "without arguments prints usage" {
-  skip
-
-  run basher-plumbing-clone
-  assert_failure
-  assert_line "Usage: basher _clone <use_ssh> <site> <package> [<ref>]"
-}
-
-@test "invalid package prints usage" {
-  skip
-
-  run basher-plumbing-clone false github.com invalid_package
-  assert_failure
-  assert_line "Usage: basher _clone <use_ssh> <site> <package> [<ref>]"
-}
-
-@test "too many arguments prints usage" {
-  skip
-
-  run basher-plumbing-clone false site a/b ref fourth_arg
-  assert_failure
-  assert_line "Usage: basher _clone <use_ssh> <site> <package> [<ref>]"
-}
-
 @test "install a specific version" {
   mock.command git
 

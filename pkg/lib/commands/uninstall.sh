@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-# Summary: Uninstalls a package
-# Usage: basher uninstall <package>
+# shellcheck shell=bash
 
 basher-uninstall() {
   if [ "$#" -ne 1 ]; then

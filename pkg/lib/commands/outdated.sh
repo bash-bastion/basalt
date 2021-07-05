@@ -1,12 +1,6 @@
-#!/usr/bin/env bash
-#
-# Summary: Displays a list of outdated packages
-# Usage: basher outdated
+# shellcheck shell=bash
 
 basher-outdated() {
-  # TODO
-  shopt -s nullglob
-
   IFS=$'\n' packages=($(basher-list))
 
   for package in "${packages[@]}"; do

@@ -1,6 +1,4 @@
-# Usage: basher complete <command>
-# Summary: Perform a completion for a particular comment
-#
+# shellcheck shell=bash
 
 basher-complete() {
   case "$1" in

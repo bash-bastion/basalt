@@ -3,6 +3,8 @@
 load 'util/init.sh'
 
 @test "without arguments prints usage" {
+  skipo
+
   run basher-uninstall
   assert_failure
   assert_line "Usage: basher uninstall <package>"

@@ -1,8 +1,4 @@
-#!/usr/bin/env bash
-#
-# Summary: Installs a package from github (or a custom site)
-#
-# Usage: basher install [--ssh] [site]/<package>[@ref]
+# shellcheck shell=bash
 
 basher-install() {
   local use_ssh="false"

@@ -1,6 +1,33 @@
 # neobasher
 
-Like the great [basher](basherpm/basher), but refactored and updated. The goals are to improve ease of use, provide better feedback to the user, and add many new features
+Originally a fork of the very useful [basher](basherpm/basher), `neobasher` is a package manager for Bash repositories.
+
+Instead of looking for specific install instructions for each package and messing with your path, basher will create a central location for all packages and manage their binaries for you.
+
+Given a repository to install, `neobasher`, will automatically
+- Detect shell-specific completion scripts, and symlink them to a common directory
+- Detect executable scripts and symlink them to a common directory
+
+With these common directories, you can add them to the PATH (executable scripts), or
+source the files in them (completion scripts)
+
+## Improvements over Alternatives
+
+### With `bpkg`
+
+- Can install multiple packages at once
+- Does not use a `package.json` that clobber's with NPM's
+- Does not automatically invoke `make install` commands on your behalf
+- Able to install more repositories (probably, not verified)
+- Likely faster
+
+### With `basher`
+
+- Can install multiple packages at once
+- Improved help menus
+- Prints why a command failed (rather than just showing the help menu)
+- Few commands (similar subcommands have been merged)
+- Faster
 
 ## Breaking Changes
 
@@ -9,14 +36,16 @@ Like the great [basher](basherpm/basher), but refactored and updated. The goals 
 Instead of
 
 ```sh
-basher init - bash
+neobasher init - bash
 ```
 
 do the following
 
 ```sh
-basher init bash
+neobasher init bash
 ```
+
+TODO: fixme
 
 A package manager for shell scripts and functions.
 

@@ -1,8 +1,10 @@
+# shellcheck shell=sh
+
 include() {
   local package="$1"
   local file="$2"
 
-  if [[ -z "$package" || -z "$file" ]]; then
+  if [ -z "$package" ] || [ -z "$file" ]; then
     echo "Usage: include <package> <file>" >&2
     return 1
   fi

@@ -1,7 +1,4 @@
-#!/usr/bin/env bash
-#
-# Summary: List installed packages
-# Usage: basher list
+# shellcheck shell=bash
 
 basher-list() {
   util.show_help_if_flag_passed 'list' "$@"

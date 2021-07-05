@@ -1,11 +1,9 @@
-#!/usr/bin/env bash
-#
-# Usage: basher _deps <package>
-# Summary: Globally installs package runtime dependencies
-#
-# Installs the package dependencies, specified with the
+# shellcheck shell=bash
+
+# @summary: Globally installs package runtime dependencies.
+# It installs the package dependencies, specified with the
 # DEPS= variable on package.sh.
-#
+# Usage: basher _deps <package>
 # Example: DEPS=username/repo1:otheruser/repo2
 
 basher-plumbing-deps() {

@@ -1,7 +1,4 @@
-#!/usr/bin/env bash
-#
-# Summary: Outputs the path for a package
-# Usage: source "$(basher package-path <package>)/file.sh"
+# shellcheck shell=bash
 
 basher-package-path() {
   if [ "$#" -ne 1 ]; then

@@ -14,8 +14,23 @@ main() {
   export BASHER_INSTALL_BIN="${BASHER_INSTALL_BIN:-"$BASHER_PREFIX/bin"}"
   export BASHER_INSTALL_MAN="${BASHER_INSTALL_MAN:-"$BASHER_PREFIX/man"}"
 
+  mkdir -p "$BASHER_PREFIX"
+
   for f in "$PROGRAM_LIB_DIR"/{commands,util}/?*.sh; do
     source "$f"
+  done
+
+  for arg; do
+    case "$arg" in
+      --help)
+      util.show_help
+      exit
+      ;;
+      --version)
+      # TODO
+      exit
+      ;;
+    esac
   done
 
   case "$1" in
@@ -26,13 +41,7 @@ main() {
     ;;
   echo)
     shift
-    # TODO: move to file
-    eval "echo \$$1"
-    exit
-    ;;
-  help)
-    shift
-    basher-help "$@"
+    basher-echo "$@"
     exit
     ;;
   init)
@@ -75,8 +84,8 @@ main() {
     exit
     ;;
   *)
-    echo "basher: no command given" >&2
-    basher-help
+    log.error "No command given"
+    util.show_help
     ;;
   esac
 }

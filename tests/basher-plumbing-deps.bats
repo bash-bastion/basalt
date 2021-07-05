@@ -2,14 +2,6 @@
 
 load 'util/init.sh'
 
-@test "without arguments, prints usage" {
-  skip
-
-  run basher-plumbing-deps
-
-  assert_failure
-  assert_line "Usage: basher _deps <package>"
-}
 
 @test "without dependencies, does nothing" {
   mock.command _clone

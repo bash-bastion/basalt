@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# Summary: Upgrades a package
-# Usage: basher upgrade <package>
+
 
 basher-upgrade() {
   if [ "$#" -ne 1 ]; then
