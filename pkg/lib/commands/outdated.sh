@@ -4,7 +4,7 @@ basher-outdated() {
 	IFS=$'\n' packages=($(basher-list))
 
 	for package in "${packages[@]}"; do
-		package_path="$BASHER_PACKAGES_PATH/$package"
+		package_path="$NEOBASHER_PACKAGES_PATH/$package"
 		if [ ! -L "$package_path" ]; then
 			cd $package_path
 			git remote update > /dev/null 2>&1

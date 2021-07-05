@@ -3,12 +3,12 @@
 print_fish_variables() {
 	cat <<EOF
 set -gx BASHER_SHELL $shell
-set -gx BASHER_ROOT $BASHER_ROOT
-set -gx BASHER_PREFIX $BASHER_PREFIX
-set -gx BASHER_PACKAGES_PATH $BASHER_PACKAGES_PATH
+set -gx NEOBASHER_ROOT $NEOBASHER_ROOT
+set -gx NEOBASHER_PREFIX $NEOBASHER_PREFIX
+set -gx NEOBASHER_PACKAGES_PATH $NEOBASHER_PACKAGES_PATH
 
-if not contains \$BASHER_ROOT/cellar/bin \$PATH
-	set -gx PATH \$BASHER_ROOT/cellar/bin \$PATH
+if not contains \$NEOBASHER_ROOT/cellar/bin \$PATH
+	set -gx PATH \$NEOBASHER_ROOT/cellar/bin \$PATH
 end
 EOF
 	}
@@ -16,29 +16,29 @@ EOF
 print_sh_variables(){
 	cat <<EOF
 export BASHER_SHELL=$shell
-export BASHER_ROOT=$BASHER_ROOT
-export BASHER_PREFIX=$BASHER_PREFIX
-export BASHER_PACKAGES_PATH=$BASHER_PACKAGES_PATH
+export NEOBASHER_ROOT=$NEOBASHER_ROOT
+export NEOBASHER_PREFIX=$NEOBASHER_PREFIX
+export NEOBASHER_PACKAGES_PATH=$NEOBASHER_PACKAGES_PATH
 
-if [ "\${PATH#*\$BASHER_ROOT/cellar/bin}" = "\$PATH" ]; then
-	export PATH="\$BASHER_ROOT/cellar/bin:\$PATH"
+if [ "\${PATH#*\$NEOBASHER_ROOT/cellar/bin}" = "\$PATH" ]; then
+	export PATH="\$NEOBASHER_ROOT/cellar/bin:\$PATH"
 fi
 EOF
 }
 
 print_bash_completions() {
 	cat <<"EOF"
-for f in $(command ls "$BASHER_ROOT/cellar/completions/bash"); do
-	source "$BASHER_ROOT/cellar/completions/bash/$f"
+for f in $(command ls "$NEOBASHER_ROOT/cellar/completions/bash"); do
+	source "$NEOBASHER_ROOT/cellar/completions/bash/$f"
 done
 EOF
 }
 
 print_zsh_completions() {
 	cat <<"EOF"
-fpath=("$BASHER_ROOT/cellar/completions/zsh/compsys" $fpath)
-for f in $(command ls "$BASHER_ROOT/cellar/completions/zsh/compctl"); do
-	source "$BASHER_ROOT/cellar/completions/zsh/compctl/$f"
+fpath=("$NEOBASHER_ROOT/cellar/completions/zsh/compsys" $fpath)
+for f in $(command ls "$NEOBASHER_ROOT/cellar/completions/zsh/compctl"); do
+	source "$NEOBASHER_ROOT/cellar/completions/zsh/compctl/$f"
 done
 EOF
 }
@@ -68,12 +68,12 @@ basher-init() {
 	esac
 
 	cat <<EOF
-if [ -f "\$BASHER_ROOT/lib/include.$shell" ]; then
-	. "\$BASHER_ROOT/lib/include.$shell"
+if [ -f "\$NEOBASHER_ROOT/lib/include.$shell" ]; then
+	. "\$NEOBASHER_ROOT/lib/include.$shell"
 fi
 
-if [ -f "\$BASHER_ROOT/completions/basher.$shell" ]; then
-	. "\$BASHER_ROOT/completions/basher.$shell"
+if [ -f "\$NEOBASHER_ROOT/completions/basher.$shell" ]; then
+	. "\$NEOBASHER_ROOT/completions/basher.$shell"
 fi
 EOF
 }

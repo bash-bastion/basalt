@@ -56,7 +56,7 @@ _neobasher() {
 		local -a subcommandOptions=()
 		case "$subcommand" in
 			echo)
-				subcommandOptions=(BASHER_ROOT BASHER_PREFIX)
+				subcommandOptions=(NEOBASHER_ROOT NEOBASHER_PREFIX)
 				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			init)

@@ -1,1 +1,1 @@
-source "$BASHER_ROOT/lib/include.sh"
+source "$NEOBASHER_ROOT/lib/include.sh"

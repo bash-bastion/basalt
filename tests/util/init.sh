@@ -14,11 +14,11 @@ export BASHER_CWD="$BASHER_TEST_DIR/cwd"
 export BASHER_TMP_BIN="$BASHER_TEST_DIR/bin"
 export XDG_DATA_HOME=""
 
-export BASHER_ROOT="$BATS_TEST_DIRNAME/.."
-export BASHER_PREFIX="$BASHER_TEST_DIR/prefix"
-export BASHER_INSTALL_BIN="$BASHER_PREFIX/bin"
-export BASHER_INSTALL_MAN="$BASHER_PREFIX/man"
-export BASHER_PACKAGES_PATH="$BASHER_PREFIX/packages"
+export NEOBASHER_ROOT="$BATS_TEST_DIRNAME/.."
+export NEOBASHER_PREFIX="$BASHER_TEST_DIR/prefix"
+export NEOBASHER_INSTALL_BIN="$NEOBASHER_PREFIX/bin"
+export NEOBASHER_INSTALL_MAN="$NEOBASHER_PREFIX/man"
+export NEOBASHER_PACKAGES_PATH="$NEOBASHER_PREFIX/packages"
 
 mkdir -p "$BASHER_TEST_DIR/path"
 mkdir -p "$BASHER_ORIGIN_DIR"
@@ -26,10 +26,10 @@ mkdir -p "$BASHER_CWD"
 mkdir -p "$BASHER_TMP_BIN"
 
 # TODO: FIX THIS
-export PATH="$BASHER_ROOT/pkg/bin:$PATH"
+export PATH="$NEOBASHER_ROOT/pkg/bin:$PATH"
 PATH="$BASHER_TMP_BIN:$PATH"
 
-for f in "$BASHER_ROOT"/pkg/lib/{commands,util}/?*.sh; do
+for f in "$NEOBASHER_ROOT"/pkg/lib/{commands,util}/?*.sh; do
 	source "$f"
 done
 

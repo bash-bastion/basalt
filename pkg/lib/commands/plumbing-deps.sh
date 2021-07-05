@@ -13,11 +13,11 @@ basher-plumbing-deps() {
 
 	local package="$1"
 
-	if [ ! -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
+	if [ ! -e "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
 		exit
 	fi
 
-	source "$BASHER_PACKAGES_PATH/$package/package.sh"
+	source "$NEOBASHER_PACKAGES_PATH/$package/package.sh"
 	IFS=: read -ra deps <<< "$DEPS"
 
 	for dep in "${deps[@]}"; do

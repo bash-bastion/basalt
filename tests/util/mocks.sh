@@ -10,7 +10,7 @@ mock.command() {
 			local site="$2"
 			local package="$3"
 
-			git clone "$BASHER_ORIGIN_DIR/$package" "$BASHER_PACKAGES_PATH/$package"
+			git clone "$BASHER_ORIGIN_DIR/$package" "$NEOBASHER_PACKAGES_PATH/$package"
 		}
 		;;
 	*)

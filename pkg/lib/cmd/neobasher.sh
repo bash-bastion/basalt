@@ -4,13 +4,13 @@ set -ETeo pipefail
 shopt -s nullglob extglob
 
 main() {
-	export BASHER_ROOT="${BASHER_ROOT:-"${XDG_DATA_HOME:-$HOME/.local/share}/neobasher"}"
-	export BASHER_PREFIX="${BASHER_PREFIX:-"$BASHER_ROOT/cellar"}"
-	export BASHER_PACKAGES_PATH="${BASHER_PACKAGES_PATH:-"$BASHER_PREFIX/packages"}"
-	export BASHER_INSTALL_BIN="${BASHER_INSTALL_BIN:-"$BASHER_PREFIX/bin"}"
-	export BASHER_INSTALL_MAN="${BASHER_INSTALL_MAN:-"$BASHER_PREFIX/man"}"
+	export NEOBASHER_ROOT="${NEOBASHER_ROOT:-"${XDG_DATA_HOME:-$HOME/.local/share}/neobasher"}"
+	export NEOBASHER_PREFIX="${NEOBASHER_PREFIX:-"$NEOBASHER_ROOT/cellar"}"
+	export NEOBASHER_PACKAGES_PATH="${NEOBASHER_PACKAGES_PATH:-"$NEOBASHER_PREFIX/packages"}"
+	export NEOBASHER_INSTALL_BIN="${NEOBASHER_INSTALL_BIN:-"$NEOBASHER_PREFIX/bin"}"
+	export NEOBASHER_INSTALL_MAN="${NEOBASHER_INSTALL_MAN:-"$NEOBASHER_PREFIX/man"}"
 
-	mkdir -p "$BASHER_PREFIX"
+	mkdir -p "$NEOBASHER_PREFIX"
 
 	for f in "$PROGRAM_LIB_DIR"/{commands,util}/?*.sh; do
 		source "$f"

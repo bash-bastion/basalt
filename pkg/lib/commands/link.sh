@@ -46,19 +46,19 @@ basher-link() {
 		exit 1
 	fi
 
-	if [ -d "$BASHER_PACKAGES_PATH/$package" ]; then
+	if [ -d "$NEOBASHER_PACKAGES_PATH/$package" ]; then
 		die "Package '$package' is already present"
 	fi
 
 	# Make sure the namespace directory exists before linking
-	if [ ! -d "$BASHER_PACKAGES_PATH/$namespace" ]; then
-		mkdir -p "$BASHER_PACKAGES_PATH/$namespace"
+	if [ ! -d "$NEOBASHER_PACKAGES_PATH/$namespace" ]; then
+		mkdir -p "$NEOBASHER_PACKAGES_PATH/$namespace"
 	fi
 
 	# Resolve local package path
 	directory="$(resolve_link "$directory")"
 
-	ln -s "$directory" "$BASHER_PACKAGES_PATH/$package"
+	ln -s "$directory" "$NEOBASHER_PACKAGES_PATH/$package"
 
 	basher-plumbing-link-bins "$package"
 	basher-plumbing-link-completions "$package"

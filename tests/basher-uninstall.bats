@@ -15,7 +15,7 @@ load 'util/init.sh'
 
 	run basher-uninstall username/package
 	assert_success
-	[ ! -d "$BASHER_PACKAGES_PATH/username/package" ]
+	[ ! -d "$NEOBASHER_PACKAGES_PATH/username/package" ]
 }
 
 @test "removes binaries" {
@@ -26,7 +26,7 @@ load 'util/init.sh'
 
 	run basher-uninstall username/package
 	assert_success
-	[ ! -e "$BASHER_INSTALL_BIN/exec1" ]
+	[ ! -e "$NEOBASHER_INSTALL_BIN/exec1" ]
 }
 
 @test "does not remove other package directories and binaries" {
@@ -40,6 +40,6 @@ load 'util/init.sh'
 
 	run basher-uninstall username/package1
 	assert_success
-	[ -d "$BASHER_PACKAGES_PATH/username/package2" ]
-	[ -e "$BASHER_INSTALL_BIN/exec2" ]
+	[ -d "$NEOBASHER_PACKAGES_PATH/username/package2" ]
+	[ -e "$NEOBASHER_INSTALL_BIN/exec2" ]
 }

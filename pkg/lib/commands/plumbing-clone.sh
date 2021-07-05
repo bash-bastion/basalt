@@ -41,7 +41,7 @@ basher-plumbing-clone() {
 		die "Wrong arguments to basher-plumbing-clone"
 	fi
 
-	if [ -e "$BASHER_PACKAGES_PATH/$package" ]; then
+	if [ -e "$NEOBASHER_PACKAGES_PATH/$package" ]; then
 		printf "%s" "Package '$package' is already present"
 		exit
 	fi
@@ -58,5 +58,5 @@ basher-plumbing-clone() {
 		URI="https://$site/$package.git"
 	fi
 
-	git clone $DEPTH_OPTION $BRANCH_OPTION --recursive "$URI" "$BASHER_PACKAGES_PATH/$package"
+	git clone $DEPTH_OPTION $BRANCH_OPTION --recursive "$URI" "$NEOBASHER_PACKAGES_PATH/$package"
 }

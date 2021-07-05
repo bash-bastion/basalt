@@ -7,5 +7,5 @@ basher-package-path() {
 
 	local package="$1"
 
-	printf "%s" "$BASHER_PACKAGES_PATH/$package"
+	printf "%s" "$NEOBASHER_PACKAGES_PATH/$package"
 }

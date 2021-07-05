@@ -22,6 +22,6 @@ basher-upgrade() {
 		die "Name must be nonZero"
 	fi
 
-	ensure.cd "$BASHER_PACKAGES_PATH/$package"
+	ensure.cd "$NEOBASHER_PACKAGES_PATH/$package"
 	git pull
 }
