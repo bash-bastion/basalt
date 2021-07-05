@@ -1,0 +1,8 @@
+using = ['Bash']
+gitRepoName = 'neobasher'
+
+name = 'Edwin Kofler'
+email = 'edwin@kofler.dev'
+project = 'neobasher'
+description = 'A Bash package manager'
+license = 'MIT'
