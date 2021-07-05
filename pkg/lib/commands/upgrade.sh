@@ -1,11 +1,15 @@
 # shellcheck shell=bash
 
 basher-upgrade() {
-	local package="$1"
+	if (( $# == 0 )); then
+		die "You must supply at least one package"
+	fi
 
-	local site= user= repository= ref=
-	util.parse_package_full "$1"
-	IFS=':' read -r site user repository ref <<< "$REPLY"
+	for repoSpec; do
+		local site= user= repository= ref=
+		util.parse_package_full "$repoSpec"
+		IFS=':' read -r site user repository ref <<< "$REPLY"
 
-	git -C "$NEOBASHER_PACKAGES_PATH/$user/$repository" pull
+		git -C "$NEOBASHER_PACKAGES_PATH/$user/$repository" pull
+	done
 }

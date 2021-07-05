@@ -3,6 +3,8 @@
 basher-plumbing-unlink-bins() {
 	local package="$1"
 
+	ensure.nonZero 'package' "$package"
+
 	local -a bins=()
 	if [ -f "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
 		source "$NEOBASHER_PACKAGES_PATH/$package/package.sh"

@@ -3,6 +3,8 @@
 basher-plumbing-unlink-completions() {
 	local package="$1"
 
+	ensure.nonZero 'package' "$package"
+
 	if [ ! -f "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
 		return
 	fi

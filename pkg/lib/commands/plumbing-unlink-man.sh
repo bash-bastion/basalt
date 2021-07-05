@@ -3,6 +3,8 @@
 basher-plumbing-unlink-man() {
 	local package="$1"
 
+	ensure.nonZero 'package' "$package"
+
 	local files=("$NEOBASHER_PACKAGES_PATH/$package"/man/*)
 	files=("${files[@]##*/}")
 
