@@ -59,7 +59,7 @@ main() {
 		basher-list "$@"
 		exit
 		;;
-	oudated)
+	outdated)
 		shift
 		basher-outdated "$@"
 		exit

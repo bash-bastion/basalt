@@ -11,6 +11,8 @@ Given a repository to install, `neobasher`, will automatically
 With these common directories, you can add them to the PATH (executable scripts), or
 source the files in them (completion scripts)
 
+STATUS: IN DEVELOPMENT
+
 ## Improvements over Alternatives
 
 ### With `bpkg`
@@ -30,6 +32,7 @@ source the files in them (completion scripts)
 - Few commands (similar subcommands have been merged)
 - More modular code
 - Substantially less exec'ing Bash processes and subshell creation
+- Better Bash, Zsh/Fish(TODO) completion
 - Faster
 
 ## Breaking Changes

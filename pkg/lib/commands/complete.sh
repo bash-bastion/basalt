@@ -5,14 +5,11 @@ basher-complete() {
 	package-path)
 		basher-list
 		;;
-	basher-uninstall)
+	uninstall)
 		basher-list
 		;;
-	basher-upgrade)
+	upgrade)
 		basher-list
 		;;
-	*)
-		echo "basher: Complete for '$1' not supported" >&2
-		exit 1
 	esac
 }
