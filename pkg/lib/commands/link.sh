@@ -10,32 +10,18 @@ basher-link() {
 		;;
 	esac
 
-	if [ "$#" -ne 2 ]; then
-		die "Must supply repository and directory"
-	fi
-
-	directory="$1"
-	package="$2"
+	local directory="$1"
+	local package="$2"
 
 	if [ ! -d "$directory" ]; then
 		die "Directory '$directory' not found"
 	fi
 
-	if [ -z "$package" ]; then
-		die "Package must be nonZero"
-	fi
+	local site= namespace= repository= ref=
+	util.parse_package_full "$2"
+	IFS=':' read -r site namespace repository ref <<< "$REPLY"
 
-	IFS=/ read -r namespace name <<< "$package"
-
-	if [ -z "$namespace" ]; then
-		die "Namespace must be nonZero"
-		exit 1
-	fi
-
-	if [ -z "$name" ]; then
-		die "Name must be nonZero"
-		exit 1
-	fi
+	local package="$namespace/$repository"
 
 	if [ -d "$NEOBASHER_PACKAGES_PATH/$package" ]; then
 		die "Package '$package' is already present"
@@ -51,11 +37,10 @@ basher-link() {
 
 	ln -s "$directory" "$NEOBASHER_PACKAGES_PATH/$package"
 
-	basher-plumbing-link-bins "$package"
-	basher-plumbing-link-completions "$package"
-	basher-plumbing-link-completions "$package"
-
 	if [ "$no_deps" = "false" ]; then
 		basher-plumbing-deps "$package"
 	fi
+	basher-plumbing-link-bins "$package"
+	basher-plumbing-link-completions "$package"
+	basher-plumbing-link-completions "$package"
 }

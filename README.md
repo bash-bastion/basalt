@@ -32,6 +32,7 @@ Since the completions and executables are in a common directory, it's much easie
 - Better neobasher completion scripts
 - Is faster (less exec'ing Bash processes and subshell creations)
 - Does not source `package.sh` which allows for arbitrary command execution
+- More flexible parsing of command line arguments
 
 Even though it is called basher, it also works with zsh and fish.
 

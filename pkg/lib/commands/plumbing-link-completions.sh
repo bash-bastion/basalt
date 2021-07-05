@@ -3,8 +3,8 @@
 basher-plumbing-link-completions() {
 	local package="$1"
 
-	if [ ! -e "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
-		exit
+	if [ ! -f "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
+		return
 	fi
 
 	source "$NEOBASHER_PACKAGES_PATH/$package/package.sh" # TODO: make this secure?
@@ -17,8 +17,9 @@ basher-plumbing-link-completions() {
 	done
 
 	for completion in "${zsh_completions[@]}"; do
-		target="$NEOBASHER_PACKAGES_PATH/$package/$completion"
-		if grep -q "#compdef" "$target"; then
+		local target="$NEOBASHER_PACKAGES_PATH/$package/$completion"
+
+		if grep -sq "#compdef" "$target"; then
 			mkdir -p "$NEOBASHER_PREFIX/completions/zsh/compsys"
 			ln -sf "$target" "$NEOBASHER_PREFIX/completions/zsh/compsys/${completion##*/}"
 		else

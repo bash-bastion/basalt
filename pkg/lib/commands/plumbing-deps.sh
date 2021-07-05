@@ -7,14 +7,12 @@
 # Example: DEPS=username/repo1:otheruser/repo2
 
 basher-plumbing-deps() {
-	if [ "$#" -ne 1 ]; then
-		die "Wrong arguments to basher-plumbing-deps"
-	fi
-
 	local package="$1"
 
-	if [ ! -e "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
-		exit
+	ensure.nonZero 'package' "$package"
+
+	if [ ! -f "$NEOBASHER_PACKAGES_PATH/$package/package.sh" ]; then
+		return
 	fi
 
 	source "$NEOBASHER_PACKAGES_PATH/$package/package.sh"

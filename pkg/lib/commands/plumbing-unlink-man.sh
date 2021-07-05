@@ -10,6 +10,7 @@ basher-plumbing-unlink-man() {
 	for file in "${files[@]}"; do
 		if [[ "$file" =~ $regex ]]; then
 			local n="${BASH_REMATCH[1]}"
+
 			rm -f "$NEOBASHER_INSTALL_MAN/man$n/$file"
 		fi
 	done

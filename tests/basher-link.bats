@@ -20,15 +20,15 @@ load 'util/init.sh'
 
 	run basher-link package1 invalid
 	assert_failure
-	assert_line -e nonZero
+	assert_line -e 'must be non-zero'
 
 	run basher-link package1 namespace1/
 	assert_failure
-	assert_line -e nonZero
+	assert_line -e 'must be non-zero'
 
 	run basher-link package1 /package1
 	assert_failure
-	assert_line -e nonZero
+	assert_line -e 'must be non-zero'
 }
 
 @test "links the package to packages under the correct namespace" {

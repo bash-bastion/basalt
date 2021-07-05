@@ -1,25 +1,13 @@
 # shellcheck shell=bash
 
 basher-uninstall() {
-	if [ "$#" -ne 1 ]; then
-		die "Must supply package to uninstall"
-	fi
+	local package="$1"
 
-	package="$1"
+	local site= user= repository= ref=
+	util.parse_package_full "$1"
+	IFS=':' read -r site user repository ref <<< "$REPLY"
 
-	if [ -z "$package" ]; then
-		die "Package must be nonZero"
-	fi
-
-	IFS=/ read -r user name <<< "$package"
-
-	if [ -z "$user" ]; then
-		die "User must be nonZero"
-	fi
-
-	if [ -z "$name" ]; then
-		die "Name must be nonZero"
-	fi
+	local package="$user/$repository"
 
 	if [ ! -d "$NEOBASHER_PACKAGES_PATH/$package" ]; then
 		die "Package '$package' is not installed"
