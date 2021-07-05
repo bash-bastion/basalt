@@ -1,73 +1,73 @@
 # shellcheck shell=bash
 
 resolve_link() {
-  if type -p realpath >/dev/null; then
-    realpath "$1"
-  else
-    readlink -f "$1"
-  fi
+	if type -p realpath >/dev/null; then
+		realpath "$1"
+	else
+		readlink -f "$1"
+	fi
 }
 
 basher-link() {
-  local no_deps="false"
+	local no_deps="false"
 
-  case $1 in
-    --no-deps)
-      no_deps="true"
-      shift
-    ;;
-  esac
+	case $1 in
+		--no-deps)
+			no_deps="true"
+			shift
+		;;
+	esac
 
-  if [ "$#" -ne 2 ]; then
-    basher-help link
-    exit 1
-  fi
+	if [ "$#" -ne 2 ]; then
+		basher-help link
+		exit 1
+	fi
 
-  directory="$1"
-  package="$2"
+	directory="$1"
+	package="$2"
 
-  if [ ! -d "$directory" ]; then
-    echo "Directory '$directory' not found."
-    exit 1
-  fi
+	if [ ! -d "$directory" ]; then
+		echo "Directory '$directory' not found."
+		exit 1
+	fi
 
-  if [ -z "$package" ]; then
-    basher-help link
-    exit 1
-  fi
+	if [ -z "$package" ]; then
+		basher-help link
+		exit 1
+	fi
 
-  IFS=/ read -r namespace name <<< "$package"
+	IFS=/ read -r namespace name <<< "$package"
 
-  if [ -z "$namespace" ]; then
-    basher-help link
-    exit 1
-  fi
+	if [ -z "$namespace" ]; then
+		basher-help link
+		exit 1
+	fi
 
-  if [ -z "$name" ]; then
-    basher-help link
-    exit 1
-  fi
+	if [ -z "$name" ]; then
+		basher-help link
+		exit 1
+	fi
 
-  if [ -d "$BASHER_PACKAGES_PATH/$package" ]; then
-    echo "Package '$package' is already present"
-    exit 1
-  fi
+	if [ -d "$BASHER_PACKAGES_PATH/$package" ]; then
+		echo "Package '$package' is already present"
+		exit 1
+	fi
 
-  # Make sure the namespace directory exists before linking
-  if [ ! -d "$BASHER_PACKAGES_PATH/$namespace" ]; then
-    mkdir -p "$BASHER_PACKAGES_PATH/$namespace"
-  fi
+	# Make sure the namespace directory exists before linking
+	if [ ! -d "$BASHER_PACKAGES_PATH/$namespace" ]; then
+		mkdir -p "$BASHER_PACKAGES_PATH/$namespace"
+	fi
 
-  # Resolve local package path
-  directory="$(resolve_link "$directory")"
+	# Resolve local package path
+	directory="$(resolve_link "$directory")"
 
-  ln -s "$directory" "$BASHER_PACKAGES_PATH/$package"
+	ln -s "$directory" "$BASHER_PACKAGES_PATH/$package"
 
-  basher-plumbing-link-bins "$package"
-  basher-plumbing-link-completions "$package"
-  basher-plumbing-link-completions "$package"
+	basher-plumbing-link-bins "$package"
+	basher-plumbing-link-completions "$package"
+	basher-plumbing-link-completions "$package"
 
-  if [ "$no_deps" = "false" ]; then
-    basher-plumbing-deps "$package"
-  fi
+	if [ "$no_deps" = "false" ]; then
+		basher-plumbing-deps "$package"
+	fi
 }

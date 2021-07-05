@@ -1,33 +1,33 @@
 # shellcheck shell=bash
 
 basher-plumbing-link-bins() {
-  local package="$1"
+	local package="$1"
 
-  local bins
-  if [ -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
-    source "$BASHER_PACKAGES_PATH/$package/package.sh"
-    IFS=: read -ra bins <<< "$BINS"
-  fi
+	local bins
+	if [ -e "$BASHER_PACKAGES_PATH/$package/package.sh" ]; then
+		source "$BASHER_PACKAGES_PATH/$package/package.sh"
+		IFS=: read -ra bins <<< "$BINS"
+	fi
 
-  if [ -z "$bins" ]; then
-    if [ -e "$BASHER_PACKAGES_PATH/$package/bin" ]; then
-      bins=($BASHER_PACKAGES_PATH/$package/bin/*)
-      bins=("${bins[@]##*/}")
-      bins=("${bins[@]/#/bin/}")
-    else
-      bins=($(find "$BASHER_PACKAGES_PATH/$package" -maxdepth 1 -mindepth 1 -perm -u+x -type f -or -type l))
-      bins=("${bins[@]##*/}")
-    fi
-  fi
+	if [ -z "$bins" ]; then
+		if [ -e "$BASHER_PACKAGES_PATH/$package/bin" ]; then
+			bins=($BASHER_PACKAGES_PATH/$package/bin/*)
+			bins=("${bins[@]##*/}")
+			bins=("${bins[@]/#/bin/}")
+		else
+			bins=($(find "$BASHER_PACKAGES_PATH/$package" -maxdepth 1 -mindepth 1 -perm -u+x -type f -or -type l))
+			bins=("${bins[@]##*/}")
+		fi
+	fi
 
-  for bin in "${bins[@]}"; do
-    name="${bin##*/}"
-    if ${REMOVE_EXTENSION:-false}; then
-      name="${name%%.*}"
-    fi
-    mkdir -p "$BASHER_INSTALL_BIN"
-    ln -sf "$BASHER_PACKAGES_PATH/$package/$bin" "$BASHER_INSTALL_BIN/$name"
-    chmod +x "$BASHER_INSTALL_BIN/$name"
-  done
+	for bin in "${bins[@]}"; do
+		name="${bin##*/}"
+		if ${REMOVE_EXTENSION:-false}; then
+			name="${name%%.*}"
+		fi
+		mkdir -p "$BASHER_INSTALL_BIN"
+		ln -sf "$BASHER_PACKAGES_PATH/$package/$bin" "$BASHER_INSTALL_BIN/$name"
+		chmod +x "$BASHER_INSTALL_BIN/$name"
+	done
 
 }

@@ -1,18 +1,18 @@
 if [[ ! -o interactive ]]; then
-    return
+		return
 fi
 
 compctl -K _neobasher neobasher
 
 _neobasher() {
-  local words completions
-  read -cA words
+	local words completions
+	read -cA words
 
-  if [ "${#words}" -eq 2 ]; then
-    completions="$(basher commands)"
-  else
-    completions="$(basher completions ${words[2,-2]})"
-  fi
+	if [ "${#words}" -eq 2 ]; then
+		completions="$(basher commands)"
+	else
+		completions="$(basher completions ${words[2,-2]})"
+	fi
 
-  reply=("${(ps:\n:)completions}")
+	reply=("${(ps:\n:)completions}")
 }
