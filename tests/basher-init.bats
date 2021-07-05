@@ -35,7 +35,7 @@ load './util/init.sh'
 }
 
 hasShell() {
-	which "$1" >>/dev/null 2>&1
+	command -v "$1" &>/dev/null
 }
 
 @test "is sh-compatible" {
