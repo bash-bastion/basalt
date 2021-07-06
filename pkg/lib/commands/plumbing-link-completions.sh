@@ -3,16 +3,14 @@
 basher-plumbing-link-completions() {
 	local package="$1"
 
-	if [ ! -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
-		return
-	fi
-
 	local bash_completions zsh_completions
-	util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BASH_COMPLETIONS'
+	if [ -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
+		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BASH_COMPLETIONS'
 		IFS=':' read -ra bash_completions <<< "$REPLY"
 
-	util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'ZSH_COMPLETIONS'
+		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'ZSH_COMPLETIONS'
 		IFS=':' read -ra zsh_completions <<< "$REPLY"
+	fi
 
 	for completion in "${bash_completions[@]}"; do
 		mkdir -p "$BPM_PREFIX/completions/bash"

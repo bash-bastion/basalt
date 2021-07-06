@@ -102,7 +102,8 @@ util.get_toml_array() {
 	# from setting the key to an empty string value)
 	if [ -z "$grepLine" ]; then
 		REPLY=''
-		return 1
+		# return 1
+		return
 	fi
 
 	local regex="[ \t]*${keyName}[ \t]*=[ \t]*\[[ \t]*(.*)[ \t]*\]"
@@ -121,7 +122,7 @@ util.get_toml_array() {
 			fi
 		done
 	else
-		die "Key '$keyName' in file '$cfgFile' must be set to an array that spans one line"
+		die "Key '$keyName' in file '$tomlFile' must be set to an array that spans one line"
 	fi
 }
 
@@ -140,10 +141,21 @@ util.extract_shell_variable() {
 
 	ensure.nonZero 'variableName' "$variableName"
 
-	local regex="^[ \t]*(declare.*? |typeset.*? )?$variableName=[\"']?([^('|\")]*)"
-	if [[ "$(<"$shellFile")" =~ $regex ]]; then
-		REPLY="${BASH_REMATCH[2]}"
-	fi
+	# Note: the following code/regex fails on macOS, so a different parsing method was done below
+	# local regex="^[ \t]*(declare.*? |typeset.*? )?$variableName=[\"']?([^('|\")]*)"
+	# if [[ "$(<"$shellFile")" =~ $regex ]]; then
+		# REPLY="${BASH_REMATCH[2]}"
+	# fi
+
+	while IFS='=' read -r key value; do
+		if [ "$key" = "$variableName" ]; then
+			REPLY="$value"
+			REPLY="${REPLY#\'}"
+			REPLY="${REPLY%\'}"
+			REPLY="${REPLY#\"}"
+			REPLY="${REPLY%\"}"
+		fi
+	done < "$shellFile"
 }
 
 util.show_help() {

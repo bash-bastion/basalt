@@ -4,11 +4,11 @@ set -ETeo pipefail
 shopt -s nullglob extglob
 
 main() {
-	export BPM_ROOT="${BPM_ROOT:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm"}"
-	export BPM_PREFIX="${BPM_PREFIX:-"$BPM_ROOT/cellar"}"
-	export BPM_PACKAGES_PATH="${BPM_PACKAGES_PATH:-"$BPM_PREFIX/packages"}"
-	export BPM_INSTALL_BIN="${BPM_INSTALL_BIN:-"$BPM_PREFIX/bin"}"
-	export BPM_INSTALL_MAN="${BPM_INSTALL_MAN:-"$BPM_PREFIX/man"}"
+	: "${BPM_ROOT:="${XDG_DATA_HOME:-$HOME/.local/share}/bpm"}"
+	: "${BPM_PREFIX:="$BPM_ROOT/cellar"}"
+	: "${BPM_PACKAGES_PATH:="$BPM_PREFIX/packages"}"
+	: "${BPM_INSTALL_BIN:="$BPM_PREFIX/bin"}"
+	: "${BPM_INSTALL_MAN:="$BPM_PREFIX/man"}"
 
 	mkdir -p "$BPM_PREFIX"
 

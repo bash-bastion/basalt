@@ -5,16 +5,14 @@ basher-plumbing-unlink-completions() {
 
 	ensure.nonZero 'package' "$package"
 
-	if [ ! -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
-		return
+	local -a bash_completions=() zsh_completions=()
+	if [ -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
+		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BASH_COMPLETIONS'
+			IFS=':' read -ra bash_completions <<< "$REPLY"
+
+		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'ZSH_COMPLETIONS'
+			IFS=':' read -ra zsh_completions <<< "$REPLY"
 	fi
-
-	local bash_completions zsh_completions
-	util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BASH_COMPLETIONS'
-		IFS=':' read -ra bash_completions <<< "$REPLY"
-
-	util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'ZSH_COMPLETIONS'
-		IFS=':' read -ra zsh_completions <<< "$REPLY"
 
 	for completion in "${bash_completions[@]}"; do
 		rm -f "$BPM_PREFIX/completions/bash/${completion##*/}"
