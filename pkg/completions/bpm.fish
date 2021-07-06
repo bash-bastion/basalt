@@ -1,6 +1,6 @@
 function __fish_bpm_needs_command
 	set cmd (commandline -opc)
-	if [ (count $cmd) -eq 1 -a $cmd[1] = 'basher' ]
+	if [ (count $cmd) -eq 1 -a $cmd[1] = 'bpm' ]
 		return 0
 	end
 	return 1
@@ -16,9 +16,9 @@ function __fish_bpm_using_command
 	return 1
 end
 
-complete -f -c basher -n '__fish_bpm_needs_command
-' -a '(basher commands)'
+complete -f -c bpm -n '__fish_bpm_needs_command
+' -a '(bpm commands)'
 
-for cmd in (basher commands)
-	complete -f -c basher -n "__fish_bpm_using_command $cmd" -a "(basher completions $cmd)"
+for cmd in (bpm commands)
+	complete -f -c bpm -n "__fish_bpm_using_command $cmd" -a "(bpm completions $cmd)"
 end

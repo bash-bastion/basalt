@@ -27,12 +27,12 @@ jobs:
 
       - name: Build image
         run: |
-          docker build --build-arg bashver=${{ matrix.bashver }} --tag basher/basher:bash-${{ matrix.bashver }} .
+          docker build --build-arg bashver=${{ matrix.bashver }} --tag bpm/bpm:bash-${{ matrix.bashver }} .
           docker run bash:${{ matrix.bashver }} --version
 
       - name: Run tests
         run: |
-          time docker run basher/basher:bash-${{ matrix.bashver }} --tap /opt/basher/tests
+          time docker run bpm/bpm:bash-${{ matrix.bashver }} --tap /opt/bpm/tests
 
   build-mac:
     runs-on: macos-latest

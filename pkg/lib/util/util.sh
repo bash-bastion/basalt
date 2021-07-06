@@ -102,6 +102,7 @@ util.get_toml_array() {
 	# from setting the key to an empty string value)
 	if [ -z "$grepLine" ]; then
 		REPLY=''
+		# TODO
 		# return 1
 		return
 	fi
@@ -174,7 +175,7 @@ Subcommands:
     Uninstalls a package
 
   link [--no-deps] <directory>
-    Installs a local directory as a basher package. These show up with
+    Installs a local directory as a bpm package. These show up with
     a namespace of 'bpm-local'
 
   list [--outdated]

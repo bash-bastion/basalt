@@ -9,9 +9,9 @@ _bpm() {
 	read -cA words
 
 	if [ "${#words}" -eq 2 ]; then
-		completions="$(basher commands)"
+		completions="$(bpm commands)"
 	else
-		completions="$(basher completions ${words[2,-2]})"
+		completions="$(bpm completions ${words[2,-2]})"
 	fi
 
 	reply=("${(ps:\n:)completions}")

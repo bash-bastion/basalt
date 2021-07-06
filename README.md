@@ -1,6 +1,6 @@
 # bpm
 
-Originally a fork of [basher](https://github.com/basherpm/basher), `bpm` is a package manager for Bash repositories.
+Originally a fork of [bpm](https://github.com/bpmpm/bpm), `bpm` is a package manager for Bash repositories.
 
 > Instead of looking for specific install instructions for each package and messing with your path, [bpm] will create a central location for all packages and manage their binaries for you
 
@@ -23,7 +23,7 @@ Since the completions and executables are in a common directory, it's much easie
 - Respects XDG
 - Is likely faster
 
-### Compared to `basher`, `bpm`
+### Compared to `bpm`, `bpm`
 
 - Can install multiple packages at once
 - Has an improved help output
@@ -34,39 +34,39 @@ Since the completions and executables are in a common directory, it's much easie
 - Does not source `package.sh` which allows for arbitrary command execution
 - More flexible parsing of command line arguments
 
-Even though it is called basher, it also works with zsh and fish.
+Even though it is called bpm, it also works with zsh and fish.
 
 ## Installation
 
 STATUS: IN DEVELOPMENT
 
-Neobasher requires `bash >= 4`, and the `realpath` utility from `coreutils`. On
+`bpm` requires `bash >= 4`, and the `realpath` utility from `coreutils`. On
 osx you can install both with brew:
 
 ```sh
 brew install bash coreutils
 ```
 
-1. Clone Neobasher
+1. Clone `bpm``
 
 ```sh
-git clone https://github.com/basherpm/basher "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
+git clone https://github.com/bpmpm/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
 ```
 
-2. Initialize Neobasher in your shell initialization
+2. Initialize `bpm` in your shell initialization
 
 For `bash`, `zsh`, `sh`
 
 ```sh
 export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin:$PATH"
-eval "$(basher init bash)" # replace 'bash' with your shell
+eval "$(bpm init bash)" # replace 'bash' with your shell
 ```
 
 For `fish`
 
 ```fish
 set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin" $PATH
-status --is-interactive; and . (basher init fish | psub)
+status --is-interactive; and . (bpm init fish | psub)
 ```
 
 ## Updating
@@ -110,21 +110,12 @@ You can prevent that with the `--no-deps` option
 
 ### Sourcing files from a package into current shell
 
-Neobasher provides an `include` function that allows sourcing files into the
+`bpm` provides an `include` function that allows sourcing files into the
 current shell. After installing a package, you can run:
 
 ```sh
 include username/repo lib/file.sh
 ```
-
-### Configuration options
-
-To change the behavior of basher, you can set the following variables either
-globally or before each command:
-
-- `BPM_ROOT` - The location of the root Neobasher folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.local/share}/bpm"`
-- `BPM_FULL_CLONE=true` - Clones the full repo history instead of only the last commit (useful for package development)
-- `BPM_PREFIX` - set the installation and package checkout prefix (default is `$BPM_ROOT/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`.  This allows you to manage "global packages", distinct from individual user packages.
 
 ## Packages
 

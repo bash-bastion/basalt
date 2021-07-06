@@ -10,8 +10,6 @@ main() {
 	: "${BPM_INSTALL_BIN:="$BPM_PREFIX/bin"}"
 	: "${BPM_INSTALL_MAN:="$BPM_PREFIX/man"}"
 
-	mkdir -p "$BPM_PREFIX"
-
 	for f in "$PROGRAM_LIB_DIR"/{commands,util}/?*.sh; do
 		source "$f"
 	done
@@ -34,52 +32,52 @@ main() {
 	case "$1" in
 	complete)
 		shift
-		basher-complete "$@"
+		bpm-complete "$@"
 		exit
 		;;
 	echo)
 		shift
-		basher-echo "$@"
+		bpm-echo "$@"
 		exit
 		;;
 	init)
 		shift
-		basher-init "$@"
+		bpm-init "$@"
 		exit
 		;;
 	install)
 		shift
-		basher-install "$@"
+		bpm-install "$@"
 		exit
 		;;
 	link)
 		shift
-		basher-link "$@"
+		bpm-link "$@"
 		exit
 		;;
 	list)
 		shift
-		basher-list "$@"
+		bpm-list "$@"
 		exit
 		;;
 	outdated)
 		shift
-		basher-outdated "$@"
+		bpm-outdated "$@"
 		exit
 		;;
 	package-path)
 		shift
-		basher-package-path "$@"
+		bpm-package-path "$@"
 		exit
 		;;
 	uninstall)
 		shift
-		basher-uninstall "$@"
+		bpm-uninstall "$@"
 		exit
 		;;
 	upgrade)
 		shift
-		basher-upgrade "$@"
+		bpm-upgrade "$@"
 		exit
 		;;
 	*)
