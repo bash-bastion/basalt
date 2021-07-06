@@ -1,1 +1,1 @@
-source "$BPM_ROOT/lib/include.sh"
+source "$BPM_ROOT/pkg/share/include.sh"

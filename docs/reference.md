@@ -36,6 +36,8 @@ Use `bpm.toml` for more fine grained control of where `bpm` searches for binarie
 
 Use `package.sh` to customize how `bpm` searches for executables and completions. Note that this is only kept for backwards-compatability with `bpm` - you should use `bpm.toml` instead
 
+
+
 Example
 
 ```sh
@@ -47,7 +49,7 @@ ZSH_COMPLETIONS="completions/_package"
 
 ### `BINS`
 
-Colon separated list of executable files
+Colon separated list of executable files. BINS specified in this fashion have higher precedence then the inference rules above
 
 ### `DEPS`
 

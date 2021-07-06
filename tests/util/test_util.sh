@@ -27,13 +27,3 @@ test_util.resolve_link() {
 		readlink -f "$1"
 	fi
 }
-
-test_util.is_exported() {
-	if ! declare -p | grep -q "declare -x $1=\""; then
-		return 1
-	fi
-}
-
-test_util.reset_variables() {
-	unset BPM_ROOT BPM_PREFIX BPM_PACKAGES_PATH BPM_INSTALL_BIN BPM_INSTALL_MAN
-}

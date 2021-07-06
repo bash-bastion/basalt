@@ -102,9 +102,7 @@ util.get_toml_array() {
 	# from setting the key to an empty string value)
 	if [ -z "$grepLine" ]; then
 		REPLY=''
-		# TODO
-		# return 1
-		return
+		return 1
 	fi
 
 	local regex="[ \t]*${keyName}[ \t]*=[ \t]*\[[ \t]*(.*)[ \t]*\]"

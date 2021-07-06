@@ -71,7 +71,7 @@ status --is-interactive; and . (bpm init fish | psub)
 
 ## Updating
 
-Go to the directory where you cloned Neoasher and pull the latest changes
+Go to the directory where you cloned bpm and pull the latest changes
 
 ```sh
 cd "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
@@ -116,29 +116,6 @@ current shell. After installing a package, you can run:
 ```sh
 include username/repo lib/file.sh
 ```
-
-## Packages
-
-Packages are simply repos (username/repo). You may also specify a site
-(site/username/repo).
-
-Any files inside a bin directory are added to the path. If there is no bin
-directory, any executable files in the package root are added to the path.
-
-Any manpages (files ended in `\.[0-9]`) inside a `man` directory are added
-to the manpath.
-
-Optionally, a repo might contain a `package.sh` file which specifies binaries,
-dependencies and completions in the following format:
-
-```sh
-BINS="folder/file1:folder/file2.sh"
-DEPS="user1/repo1:user2/repo2"
-BASH_COMPLETIONS="completions/package"
-ZSH_COMPLETIONS="completions/_package"
-```
-
-BINS specified in this fashion have higher precedence then the inference rules above
 
 ## Contributing
 

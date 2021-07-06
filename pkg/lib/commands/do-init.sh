@@ -45,11 +45,10 @@ bpm-init() {
 		EOF
 		;;
 	bash)
-		echo "$BPM_ROOT" >&3
 		echo_posix_shell_variables
 		cat <<-"EOF"
 		# bpm packages completions
-		for f in "$BPM_ROOT"/cellar/completions/bash/*.{sh,bash}; do
+		for f in "$BPM_ROOT"/cellar/completions/bash/?*.{sh,bash}; do
 		  source "$f"
 		done
 		unset f
@@ -61,7 +60,7 @@ bpm-init() {
 		cat <<-"EOF"
 		# bpm packages completions
 		fpath=("$BPM_ROOT/cellar/completions/zsh/compsys" $fpath)
-		for f in "$BPM_ROOT"/cellar/completions/zsh/compctl/*.zsh; do
+		for f in "$BPM_ROOT"/cellar/completions/zsh/compctl/?*.zsh; do
 		  source "$f"
 		done
 		unset f
@@ -85,8 +84,8 @@ bpm-init() {
 	fi
 
 	# bpm include
-	if [ -f "\$BPM_ROOT/pkg/lib/share/include.$shell" ]; then
-	  . "\$BPM_ROOT/pkg/lib/share/include.$shell"
+	if [ -f "\$BPM_ROOT/pkg/share/include.$shell" ]; then
+	  . "\$BPM_ROOT/pkg/share/include.$shell"
 	fi
 
 	EOF
