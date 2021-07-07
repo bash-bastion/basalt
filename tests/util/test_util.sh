@@ -19,7 +19,13 @@ test_util.fake_clone() {
 
 # @description Clones the repository, and performs any linking, etc.
 test_util.fake_install() {
-	:
+		local package="$1"
+
+		test_util.fake_clone "$package"
+		do-plumbing-deps "$package"
+		do-plumbing-link-bins "$package"
+		do-plumbing-link-completions "$package"
+		do-plumbing-link-man "$package"
 }
 
 test_util.readlink() {

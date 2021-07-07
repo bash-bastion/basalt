@@ -3,47 +3,52 @@
 load 'util/init.sh'
 
 @test "without arguments, prints an error" {
-  eval "$(do-init sh)"
-  run include
-  assert_failure
-  assert_output -e "Usage: include <package> <file>"
+	eval "$(do-init sh)"
+	run include
+	assert_failure
+	assert_output -p "Usage: include <package> <file>"
 }
 
 @test "with one argument, prints an error" {
-  eval "$(do-init sh)"
-  run include user/repo
-  assert_failure
-  assert_output -e "Usage: include <package> <file>"
+	eval "$(do-init sh)"
+	run include user/repo
+	assert_failure
+	assert_output -p "Usage: include <package> <file>"
 }
 
 @test "when package is not installed, prints an error" {
-  eval "$(do-init sh)"
-  run include user/repo file
-  assert_failure
-  assert_output -e "Package not installed: user/repo"
+	eval "$(do-init sh)"
+	run include user/repo file
+	assert_failure
+	assert_output -p "Package not installed: user/repo"
 }
 
 @test "when file doesn't exist, prints an error" {
-  create_package username/repo
-  test_util.mock_command plumbing-clone
-  do-plumbing-clone false site username/repo
+	local package='username/repo'
 
-  eval "$(do-init sh)"
-  run include username/repo non_existent
-  assert_failure
-  assert_output -e "File '$BPM_PREFIX/packages/username/repo/non_existent' not found"
+	create_package "$package"
+	test_util.fake_install "$package"
+
+	eval "$(do-init sh)"
+
+	run include "$package" non_existent
+
+	assert_failure
+	assert_output -p "File '$BPM_PREFIX/packages/$package/non_existent' not found"
 }
 
 @test "sources a file into the current shell" {
-  create_package username/repo
-  create_file username/repo function.sh "func_name() { echo DONE; }"
-  test_util.mock_command plumbing-clone
-  do-plumbing-clone false site username/repo
+	local package='username/repo'
 
-  eval "$(do-init sh)"
-  include username/repo function.sh
+	create_package "$package"
+	create_file "$package" function.sh "func_name() { echo DONE; }"
+	test_util.fake_install "$package"
 
-  run func_name
-  assert_success
-  assert_output "DONE"
+	eval "$(do-init sh)"
+	include "$package" function.sh
+
+	run func_name
+
+	assert_success
+	assert_output "DONE"
 }
