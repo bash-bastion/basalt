@@ -2,25 +2,13 @@
 
 load 'util/init.sh'
 
-# @description Creates man pages in the root directory
-create.man_root() {
-	: "${1?"create.man_root Args required"}"
-
-	cd "$BPM_ORIGIN_DIR/$package"
-
-	touch "$1"
-	git add .
-	git commit -m "Add $1"
-
-	cd "$BPM_CWD"
-}
-
 @test "links each man page to install-man under correct subdirectory" {
-	create_package username/package
+	local package='username/package'
+
+	create_package "$package"
 	create_man username/package exec.1
 	create_man username/package exec.2
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-man username/package
 
@@ -34,9 +22,7 @@ create.man_root() {
 
 	create_package username/package
 	create.man_root 'prog.1'
-
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-man username/package
 

@@ -3,11 +3,12 @@
 load 'util/init.sh'
 
 @test "removes each man page from the install-man" {
+	local package="username/package"
+
 	create_package username/package
 	create_man username/package exec.1
 	create_man username/package exec.2
-	test_util.mock_command plumbing-clone
-	do-install username/package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-unlink-man username/package
 

@@ -3,12 +3,11 @@
 load 'util/init.sh'
 
 @test "links bash completions from package.sh to prefix/completions" {
+	local package='username/package'
+
 	create_package username/package
 	create_bash_completions username/package comp.bash
-
-	# TODO: remove mock-command plumbing-clone?
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions username/package
 
@@ -21,9 +20,8 @@ load 'util/init.sh'
 	for completionDir in completion completions contrib/completion contrib/completions; do
 
 		local package="username/package$i"
-		create_package "$package"
 
-		# Manually add completion
+		create_package "$package"
 		cd "$BPM_ORIGIN_DIR/$package"
 		mkdir -p "$completionDir"
 		touch "$completionDir/c.bash"
@@ -31,10 +29,7 @@ load 'util/init.sh'
 		git add .
 		git commit -m "Add completions"
 		cd "$BPM_CWD"
-
-		# Manually install
-		mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
-		ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+		test_util.fake_clone "$package"
 
 		run do-plumbing-link-completions "$package"
 
@@ -48,17 +43,16 @@ load 'util/init.sh'
 
 @test "don't link bash from './?(contrib/)completion?(s)' when BASH_COMPLETIONS is specified in package.sh" {
 	local package="username/package"
-	create_package "$package"
 
+	create_package "$package"
 	cd "$BPM_ORIGIN_DIR/$package"
 	mkdir completions
 	touch completions/prog.bash
 	echo "BASH_COMPLETIONS=" >| package.sh
+	git add .
+	git commit -m "Add package.sh"
 	cd "$BPM_CWD"
-
-	# Manually install
-	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
-	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions "$package"
 
@@ -67,17 +61,17 @@ load 'util/init.sh'
 
 @test "do link bash from './?(contrib/)completion?(s)' when ZSH_COMPLETIONS is specified in package.sh" {
 	local package="username/package"
-	create_package "$package"
 
+	create_package "$package"
 	cd "$BPM_ORIGIN_DIR/$package"
 	mkdir completions
 	touch completions/prog.bash
 	echo "ZSH_COMPLETIONS=" >| package.sh
+	git add .
+	git commit -m 'Add package.sh'
 	cd "$BPM_CWD"
 
-	# Manually install
-	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
-	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions "$package"
 
@@ -85,10 +79,11 @@ load 'util/init.sh'
 }
 
 @test "links zsh compsys completions to prefix/completions" {
+	local package="username/package"
+
 	create_package username/package
 	create_zsh_compsys_completions username/package _exec
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions username/package
 
@@ -97,10 +92,11 @@ load 'util/init.sh'
 }
 
 @test "links zsh compctl completions to prefix/completions" {
+	local package="username/package"
+
 	create_package username/package
 	create_zsh_compctl_completions username/package exec
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions username/package
 
@@ -111,11 +107,9 @@ load 'util/init.sh'
 @test "links zsh completions from ./?(contrib/)completion?(s)" {
 	local -i i=1
 	for completionDir in completion completions contrib/completion contrib/completions; do
-
 		local package="username/package$i"
-		create_package "$package"
 
-		# Manually add completion
+		create_package "$package"
 		cd "$BPM_ORIGIN_DIR/$package"
 		mkdir -p "$completionDir"
 		touch "$completionDir/c.zsh"
@@ -123,10 +117,7 @@ load 'util/init.sh'
 		git add .
 		git commit -m "Add completions"
 		cd "$BPM_CWD"
-
-		# Manually install
-		mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
-		ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+		test_util.fake_clone "$package"
 
 		run do-plumbing-link-completions "$package"
 
@@ -140,17 +131,16 @@ load 'util/init.sh'
 
 @test "don't link bash from './?(contrib/)completion?(s)' when ZSH_COMPLETIONS is specified in package.sh" {
 	local package="username/package"
-	create_package "$package"
 
+	create_package "$package"
 	cd "$BPM_ORIGIN_DIR/$package"
 	mkdir completions
 	touch completions/prog.zsh
 	echo "ZSH_COMPLETIONS=" >| package.sh
+	git add .
+	git commit -m 'Add package.sh'
 	cd "$BPM_CWD"
-
-	# Manually install
-	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
-	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions "$package"
 
@@ -161,17 +151,16 @@ load 'util/init.sh'
 
 @test "do link zsh from './?(contrib/)completion?(s)' when BASH_COMPLETIONS is specified in package.sh" {
 	local package="username/package"
-	create_package "$package"
 
+	create_package "$package"
 	cd "$BPM_ORIGIN_DIR/$package"
 	mkdir completions
 	touch completions/prog.zsh
 	echo "BASH_COMPLETIONS=" >| package.sh
+	git add .
+	git commit -m 'Add package.sh'
 	cd "$BPM_CWD"
-
-	# Manually install
-	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
-	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions "$package"
 
@@ -181,9 +170,10 @@ load 'util/init.sh'
 
 
 @test "does not fail if package doesn't have any completions" {
+	local package="username/package"
+
 	create_package username/package
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-completions username/package
 

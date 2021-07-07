@@ -3,11 +3,12 @@
 load 'util/init.sh'
 
 @test "links each file on the BINS config on package.sh to the install bin" {
+	local package="username/package"
+
 	create_package username/package
 	create_package_exec username/package exec1
 	create_package_exec username/package exec2.sh
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 
@@ -17,11 +18,12 @@ load 'util/init.sh'
 }
 
 @test "links each file inside bin folder to install bin" {
+	local package="username/package"
+
 	create_package username/package
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 
@@ -31,11 +33,12 @@ load 'util/init.sh'
 }
 
 @test "links each exec file in package root to install bin" {
+	local package="username/package"
+
 	create_package username/package
 	create_root_exec username/package exec3
 	create_root_exec username/package exec4.sh
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 
@@ -45,11 +48,12 @@ load 'util/init.sh'
 }
 
 @test "doesn't link root bins if there is a bin folder" {
+	local package="username/package"
+
 	create_package username/package
 	create_exec username/package exec1
 	create_root_exec username/package exec2
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 
@@ -59,12 +63,13 @@ load 'util/init.sh'
 }
 
 @test "doesn't link root bins or files in bin folder if there is a BINS config on package.sh" {
+	local package="username/package"
+
 	create_package username/package
 	create_exec username/package exec1
 	create_root_exec username/package exec2
 	create_package_exec username/package exec3
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 
@@ -75,9 +80,10 @@ load 'util/init.sh'
 }
 
 @test "does not fail if there are no binaries" {
+	local package="username/package"
+
 	create_package username/package
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 
@@ -85,12 +91,13 @@ load 'util/init.sh'
 }
 
 @test "remove extension if REMOVE_EXTENSION is true" {
+	local package="username/package"
+
 	create_package username/package
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package true
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 
@@ -100,12 +107,13 @@ load 'util/init.sh'
 }
 
 @test "does not remove extension if REMOVE_EXTENSION is false" {
+	local package="username/package"
+
 	create_package username/package
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package false
-	test_util.mock_command plumbing-clone
-	do-plumbing-clone false site username package
+	test_util.fake_clone "$package"
 
 	run do-plumbing-link-bins username/package
 

@@ -44,6 +44,17 @@ create_man() {
 	cd "$BPM_CWD"
 }
 
+# @description Creates man pages in the root directory
+create.man_root() {
+	cd "$BPM_ORIGIN_DIR/$package"
+
+	touch "$1"
+	git add .
+	git commit -m "Add $1"
+
+	cd "$BPM_CWD"
+}
+
 create_package_exec() {
 	local package="$1"
 	local exec="package_bin/$2"
