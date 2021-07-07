@@ -18,7 +18,6 @@ bpm-link() {
 
 	directory="$(util.resolve_link "$directory")"
 
-
 	local namespace="bpm-local"
 	local repository="${directory##*/}"
 	local package="$namespace/$repository"
@@ -27,14 +26,13 @@ bpm-link() {
 		die "Package '$package' is already present"
 	fi
 
-
 	mkdir -p "$BPM_PACKAGES_PATH/$namespace"
 	ln -s "$directory" "$BPM_PACKAGES_PATH/$package"
 
+	log.info "Linking '$directory'"
 	if [ "$no_deps" = "false" ]; then
 		bpm-plumbing-deps "$package"
 	fi
 	bpm-plumbing-link-bins "$package"
-	bpm-plumbing-link-completions "$package"
 	bpm-plumbing-link-completions "$package"
 }

@@ -8,7 +8,6 @@ load 'util/init.sh'
 	test_util.mock_command _clone
 	bpm-plumbing-clone false site username package
 
-
 	run bpm-plumbing-link-completions username/package
 
 	assert_success

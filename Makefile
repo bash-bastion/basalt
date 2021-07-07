@@ -1,4 +1,4 @@
+.PHONY: test
+
 test:
 	bats tests
-
-.PHONY: test
