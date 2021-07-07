@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "outputs the package path" {
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	create_package username/package
 	bpm-install username/package
 

@@ -79,7 +79,7 @@ bpm-plumbing-link-completions username/package"
 
 @test "doesn't fail" {
 	create_package username/package
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 
 	run bpm-install username/package
 	assert_success

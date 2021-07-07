@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "list installed packages" {
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	create_package username/p1
 	create_package username2/p2
 	create_package username2/p3
@@ -24,7 +24,7 @@ load 'util/init.sh'
 }
 
 @test "displays outdated packages" {
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	create_package username/outdated
 	create_package username/uptodate
 	bpm-install username/outdated

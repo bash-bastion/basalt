@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "upgrades a package to the latest version" {
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	create_package username/package
 	bpm-install username/package
 	create_exec username/package "second"

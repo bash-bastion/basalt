@@ -6,7 +6,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_package_exec username/package exec1
 	create_package_exec username/package exec2.sh
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package
@@ -20,7 +20,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package
@@ -34,7 +34,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_root_exec username/package exec3
 	create_root_exec username/package exec4.sh
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package
@@ -48,7 +48,7 @@ load 'util/init.sh'
 	create_package username/package
 	create_exec username/package exec1
 	create_root_exec username/package exec2
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package
@@ -63,7 +63,7 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_root_exec username/package exec2
 	create_package_exec username/package exec3
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package
@@ -76,7 +76,7 @@ load 'util/init.sh'
 
 @test "does not fail if there are no binaries" {
 	create_package username/package
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package
@@ -89,7 +89,7 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package true
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package
@@ -104,7 +104,7 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package false
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	bpm-plumbing-clone false site username package
 
 	run bpm-plumbing-link-bins username/package

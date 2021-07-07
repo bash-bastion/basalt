@@ -4,7 +4,7 @@
 # prints all the arguments to the command, in addition to the command name
 test_util.mock_command() {
 	case "$1" in
-	_clone)
+	plumbing-clone)
 		bpm-plumbing-clone() {
 			local use_ssh="$1"
 			local site="$2"

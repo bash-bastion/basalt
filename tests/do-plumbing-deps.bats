@@ -4,7 +4,7 @@ load 'util/init.sh'
 
 
 @test "without dependencies, does nothing" {
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	test_util.mock_command bpm-install
 	create_package "user/main"
 	bpm-plumbing-clone false site user/main
@@ -15,7 +15,7 @@ load 'util/init.sh'
 }
 
 @test "installs dependencies" {
-	test_util.mock_command _clone
+	test_util.mock_command plumbing-clone
 	test_util.mock_command bpm-install
 	create_package "user/main"
 	create_dep "user/main" "user/dep1"

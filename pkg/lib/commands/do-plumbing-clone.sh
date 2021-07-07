@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # @summary Clones a package from a site, but doesn't install it
-# Usage: bpm _clone <use_ssh> <site> <package> [<ref>]
+# Usage: bpm plumbing-clone <use_ssh> <site> <package> [<ref>]
 
 bpm-plumbing-clone() {
 	local useSsh="$1"
