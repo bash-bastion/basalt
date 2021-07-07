@@ -23,7 +23,7 @@ bpm-plumbing-link-completions() {
 	for completion in "${zsh_completions[@]}"; do
 		local target="$BPM_PACKAGES_PATH/$package/$completion"
 
-		if grep -sq "#compdef" "$target"; then
+		if grep -Pqs "\A#compdef" "$target"; then
 			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
 			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${completion##*/}"
 		else
@@ -31,4 +31,26 @@ bpm-plumbing-link-completions() {
 			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${completion##*/}"
 		fi
 	done
+
+	if [[ "${#bash_completions[@]}" -eq 0 && "${#zsh_completions[@]}" -eq 0 ]]; then
+		for completionDir in completion completions contrib/completion contrib/completions; do
+		local completionDir="$BPM_PACKAGES_PATH/$package/$completionDir"
+
+		for target in "$completionDir"/?*.{sh,bash}; do
+			mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
+			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/bash/${completion##*/}"
+		done
+
+		for target in "$completionDir"/?*.zsh; do
+			if grep -Pqs "\A#compdef" "$target"; then
+				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
+				ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${completion##*/}"
+			else
+				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compctl"
+				ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${completion##*/}"
+			fi
+		done
+	done
+	fi
+
 }
