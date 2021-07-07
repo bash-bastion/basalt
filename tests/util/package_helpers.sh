@@ -117,26 +117,6 @@ set_remove_extension() {
 	cd "$BPM_CWD"
 }
 
-create_dep() {
-	local package="$1"
-	local dep="$2"
-
-	cd "$BPM_ORIGIN_DIR/$package"
-
-	touch "package.sh"
-	if grep -sq "DEPS=" "package.sh"; then
-		sed -e "/^DEPS=/ s;$;:$dep;" package.sh > package.sh.tmp
-		mv package.sh.tmp package.sh
-	else
-		echo "DEPS=$dep" >> package.sh
-	fi
-
-	git add .
-	git commit -m "Add dependency on $dep"
-
-	cd "$BPM_CWD"
-}
-
 create_bash_completions() {
 	local package="$1"
 	local comp="$2"

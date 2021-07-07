@@ -12,8 +12,14 @@ do-plumbing-deps() {
 
 	local -a deps=()
 
+	local bpmTomlFile="$BPM_PACKAGES_PATH/$package/bpm.toml"
 	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
-	if [ -f "$packageShFile" ]; then
+
+	if [ -f  "$bpmTomlFile" ]; then
+		if util.get_toml_array "$bpmTomlFile" 'dependencies'; then
+			deps=("${REPLIES[@]}")
+		fi
+	elif [ -f "$packageShFile" ]; then
 		util.extract_shell_variable "$packageShFile" 'DEPS'
 		IFS=':' read -ra deps <<< "$REPLY"
 	fi

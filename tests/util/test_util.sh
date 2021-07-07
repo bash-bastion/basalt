@@ -23,6 +23,14 @@ test_util.mock_command() {
 	esac
 }
 
+# TODO: remove plumbing-clone branch from test_util.mock_command
+# @description Fakes a clone. This behaves more like link
+test_util.fake_clone() {
+	local package="$1"
+
+	git clone "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+}
+
 test_util.readlink() {
 	if command -v realpath &>/dev/null; then
 		realpath "$1"
