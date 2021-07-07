@@ -13,8 +13,8 @@ load 'util/init.sh'
 	run bpm-list
 
 	assert_success
-	assert_line -n 0 "username2/p2"
-	assert_line -n 1 "username/p1"
+	assert_line "username2/p2"
+	assert_line "username/p1"
 	refute_line "username2/p3"
 }
 
