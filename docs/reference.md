@@ -8,7 +8,7 @@ The location of the root `bpm` folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.loc
 
 ### `BPM_FULL_CLONE`
 
-Set to `true` to clone the full repo history instead of only the last commit (useful for package development)
+Set to a non-null string to clone the full repo history instead of only the last commit (useful for package development)
 
 ### `BPM_PREFIX`
 

@@ -24,7 +24,7 @@ bpm-plumbing-clone() {
 
 	local -a gitArgs=(--recursive)
 
-	if [ "$BPM_FULL_CLONE" != "true" ]; then
+	if [ -z "${BPM_FULL_CLONE+x}" ]; then
 		gitArgs+=(--depth=1)
 	fi
 
