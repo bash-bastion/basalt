@@ -8,13 +8,13 @@ load 'util/init.sh'
 	create_package username/package
 	create_package_exec username/package exec1
 	create_package_exec username/package exec2.sh
-	test_util.fake_clone "$package"
+	do-link "$BPM_ORIGIN_DIR/$package"
 
-	run do-plumbing-unlink-bins username/package
+	run do-plumbing-unlink-bins 'bpm-local/package'
 
 	assert_success
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
 }
 
 @test "removes each binary from the install bin" {
@@ -23,13 +23,13 @@ load 'util/init.sh'
 	create_package username/package
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
-	test_util.fake_clone "$package"
+	do-link "$BPM_ORIGIN_DIR/$package"
 
-	run do-plumbing-unlink-bins username/package
+	run do-plumbing-unlink-bins 'bpm-local/package'
 
 	assert_success
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
 }
 
 @test "removes root binaries from the install bin" {
@@ -38,9 +38,9 @@ load 'util/init.sh'
 	create_package username/package
 	create_root_exec username/package exec3
 	create_root_exec username/package exec4.sh
-	test_util.fake_clone "$package"
+	do-link "$BPM_ORIGIN_DIR/$package"
 
-	run do-plumbing-unlink-bins username/package
+	run do-plumbing-unlink-bins bpm-local/package
 
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec3)" ]
@@ -51,9 +51,9 @@ load 'util/init.sh'
 	local package="username/package"
 
 	create_package username/package
-	test_util.fake_clone "$package"
+	do-link "$BPM_ORIGIN_DIR/$package"
 
-	run do-plumbing-unlink-bins username/package
+	run do-plumbing-unlink-bins bpm-local/package
 
 	assert_success
 }
@@ -65,9 +65,9 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package true
-	test_util.fake_clone "$package"
+	do-link "$BPM_ORIGIN_DIR/$package"
 
-	run do-plumbing-unlink-bins username/package
+	run do-plumbing-unlink-bins bpm-local/package
 
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
@@ -81,9 +81,9 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	set_remove_extension username/package false
-	test_util.fake_clone "$package"
+	do-link "$BPM_ORIGIN_DIR/$package"
 
-	run do-plumbing-unlink-bins username/package
+	run do-plumbing-unlink-bins bpm-local/package
 
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]

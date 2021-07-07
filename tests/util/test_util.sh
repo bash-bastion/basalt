@@ -3,32 +3,23 @@
 # @description This mocks a command by creating a function for it, which
 # prints all the arguments to the command, in addition to the command name
 test_util.mock_command() {
-	case "$1" in
-	plumbing-clone)
-		do-plumbing-clone() {
-			local use_ssh="$1"
-			local site="$2"
-			local user="$3"
-			local repository="$4"
-
-			git clone "$BPM_ORIGIN_DIR/$user/$repository" "$BPM_PACKAGES_PATH/$user/$repository"
-		}
-		;;
-	*)
-		# This creates a function with the first argument (the function to
-		# mock). When called, it prints the command name, along with the arguments
-		# it was called with
-		eval "$1() { echo \"$1 \$*\"; }"
-		;;
-	esac
+	# This creates a function with the first argument (the function to
+	# mock). When called, it prints the command name, along with the arguments
+	# it was called with
+	eval "$1() { echo \"$1 \$*\"; }"
 }
 
-# TODO: remove plumbing-clone branch from test_util.mock_command
-# @description Fakes a clone. This behaves more like link
+# @description Fakes a clone. This is meant to be used for
+# the download step
 test_util.fake_clone() {
 	local package="$1"
 
 	git clone "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+}
+
+# @description Clones the repository, and performs any linking, etc.
+test_util.fake_install() {
+	:
 }
 
 test_util.readlink() {

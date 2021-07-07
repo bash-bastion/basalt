@@ -10,11 +10,13 @@ load 'util/init.sh'
 }
 
 @test "removes package directory" {
-	test_util.mock_command plumbing-clone
-	create_package username/package
-	do-install username/package
+	local package="username/package"
 
-	run do-uninstall username/package
+	create_package 'username/package'
+	test_util.fake_clone 'username/package'
+	do-link "$BPM_ORIGIN_DIR/$package"
+
+	run do-uninstall 'username/package'
 
 	assert_success
 	[ ! -d "$BPM_PACKAGES_PATH/username/package" ]
@@ -24,36 +26,39 @@ load 'util/init.sh'
 	mkdir -p "$BPM_PACKAGES_PATH/theta"
 	touch "$BPM_PACKAGES_PATH/theta/tango"
 
-	run do-uninstall theta/tango
+	run do-uninstall 'theta/tango'
 
 	assert_success
 	[ ! -e "$BPM_PACKAGES_PATH/username/package" ]
 }
 
 @test "removes binaries" {
-	test_util.mock_command plumbing-clone
-	create_package username/package
-	create_exec username/package exec1
-	do-install username/package
+	local package="username/package"
 
-	run do-uninstall username/package
+	create_package 'username/package'
+	create_exec 'username/package' exec1
+	test_util.fake_clone 'username/package'
+	do-link "$BPM_ORIGIN_DIR/$package"
+
+	run do-uninstall 'username/package'
 
 	assert_success
 	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
 }
 
 @test "does not remove other package directories and binaries" {
-	test_util.mock_command plumbing-clone
-	create_package username/package1
-	create_exec username/package1 exec1
-	create_package username/package2
-	create_exec username/package2 exec2
-	do-install username/package1
-	do-install username/package2
+	create_package 'username/package1'
+	create_package 'username/package2'
+	create_exec 'username/package1' exec1
+	create_exec 'username/package2' exec2
+	do-link "$BPM_ORIGIN_DIR/username/package1"
+	do-link "$BPM_ORIGIN_DIR/username/package2"
 
-	run do-uninstall username/package1
+	run do-uninstall 'bpm-local/package1'
 
 	assert_success
-	[ -d "$BPM_PACKAGES_PATH/username/package2" ]
+	[ ! -d "$BPM_PACKAGES_PATH/bpm-local/package1" ]
+	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	[ -d "$BPM_PACKAGES_PATH/bpm-local/package2" ]
 	[ -e "$BPM_INSTALL_BIN/exec2" ]
 }

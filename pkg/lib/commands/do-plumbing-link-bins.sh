@@ -37,6 +37,7 @@ do-plumbing-link-bins() {
 			name="${name%%.*}"
 		fi
 
+		# TODO: test for chmod +x
 		mkdir -p "$BPM_INSTALL_BIN"
 		ln -sf "$BPM_PACKAGES_PATH/$package/$bin" "$BPM_INSTALL_BIN/$name"
 		chmod +x "$BPM_INSTALL_BIN/$name"

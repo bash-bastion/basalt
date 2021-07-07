@@ -18,7 +18,7 @@ do-plumbing-clone() {
 	local package="$user/$repository"
 
 	if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
-		log.info "Package '$package' is already present"
+		log.error "Package '$package' is already present"
 		exit
 	fi
 
