@@ -16,19 +16,19 @@ bpm-plumbing-link-completions() {
 	fi
 
 	for completion in "${bash_completions[@]}"; do
-		mkdir -p "$BPM_PREFIX/completions/bash"
-		ln -sf "$BPM_PACKAGES_PATH/$package/$completion" "$BPM_PREFIX/completions/bash/${completion##*/}"
+		mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
+		ln -sf "$BPM_PACKAGES_PATH/$package/$completion" "$BPM_INSTALL_COMPLETIONS/bash/${completion##*/}"
 	done
 
 	for completion in "${zsh_completions[@]}"; do
 		local target="$BPM_PACKAGES_PATH/$package/$completion"
 
 		if grep -sq "#compdef" "$target"; then
-			mkdir -p "$BPM_PREFIX/completions/zsh/compsys"
-			ln -sf "$target" "$BPM_PREFIX/completions/zsh/compsys/${completion##*/}"
+			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
+			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${completion##*/}"
 		else
-			mkdir -p "$BPM_PREFIX/completions/zsh/compctl"
-			ln -sf "$target" "$BPM_PREFIX/completions/zsh/compctl/${completion##*/}"
+			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compctl"
+			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${completion##*/}"
 		fi
 	done
 }

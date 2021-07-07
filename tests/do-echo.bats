@@ -66,3 +66,18 @@ load 'util/init.sh'
 	BPM_INSTALL_MAN= BPM_PREFIX=/usr/local run bpm echo BPM_INSTALL_MAN
 	assert_output "/usr/local/man"
 }
+
+@test "default BPM_INSTALL_COMPLETIONS" {
+	BPM_ROOT= BPM_PREFIX= BPM_INSTALL_COMPLETIONS= run bpm echo BPM_INSTALL_COMPLETIONS
+	assert_output "$HOME/.local/share/bpm/cellar/completions"
+}
+
+@test "inherited BPM_INSTALL_COMPLETIONS" {
+	BPM_INSTALL_COMPLETIONS=/opt/completions run bpm echo BPM_INSTALL_COMPLETIONS
+	assert_output "/opt/completions"
+}
+
+@test "BPM_INSTALL_COMPLETIONS based on BPM_PREFIX" {
+	BPM_INSTALL_COMPLETIONS= BPM_PREFIX=/usr/local run bpm echo BPM_INSTALL_COMPLETIONS
+	assert_output "/usr/local/completions"
+}

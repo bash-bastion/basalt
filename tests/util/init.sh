@@ -20,6 +20,7 @@ export BPM_PREFIX="$BPM_TEST_DIR/cellar"
 export BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
 export BPM_INSTALL_BIN="$BPM_PREFIX/bin"
 export BPM_INSTALL_MAN="$BPM_PREFIX/man"
+export BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
 
 for f in "$BPM_ROOT"/pkg/lib/{commands,util}/?*.sh; do
 	source "$f"

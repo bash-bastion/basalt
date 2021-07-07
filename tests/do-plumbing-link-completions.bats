@@ -11,7 +11,7 @@ load 'util/init.sh'
 	run bpm-plumbing-link-completions username/package
 
 	assert_success
-	assert [ "$(readlink "$BPM_PREFIX/completions/bash/comp.bash")" = "$BPM_PACKAGES_PATH/username/package/completions/comp.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/username/package/completions/comp.bash" ]
 }
 
 @test "links zsh compsys completions to prefix/completions" {
@@ -23,7 +23,7 @@ load 'util/init.sh'
 	run bpm-plumbing-link-completions username/package
 
 	assert_success
-	assert [ "$(readlink $BPM_PREFIX/completions/zsh/compsys/_exec)" = "$BPM_PACKAGES_PATH/username/package/completions/_exec" ]
+	assert [ "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec)" = "$BPM_PACKAGES_PATH/username/package/completions/_exec" ]
 }
 
 @test "links zsh compctl completions to prefix/completions" {
@@ -35,7 +35,7 @@ load 'util/init.sh'
 	run bpm-plumbing-link-completions username/package
 
 	assert_success
-	assert [ "$(readlink $BPM_PREFIX/completions/zsh/compctl/exec)" = "$BPM_PACKAGES_PATH/username/package/completions/exec" ]
+	assert [ "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compctl/exec)" = "$BPM_PACKAGES_PATH/username/package/completions/exec" ]
 }
 
 @test "does not fail if package doesn't have any completions" {

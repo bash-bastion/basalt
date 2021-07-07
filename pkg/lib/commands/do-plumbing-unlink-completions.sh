@@ -16,16 +16,16 @@ bpm-plumbing-unlink-completions() {
 	fi
 
 	for completion in "${bash_completions[@]}"; do
-		rm -f "$BPM_PREFIX/completions/bash/${completion##*/}"
+		rm -f "$BPM_INSTALL_COMPLETIONS/bash/${completion##*/}"
 	done
 
 	for completion in "${zsh_completions[@]}"; do
 		local target="$BPM_PACKAGES_PATH/$package/$completion"
 
 		if grep -sq "#compdef" "$target"; then
-			rm -f "$BPM_PREFIX/completions/zsh/compsys/${completion##*/}"
+			rm -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${completion##*/}"
 		else
-			rm -f "$BPM_PREFIX/completions/zsh/compctl/${completion##*/}"
+			rm -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${completion##*/}"
 		fi
 	done
 }

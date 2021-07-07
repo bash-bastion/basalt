@@ -9,6 +9,7 @@ main() {
 	: "${BPM_PACKAGES_PATH:="$BPM_PREFIX/packages"}"
 	: "${BPM_INSTALL_BIN:="$BPM_PREFIX/bin"}"
 	: "${BPM_INSTALL_MAN:="$BPM_PREFIX/man"}"
+	: "${BPM_INSTALL_COMPLETIONS:="$BPM_PREFIX/completions"}"
 
 	for f in "$PROGRAM_LIB_DIR"/{commands,util}/?*.sh; do
 		source "$f"

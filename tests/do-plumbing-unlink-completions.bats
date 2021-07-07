@@ -11,7 +11,7 @@ load 'util/init.sh'
 	run bpm-plumbing-unlink-completions username/package
 
 	assert_success
-	assert [ ! -e "$($BPM_PREFIX/completions/bash/comp.bash)" ]
+	assert [ ! -e "$($BPM_INSTALL_COMPLETIONS/bash/comp.bash)" ]
 }
 
 @test "unlinks zsh compsys completions from prefix/completions" {
@@ -23,7 +23,7 @@ load 'util/init.sh'
 	run bpm-plumbing-unlink-completions username/package
 
 	assert_success
-	assert [ ! -e "$(readlink $BPM_PREFIX/completions/zsh/compsys/_exec)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec)" ]
 }
 
 @test "unlinks zsh compctl completions from prefix/completions" {
@@ -35,5 +35,5 @@ load 'util/init.sh'
 	run bpm-plumbing-unlink-completions username/package
 
 	assert_success
-	assert [ ! -e "$(readlink $BPM_PREFIX/completions/zsh/compctl/exec)" ]
+	assert [ ! -e "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compctl/exec)" ]
 }
