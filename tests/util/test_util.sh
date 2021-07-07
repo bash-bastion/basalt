@@ -5,7 +5,7 @@
 test_util.mock_command() {
 	case "$1" in
 	plumbing-clone)
-		bpm-plumbing-clone() {
+		do-plumbing-clone() {
 			local use_ssh="$1"
 			local site="$2"
 			local user="$3"

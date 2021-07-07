@@ -1,15 +1,15 @@
 # shellcheck shell=bash
 
-bpm-complete() {
+do-complete() {
 	case "$1" in
 	package-path)
-		bpm-list
+		do-list
 		;;
 	uninstall)
-		bpm-list
+		do-list
 		;;
 	upgrade)
-		bpm-list
+		do-list
 		;;
 	esac
 }

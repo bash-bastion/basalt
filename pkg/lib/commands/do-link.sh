@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-bpm-link() {
+do-link() {
 	local no_deps="false"
 
 	case $1 in
@@ -31,9 +31,9 @@ bpm-link() {
 
 	log.info "Linking '$directory'"
 	if [ "$no_deps" = "false" ]; then
-		bpm-plumbing-deps "$package"
+		do-plumbing-deps "$package"
 	fi
-	bpm-plumbing-link-bins "$package"
-	bpm-plumbing-link-completions "$package"
-	bpm-plumbing-link-man "$package"
+	do-plumbing-link-bins "$package"
+	do-plumbing-link-completions "$package"
+	do-plumbing-link-man "$package"
 }

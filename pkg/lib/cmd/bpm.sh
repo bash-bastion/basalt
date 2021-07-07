@@ -33,32 +33,32 @@ main() {
 	case "$1" in
 	complete)
 		shift
-		bpm-complete "$@"
+		do-complete "$@"
 		exit
 		;;
 	echo)
 		shift
-		bpm-echo "$@"
+		do-echo "$@"
 		exit
 		;;
 	init)
 		shift
-		bpm-init "$@"
+		do-init "$@"
 		exit
 		;;
 	install)
 		shift
-		bpm-install "$@"
+		do-install "$@"
 		exit
 		;;
 	link)
 		shift
-		bpm-link "$@"
+		do-link "$@"
 		exit
 		;;
 	list)
 		shift
-		bpm-list "$@"
+		do-list "$@"
 		exit
 		;;
 	outdated)
@@ -73,12 +73,12 @@ main() {
 		;;
 	uninstall)
 		shift
-		bpm-uninstall "$@"
+		do-uninstall "$@"
 		exit
 		;;
 	upgrade)
 		shift
-		bpm-upgrade "$@"
+		do-upgrade "$@"
 		exit
 		;;
 	*)

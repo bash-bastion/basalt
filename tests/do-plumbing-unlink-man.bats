@@ -7,9 +7,9 @@ load 'util/init.sh'
 	create_man username/package exec.1
 	create_man username/package exec.2
 	test_util.mock_command plumbing-clone
-	bpm-install username/package
+	do-install username/package
 
-	run bpm-plumbing-unlink-man username/package
+	run do-plumbing-unlink-man username/package
 
 	assert_success
 	assert [ ! -e "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" ]

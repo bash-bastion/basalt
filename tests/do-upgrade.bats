@@ -5,11 +5,11 @@ load 'util/init.sh'
 @test "upgrades a package to the latest version" {
 	test_util.mock_command plumbing-clone
 	create_package username/package
-	bpm-install username/package
+	do-install username/package
 	create_exec username/package "second"
 
-	bpm-upgrade username/package
+	do-upgrade username/package
 
-	run bpm-list --outdated
+	run do-list --outdated
 	assert_output ""
 }

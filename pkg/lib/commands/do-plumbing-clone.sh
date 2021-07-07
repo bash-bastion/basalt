@@ -3,7 +3,7 @@
 # @summary Clones a package from a site, but doesn't install it
 # Usage: bpm plumbing-clone <use_ssh> <site> <package> [<ref>]
 
-bpm-plumbing-clone() {
+do-plumbing-clone() {
 	local useSsh="$1"
 	local site="$2"
 	local user="$3"

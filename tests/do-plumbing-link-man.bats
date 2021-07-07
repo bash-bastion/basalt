@@ -4,7 +4,7 @@ load 'util/init.sh'
 
 # @description Creates man pages in the root directory
 create.man_root() {
-	: "${1?"create.man1 Args required"}"
+	: "${1?"create.man_root Args required"}"
 
 	cd "$BPM_ORIGIN_DIR/$package"
 
@@ -20,9 +20,9 @@ create.man_root() {
 	create_man username/package exec.1
 	create_man username/package exec.2
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-man username/package
+	run do-plumbing-link-man username/package
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/username/package/man/exec.1" ]
@@ -36,9 +36,9 @@ create.man_root() {
 	create.man_root 'prog.1'
 
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-man username/package
+	run do-plumbing-link-man username/package
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/prog.1")" = "$BPM_PACKAGES_PATH/$package/prog.1" ]

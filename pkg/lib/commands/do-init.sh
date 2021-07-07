@@ -21,7 +21,7 @@ echo_posix_shell_variables() {
 # - Sourcing bpm package completion
 # - Sourcing bpm completion
 # - Sourcing 'include' function
-bpm-init() {
+do-init() {
 	local shell="$1"
 
 	if [ -z "$shell" ]; then

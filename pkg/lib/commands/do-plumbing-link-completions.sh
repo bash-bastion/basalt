@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-bpm-plumbing-link-completions() {
+do-plumbing-link-completions() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 

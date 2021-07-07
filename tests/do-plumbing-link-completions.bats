@@ -8,9 +8,9 @@ load 'util/init.sh'
 
 	# TODO: remove mock-command plumbing-clone?
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-completions username/package
+	run do-plumbing-link-completions username/package
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/username/package/completions/comp.bash" ]
@@ -36,7 +36,7 @@ load 'util/init.sh'
 		mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
 		ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
 
-		run bpm-plumbing-link-completions "$package"
+		run do-plumbing-link-completions "$package"
 
 		assert_success
 		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c.bash")" = "$BPM_PACKAGES_PATH/$package/$completionDir/c.bash" ]
@@ -60,7 +60,7 @@ load 'util/init.sh'
 	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
 	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
 
-	run bpm-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$package"
 
 	! [ -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
 }
@@ -79,7 +79,7 @@ load 'util/init.sh'
 	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
 	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
 
-	run bpm-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$package"
 
 	[ -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
@@ -88,9 +88,9 @@ load 'util/init.sh'
 	create_package username/package
 	create_zsh_compsys_completions username/package _exec
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-completions username/package
+	run do-plumbing-link-completions username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec)" = "$BPM_PACKAGES_PATH/username/package/completions/_exec" ]
@@ -100,9 +100,9 @@ load 'util/init.sh'
 	create_package username/package
 	create_zsh_compctl_completions username/package exec
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-completions username/package
+	run do-plumbing-link-completions username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compctl/exec)" = "$BPM_PACKAGES_PATH/username/package/completions/exec" ]
@@ -128,7 +128,7 @@ load 'util/init.sh'
 		mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
 		ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
 
-		run bpm-plumbing-link-completions "$package"
+		run do-plumbing-link-completions "$package"
 
 		assert_success
 		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/c2.zsh")" = "$BPM_PACKAGES_PATH/$package/$completionDir/c2.zsh" ]
@@ -152,7 +152,7 @@ load 'util/init.sh'
 	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
 	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
 
-	run bpm-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$package"
 
 	assert_success
 	! [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prof.zsh" ]
@@ -173,7 +173,7 @@ load 'util/init.sh'
 	mkdir -p "$BPM_PACKAGES_PATH/${package%%/*}"
 	ln -s "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
 
-	run bpm-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$package"
 
 	assert_success
 	[ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
@@ -183,9 +183,9 @@ load 'util/init.sh'
 @test "does not fail if package doesn't have any completions" {
 	create_package username/package
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-completions username/package
+	run do-plumbing-link-completions username/package
 
 	assert_success
 }

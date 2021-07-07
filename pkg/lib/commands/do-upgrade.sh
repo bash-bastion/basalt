@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-bpm-upgrade() {
+do-upgrade() {
 	if (( $# == 0 )); then
 		die "You must supply at least one package"
 	fi

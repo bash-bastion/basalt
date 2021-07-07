@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-bpm-uninstall() {
+do-uninstall() {
 	if (( $# == 0 )); then
 		die "You must supply at least one package"
 	fi
@@ -17,9 +17,9 @@ bpm-uninstall() {
 		fi
 
 		log.info "Uninstalling '$repoSpec'"
-		bpm-plumbing-unlink-man "$package"
-		bpm-plumbing-unlink-bins "$package"
-		bpm-plumbing-unlink-completions "$package"
+		do-plumbing-unlink-man "$package"
+		do-plumbing-unlink-bins "$package"
+		do-plumbing-unlink-completions "$package"
 
 		rm -rf "${BPM_PACKAGES_PATH:?}/$package"
 	done

@@ -6,7 +6,7 @@
 # Usage: bpm _deps <package>
 # Example: DEPS=username/repo1:otheruser/repo2
 
-bpm-plumbing-deps() {
+do-plumbing-deps() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 
@@ -19,6 +19,6 @@ bpm-plumbing-deps() {
 	fi
 
 	for dep in "${deps[@]}"; do
-		bpm-install "$dep"
+		do-install "$dep"
 	done
 }

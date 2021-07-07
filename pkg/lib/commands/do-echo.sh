@@ -1,5 +1,5 @@
 # shellcheck shell=bash
 
-bpm-echo() {
+do-echo() {
 	eval "printf \"%s\" \$$1"
 }

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-bpm-list() {
+do-list() {
 	local shouldShowOutdated=false
 
 	for arg; do
@@ -14,7 +14,7 @@ bpm-list() {
 
 	if [ "$shouldShowOutdated" = true ]; then
 		local packages
-		readarray -t packages < <(bpm-list)
+		readarray -t packages < <(do-list)
 
 		for package in "${packages[@]}"; do
 			local package_path="$BPM_PACKAGES_PATH/$package"

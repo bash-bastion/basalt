@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # TODO: cleanup
-bpm-plumbing-link-man() {
+do-plumbing-link-man() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 

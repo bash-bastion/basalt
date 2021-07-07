@@ -7,10 +7,10 @@ load 'util/init.sh'
 	create_package username/p1
 	create_package username2/p2
 	create_package username2/p3
-	bpm-install username/p1
-	bpm-install username2/p2
+	do-install username/p1
+	do-install username2/p2
 
-	run bpm-list
+	run do-list
 
 	assert_success
 	assert_line "username2/p2"
@@ -22,7 +22,7 @@ load 'util/init.sh'
 	test_util.mock_command plumbing-clone
 	create_package username/p1
 
-	run bpm-list
+	run do-list
 
 	assert_success
 	assert_output ""
@@ -32,11 +32,11 @@ load 'util/init.sh'
 	test_util.mock_command plumbing-clone
 	create_package username/outdated
 	create_package username/uptodate
-	bpm-install username/outdated
-	bpm-install username/uptodate
+	do-install username/outdated
+	do-install username/uptodate
 	create_exec username/outdated "second"
 
-	run bpm-list --outdated
+	run do-list --outdated
 
 	assert_success
 	assert_output username/outdated

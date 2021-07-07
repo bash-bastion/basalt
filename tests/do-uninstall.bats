@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "fails if package is not installed" {
-	run bpm-uninstall user/lol
+	run do-uninstall user/lol
 
 	assert_failure
 	assert_output -e "Package 'user/lol' is not installed"
@@ -12,9 +12,9 @@ load 'util/init.sh'
 @test "removes package directory" {
 	test_util.mock_command plumbing-clone
 	create_package username/package
-	bpm-install username/package
+	do-install username/package
 
-	run bpm-uninstall username/package
+	run do-uninstall username/package
 
 	assert_success
 	[ ! -d "$BPM_PACKAGES_PATH/username/package" ]
@@ -24,7 +24,7 @@ load 'util/init.sh'
 	mkdir -p "$BPM_PACKAGES_PATH/theta"
 	touch "$BPM_PACKAGES_PATH/theta/tango"
 
-	run bpm-uninstall theta/tango
+	run do-uninstall theta/tango
 
 	assert_success
 	[ ! -e "$BPM_PACKAGES_PATH/username/package" ]
@@ -34,9 +34,9 @@ load 'util/init.sh'
 	test_util.mock_command plumbing-clone
 	create_package username/package
 	create_exec username/package exec1
-	bpm-install username/package
+	do-install username/package
 
-	run bpm-uninstall username/package
+	run do-uninstall username/package
 
 	assert_success
 	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -48,10 +48,10 @@ load 'util/init.sh'
 	create_exec username/package1 exec1
 	create_package username/package2
 	create_exec username/package2 exec2
-	bpm-install username/package1
-	bpm-install username/package2
+	do-install username/package1
+	do-install username/package2
 
-	run bpm-uninstall username/package1
+	run do-uninstall username/package1
 
 	assert_success
 	[ -d "$BPM_PACKAGES_PATH/username/package2" ]

@@ -7,9 +7,9 @@ load 'util/init.sh'
 	create_package_exec username/package exec1
 	create_package_exec username/package exec2.sh
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/username/package/package_bin/exec1" ]
@@ -21,9 +21,9 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_exec username/package exec2.sh
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -35,9 +35,9 @@ load 'util/init.sh'
 	create_root_exec username/package exec3
 	create_root_exec username/package exec4.sh
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec3)" = "$BPM_PACKAGES_PATH/username/package/exec3" ]
@@ -49,9 +49,9 @@ load 'util/init.sh'
 	create_exec username/package exec1
 	create_root_exec username/package exec2
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -64,9 +64,9 @@ load 'util/init.sh'
 	create_root_exec username/package exec2
 	create_package_exec username/package exec3
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
@@ -77,9 +77,9 @@ load 'util/init.sh'
 @test "does not fail if there are no binaries" {
 	create_package username/package
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 }
@@ -90,9 +90,9 @@ load 'util/init.sh'
 	create_exec username/package exec2.sh
 	set_remove_extension username/package true
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -105,9 +105,9 @@ load 'util/init.sh'
 	create_exec username/package exec2.sh
 	set_remove_extension username/package false
 	test_util.mock_command plumbing-clone
-	bpm-plumbing-clone false site username package
+	do-plumbing-clone false site username package
 
-	run bpm-plumbing-link-bins username/package
+	run do-plumbing-link-bins username/package
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/username/package/bin/exec1" ]
@@ -117,8 +117,8 @@ load 'util/init.sh'
 @test "does not symlink package itself as bin when linked with bpm link" {
 	mkdir package
 
-	# implicit call to bpm-plumbing-link-bins
-	run bpm-link package username/package
+	# implicit call to do-plumbing-link-bins
+	run do-link package username/package
 
 	assert_success
 	assert [ ! -e "$BPM_PREFIX/bin/package" ]
