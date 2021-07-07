@@ -35,4 +35,5 @@ bpm-link() {
 	fi
 	bpm-plumbing-link-bins "$package"
 	bpm-plumbing-link-completions "$package"
+	bpm-plumbing-link-man "$package"
 }

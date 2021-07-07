@@ -154,6 +154,7 @@ load 'util/init.sh'
 
 	run bpm-plumbing-link-completions "$package"
 
+	assert_success
 	! [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prof.zsh" ]
 	! [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prof.zsh" ]
 }
@@ -174,6 +175,7 @@ load 'util/init.sh'
 
 	run bpm-plumbing-link-completions "$package"
 
+	assert_success
 	[ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
 }
 

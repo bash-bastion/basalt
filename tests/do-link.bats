@@ -22,6 +22,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir -p subdir/theta
 	bpm-link subdir/theta
@@ -37,6 +38,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir -p touch "$BPM_PACKAGES_PATH/bpm-local"
 	touch "$BPM_PACKAGES_PATH/bpm-local/theta"
@@ -52,6 +54,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir package1
 
@@ -65,6 +68,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir package2
 
@@ -75,12 +79,15 @@ load 'util/init.sh'
 	assert_line -n 1 "bpm-plumbing-deps bpm-local/package2"
 	assert_line -n 2 "bpm-plumbing-link-bins bpm-local/package2"
 	assert_line -n 3 "bpm-plumbing-link-completions bpm-local/package2"
+	assert_line -n 4 "bpm-plumbing-link-man bpm-local/package2"
+
 }
 
 @test "respects --no-deps option, in order, with --nodeps" {
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir package2
 
@@ -90,6 +97,7 @@ load 'util/init.sh'
 	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
 	assert_line -n 1 "bpm-plumbing-link-bins bpm-local/package2"
 	assert_line -n 2 "bpm-plumbing-link-completions bpm-local/package2"
+	assert_line -n 3 "bpm-plumbing-link-man bpm-local/package2"
 }
 
 
@@ -97,6 +105,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir package2
 
@@ -110,6 +119,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir package3
 	cd package3
@@ -124,6 +134,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir package3
 	cd package3
@@ -138,6 +149,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	mkdir package3
 

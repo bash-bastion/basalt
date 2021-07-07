@@ -7,6 +7,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install
 
@@ -19,6 +20,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install username/package
 
@@ -28,6 +30,7 @@ load 'util/init.sh'
 	assert_line -n 2 'bpm-plumbing-deps username/package'
 	assert_line -n 3 'bpm-plumbing-link-bins username/package'
 	assert_line -n 4 'bpm-plumbing-link-completions username/package'
+	assert_line -n 5 'bpm-plumbing-link-man username/package'
 }
 
 @test "executes install steps in right order for multiple packages" {
@@ -35,6 +38,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install username/package username2/package2
 
@@ -44,11 +48,13 @@ load 'util/init.sh'
 	assert_line -n 2 'bpm-plumbing-deps username/package'
 	assert_line -n 3 'bpm-plumbing-link-bins username/package'
 	assert_line -n 4 'bpm-plumbing-link-completions username/package'
-	assert_line -n 5 -p "Installing 'username2/package2'"
-	assert_line -n 6 'bpm-plumbing-clone false github.com username2 package2'
-	assert_line -n 7 'bpm-plumbing-deps username2/package2'
-	assert_line -n 8 'bpm-plumbing-link-bins username2/package2'
-	assert_line -n 9 'bpm-plumbing-link-completions username2/package2'
+	assert_line -n 5 'bpm-plumbing-link-man username/package'
+	assert_line -n 6 -p "Installing 'username2/package2'"
+	assert_line -n 7 'bpm-plumbing-clone false github.com username2 package2'
+	assert_line -n 8 'bpm-plumbing-deps username2/package2'
+	assert_line -n 9 'bpm-plumbing-link-bins username2/package2'
+	assert_line -n 10 'bpm-plumbing-link-completions username2/package2'
+	assert_line -n 11 'bpm-plumbing-link-man username2/package2'
 }
 
 
@@ -57,6 +63,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install https://gitlab.com/username/package
 
@@ -69,6 +76,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install http://gitlab.com/username/package
 
@@ -81,6 +89,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install site/username/package
 
@@ -93,6 +102,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install username/package
 
@@ -105,6 +115,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install --ssh username/package
 
@@ -117,6 +128,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install username/package@v1.2.3
 
@@ -129,6 +141,7 @@ load 'util/init.sh'
 	test_util.mock_command bpm-plumbing-deps
 	test_util.mock_command bpm-plumbing-link-bins
 	test_util.mock_command bpm-plumbing-link-completions
+	test_util.mock_command bpm-plumbing-link-man
 
 	run bpm-install username/package@
 

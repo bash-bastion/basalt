@@ -25,5 +25,6 @@ bpm-install() {
 		bpm-plumbing-deps "$user/$repository"
 		bpm-plumbing-link-bins "$user/$repository"
 		bpm-plumbing-link-completions "$user/$repository"
+		bpm-plumbing-link-man "$user/$repository"
 	done
 }
