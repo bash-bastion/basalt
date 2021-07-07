@@ -71,7 +71,7 @@ load 'util/init.sh'
 	run bpm-link package2
 
 	assert_success
-	assert_line -n 0 -p "Linking '/tmp/bpm/cwd/package2'"
+	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
 	assert_line -n 1 "bpm-plumbing-deps bpm-local/package2"
 	assert_line -n 2 "bpm-plumbing-link-bins bpm-local/package2"
 	assert_line -n 3 "bpm-plumbing-link-completions bpm-local/package2"
@@ -87,7 +87,7 @@ load 'util/init.sh'
 	run bpm-link --no-deps package2
 
 	assert_success
-	assert_line -n 0 -p "Linking '/tmp/bpm/cwd/package2'"
+	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
 	assert_line -n 1 "bpm-plumbing-link-bins bpm-local/package2"
 	assert_line -n 2 "bpm-plumbing-link-completions bpm-local/package2"
 }
