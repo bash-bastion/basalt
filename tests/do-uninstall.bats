@@ -4,6 +4,7 @@ load 'util/init.sh'
 
 @test "fails if package is not installed" {
 	run bpm-uninstall user/lol
+
 	assert_failure
 	assert_output -e "Package 'user/lol' is not installed"
 }
@@ -14,8 +15,19 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-uninstall username/package
+
 	assert_success
 	[ ! -d "$BPM_PACKAGES_PATH/username/package" ]
+}
+
+@test "removes package directory (if it happens to be a file)" {
+	mkdir -p "$BPM_PACKAGES_PATH/theta"
+	touch "$BPM_PACKAGES_PATH/theta/tango"
+
+	run bpm-uninstall theta/tango
+
+	assert_success
+	[ ! -e "$BPM_PACKAGES_PATH/username/package" ]
 }
 
 @test "removes binaries" {
@@ -25,6 +37,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-uninstall username/package
+
 	assert_success
 	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
 }
@@ -39,6 +52,7 @@ load 'util/init.sh'
 	bpm-install username/package2
 
 	run bpm-uninstall username/package1
+
 	assert_success
 	[ -d "$BPM_PACKAGES_PATH/username/package2" ]
 	[ -e "$BPM_INSTALL_BIN/exec2" ]

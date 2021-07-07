@@ -36,8 +36,8 @@ util.parse_package_full() {
 	REPLY="$site:$user:$repository:$ref"
 }
 
-util.resolve_link() {
-	if type -p realpath >/dev/null; then
+util.readlink() {
+	if command -v realpath &>/dev/null; then
 		realpath "$1"
 	else
 		readlink -f "$1"

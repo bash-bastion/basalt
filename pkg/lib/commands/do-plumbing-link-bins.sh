@@ -5,17 +5,21 @@ bpm-plumbing-link-bins() {
 
 	ensure.nonZero 'package' "$package"
 
+	local REMOVE_EXTENSION=
 	local -a bins=()
-	if [ -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
-		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BINS'
+
+	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
+	if [ -f "$packageShFile" ]; then
+		util.extract_shell_variable "$packageShFile" 'BINS'
 		IFS=':' read -ra bins <<< "$REPLY"
 
-		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'REMOVE_EXTENSION'
-		local REMOVE_EXTENSION="$REPLY"
+		util.extract_shell_variable "$packageShFile" 'REMOVE_EXTENSION'
+		REMOVE_EXTENSION="$REPLY"
 	fi
 
+	# Either get bins from a 'bin' folder, or directly from the repository
 	if ((${#bins} == 0)); then
-		if [ -e "$BPM_PACKAGES_PATH/$package/bin" ]; then
+		if [ -d "$BPM_PACKAGES_PATH/$package/bin" ]; then
 			bins=("$BPM_PACKAGES_PATH/$package"/bin/*)
 			bins=("${bins[@]##*/}")
 			bins=("${bins[@]/#/bin/}")
@@ -24,6 +28,7 @@ bpm-plumbing-link-bins() {
 			bins=("${bins[@]##*/}")
 		fi
 	fi
+
 
 	for bin in "${bins[@]}"; do
 		local name="${bin##*/}"

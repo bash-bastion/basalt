@@ -4,33 +4,38 @@ bpm-list() {
 	local shouldShowOutdated=false
 
 	for arg; do
-		if [ "$arg" == --outdated ]; then
+		case "$arg" in
+		--outdated)
 			shouldShowOutdated=true
 			shift
-		fi
+			;;
+		esac
 	done
 
 	if [ "$shouldShowOutdated" = true ]; then
+		local packages
 		readarray -t packages < <(bpm-list)
 
 		for package in "${packages[@]}"; do
-			package_path="$BPM_PACKAGES_PATH/$package"
+			local package_path="$BPM_PACKAGES_PATH/$package"
+
 			if [ ! -L "$package_path" ]; then
 				ensure.cd "$package_path"
-				git remote update > /dev/null 2>&1
-				if git symbolic-ref --short -q HEAD > /dev/null; then
-						if [ "$(git rev-list --count HEAD...HEAD@{upstream})" -gt 0 ]; then
-							echo "$package"
-						fi
+				git remote update &>/dev/null
+
+				if git symbolic-ref --short -q HEAD >/dev/null; then
+					# shellcheck disable=SC1083
+					if [ "$(git rev-list --count HEAD...HEAD@{upstream})" -gt 0 ]; then
+						printf "%s\n" "$package"
+					fi
 				fi
 			fi
 		done
 	else
-		local username= package=
 		for package_path in "$BPM_PACKAGES_PATH"/*/*; do
-			username="${package_path%/*}"; username="${username##*/}"
-			package="${package_path##*/}"
-			printf "%s\n" "$username/$package"
+			local user="${package_path%/*}"; user="${user##*/}"
+			local repository="${package_path##*/}"
+			printf "%s\n" "$user/$repository"
 		done
 	fi
 }

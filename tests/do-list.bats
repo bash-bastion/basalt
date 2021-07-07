@@ -11,14 +11,19 @@ load 'util/init.sh'
 	bpm-install username2/p2
 
 	run bpm-list
+
 	assert_success
-	assert_line "username/p1"
-	assert_line "username2/p2"
+	assert_line -n 0 "username2/p2"
+	assert_line -n 1 "username/p1"
 	refute_line "username2/p3"
 }
 
 @test "displays nothing if there are no packages" {
-	run bpm-list --outdated
+	test_util.mock_command plumbing-clone
+	create_package username/p1
+
+	run bpm-list
+
 	assert_success
 	assert_output ""
 }
@@ -32,6 +37,7 @@ load 'util/init.sh'
 	create_exec username/outdated "second"
 
 	run bpm-list --outdated
+
 	assert_success
 	assert_output username/outdated
 }

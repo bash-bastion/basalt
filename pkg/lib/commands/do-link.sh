@@ -16,13 +16,13 @@ bpm-link() {
 		die "Directory '$directory' not found"
 	fi
 
-	directory="$(util.resolve_link "$directory")"
+	directory="$(util.readlink "$directory")"
 
 	local namespace="bpm-local"
 	local repository="${directory##*/}"
 	local package="$namespace/$repository"
 
-	if [ -d "$BPM_PACKAGES_PATH/$package" ]; then
+	if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
 		die "Package '$package' is already present"
 	fi
 

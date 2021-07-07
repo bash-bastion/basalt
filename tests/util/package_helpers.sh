@@ -24,7 +24,6 @@ create_file() {
 	cd "$BPM_ORIGIN_DIR/$package"
 
 	echo "$content" > "$filename"
-
 	git add .
 	git commit -m "Add $filename"
 
@@ -39,7 +38,6 @@ create_man() {
 
 	mkdir -p man
 	touch "man/$man"
-
 	git add .
 	git commit -m "Add $man"
 

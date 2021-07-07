@@ -22,7 +22,7 @@ bpm-plumbing-clone() {
 		exit
 	fi
 
-	local -a gitArgs=()
+	local -a gitArgs=(--recursive)
 
 	if [ "$BPM_FULL_CLONE" != "true" ]; then
 		gitArgs+=(--depth=1)
@@ -31,8 +31,6 @@ bpm-plumbing-clone() {
 	if [ -n "$ref" ]; then
 		gitArgs+=(-b "$ref")
 	fi
-
-	gitArgs+=(--recursive)
 
 	if [ "$useSsh" = "true" ]; then
 		gitArgs+=("git@$site:$package.git")

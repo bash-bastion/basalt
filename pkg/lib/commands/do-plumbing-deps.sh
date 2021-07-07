@@ -11,8 +11,10 @@ bpm-plumbing-deps() {
 	ensure.nonZero 'package' "$package"
 
 	local -a deps=()
-	if [ -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
-		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'DEPS'
+
+	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
+	if [ -f "$packageShFile" ]; then
+		util.extract_shell_variable "$packageShFile" 'DEPS'
 		IFS=':' read -ra deps <<< "$REPLY"
 	fi
 

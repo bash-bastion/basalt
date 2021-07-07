@@ -10,6 +10,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-man username/package
+
 	assert_success
 	assert [ ! -e "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" ]
 	assert [ ! -e "$(readlink "$BPM_INSTALL_MAN/man2/exec.2")" ]

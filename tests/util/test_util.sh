@@ -15,13 +15,16 @@ test_util.mock_command() {
 		}
 		;;
 	*)
+		# This creates a function with the first argument (the function to
+		# mock). When called, it prints the command name, along with the arguments
+		# it was called with
 		eval "$1() { echo \"$1 \$*\"; }"
 		;;
 	esac
 }
 
-test_util.resolve_link() {
-	if type -p realpath &>/dev/null; then
+test_util.readlink() {
+	if command -v realpath &>/dev/null; then
 		realpath "$1"
 	else
 		readlink -f "$1"

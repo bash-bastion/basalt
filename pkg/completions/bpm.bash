@@ -25,7 +25,7 @@ _bpm() {
 	# If the current word index is less than the subcommand index, it means we are completing something before
 	# the subcommand. This can happen if we are completing an option first (before completing a subcommand)
 	if (( COMP_CWORD < subcommandIndex )); then
-		mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${listPreSubcommandOptions[*]}" -- "$currentWord")
+		readarray -t COMPREPLY < <(IFS=' ' compgen -W "${listPreSubcommandOptions[*]}" -- "$currentWord")
 
 	# If the current word index is the same as the subcommand index, it means we are completing the subcommand
 	elif (( COMP_CWORD == subcommandIndex )); then
@@ -39,7 +39,7 @@ _bpm() {
 		local rest="${COMP_LINE#*$subcommand}"
 		local stringIndexOfSubcommand=$((${#COMP_LINE} - ${#rest} - ${#subcommand}))
 		if (( COMP_POINT <= stringIndexOfSubcommand )); then
-			mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${listPreSubcommandOptions[*]}" -- '')
+			readarray -t COMPREPLY < <(IFS=' ' compgen -W "${listPreSubcommandOptions[*]}" -- '')
 			return
 		fi
 
@@ -48,7 +48,7 @@ _bpm() {
 		# Now, we are really completing a subcommand. Add 'listPreSubcommandOptions' because this branch is ran even when the
 		# $currentWord is empty. Of course, when we enter in a subcommand to be completed, none of the 'listPreSubcommandOptions'
 		# will show because they all start with a hyphen
-		mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${listPreSubcommandOptions[*]} ${listSubcommands[*]}" -- "$currentWord")
+		readarray -t COMPREPLY < <(IFS=' ' compgen -W "${listPreSubcommandOptions[*]} ${listSubcommands[*]}" -- "$currentWord")
 
 	# If the current word index is greater than the subcommand index, it means that we have already completed the subcommand and
 	# we are completion options for a particular subcommand
@@ -57,11 +57,11 @@ _bpm() {
 		case "$subcommand" in
 			echo)
 				subcommandOptions=(BPM_ROOT BPM_PREFIX)
-				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			init)
 				subcommandOptions=(sh bash zsh fish)
-				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			install)
 				;;
@@ -69,17 +69,17 @@ _bpm() {
 				;;
 			list)
 				subcommandOptions=(--outdated)
-				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			package-path)
-				mapfile -t subcommandOptions < <(bpm complete package-path)
-				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
+				readarray -t subcommandOptions < <(bpm complete package-path)
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			uninstall)
 				;;
 			upgrade)
-				mapfile -t subcommandOptions < <(bpm complete package-path)
-				mapfile -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
+				readarray -t subcommandOptions < <(bpm complete package-path)
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 		esac
 	fi

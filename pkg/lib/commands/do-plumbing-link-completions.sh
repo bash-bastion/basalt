@@ -5,11 +5,13 @@ bpm-plumbing-link-completions() {
 	ensure.nonZero 'package' "$package"
 
 	local -a bash_completions=() zsh_completions=()
-	if [ -f "$BPM_PACKAGES_PATH/$package/package.sh" ]; then
-		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'BASH_COMPLETIONS'
+
+	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
+	if [ -f "$packageShFile" ]; then
+		util.extract_shell_variable "$packageShFile" 'BASH_COMPLETIONS'
 		IFS=':' read -ra bash_completions <<< "$REPLY"
 
-		util.extract_shell_variable "$BPM_PACKAGES_PATH/$package/package.sh" 'ZSH_COMPLETIONS'
+		util.extract_shell_variable "$packageShFile" 'ZSH_COMPLETIONS'
 		IFS=':' read -ra zsh_completions <<< "$REPLY"
 	fi
 

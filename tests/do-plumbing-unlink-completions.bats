@@ -9,6 +9,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-completions username/package
+
 	assert_success
 	assert [ ! -e "$($BPM_PREFIX/completions/bash/comp.bash)" ]
 }
@@ -20,6 +21,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-completions username/package
+
 	assert_success
 	assert [ ! -e "$(readlink $BPM_PREFIX/completions/zsh/compsys/_exec)" ]
 }
@@ -31,6 +33,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-completions username/package
+
 	assert_success
 	assert [ ! -e "$(readlink $BPM_PREFIX/completions/zsh/compctl/exec)" ]
 }

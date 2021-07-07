@@ -2,6 +2,7 @@
 
 bpm-plumbing-link-man() {
 	local package="$1"
+	ensure.nonZero 'package' "$package"
 
 	local files=("$BPM_PACKAGES_PATH/$package"/man/*)
 	files=("${files[@]##*/}")

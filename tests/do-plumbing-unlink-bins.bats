@@ -10,6 +10,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-bins username/package
+
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
@@ -23,6 +24,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-bins username/package
+
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
@@ -36,6 +38,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-bins username/package
+
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec3)" ]
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec4.sh)" ]
@@ -49,13 +52,13 @@ load 'util/init.sh'
 	mkdir "$BPM_PACKAGES_PATH/username/package/bin"
 
 	run bpm-plumbing-unlink-bins username/package
+
 	assert_success
 	assert [ -e "$(readlink $BPM_INSTALL_BIN/exec3)" ]
 }
 
 @test "doesn't remote root bins or files in bin folder if there is a BINS config on package.sh" {
 	skip
-
 	test_util.mock_command plumbing-clone
 
 	create_package username/package
@@ -63,7 +66,6 @@ load 'util/init.sh'
 	create_exec username/package exec2
 	create_root_exec username/package exec3
 	bpm-install username/package
-
 
 	create_package username/package2
 	create_root_exec username/package2 exec2
@@ -100,6 +102,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-bins username/package
+
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2)" ]
@@ -114,6 +117,7 @@ load 'util/init.sh'
 	bpm-install username/package
 
 	run bpm-plumbing-unlink-bins username/package
+
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
