@@ -1,21 +1,14 @@
 # shellcheck shell=bash
 
-# @summary Clones a package from a site, but doesn't install it
-# Usage: bpm plumbing-clone <use_ssh> <site> <package> [<ref>]
-
 do-plumbing-clone() {
-	local useSsh="$1"
+	local use_ssh="$1"
 	local site="$2"
-	local user="$3"
-	local repository="$4"
+	local package="$3"
 	local ref="$5"
 
-	ensure.nonZero 'useSsh' "$useSsh"
+	ensure.nonZero 'use_ssh' "$use_ssh"
 	ensure.nonZero 'site' "$site"
-	ensure.nonZero 'user' "$user"
-	ensure.nonZero 'repository' "$repository"
-
-	local package="$user/$repository"
+	ensure.nonZero 'package' "$package"
 
 	if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
 		log.error "Package '$package' is already present"
@@ -32,7 +25,7 @@ do-plumbing-clone() {
 		gitArgs+=(-b "$ref")
 	fi
 
-	if [ "$useSsh" = "true" ]; then
+	if [ "$use_ssh" = "true" ]; then
 		gitArgs+=("git@$site:$package.git")
 	else
 		gitArgs+=("https://$site/$package.git")

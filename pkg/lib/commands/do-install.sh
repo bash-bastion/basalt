@@ -21,7 +21,7 @@ do-install() {
 		IFS=':' read -r site user repository ref <<< "$REPLY"
 
 		log.info "Installing '$repoSpec'"
-		do-plumbing-clone "$use_ssh" "$site" "$user" "$repository" $ref
+		do-plumbing-clone "$use_ssh" "$site" "$user/$repository" $ref
 		do-plumbing-deps "$user/$repository"
 		do-plumbing-link-bins "$user/$repository"
 		do-plumbing-link-completions "$user/$repository"
