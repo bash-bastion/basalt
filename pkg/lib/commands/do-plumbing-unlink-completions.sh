@@ -4,6 +4,8 @@ do-plumbing-unlink-completions() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 
+	log.info "Unlinking completion files for '$package'"
+
 	local -a bash_completions=() zsh_completions=()
 
 	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"

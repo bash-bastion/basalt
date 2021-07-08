@@ -4,6 +4,8 @@ do-plumbing-unlink-bins() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 
+	log.info "Unlinking bin files for '$package'"
+
 	local -a bins=()
 	local REMOVE_EXTENSION=
 

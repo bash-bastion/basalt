@@ -24,5 +24,6 @@ do-plumbing-clone() {
 	gitArgs+=("$uri")
 	gitArgs+=("$BPM_PACKAGES_PATH/$package")
 
+	log.info "Cloning package '$package'"
 	git clone "${gitArgs[@]}"
 }

@@ -24,6 +24,7 @@ do-plumbing-deps() {
 		IFS=':' read -ra deps <<< "$REPLY"
 	fi
 
+	log.info "Installing dependencies for '$package'"
 	for dep in "${deps[@]}"; do
 		do-install "$dep"
 	done

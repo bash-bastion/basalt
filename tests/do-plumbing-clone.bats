@@ -8,7 +8,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://site/username/package.git username/package version
 
 	assert_success
-	assert_output "git clone --recursive --depth=1 --branch version https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
+	assert_line -n 1 "git clone --recursive --depth=1 --branch version https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
 }
 
 @test "does nothing if package is already present" {
@@ -17,7 +17,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
 	assert_failure
-	assert_output -e "Package 'username/package' is already present"
+	assert_line -n 0 -p "Package 'username/package' is already present"
 }
 
 @test "does nothing if package is already present (as erroneous file)" {
@@ -27,7 +27,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
 	assert_failure
-	assert_output -e "Package 'username/package' is already present"
+	assert_line -n 0 -p "Package 'username/package' is already present"
 }
 
 @test "using a different site" {
@@ -36,7 +36,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://site/username/package.git username/package
 
 	assert_success
-	assert_output "git clone --recursive --depth=1 https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
+	assert_line -n 1 "git clone --recursive --depth=1 https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
 }
 
 
@@ -49,7 +49,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
 	assert_success
-	assert_output "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/username/package"
+	assert_line -n 1 "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/username/package"
 }
 
 @test "setting BPM_FULL_CLONE to true, clones a package without depth option" {
@@ -59,7 +59,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
 	assert_success
-	assert_output "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/username/package"
+	assert_line -n 1 "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/username/package"
 }
 
 # This is a difference in behavior compared to Basher. Setting
@@ -71,7 +71,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
 	assert_success
-	assert_output "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/username/package"
+	assert_line -n 1 "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/username/package"
 }
 
 @test "using ssh protocol" {
@@ -80,5 +80,5 @@ load 'util/init.sh'
 	run do-plumbing-clone git@site:username/package.git username/package
 
 	assert_success
-	assert_output "git clone --recursive --depth=1 git@site:username/package.git $BPM_PACKAGES_PATH/username/package"
+	assert_line -n 1 "git clone --recursive --depth=1 git@site:username/package.git $BPM_PACKAGES_PATH/username/package"
 }

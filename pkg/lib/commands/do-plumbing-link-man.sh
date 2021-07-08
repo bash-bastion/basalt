@@ -5,6 +5,8 @@ do-plumbing-link-man() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 
+	log.info "Linking man files for '$package'"
+
 	local -a mans=()
 
 	local bpmTomlFile="$BPM_PACKAGES_PATH/$package/bpm.toml"

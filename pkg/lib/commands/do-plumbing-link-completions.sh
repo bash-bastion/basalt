@@ -4,6 +4,8 @@ do-plumbing-link-completions() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 
+	log.info "Linking completion files for '$package'"
+
 	local -a completions=()
 	local -a bash_completions=() zsh_completions=()
 

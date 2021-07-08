@@ -2,8 +2,9 @@
 
 do-plumbing-link-bins() {
 	local package="$1"
-
 	ensure.nonZero 'package' "$package"
+
+	log.info "Linking bin files for '$package'"
 
 	local REMOVE_EXTENSION=
 	local -a bins=()
@@ -54,5 +55,4 @@ do-plumbing-link-bins() {
 		ln -sf "$BPM_PACKAGES_PATH/$package/$bin" "$BPM_INSTALL_BIN/$name"
 		chmod +x "$BPM_INSTALL_BIN/$name"
 	done
-
 }
