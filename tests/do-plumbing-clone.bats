@@ -8,7 +8,7 @@ load 'util/init.sh'
 	run do-plumbing-clone false site username/package version
 
 	assert_success
-	assert_output "git clone --recursive --depth=1 -b version https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
+	assert_output "git clone --recursive --depth=1 --branch version https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
 }
 
 @test "does nothing if package is already present" {

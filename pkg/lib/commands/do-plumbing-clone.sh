@@ -4,7 +4,7 @@ do-plumbing-clone() {
 	local use_ssh="$1"
 	local site="$2"
 	local package="$3"
-	local ref="$5"
+	local ref="$4"
 
 	ensure.nonZero 'use_ssh' "$use_ssh"
 	ensure.nonZero 'site' "$site"
@@ -22,7 +22,7 @@ do-plumbing-clone() {
 	fi
 
 	if [ -n "$ref" ]; then
-		gitArgs+=(-b "$ref")
+		gitArgs+=(--branch "$ref")
 	fi
 
 	if [ "$use_ssh" = "true" ]; then
