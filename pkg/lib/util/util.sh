@@ -217,8 +217,12 @@ util.extract_shell_variable() {
 			REPLY="${REPLY%\'}"
 			REPLY="${REPLY#\"}"
 			REPLY="${REPLY%\"}"
+
+			return 0
 		fi
 	done < "$shellFile"
+
+	return 1
 }
 
 util.show_help() {

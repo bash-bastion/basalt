@@ -11,11 +11,13 @@ do-plumbing-unlink-bins() {
 
 	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
 	if [ -f "$packageShFile" ]; then
-		util.extract_shell_variable "$packageShFile" 'BINS'
-		IFS=':' read -ra bins <<< "$REPLY"
+		if util.extract_shell_variable "$packageShFile" 'BINS'; then
+			IFS=':' read -ra bins <<< "$REPLY"
+		fi
 
-		util.extract_shell_variable "$packageShFile" 'REMOVE_EXTENSION'
-		REMOVE_EXTENSION="$REPLY"
+		if util.extract_shell_variable "$packageShFile" 'REMOVE_EXTENSION'; then
+			REMOVE_EXTENSION="$REPLY"
+		fi
 	fi
 
 	if ((${#bins} == 0)); then

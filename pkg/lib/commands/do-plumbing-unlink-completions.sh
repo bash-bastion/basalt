@@ -10,11 +10,13 @@ do-plumbing-unlink-completions() {
 
 	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
 	if [ -f "$packageShFile" ]; then
-		util.extract_shell_variable "$packageShFile" 'BASH_COMPLETIONS'
-		IFS=':' read -ra bash_completions <<< "$REPLY"
+		if util.extract_shell_variable "$packageShFile" 'BASH_COMPLETIONS'; then
+			IFS=':' read -ra bash_completions <<< "$REPLY"
+		fi
 
-		util.extract_shell_variable "$packageShFile" 'ZSH_COMPLETIONS'
-		IFS=':' read -ra zsh_completions <<< "$REPLY"
+		if til.extract_shell_variable "$packageShFile" 'ZSH_COMPLETIONS'; then
+			IFS=':' read -ra zsh_completions <<< "$REPLY"
+		fi
 	fi
 
 	for completion in "${bash_completions[@]}"; do
