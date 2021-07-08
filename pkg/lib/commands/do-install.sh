@@ -21,7 +21,7 @@ do-install() {
 		local ref="$REPLY3"
 
 		log.info "Installing '$repoSpec'"
-		do-plumbing-clone 'raw' "$uri" $ref
+		do-plumbing-clone "$uri" "$package" $ref
 		do-plumbing-deps "$package"
 		do-plumbing-link-bins "$package"
 		do-plumbing-link-completions "$package"
