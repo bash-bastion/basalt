@@ -15,6 +15,25 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/username/package/completions/comp.bash" ]
 }
 
+@test "links bash completions from bpm.toml to prefix/completions" {
+	local package='username/package'
+
+	create_package "$package"
+	cd "$BPM_ORIGIN_DIR/$package"
+	mkdir 'weird_completions'
+	touch 'weird_completions/comp.bash'
+	echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+	git add .
+	git commit -m "Add completions"
+	cd "$BPM_CWD"
+	test_util.fake_clone "$package"
+
+	run do-plumbing-link-completions "$package"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$package/weird_completions/comp.bash" ]
+}
+
 @test "links bash completions from ./?(contrib/)completion?(s)" {
 	local -i i=1
 	for completionDir in completion completions contrib/completion contrib/completions; do

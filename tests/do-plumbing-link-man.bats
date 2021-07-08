@@ -17,6 +17,25 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man2/exec.2")" = "$BPM_PACKAGES_PATH/username/package/man/exec.2" ]
 }
 
+@test "links mans from bpm.toml to prefix/man" {
+	local package='username/package'
+
+	create_package "$package"
+	cd "$BPM_ORIGIN_DIR/$package"
+	mkdir 'weird_man'
+	touch 'weird_man/prog.1'
+	echo 'manDirs = [ "weird_man" ]' > 'bpm.toml'
+	git add .
+	git commit -m "Add man"
+	cd "$BPM_CWD"
+	test_util.fake_clone "$package"
+
+	run do-plumbing-link-man "$package"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/prog.1")" = "$BPM_PACKAGES_PATH/$package/weird_man/prog.1" ]
+}
+
 @test "links each top-level man page to install-man under correct subdirectory" {
 	local package="username/package"
 

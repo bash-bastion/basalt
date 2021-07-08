@@ -4,10 +4,27 @@ do-plumbing-link-completions() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
 
+	local -a completions=()
 	local -a bash_completions=() zsh_completions=()
 
+	local bpmTomlFile="$BPM_PACKAGES_PATH/$package/bpm.toml"
 	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
-	if [ -f "$packageShFile" ]; then
+
+	if [ -f "$bpmTomlFile" ]; then
+		if util.get_toml_array "$bpmTomlFile" 'completionDirs'; then
+			local -a newCompletions=()
+			for dir in "${REPLIES[@]}"; do
+				newCompletions=("$BPM_PACKAGES_PATH/$package/$dir"/*)
+				newCompletions=("${newCompletions[@]##*/}")
+				newCompletions=("${newCompletions[@]/#/"$dir"/}")
+			done
+			completions+=("${newCompletions[@]}")
+
+			# TODO: quick hack
+			bash_completions+=("${completions[@]}")
+			zsh_completions+=("${completions[@]}")
+		fi
+	elif [ -f "$packageShFile" ]; then
 		util.extract_shell_variable "$packageShFile" 'BASH_COMPLETIONS'
 		IFS=':' read -ra bash_completions <<< "$REPLY"
 
@@ -32,6 +49,7 @@ do-plumbing-link-completions() {
 		fi
 	done
 
+	# TODO: Move this inside -f packageshFile
 	if [[ "${#bash_completions[@]}" -eq 0 && "${#zsh_completions[@]}" -eq 0 ]]; then
 		for completionDir in completion completions contrib/completion contrib/completions; do
 		local completionDir="$BPM_PACKAGES_PATH/$package/$completionDir"

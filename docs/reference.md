@@ -20,15 +20,9 @@ Use `bpm.toml` for more fine grained control of where `bpm` searches for binarie
 
 ### `dependencies`
 
-### `binFiles`
-
 ### `binDirs`
 
-### `completionFiles`
-
 ### `completionDirs`
-
-### `manFiles`
 
 ### `manDirs`
 

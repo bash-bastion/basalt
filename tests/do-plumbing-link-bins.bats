@@ -17,6 +17,31 @@ load 'util/init.sh'
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/username/package/package_bin/exec2.sh" ]
 }
 
+@test "links each file on the binDirs config on bpm.toml to the install bin" {
+	local package="username/package"
+
+	create_package "$package"
+	cd "$BPM_ORIGIN_DIR/$package"
+	mkdir 'weird_dir'
+	touch 'weird_dir/exec1'
+	touch 'weird_dir/exec2.sh'
+	echo 'binDirs = [ "weird_dir" ]' > 'bpm.toml'
+	git add .
+	git commit -m "Add package exec: $exec"
+	cd "$BPM_CWD"
+	test_util.fake_clone "$package"
+
+	run do-plumbing-link-bins "$package"
+
+	assert_success
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$package/weird_dir/exec1" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$package/weird_dir/exec2.sh" ]
+}
+
+@test "bpm.toml has presidence over package.sh" {
+	skip
+}
+
 @test "links each file inside bin folder to install bin" {
 	local package="username/package"
 

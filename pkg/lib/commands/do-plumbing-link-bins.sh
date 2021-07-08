@@ -8,8 +8,20 @@ do-plumbing-link-bins() {
 	local REMOVE_EXTENSION=
 	local -a bins=()
 
+	local bpmTomlFile="$BPM_PACKAGES_PATH/$package/bpm.toml"
 	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
-	if [ -f "$packageShFile" ]; then
+
+	if [ -f "$bpmTomlFile" ]; then
+		if util.get_toml_array "$bpmTomlFile" 'binDirs'; then
+			local -a newBins=()
+			for dir in "${REPLIES[@]}"; do
+				newBins=("$BPM_PACKAGES_PATH/$package/$dir"/*)
+				newBins=("${newBins[@]##*/}")
+				newBins=("${newBins[@]/#/"$dir"/}")
+			done
+			bins+=("${newBins[@]}")
+		fi
+	elif [ -f "$packageShFile" ]; then
 		util.extract_shell_variable "$packageShFile" 'BINS'
 		IFS=':' read -ra bins <<< "$REPLY"
 
