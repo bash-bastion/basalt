@@ -16,7 +16,7 @@ load 'util/init.sh'
 
 	run do-plumbing-clone false github.com username/package
 
-	assert_success
+	assert_failure
 	assert_output -e "Package 'username/package' is already present"
 }
 
@@ -26,7 +26,7 @@ load 'util/init.sh'
 
 	run do-plumbing-clone false github.com username/package
 
-	assert_success
+	assert_failure
 	assert_output -e "Package 'username/package' is already present"
 }
 

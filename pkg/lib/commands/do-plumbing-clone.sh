@@ -11,8 +11,7 @@ do-plumbing-clone() {
 	ensure.nonZero 'package' "$package"
 
 	if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
-		log.error "Package '$package' is already present"
-		exit
+		die "Package '$package' is already present"
 	fi
 
 	local -a gitArgs=(--recursive)
