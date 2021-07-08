@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 do-install() {
-	local use_ssh="false"
+	local with_ssh="no"
 
 	case "$1" in
 		--ssh)
-			use_ssh="true"
+			with_ssh="yes"
 			shift
 		;;
 	esac
@@ -15,16 +15,16 @@ do-install() {
 	fi
 
 	for repoSpec; do
-		local site= user= repository= ref=
-
-		util.parse_package_full "$repoSpec"
-		IFS=':' read -r site user repository ref <<< "$REPLY"
+		util.construct_clone_url "$repoSpec" "$with_ssh"
+		local uri="$REPLY1"
+		local package="$REPLY2"
+		local ref="$REPLY3"
 
 		log.info "Installing '$repoSpec'"
-		do-plumbing-clone "$use_ssh" "$site" "$user/$repository" $ref
-		do-plumbing-deps "$user/$repository"
-		do-plumbing-link-bins "$user/$repository"
-		do-plumbing-link-completions "$user/$repository"
-		do-plumbing-link-man "$user/$repository"
+		do-plumbing-clone 'raw' "$uri" $ref
+		do-plumbing-deps "$package"
+		do-plumbing-link-bins "$package"
+		do-plumbing-link-completions "$package"
+		do-plumbing-link-man "$package"
 	done
 }

@@ -36,6 +36,70 @@ util.parse_package_full() {
 	REPLY="$site:$user:$repository:$ref"
 }
 
+# @description Generate the final URL to clone from
+# @arg $1 repoSpec
+# @arg $2 with_ssh Whether to clone with SSH (yes/no)
+util.construct_clone_url() {
+	REPLY1=
+	REPLY2=
+	REPLY3=
+
+	local repoSpec="$1"
+	local with_ssh="$2"
+
+	if [ -z "$repoSpec" ]; then
+		die "Must supply a repository"
+	fi
+
+	local site= package= ref=
+
+	local regex="^https?://"
+	local regex2="^git@"
+	if [[ "$repoSpec" =~ $regex ]]; then
+		local http="${repoSpec%%://*}"
+		repoSpec="${repoSpec#http?(s)://}"
+		repoSpec="${repoSpec%.git}"
+
+		IFS='/' read -r site package <<< "$repoSpec"
+
+		REPLY1="$http://$repoSpec.git"
+		REPLY2="$package"
+		REPLY3=
+	elif [[ "$repoSpec" =~ $regex2 ]]; then
+		repoSpec="${repoSpec#git@}"
+		repoSpec="${repoSpec%.git}"
+
+		IFS=':' read -r site package <<< "$repoSpec"
+
+		REPLY1="git@$repoSpec.git"
+		REPLY2="$package"
+		REPLY3=
+	else
+		repoSpec="${repoSpec%.git}"
+
+		if [[ "$repoSpec" = */*/* ]]; then
+			IFS='/' read -r site package <<< "$repoSpec"
+		elif [[ "$repoSpec" = */* ]]; then
+			site="github.com"
+			package="$repoSpec"
+		else
+			die "Invalid repository"
+		fi
+
+		if [[ "$package" = *@* ]]; then
+			IFS='@' read -r package ref <<< "$package"
+		fi
+
+		if [ "$with_ssh" = yes ]; then
+			REPLY1="git@$site:$package.git"
+		else
+			REPLY1="https://$site/$package.git"
+		fi
+		REPLY2="$package"
+		REPLY3="$ref"
+	fi
+}
+
 util.readlink() {
 	if command -v realpath &>/dev/null; then
 		realpath "$1"
