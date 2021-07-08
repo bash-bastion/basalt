@@ -30,7 +30,7 @@ macOS
 | Ubuntu 20.10 | 5.0 | July 2021 | ✔️
 | Ubuntu 21.04 | 5.1 | January 2022 | ✔️
 | CentOS 6 | 4.1.p2 | November 30th, 2020 | ❌
-| CentOS 7 | 4.2.p46 | June 30th, 2024 |✔️
+| CentOS 7 | 4.2.p46 | June 30th, 2024 | ✔️
 | CentOS 8 | 5.0.p11 | December 31, 2021 | ✔️
 | Debian 9 Oldstable | 4.4 | June 30, 2022 | ✔️
 | Debian 10 Stable | 5.0 | June, 2024 | ✔️

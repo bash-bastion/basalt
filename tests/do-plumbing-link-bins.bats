@@ -34,8 +34,8 @@ load 'util/init.sh'
 	run do-plumbing-link-bins "$package"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$package/weird_dir/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$package/weird_dir/exec2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$package/weird_dir/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$package/weird_dir/exec2.sh" ]
 }
 
 @test "bpm.toml has presidence over package.sh" {
