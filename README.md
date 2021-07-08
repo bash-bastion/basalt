@@ -1,127 +1,56 @@
 # bpm
 
-Originally a fork of [bpm](https://github.com/bpmpm/bpm), `bpm` is a package manager for Bash repositories.
+`bpm` is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
 
-> Instead of looking for specific install instructions for each package and messing with your path, [bpm] will create a central location for all packages and manage their binaries for you
+---
 
-More specifically, when `bpm` is given a repository to install, it will automatically
+`bpm` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
 
-- Detect shell-specific completion scripts, and symlink them to a common directory
-- Detect executable scripts and symlink them to a common directory
-- Detect man pages and symlink them to a common directory
-
-Since the completions and executables are in a common directory, it's much easier to make PATH / completion modifications
-
-## Alternatives Comparison
-
-### Compared to `bpkg`, `bpm`
-
-- Can install multiple packages at once
-- Does not use a `package.json` that clobbers with NPM's
-- Does not automatically invoke `make install` commands on your behalf
-- Probably is able to install more repositories (not verified)
-- Respects XDG
-- Is likely faster
-
-### Compared to `bpm`, `bpm`
-
-- Can install multiple packages at once
-- Has an improved help output
-- Prints why a command failed (rather than just showing the help menu)
-- Has more modern code
-- Better bpm completion scripts
-- Is faster (less exec'ing Bash processes and subshell creations)
-- Does not source `package.sh` which allows for arbitrary command execution
-- More flexible parsing of command line arguments
-
-Even though it is called bpm, it also works with zsh and fish.
-
-## Installation
-
-STATUS: IN DEVELOPMENT
-
-`bpm` requires `bash >= 4`, and the `realpath` utility from `coreutils`. On
-osx you can install both with brew:
+Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following (as you can see, many formats are supported)
 
 ```sh
-brew install bash coreutils
+$ bpm install \
+  rupa/z \
+  github.com/tj/git-extras \
+  https://github.com/aristocratos/bashtop \
+  git@github.com:JosefZIla/bash2048
 ```
 
-1. Clone `bpm``
+This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
 
 ```sh
-git clone https://github.com/bpmpm/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
+$ ls -l --color=always ~/.local/share/bpm/cellar/bin/
+... bash2048.sh -> /home/edwin/.local/share/bpm/cellar/packages/JosefZIla/bash2048/bash2048.sh
+... bashtop -> /home/edwin/.local/share/bpm/cellar/packages/aristocratos/bashtop/bashtop
+... git-alias -> /home/edwin/.local/share/bpm/cellar/packages/tj/git-extras/bin/git-alias
+... git-archive-file -> /home/edwin/.local/share/bpm/cellar/packages/tj/git-extras/bin/git-archive-file
+...
 ```
 
-2. Initialize `bpm` in your shell initialization
-
-For `bash`, `zsh`, `sh`
+If you want to automatically add the bin directory to your path, source the completion files, and add the man pages to your man path, simply add a two-liner in your shell configuration
 
 ```sh
 export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin:$PATH"
 eval "$(bpm init bash)" # replace 'bash' with your shell
 ```
 
-For `fish`
+See [Getting Started](./docs/getting-started.md) for more details
 
-```fish
-set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin" $PATH
-status --is-interactive; and . (bpm init fish | psub)
-```
+## Alternatives Comparison
 
-## Updating
+Why not use `bpkg` or `Basher`? Because `bpm`...
 
-Go to the directory where you cloned bpm and pull the latest changes
+- Can install multiple packages at once
+- Does not use a `package.json` that clobbers with NPM's `package.json` (bpkg)
+- Does not automatically invoke `make` commands on your behalf (bpkg)
+- Does not automatically source a `package.sh` for package configuration (basher)
+- Is able to install more repositories
+- Respects the XDG Base Directory specification (bpkg)
+- Is faster (bpm considers exec and subshell creation overhead)
+- Has a _much_ improved help output (basher)
+- Prints why a command failed, rather than just printing the help menu (basher)
+- Has actually been updated recently
+- Better bpm completion scripts
+- More flexibly parses command line arguments (basher)
 
-```sh
-cd "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
-git pull
-```
-
-## Usage
-
-### Installing packages from Github
-
-```sh
-bpm install sstephenson/bats
-```
-
-This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin` to the `PATH`.
-
-### Installing packages from other sites
-
-```sh
-bpm install bitbucket.org/user/repo_name
-```
-
-This will install `repo_name` from https://bitbucket.org/user/repo_name
-
-### Installing a local package
-
-If you develop a package locally and want to try it through Basher,
-use the `link` subcommand
-
-```sh
-bpm link ./directory my_namespace/my_package
-```
-
-The `link` command will install the dependencies of the local package.
-You can prevent that with the `--no-deps` option
-
-### Sourcing files from a package into current shell
-
-`bpm` provides an `include` function that allows sourcing files into the
-current shell. After installing a package, you can run:
-
-```sh
-include username/repo lib/file.sh
-```
-
-## Contributing
-
-```sh
-git clone https://github.com/eankeen/bpm
-cd bpm
-git submodule update --init
-make test
-```
+I originally created a [different](https://github.com/eankeen/shell-installer) Shell package manager but later abandoned it. When I _really_ needed the functionality, I forked Basher because it had an excellent test suite and its behavior for installing packages actually made sense, compared to `bpkg`

@@ -26,7 +26,10 @@ main() {
 			Version: $PROGRAM_VERSION
 			EOF
 			exit
-		;;
+			;;
+		*)
+			break
+			;;
 		esac
 	done
 
@@ -82,7 +85,7 @@ main() {
 		exit
 		;;
 	*)
-		log.error "No command given"
+		log.error "Command '$1' not valid"
 		util.show_help
 		;;
 	esac

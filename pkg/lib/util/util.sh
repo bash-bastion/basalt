@@ -228,7 +228,7 @@ Usage:
 
 Subcommands:
   init <shell>
-    Configure the shell environment for Basher
+    Configure shell environment for Basher
 
   install [--ssh] [site]/<package>[@ref]
     Installs a package from GitHub (or a custom site)
@@ -252,12 +252,10 @@ Subcommands:
   complete <command>
     Perform the completion for a particular subcommand. Used by the completion scripts
 
-  echo <variable>
-    Echo a particular internal variable. Used by the testing suite
-
 Examples:
   bpm install tj/git-extras
   bpm install github.com/tj/git-extras
   bpm install https://github.com/tj/git-extras
+  bpm install git@github.com:tj/git-extras
 EOF
 }
