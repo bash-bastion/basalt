@@ -4,6 +4,7 @@
 do-plumbing-link-man() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
+	ensure.packageExists "$package"
 
 	log.info "Linking man files for '$package'"
 

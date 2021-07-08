@@ -3,6 +3,7 @@
 do-plumbing-link-completions() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
+	ensure.packageExists "$package"
 
 	log.info "Linking completion files for '$package'"
 

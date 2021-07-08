@@ -9,6 +9,7 @@
 do-plumbing-deps() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
+	ensure.packageExists "$package"
 
 	local -a deps=()
 

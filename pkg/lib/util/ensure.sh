@@ -24,3 +24,18 @@ ensure.nonZero() {
 		die "Variable '$varName' must be non-zero. Please check the validity of your passed arguments"
 	fi
 }
+
+# @description This is a check to determine if a package actually exists.
+# If it does not, then the program fails. This was created to increase
+# the integrity of the testing suite. Most of the callsites of this
+# function are in 'do-plumbing-link' since we expect a package to exist
+# before performing operations on it. This contrasts 'do-plumbing-unlink' -
+# that is not an expectation
+# @arg $1 package
+ensure.packageExists() {
+	local package="$1"
+
+	if [ ! -d "$BPM_PACKAGES_PATH/$package" ]; then
+		die "Package '$package' does not exist"
+	fi
+}

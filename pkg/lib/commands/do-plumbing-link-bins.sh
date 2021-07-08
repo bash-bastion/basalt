@@ -3,6 +3,7 @@
 do-plumbing-link-bins() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
+	ensure.packageExists "$package"
 
 	log.info "Linking bin files for '$package'"
 
