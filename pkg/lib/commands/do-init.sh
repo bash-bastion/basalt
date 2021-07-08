@@ -48,10 +48,12 @@ do-init() {
 		echo_posix_shell_variables
 		cat <<-"EOF"
 		# bpm packages completions
-		for f in "$BPM_ROOT"/cellar/completions/bash/?*.{sh,bash}; do
-		  source "$f"
-		done
-		unset f
+		if [ -d "$BPM_ROOT/cellar/completions/bash" ]; then
+		  for f in "$BPM_ROOT"/cellar/completions/bash/?*.{sh,bash}; do
+		    source "$f"
+		  done
+		  unset f
+		fi
 
 		EOF
 		;;
@@ -60,10 +62,12 @@ do-init() {
 		cat <<-"EOF"
 		# bpm packages completions
 		fpath=("$BPM_ROOT/cellar/completions/zsh/compsys" $fpath)
-		for f in "$BPM_ROOT"/cellar/completions/zsh/compctl/?*.zsh; do
-		  source "$f"
-		done
-		unset f
+		if [ -d "$BPM_ROOT/cellar/completions/zsh/compctl" ]; then
+		  for f in "$BPM_ROOT"/cellar/completions/zsh/compctl/?*.zsh; do
+		    source "$f"
+		  done
+		  unset f
+		fi
 
 		EOF
 		;;
