@@ -1,29 +1,5 @@
 # shellcheck shell=bash
 
-auto-collect-completion_files() {
-	declare -ga REPLIES=()
-
-	local package="$1"
-
-	local -a bash_completion_files=() zsh_completion_files=()
-
-	for completionDir in completion completions contrib/completion contrib/completions; do
-		local completionDir="$BPM_PACKAGES_PATH/$package/$completionDir"
-
-		# TODO: optimize
-		for target in "$completionDir"/?*.{sh,bash}; do
-			bash_completion_files+=("$target")
-		done
-
-		for target in "$completionDir"/?*.zsh; do
-			zsh_completion_files+=("$target")
-		done
-	done
-
-	REPLIES1=("${bash_completion_files[@]}")
-	REPLIES2=("${zsh_completion_files[@]}")
-}
-
 do-plumbing-link-completions() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
@@ -99,4 +75,28 @@ do-plumbing-link-completions() {
 			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${completion##*/}"
 		fi
 	done
+}
+
+auto-collect-completion_files() {
+	declare -ga REPLIES=()
+
+	local package="$1"
+
+	local -a bash_completion_files=() zsh_completion_files=()
+
+	for completionDir in completion completions contrib/completion contrib/completions; do
+		local completionDir="$BPM_PACKAGES_PATH/$package/$completionDir"
+
+		# TODO: optimize
+		for target in "$completionDir"/?*.{sh,bash}; do
+			bash_completion_files+=("$target")
+		done
+
+		for target in "$completionDir"/?*.zsh; do
+			zsh_completion_files+=("$target")
+		done
+	done
+
+	REPLIES1=("${bash_completion_files[@]}")
+	REPLIES2=("${zsh_completion_files[@]}")
 }

@@ -7,7 +7,7 @@ do-plumbing-unlink-bins() {
 	log.info "Unlinking bin files for '$package'"
 
 	local -a bins=()
-	local REMOVE_EXTENSION=
+	local remove_extension=
 
 	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
 	if [ -f "$packageShFile" ]; then
@@ -16,7 +16,7 @@ do-plumbing-unlink-bins() {
 		fi
 
 		if util.extract_shell_variable "$packageShFile" 'REMOVE_EXTENSION'; then
-			REMOVE_EXTENSION="$REPLY"
+			remove_extension="$REPLY"
 		fi
 	fi
 
@@ -26,6 +26,18 @@ do-plumbing-unlink-bins() {
 			bins=("${bins[@]##*/}")
 			bins=("${bins[@]/#/bin/}")
 		else
+			for file in "$BPM_PACKAGES_PATH/$package"/*; do
+				if [ -x "$file" ]; then
+					local name="${file##*/}"
+
+					if "${remove_extension:-false}"; then
+						name="${name%%.*}"
+					fi
+
+					rm -f "$BPM_INSTALL_BIN/$name"
+				fi
+			done
+
 			readarray -t bins < <(find "$BPM_PACKAGES_PATH/$package" -maxdepth 1 -perm -u+x -type f -or -type l)
 			bins=("${bins[@]##*/}")
 		fi
@@ -34,10 +46,11 @@ do-plumbing-unlink-bins() {
 	for bin in "${bins[@]}"; do
 		local name="${bin##*/}"
 
-		if "${REMOVE_EXTENSION:-false}"; then
+		if "${remove_extension:-false}"; then
 			name="${name%%.*}"
 		fi
 
+		# TODO: unlink?
 		rm -f "$BPM_INSTALL_BIN/$name"
 	done
 }

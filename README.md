@@ -44,7 +44,7 @@ Why not use `bpkg` or `Basher`? Because `bpm`...
 - Does not use a `package.json` that clobbers with NPM's `package.json` (bpkg)
 - Does not automatically invoke `make` commands on your behalf (bpkg)
 - Does not automatically source a `package.sh` for package configuration (basher)
-- Is able to install more repositories
+- Is able to install more repositories out-of-the-box
 - Respects the XDG Base Directory specification (bpkg)
 - Is faster (bpm considers exec and subshell creation overhead)
 - Has a _much_ improved help output (basher)

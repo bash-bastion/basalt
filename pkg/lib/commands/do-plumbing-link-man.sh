@@ -1,27 +1,5 @@
 # shellcheck shell=bash
 
-# @arg $1 The man file to symlink
-link-man-n-file() {
-	local fullManFile="$1"
-
-	local manFile="${fullManFile##*/}"
-
-	local regex="\.([1-9])\$"
-	if [[ "$fullManFile" =~ $regex ]]; then
-		local n="${BASH_REMATCH[1]}"
-		mkdir -p "$BPM_INSTALL_MAN/man$n"
-		ln -sf "$fullManFile" "$BPM_INSTALL_MAN/man$n/$manFile"
-	fi
-}
-
-# @description Automatically locate man files in the project and symlink them.
-# This is used when no directories are given in any config files
-auto-symlink-man() {
-	for file in "$BPM_PACKAGES_PATH/$package"/{,man/}*; do
-		link-man-n-file "$file"
-	done
-}
-
 do-plumbing-link-man() {
 	local package="$1"
 	ensure.nonZero 'package' "$package"
@@ -42,7 +20,7 @@ do-plumbing-link-man() {
 				# 2. A directory (man1, man2), that contains man files
 				for file in "$fullDir"/*; do
 					if [ -f "$file" ]; then
-						link-man-n-file "$file"
+						symlink-manfile "$file"
 					elif [ -d "$file" ]; then
 						:
 						# TODO: Implement 2
@@ -50,9 +28,31 @@ do-plumbing-link-man() {
 				done
 			done
 		else
-			auto-symlink-man "$package"
+			fallback_symlink_mans "$package"
 		fi
 	else
-		auto-symlink-man "$package"
+		fallback_symlink_mans "$package"
+	fi
+}
+
+# @description Use heuristics to locate and symlink man files. This is ran when
+# the user does not supply any man files/dirs with any config
+fallback_symlink_mans() {
+	for file in "$BPM_PACKAGES_PATH/$package"/{,man/}*; do
+		symlink-manfile "$file"
+	done
+}
+
+# @arg $1 The man file to symlink
+symlink-manfile() {
+	local fullManFile="$1"
+
+	local manFile="${fullManFile##*/}"
+
+	local regex="\.([1-9])\$"
+	if [[ "$fullManFile" =~ $regex ]]; then
+		local n="${BASH_REMATCH[1]}"
+		mkdir -p "$BPM_INSTALL_MAN/man$n"
+		ln -sf "$fullManFile" "$BPM_INSTALL_MAN/man$n/$manFile"
 	fi
 }
