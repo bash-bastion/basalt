@@ -36,3 +36,9 @@ current shell. After installing a package, you can run:
 ```sh
 include username/repo lib/file.sh
 ```
+
+# Upgrading `bpm`
+
+```sh
+bpm upgrade bpm
+```

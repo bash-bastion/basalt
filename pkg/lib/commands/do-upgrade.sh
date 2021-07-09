@@ -1,7 +1,35 @@
 # shellcheck shell=bash
 
 do-upgrade() {
-	if (( $# == 0 )); then
+	local upgrade_bpm='no'
+
+	local -a pkgs=()
+	for arg; do
+		case "$arg" in
+		bpm)
+			upgrade_bpm='yes'
+			;;
+		*)
+			pkgs+=("$arg")
+			;;
+		esac
+	done
+
+	if [ "$upgrade_bpm" = 'yes' ]; then
+		if (( ${#pkgs[@]} > 0 )); then
+			die 'You cannot upgarde bpm and its packages at the same time'
+		fi
+
+		if [ -d "$PROGRAM_LIB_DIR/../../.git" ]; then
+			git -C "$PROGRAM_LIB_DIR/../.." pull
+		else
+			log.error "bpm is not a Git repository"
+		fi
+
+		return
+	fi
+
+	if (( ${#pkgs[@]} == 0 )); then
 		die "You must supply at least one package"
 	fi
 

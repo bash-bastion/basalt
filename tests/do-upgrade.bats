@@ -66,3 +66,32 @@ load 'util/init.sh'
 
 	assert [ ! -f "$BPM_INSTALL_BIN/script3.sh" ]
 }
+
+@test "errors when no packages are given" {
+	run do-upgrade
+
+	assert_failure
+	assert_line -p 'You must supply at least one package'
+}
+
+@test "upgrade bpm works" {
+	local pkg='username/package'
+
+	test_util.mock_command 'git'
+
+	run do-upgrade 'bpm'
+
+	assert_success
+	assert_line 'git -C /home/edwin/data/bpm/source/tests/../pkg/lib/../.. pull'
+}
+
+@test "upgrade bpm fails when mixing package names" {
+	local pkg='username/package'
+
+	test_util.mock_command 'git'
+
+	run do-upgrade 'bpm' 'pkg/name'
+
+	assert_failure
+	assert_line -p 'You cannot upgarde bpm and its packages at the same time'
+}
