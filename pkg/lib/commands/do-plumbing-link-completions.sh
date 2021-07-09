@@ -7,96 +7,86 @@ do-plumbing-link-completions() {
 
 	log.info "Linking completion files for '$package'"
 
-	local -a bash_completion_files=() zsh_completion_files=()
-
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
 	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
 
 	# Get completion directories
 	if [ -f "$bpm_toml_file" ]; then
 		if util.get_toml_array "$bpm_toml_file" 'completionDirs'; then
-			local -a newCompletions=()
-
 			for dir in "${REPLIES[@]}"; do
-				newCompletions+=("$BPM_PACKAGES_PATH/$package/$dir"/*)
-				newCompletions=("${newCompletions[@]/#"$BPM_PACKAGES_PATH/$package/"}")
+				for file in "$BPM_PACKAGES_PATH/$package/$dir"/*; do
+					local fileName="${file##*/}"
+
+					if [[ $fileName == *.@(sh|bash) ]]; then
+						symlink_bash_completion_file "$file"
+					elif [[ $fileName == *.zsh ]]; then
+						symlink_zsh_completion_file "$file"
+					fi
+				done
 			done
-
-			bash_completion_files+=("${newCompletions[@]}")
-			zsh_completion_files+=("${newCompletions[@]}")
 		else
-			auto_collect_completion_files "$package"
-			REPLIES1=("${REPLIES1[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
-			REPLIES2=("${REPLIES2[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
-
-			bash_completion_files+=("${REPLIES1[@]}")
-			zsh_completion_files+=("${REPLIES2[@]}")
+			fallback_symlink_completions "$package" 'all'
 		fi
 	elif [ -f "$package_sh_file" ]; then
+		local -a bash_completion_files=() zsh_completion_files=()
+
 		if util.extract_shell_variable "$package_sh_file" 'BASH_COMPLETIONS'; then
 			IFS=':' read -ra bash_completion_files <<< "$REPLY"
+
+			for file in "${bash_completion_files[@]}"; do
+				symlink_bash_completion_file "$BPM_PACKAGES_PATH/$package/$file"
+			done
 		else
-			auto_collect_completion_files "$package"
-			bash_completion_files+=("${REPLIES1[@]}")
+			fallback_symlink_completions "$package" 'bash'
 		fi
 
 		if util.extract_shell_variable "$package_sh_file" 'ZSH_COMPLETIONS'; then
 			IFS=':' read -ra zsh_completion_files <<< "$REPLY"
+
+			for file in "${zsh_completion_files[@]}"; do
+				symlink_zsh_completion_file "$BPM_PACKAGES_PATH/$package/$file"
+			done
 		else
-			auto_collect_completion_files "$package"
-			zsh_completion_files+=("${REPLIES2[@]}")
+			fallback_symlink_completions "$package" 'zsh'
 		fi
 	else
-		auto_collect_completion_files "$package"
-		REPLIES1=("${REPLIES1[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
-		REPLIES2=("${REPLIES2[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
-		bash_completion_files+=("${REPLIES1[@]}")
-		zsh_completion_files+=("${REPLIES2[@]}")
+		fallback_symlink_completions "$package" 'all'
 	fi
+}
 
-	# Do linking of completion files
-	for completion in "${bash_completion_files[@]}"; do
-		completion="${completion/#"$BPM_PACKAGES_PATH/$package/"}"
+fallback_symlink_completions() {
+	local package="$1"
+	local type="$2"
 
-		mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
-		ln -sf "$BPM_PACKAGES_PATH/$package/$completion" "$BPM_INSTALL_COMPLETIONS/bash/${completion##*/}"
-	done
+	for completion_dir in completion completions contrib/completion contrib/completions; do
+		for file in "$BPM_PACKAGES_PATH/$package/$completion_dir"/*; do
+			local fileName="${file##*/}"
 
-	for completion in "${zsh_completion_files[@]}"; do
-		completion="${completion/#"$BPM_PACKAGES_PATH/$package/"}"
-
-		local target="$BPM_PACKAGES_PATH/$package/$completion"
-
-		if grep -qs "^#compdef" "$target"; then
-			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
-			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${completion##*/}"
-		else
-			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compctl"
-			ln -sf "$target" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${completion##*/}"
-		fi
+			if [[ $fileName == *.@(sh|bash) ]] && [[ $type == all || $type == bash ]]; then
+				symlink_bash_completion_file "$file"
+			elif [[ $fileName == *.zsh ]] && [[ $type == all || $type == zsh ]]; then
+				symlink_zsh_completion_file "$file"
+			fi
+		done
 	done
 }
 
-auto_collect_completion_files() {
-	declare -ga REPLIES=()
+symlink_bash_completion_file() {
+	local file="$1"
 
-	local package="$1"
+	mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
+	ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}"
+}
 
-	local -a bash_completion_files=() zsh_completion_files=()
+symlink_zsh_completion_file() {
+	local file="$1"
 
-	for completion_dir in completion completions contrib/completion contrib/completions; do
-		local completion_dir="$BPM_PACKAGES_PATH/$package/$completion_dir"
-
-		# TODO: optimize
-		for target in "$completion_dir"/?*.{sh,bash}; do
-			bash_completion_files+=("$target")
-		done
-
-		for target in "$completion_dir"/?*.zsh; do
-			zsh_completion_files+=("$target")
-		done
-	done
-
-	REPLIES1=("${bash_completion_files[@]}")
-	REPLIES2=("${zsh_completion_files[@]}")
+	if grep -qs "^#compdef" "$file"; then
+		# TODO: run mkdir outside of loop
+		mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
+		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
+	else
+		mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compctl"
+		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
+	fi
 }
