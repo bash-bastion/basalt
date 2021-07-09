@@ -40,7 +40,14 @@ test_util.readlink() {
 test_util.setup_pkg() {
 	local package="$1"
 
-	create_package "$package"
+	mkdir -p "$BPM_ORIGIN_DIR/$package"
+	cd "$BPM_ORIGIN_DIR/$package"
+
+	git init .
+	touch 'README.md'
+	git add .
+	git commit -m "Initial commit"
+
 	cd "$BPM_ORIGIN_DIR/$package"
 }
 

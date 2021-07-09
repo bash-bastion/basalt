@@ -22,8 +22,11 @@ do-plumbing-link-man() {
 					if [ -f "$file" ]; then
 						symlink_manfile "$file"
 					elif [ -d "$file" ]; then
-						:
-						# TODO: Implement 2
+						for actualFile in "$file"/*; do
+							if [ -f "$actualFile" ]; then
+								symlink_manfile "$actualFile"
+							fi
+						done
 					fi
 				done
 			done
@@ -39,7 +42,15 @@ do-plumbing-link-man() {
 # the user does not supply any man files/dirs with any config
 fallback_symlink_mans() {
 	for file in "$BPM_PACKAGES_PATH/$package"/{,man/}*; do
-		symlink_manfile "$file"
+		if [ -f "$file" ]; then
+			symlink_manfile "$file"
+		elif [ -d "$file" ]; then
+			for actualFile in "$file"/*; do
+				if [ -f "$actualFile" ]; then
+					symlink_manfile "$actualFile"
+				fi
+			done
+		fi
 	done
 }
 
