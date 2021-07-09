@@ -163,11 +163,12 @@ load 'util/init.sh'
 }
 
 @test "does not symlink package itself as bin when linked with bpm link" {
-	mkdir package
+	mkdir -p 'package' 'username/package2'
 
 	# implicit call to do-plumbing-link-bins
-	run do-link package username/package
+	run do-link 'package' 'username/package2'
 
 	assert_success
 	assert [ ! -e "$BPM_PREFIX/bin/package" ]
+	assert [ ! -e "$BPM_PREFIX/bin/package2" ]
 }
