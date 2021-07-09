@@ -22,6 +22,10 @@ echo_posix_shell_variables() {
 # - Sourcing bpm completion
 # - Sourcing 'include' function
 do-init() {
+	if [ "$1" == '-' ]; then
+		shift
+	fi
+
 	local shell="$1"
 
 	if [ -z "$shell" ]; then
