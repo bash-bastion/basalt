@@ -22,7 +22,7 @@ do-install() {
 
 		log.info "Installing '$repoSpec'"
 		do-plumbing-clone "$uri" "$package" $ref
-		do-plumbing-deps "$package"
+		do-plumbing-add-deps "$package"
 		do-plumbing-link-bins "$package"
 		do-plumbing-link-completions "$package"
 		do-plumbing-link-man "$package"

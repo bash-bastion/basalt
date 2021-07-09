@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.fake_clone "$package"
 
 	test_util.mock_command do-install
-	run do-plumbing-deps "$package"
+	run do-plumbing-add-deps "$package"
 
 	assert_success ""
 }
@@ -26,7 +26,7 @@ load 'util/init.sh'
 	test_util.fake_clone "$package"
 
 	test_util.mock_command do-install
-	run do-plumbing-deps "$package"
+	run do-plumbing-add-deps "$package"
 
 	assert_success
 	assert_line "do-install user/dep1"
@@ -45,7 +45,7 @@ load 'util/init.sh'
 	test_util.fake_clone "$package"
 
 	test_util.mock_command do-install
-	run do-plumbing-deps "$package"
+	run do-plumbing-add-deps "$package"
 
 	assert_success
 	assert_line "do-install user/dep1"
@@ -65,7 +65,7 @@ load 'util/init.sh'
 	test_util.fake_clone "$package"
 
 	test_util.mock_command do-install
-	run do-plumbing-deps "$package"
+	run do-plumbing-add-deps "$package"
 
 	assert_success
 	assert_line "do-install user/good_dep"

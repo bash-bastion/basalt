@@ -6,6 +6,7 @@ do-uninstall() {
 	fi
 
 	for repoSpec; do
+		# If is local directory
 		if [ -d "$repoSpec" ]; then
 			local fullPath=
 			fullPath="$(util.readlink "$repoSpec")"
@@ -13,7 +14,7 @@ do-uninstall() {
 
 			local user="${fullPath%/*}"; user="${user##*/}"
 			local repository="${fullPath##*/}"
-			if [ "$fullPath" == "$BPM_PACKAGES_PATH/$user/$repository" ]; then
+			if [ "$fullPath" = "$BPM_PACKAGES_PATH/$user/$repository" ]; then
 				do_actual_uninstall "$user/$repository"
 			fi
 		else

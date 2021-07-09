@@ -19,7 +19,7 @@ load 'util/init.sh'
 }
 
 @test "fails if package already present" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -35,7 +35,7 @@ load 'util/init.sh'
 }
 
 @test "fails if package already present (as erroneous file)" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -51,7 +51,7 @@ load 'util/init.sh'
 }
 
 @test "links the package to packages under the correct namespace" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -65,7 +65,7 @@ load 'util/init.sh'
 }
 
 @test "calls link-bins, link-completions, link-man and deps in order" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -76,7 +76,7 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
-	assert_line -n 1 "do-plumbing-deps bpm-local/package2"
+	assert_line -n 1 "do-plumbing-add-deps bpm-local/package2"
 	assert_line -n 2 "do-plumbing-link-bins bpm-local/package2"
 	assert_line -n 3 "do-plumbing-link-completions bpm-local/package2"
 	assert_line -n 4 "do-plumbing-link-man bpm-local/package2"
@@ -84,7 +84,7 @@ load 'util/init.sh'
 }
 
 @test "respects --no-deps option, in order, with --nodeps" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -102,7 +102,7 @@ load 'util/init.sh'
 
 
 @test "respects --no-deps option" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -112,11 +112,11 @@ load 'util/init.sh'
 	run do-link --no-deps package2
 
 	assert_success
-	refute_line "do-plumbing-deps bpm-local/package2"
+	refute_line "do-plumbing-add-deps bpm-local/package2"
 }
 
 @test "resolves current directory (dot) path" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -131,7 +131,7 @@ load 'util/init.sh'
 }
 
 @test "resolves parent directory (dotdot) path" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
@@ -146,7 +146,7 @@ load 'util/init.sh'
 }
 
 @test "resolves arbitrary complex relative path" {
-	test_util.mock_command do-plumbing-deps
+	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man

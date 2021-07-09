@@ -17,6 +17,27 @@ load 'util/init.sh'
 	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
 }
 
+# @test "remove bpm.toml bin" {
+# 	local package="username/package"
+
+# 	test_util.setup_pkg "$package"; {
+# 		echo 'manDirs = [ "a_dir" ]' > 'bpm.toml'
+# 		# Leave a '_' suffix to directory to be extra flexible
+# 		mkdir -p 'a_dir/man1_'
+# 		touch 'a_dir/man1_/exec.1'
+
+# 		mkdir -p 'a_dir/man5_'
+# 		touch 'a_dir/man5_/execcfg.5'
+# 	}; test_util.finish_pkg
+# 	test_util.fake_clone "$package"
+
+# 	run do-plumbing-unlink-bins "$package"
+
+# 	assert_success
+# 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$package/a_dir/man1_/exec.1" ]
+# 	assert [ "$(readlink "$BPM_INSTALL_MAN/man5/execcfg.5")" = "$BPM_PACKAGES_PATH/$package/a_dir/man5_/execcfg.5" ]
+# }
+
 @test "removes each binary from the install bin" {
 	local package="username/package"
 

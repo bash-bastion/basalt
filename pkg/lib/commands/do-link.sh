@@ -31,7 +31,7 @@ do-link() {
 
 	log.info "Linking '$directory'"
 	if [ "$install_deps" = 'yes' ]; then
-		do-plumbing-deps "$package"
+		do-plumbing-add-deps "$package"
 	fi
 	do-plumbing-link-bins "$package"
 	do-plumbing-link-completions "$package"

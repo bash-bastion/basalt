@@ -22,7 +22,7 @@ test_util.fake_install() {
 		local package="$1"
 
 		test_util.fake_clone "$package"
-		do-plumbing-deps "$package"
+		do-plumbing-add-deps "$package"
 		do-plumbing-link-bins "$package"
 		do-plumbing-link-completions "$package"
 		do-plumbing-link-man "$package"
@@ -55,6 +55,6 @@ test_util.setup_pkg() {
 # into the regular testing directory
 test_util.finish_pkg() {
 	git add .
-	git commit -m "commit"
+	git commit -m "Make changes"
 	cd "$BPM_CWD"
 }
