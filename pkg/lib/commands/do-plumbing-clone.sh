@@ -5,25 +5,25 @@ do-plumbing-clone() {
 	local package="$2"
 	local ref="$3"
 
-	ensure.nonZero 'uri' "$uri"
+	ensure.non_zero 'uri' "$uri"
 
 	if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
 		die "Package '$package' is already present"
 	fi
 
-	local -a gitArgs=(--recursive)
+	local -a git_args=(--recursive)
 
 	if [ -z "${BPM_FULL_CLONE+x}" ]; then
-		gitArgs+=(--depth=1)
+		git_args+=(--depth=1)
 	fi
 
 	if [ -n "$ref" ]; then
-		gitArgs+=(--branch "$ref")
+		git_args+=(--branch "$ref")
 	fi
 
-	gitArgs+=("$uri")
-	gitArgs+=("$BPM_PACKAGES_PATH/$package")
+	git_args+=("$uri")
+	git_args+=("$BPM_PACKAGES_PATH/$package")
 
 	log.info "Cloning package '$package'"
-	git clone "${gitArgs[@]}"
+	git clone "${git_args[@]}"
 }

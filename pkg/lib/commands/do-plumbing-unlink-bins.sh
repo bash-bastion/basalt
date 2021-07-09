@@ -2,20 +2,20 @@
 
 do-plumbing-unlink-bins() {
 	local package="$1"
-	ensure.nonZero 'package' "$package"
+	ensure.non_zero 'package' "$package"
 
 	log.info "Unlinking bin files for '$package'"
 
 	local -a bins=()
 	local remove_extension=
 
-	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
-	if [ -f "$packageShFile" ]; then
-		if util.extract_shell_variable "$packageShFile" 'BINS'; then
+	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
+	if [ -f "$package_sh_file" ]; then
+		if util.extract_shell_variable "$package_sh_file" 'BINS'; then
 			IFS=':' read -ra bins <<< "$REPLY"
 		fi
 
-		if util.extract_shell_variable "$packageShFile" 'REMOVE_EXTENSION'; then
+		if util.extract_shell_variable "$package_sh_file" 'REMOVE_EXTENSION'; then
 			remove_extension="$REPLY"
 		fi
 	fi

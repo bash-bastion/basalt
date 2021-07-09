@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 do-install() {
-	local with_ssh="no"
+	local with_ssh='no'
 
 	case "$1" in
 		--ssh)
-			with_ssh="yes"
+			with_ssh='yes'
 			shift
 		;;
 	esac

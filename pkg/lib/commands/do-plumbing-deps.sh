@@ -8,20 +8,20 @@
 
 do-plumbing-deps() {
 	local package="$1"
-	ensure.nonZero 'package' "$package"
-	ensure.packageExists "$package"
+	ensure.non_zero 'package' "$package"
+	ensure.package_exists "$package"
 
 	local -a deps=()
 
-	local bpmTomlFile="$BPM_PACKAGES_PATH/$package/bpm.toml"
-	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
+	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
+	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
 
-	if [ -f "$bpmTomlFile" ]; then
-		if util.get_toml_array "$bpmTomlFile" 'dependencies'; then
+	if [ -f "$bpm_toml_file" ]; then
+		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			deps=("${REPLIES[@]}")
 		fi
-	elif [ -f "$packageShFile" ]; then
-		if util.extract_shell_variable "$packageShFile" 'DEPS'; then
+	elif [ -f "$package_sh_file" ]; then
+		if util.extract_shell_variable "$package_sh_file" 'DEPS'; then
 			IFS=':' read -ra deps <<< "$REPLY"
 		fi
 	fi

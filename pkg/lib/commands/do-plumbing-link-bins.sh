@@ -2,8 +2,8 @@
 
 do-plumbing-link-bins() {
 	local package="$1"
-	ensure.nonZero 'package' "$package"
-	ensure.packageExists "$package"
+	ensure.non_zero 'package' "$package"
+	ensure.package_exists "$package"
 
 	log.info "Linking bin files for '$package'"
 
@@ -11,11 +11,11 @@ do-plumbing-link-bins() {
 	declare -g remove_extension=
 	local -a bins=()
 
-	local bpmTomlFile="$BPM_PACKAGES_PATH/$package/bpm.toml"
-	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
+	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
+	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
 
-	if [ -f "$bpmTomlFile" ]; then
-		if util.get_toml_array "$bpmTomlFile" 'binDirs'; then
+	if [ -f "$bpm_toml_file" ]; then
+		if util.get_toml_array "$bpm_toml_file" 'binDirs'; then
 			for dir in "${REPLIES[@]}"; do
 				for file in "$BPM_PACKAGES_PATH/$package/$dir"/*; do
 					symlink_binfile "$file"
@@ -24,12 +24,12 @@ do-plumbing-link-bins() {
 		else
 			fallback_symlink_bins "$package"
 		fi
-	elif [ -f "$packageShFile" ]; then
-		if util.extract_shell_variable "$packageShFile" 'REMOVE_EXTENSION'; then
+	elif [ -f "$package_sh_file" ]; then
+		if util.extract_shell_variable "$package_sh_file" 'REMOVE_EXTENSION'; then
 			remove_extension="$REPLY"
 		fi
 
-		if util.extract_shell_variable "$packageShFile" 'BINS'; then
+		if util.extract_shell_variable "$package_sh_file" 'BINS'; then
 			IFS=':' read -ra bins <<< "$REPLY"
 
 			for file in "${bins[@]}"; do

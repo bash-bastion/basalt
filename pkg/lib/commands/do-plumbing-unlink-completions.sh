@@ -2,19 +2,19 @@
 
 do-plumbing-unlink-completions() {
 	local package="$1"
-	ensure.nonZero 'package' "$package"
+	ensure.non_zero 'package' "$package"
 
 	log.info "Unlinking completion files for '$package'"
 
 	local -a bash_completions=() zsh_completions=()
 
-	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
-	if [ -f "$packageShFile" ]; then
-		if util.extract_shell_variable "$packageShFile" 'BASH_COMPLETIONS'; then
+	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
+	if [ -f "$package_sh_file" ]; then
+		if util.extract_shell_variable "$package_sh_file" 'BASH_COMPLETIONS'; then
 			IFS=':' read -ra bash_completions <<< "$REPLY"
 		fi
 
-		if til.extract_shell_variable "$packageShFile" 'ZSH_COMPLETIONS'; then
+		if util.extract_shell_variable "$package_sh_file" 'ZSH_COMPLETIONS'; then
 			IFS=':' read -ra zsh_completions <<< "$REPLY"
 		fi
 	fi

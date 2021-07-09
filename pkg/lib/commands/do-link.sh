@@ -1,11 +1,11 @@
 # shellcheck shell=bash
 
 do-link() {
-	local no_deps="false"
+	local install_deps='yes'
 
 	case $1 in
 		--no-deps)
-			no_deps="true"
+			install_deps='no'
 			shift
 		;;
 	esac
@@ -30,7 +30,7 @@ do-link() {
 	ln -s "$directory" "$BPM_PACKAGES_PATH/$package"
 
 	log.info "Linking '$directory'"
-	if [ "$no_deps" = "false" ]; then
+	if [ "$install_deps" = 'yes' ]; then
 		do-plumbing-deps "$package"
 	fi
 	do-plumbing-link-bins "$package"

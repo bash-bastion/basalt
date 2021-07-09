@@ -2,7 +2,7 @@
 
 do-plumbing-unlink-man() {
 	local package="$1"
-	ensure.nonZero 'package' "$package"
+	ensure.non_zero 'package' "$package"
 
 	log.info "Unlinking man files for '$package'"
 

@@ -29,9 +29,9 @@ util.parse_package_full() {
 		ref=""
 	fi
 
-	ensure.nonZero 'site' "$site"
-	ensure.nonZero 'user' "$user"
-	ensure.nonZero 'repository' "$repository"
+	ensure.non_zero 'site' "$site"
+	ensure.non_zero 'user' "$user"
+	ensure.non_zero 'repository' "$repository"
 
 	REPLY="$site:$user:$repository:$ref"
 }
@@ -202,7 +202,7 @@ util.extract_shell_variable() {
 		die "File '$shellFile' not found"
 	fi
 
-	ensure.nonZero 'variableName' "$variableName"
+	ensure.non_zero 'variableName' "$variableName"
 
 	# Note: the following code/regex fails on macOS, so a different parsing method was done below
 	# local regex="^[ \t]*(declare.*? |typeset.*? )?$variableName=[\"']?([^('|\")]*)"

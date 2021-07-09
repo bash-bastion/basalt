@@ -2,7 +2,7 @@
 
 bpm-package-path() {
 	local package="$1"
-	ensure.nonZero 'package' "$package"
+	ensure.non_zero 'package' "$package"
 
 	printf "%s\n" "$BPM_PACKAGES_PATH/$package"
 }

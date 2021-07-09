@@ -1,18 +1,18 @@
 # shellcheck shell=bash
 
 do-list() {
-	local shouldShowOutdated=false
+	local should_show_outdated='no'
 
 	for arg; do
 		case "$arg" in
 		--outdated)
-			shouldShowOutdated=true
+			should_show_outdated='yes'
 			shift
 			;;
 		esac
 	done
 
-	if [ "$shouldShowOutdated" = true ]; then
+	if [ "$should_show_outdated" = 'yes' ]; then
 		local packages
 		readarray -t packages < <(do-list)
 

@@ -36,15 +36,15 @@ load 'util/init.sh'
 
 @test "links bash completions from ./?(contrib/)completion?(s)" {
 	local -i i=1
-	for completionDir in completion completions contrib/completion contrib/completions; do
+	for completion_dir in completion completions contrib/completion contrib/completions; do
 
 		local package="username/package$i"
 
 		create_package "$package"
 		cd "$BPM_ORIGIN_DIR/$package"
-		mkdir -p "$completionDir"
-		touch "$completionDir/c.bash"
-		touch "$completionDir/c2.sh"
+		mkdir -p "$completion_dir"
+		touch "$completion_dir/c.bash"
+		touch "$completion_dir/c2.sh"
 		git add .
 		git commit -m "Add completions"
 		cd "$BPM_CWD"
@@ -53,8 +53,8 @@ load 'util/init.sh'
 		run do-plumbing-link-completions "$package"
 
 		assert_success
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c.bash")" = "$BPM_PACKAGES_PATH/$package/$completionDir/c.bash" ]
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.sh")" = "$BPM_PACKAGES_PATH/$package/$completionDir/c2.sh" ]
+		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c.bash")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c.bash" ]
+		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.sh")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c2.sh" ]
 
 		(( ++i ))
 	done
@@ -125,14 +125,14 @@ load 'util/init.sh'
 
 @test "links zsh completions from ./?(contrib/)completion?(s)" {
 	local -i i=1
-	for completionDir in completion completions contrib/completion contrib/completions; do
+	for completion_dir in completion completions contrib/completion contrib/completions; do
 		local package="username/package$i"
 
 		create_package "$package"
 		cd "$BPM_ORIGIN_DIR/$package"
-		mkdir -p "$completionDir"
-		touch "$completionDir/c.zsh"
-		echo "#compdef" >| "$completionDir/c2.zsh"
+		mkdir -p "$completion_dir"
+		touch "$completion_dir/c.zsh"
+		echo "#compdef" >| "$completion_dir/c2.zsh"
 		git add .
 		git commit -m "Add completions"
 		cd "$BPM_CWD"
@@ -141,8 +141,8 @@ load 'util/init.sh'
 		run do-plumbing-link-completions "$package"
 
 		assert_success
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/c2.zsh")" = "$BPM_PACKAGES_PATH/$package/$completionDir/c2.zsh" ]
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c.zsh")" = "$BPM_PACKAGES_PATH/$package/$completionDir/c.zsh" ]
+		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/c2.zsh")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c2.zsh" ]
+		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c.zsh")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c.zsh" ]
 
 		(( ++i ))
 	done

@@ -2,19 +2,19 @@
 
 do-plumbing-link-completions() {
 	local package="$1"
-	ensure.nonZero 'package' "$package"
-	ensure.packageExists "$package"
+	ensure.non_zero 'package' "$package"
+	ensure.package_exists "$package"
 
 	log.info "Linking completion files for '$package'"
 
 	local -a bash_completion_files=() zsh_completion_files=()
 
-	local bpmTomlFile="$BPM_PACKAGES_PATH/$package/bpm.toml"
-	local packageShFile="$BPM_PACKAGES_PATH/$package/package.sh"
+	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
+	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
 
 	# Get completion directories
-	if [ -f "$bpmTomlFile" ]; then
-		if util.get_toml_array "$bpmTomlFile" 'completionDirs'; then
+	if [ -f "$bpm_toml_file" ]; then
+		if util.get_toml_array "$bpm_toml_file" 'completionDirs'; then
 			local -a newCompletions=()
 
 			for dir in "${REPLIES[@]}"; do
@@ -25,29 +25,29 @@ do-plumbing-link-completions() {
 			bash_completion_files+=("${newCompletions[@]}")
 			zsh_completion_files+=("${newCompletions[@]}")
 		else
-			auto-collect-completion_files "$package"
+			auto_collect_completion_files "$package"
 			REPLIES1=("${REPLIES1[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
 			REPLIES2=("${REPLIES2[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
 
 			bash_completion_files+=("${REPLIES1[@]}")
 			zsh_completion_files+=("${REPLIES2[@]}")
 		fi
-	elif [ -f "$packageShFile" ]; then
-		if util.extract_shell_variable "$packageShFile" 'BASH_COMPLETIONS'; then
+	elif [ -f "$package_sh_file" ]; then
+		if util.extract_shell_variable "$package_sh_file" 'BASH_COMPLETIONS'; then
 			IFS=':' read -ra bash_completion_files <<< "$REPLY"
 		else
-			auto-collect-completion_files "$package"
+			auto_collect_completion_files "$package"
 			bash_completion_files+=("${REPLIES1[@]}")
 		fi
 
-		if util.extract_shell_variable "$packageShFile" 'ZSH_COMPLETIONS'; then
+		if util.extract_shell_variable "$package_sh_file" 'ZSH_COMPLETIONS'; then
 			IFS=':' read -ra zsh_completion_files <<< "$REPLY"
 		else
-			auto-collect-completion_files "$package"
+			auto_collect_completion_files "$package"
 			zsh_completion_files+=("${REPLIES2[@]}")
 		fi
 	else
-		auto-collect-completion_files "$package"
+		auto_collect_completion_files "$package"
 		REPLIES1=("${REPLIES1[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
 		REPLIES2=("${REPLIES2[@]/#/"$BPM_PACKAGES_PATH/$package/"}")
 		bash_completion_files+=("${REPLIES1[@]}")
@@ -77,22 +77,22 @@ do-plumbing-link-completions() {
 	done
 }
 
-auto-collect-completion_files() {
+auto_collect_completion_files() {
 	declare -ga REPLIES=()
 
 	local package="$1"
 
 	local -a bash_completion_files=() zsh_completion_files=()
 
-	for completionDir in completion completions contrib/completion contrib/completions; do
-		local completionDir="$BPM_PACKAGES_PATH/$package/$completionDir"
+	for completion_dir in completion completions contrib/completion contrib/completions; do
+		local completion_dir="$BPM_PACKAGES_PATH/$package/$completion_dir"
 
 		# TODO: optimize
-		for target in "$completionDir"/?*.{sh,bash}; do
+		for target in "$completion_dir"/?*.{sh,bash}; do
 			bash_completion_files+=("$target")
 		done
 
-		for target in "$completionDir"/?*.zsh; do
+		for target in "$completion_dir"/?*.zsh; do
 			zsh_completion_files+=("$target")
 		done
 	done

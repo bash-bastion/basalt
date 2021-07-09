@@ -5,19 +5,19 @@
 
 ensure.cd() {
 	local dir="$1"
-	ensure.nonZero 'dir' "$dir"
+	ensure.non_zero 'dir' "$dir"
 
 	if ! cd "$1"; then
 		die "Could not cd to directory '$1'"
 	fi
 }
 
-ensure.nonZero() {
+ensure.non_zero() {
 	local varName="$1"
 	local varValue="$2"
 
 	if [ -z "$varName" ] || [ $# -ne 2 ]; then
-		die "Internal: Incorrect arguments passed to 'ensure.nonZero'"
+		die "Internal: Incorrect arguments passed to 'ensure.non_zero'"
 	fi
 
 	if [ -z "$varValue" ]; then
@@ -32,7 +32,7 @@ ensure.nonZero() {
 # before performing operations on it. This contrasts 'do-plumbing-unlink' -
 # that is not an expectation
 # @arg $1 package
-ensure.packageExists() {
+ensure.package_exists() {
 	local package="$1"
 
 	if [ ! -d "$BPM_PACKAGES_PATH/$package" ]; then
