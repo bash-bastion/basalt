@@ -24,7 +24,7 @@ do-uninstall() {
 
 			if [ -d "$BPM_PACKAGES_PATH/$user/$repository" ]; then
 				do_actual_uninstall "$user/$repository"
-			elif [ -f "$BPM_PACKAGES_PATH/$user/$repository" ]; then
+			elif [ -e "$BPM_PACKAGES_PATH/$user/$repository" ]; then
 				rm -f "$BPM_PACKAGES_PATH/$user/$repository"
 			else
 				die "Package '$user/$repository' is not installed"
@@ -42,4 +42,5 @@ do_actual_uninstall() {
 	do-plumbing-unlink-completions "$package"
 
 	rm -rf "${BPM_PACKAGES_PATH:?}/$package"
+	rmdir --ignore-fail-on-non-empty "${BPM_PACKAGES_PATH:?}/${package%/*}"
 }

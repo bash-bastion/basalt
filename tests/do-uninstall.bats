@@ -3,62 +3,114 @@
 load 'util/init.sh'
 
 @test "fails if package is not installed" {
-	run do-uninstall user/lol
+	local pkg='user/repo'
+
+	run do-uninstall "$pkg"
 
 	assert_failure
-	assert_output -e "Package 'user/lol' is not installed"
+	assert_output -e "Package '$pkg' is not installed"
 }
 
-@test "removes package directory" {
-	local package="username/package"
+@test "succeeds if package is a file" {
+	local pkg='user/repo'
 
-	create_package 'username/package'
-	test_util.fake_clone 'username/package'
-	do-link "$BPM_ORIGIN_DIR/$package"
+	mkdir -p "$BPM_PACKAGES_PATH/${pkg%/*}"
+	touch "$BPM_PACKAGES_PATH/$pkg"
 
-	run do-uninstall 'username/package'
+	[ -f "$BPM_PACKAGES_PATH/$pkg" ]
+
+	run do-uninstall "$pkg"
 
 	assert_success
-	[ ! -d "$BPM_PACKAGES_PATH/username/package" ]
+	assert [ ! -e "$BPM_ORIGIN_DIR/$pkg" ]
 }
 
-@test "removes package directory (if it happens to be a file)" {
-	mkdir -p "$BPM_PACKAGES_PATH/theta"
-	touch "$BPM_PACKAGES_PATH/theta/tango"
+@test "succeeds if package is an empty directory" {
+	local pkg='user/repo'
 
-	run do-uninstall 'theta/tango'
+	mkdir -p "$BPM_PACKAGES_PATH/$pkg"
+
+	run do-uninstall "$pkg"
 
 	assert_success
-	[ ! -e "$BPM_PACKAGES_PATH/username/package" ]
+	assert [ ! -e "$BPM_ORIGIN_DIR/$pkg" ]
 }
 
-@test "removes binaries" {
-	local package="username/package"
+@test "properly removes package directory" {
+	local pkg="username/package"
 
-	create_package 'username/package'
-	create_exec 'username/package' exec1
-	test_util.fake_clone 'username/package'
-	do-link "$BPM_ORIGIN_DIR/$package"
+	test_util.setup_pkg "$pkg"; {
+		touch 'bpm.toml'
+		touch 'file.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-uninstall 'username/package'
+	run do-uninstall "$pkg"
+
+	assert_success
+	assert [ ! -d "$BPM_PACKAGES_PATH/$pkg" ]
+}
+
+@test "properly removes package namespace directory, if it is empty" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		touch 'bpm.toml'
+		touch 'file.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-uninstall "$pkg"
+
+	assert_success
+	assert [ ! -d "$BPM_PACKAGES_PATH/$pkg" ]
+	assert [ ! -d "$BPM_PACKAGES_PATH/${pkg%/*}" ]
+}
+
+@test "properly removes binaries" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir bin
+		touch 'bin/exec1'
+		touch 'exec2.sh'
+		chmod +x 'exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-uninstall "$pkg"
 
 	assert_success
 	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	[ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
 }
 
-@test "does not remove other package directories and binaries" {
-	create_package 'username/package1'
-	create_package 'username/package2'
-	create_exec 'username/package1' exec1
-	create_exec 'username/package2' exec2
-	do-link "$BPM_ORIGIN_DIR/username/package1"
-	do-link "$BPM_ORIGIN_DIR/username/package2"
+@test "properly keeps non-uninstalled package directories and binaries" {
+	local pkg1='username/pkg1'
+	local pkg2='username/pkg2'
 
-	run do-uninstall 'bpm-local/package1'
+	test_util.setup_pkg "$pkg1"; {
+		mkdir bin
+		touch 'bin/exec1'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg1"
+
+	test_util.setup_pkg "$pkg2"; {
+		mkdir bin
+		touch 'bin/exec2'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg2"
+
+	assert [ -d "$BPM_PACKAGES_PATH/$pkg1" ]
+	assert [ -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -d "$BPM_PACKAGES_PATH/$pkg2" ]
+	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
+
+	run do-uninstall "$pkg1"
 
 	assert_success
-	[ ! -d "$BPM_PACKAGES_PATH/bpm-local/package1" ]
-	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	[ -d "$BPM_PACKAGES_PATH/bpm-local/package2" ]
-	[ -e "$BPM_INSTALL_BIN/exec2" ]
+	assert [ ! -d "$BPM_PACKAGES_PATH/$pkg1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -d "$BPM_PACKAGES_PATH/$pkg2" ]
+	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
 }

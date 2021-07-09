@@ -17,6 +17,7 @@ test_util.fake_clone() {
 	git clone "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
 }
 
+# TODO phase out in favor if do-link?
 # @description Clones the repository, and performs any linking, etc.
 test_util.fake_install() {
 		local package="$1"

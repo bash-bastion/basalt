@@ -26,6 +26,7 @@ do-link() {
 		die "Package '$package' is already present"
 	fi
 
+	# TODO: local git clone
 	mkdir -p "$BPM_PACKAGES_PATH/$namespace"
 	ln -s "$directory" "$BPM_PACKAGES_PATH/$package"
 
