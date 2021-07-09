@@ -139,6 +139,20 @@ load 'util/init.sh'
 	refute_line "do-plumbing-add-deps bpm-local/package2"
 }
 
+@test "respects the --no-deps option (at end)" {
+	test_util.mock_command do-plumbing-add-deps
+	test_util.mock_command do-plumbing-link-bins
+	test_util.mock_command do-plumbing-link-completions
+	test_util.mock_command do-plumbing-link-man
+
+	mkdir 'package2'
+
+	run do-link 'package2' --no-deps
+
+	assert_success
+	refute_line "do-plumbing-add-deps bpm-local/package2"
+}
+
 @test "links the current directory" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins

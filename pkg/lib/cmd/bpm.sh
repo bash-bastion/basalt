@@ -37,52 +37,42 @@ main() {
 	complete)
 		shift
 		do-complete "$@"
-		exit
 		;;
 	echo)
 		shift
 		do-echo "$@"
-		exit
 		;;
 	init)
 		shift
 		do-init "$@"
-		exit
 		;;
 	install)
 		shift
 		do-install "$@"
-		exit
 		;;
 	link)
 		shift
 		do-link "$@"
-		exit
 		;;
 	list)
 		shift
 		do-list "$@"
-		exit
 		;;
 	outdated)
 		shift
 		bpm-outdated "$@"
-		exit
 		;;
 	package-path)
 		shift
 		bpm-package-path "$@"
-		exit
 		;;
 	uninstall)
 		shift
 		do-uninstall "$@"
-		exit
 		;;
 	upgrade)
 		shift
 		do-upgrade "$@"
-		exit
 		;;
 	*)
 		if [ -n "$1" ]; then

@@ -123,6 +123,19 @@ load 'util/init.sh'
 	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
 }
 
+@test "uses ssh protocol, when specified (at end)" {
+	test_util.mock_command do-plumbing-clone
+	test_util.mock_command do-plumbing-add-deps
+	test_util.mock_command do-plumbing-link-bins
+	test_util.mock_command do-plumbing-link-completions
+	test_util.mock_command do-plumbing-link-man
+
+	run do-install username/package --ssh
+
+	assert_success
+	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
+}
+
 @test "uses ssh protocol raw, when specified" {
 	test_util.mock_command do-plumbing-clone
 	test_util.mock_command do-plumbing-add-deps

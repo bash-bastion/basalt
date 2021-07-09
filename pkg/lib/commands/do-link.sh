@@ -1,20 +1,25 @@
 # shellcheck shell=bash
 
 do-link() {
-	if (( $# == 0 )); then
+	local install_deps='yes'
+
+	local -a dirs=()
+	for arg; do
+		case "$arg" in
+		--no-deps)
+			install_deps='no'
+			;;
+		*)
+			dirs+=("$arg")
+			;;
+		esac
+	done
+
+	if (( ${#dirs[@]} == 0 )); then
 		die "You must supply at least one directory"
 	fi
 
-	local install_deps='yes'
-
-	case "$1" in
-	--no-deps)
-		install_deps='no'
-		shift
-		;;
-	esac
-
-	for directory; do
+	for directory in "${dirs[@]}"; do
 		if [ ! -d "$directory" ]; then
 			die "Directory '$directory' not found"
 		fi

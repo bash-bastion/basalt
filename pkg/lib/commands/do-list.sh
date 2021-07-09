@@ -7,7 +7,6 @@ do-list() {
 		case "$arg" in
 		--outdated)
 			should_show_outdated='yes'
-			shift
 			;;
 		esac
 	done

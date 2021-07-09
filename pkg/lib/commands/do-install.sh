@@ -3,18 +3,23 @@
 do-install() {
 	local with_ssh='no'
 
-	case "$1" in
+	local -a pkgs=()
+	for arg; do
+		case "$arg" in
 		--ssh)
 			with_ssh='yes'
-			shift
-		;;
-	esac
+			;;
+		*)
+			pkgs+=("$arg")
+			;;
+		esac
+	done
 
-	if (( $# == 0 )); then
+	if (( ${#pkgs[@]} == 0 )); then
 		die "At least one package must be supplied"
 	fi
 
-	for repoSpec; do
+	for repoSpec in "${pkgs[@]}"; do
 		util.construct_clone_url "$repoSpec" "$with_ssh"
 		local uri="$REPLY1"
 		local package="$REPLY2"

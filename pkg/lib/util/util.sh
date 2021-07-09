@@ -83,7 +83,7 @@ util.construct_clone_url() {
 			site="github.com"
 			package="$repoSpec"
 		else
-			die "Invalid repository"
+			die "Invalid repository '$repoSpec'"
 		fi
 
 		if [[ "$package" = *@* ]]; then
@@ -234,13 +234,13 @@ Subcommands:
   init <shell>
     Configure shell environment for Basher
 
-  install [--ssh] [site]/<package>[@ref]
+  install [--ssh] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
 
-  uninstall <package>
+  uninstall <package...>
     Uninstalls a package
 
-  link [--no-deps] <directory>
+  link [--no-deps] <directory...>
     Installs a local directory as a bpm package. These show up with
     a namespace of 'bpm-local'
 
@@ -250,10 +250,10 @@ Subcommands:
   package-path <package>
     Outputs the path for a package
 
-  upgrade <package>
+  upgrade <package...>
     Upgrades a package
 
-  complete <command>
+  complete <command...>
     Perform the completion for a particular subcommand. Used by the completion scripts
 
 Examples:
