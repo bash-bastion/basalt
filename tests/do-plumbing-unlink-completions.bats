@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "unlinks bash completions determined from package.sh" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'BASH_COMPLETIONS="somedir/comp.bash"' > 'package.sh'
@@ -21,7 +21,7 @@ load 'util/init.sh'
 }
 
 @test "unlinks bash completions determined from bpm.toml" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'completionDirs = [ "somedir" ]' > 'bpm.toml'
@@ -39,7 +39,7 @@ load 'util/init.sh'
 }
 
 @test "unlinks bash completions determined from heuristics (completion?(s) directory)" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir -p 'completions' 'completion'
@@ -59,7 +59,7 @@ load 'util/init.sh'
 }
 
 @test "unlinks bash completions determined from heuristics (contrib/completion?(s) directory)" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir -p contrib/completion{,s}
@@ -79,7 +79,7 @@ load 'util/init.sh'
 }
 
 @test "unlinks zsh completions determined from package.sh" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'ZSH_COMPLETIONS="somedir/comp1.zsh:otherdir/comp3.zsh"' > 'package.sh'
@@ -100,7 +100,7 @@ load 'util/init.sh'
 }
 
 @test "unlinks zsh completions determined from bpm.toml" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'completionDirs = [ "somedir", "otherdir" ]' > 'bpm.toml'
@@ -121,7 +121,7 @@ load 'util/init.sh'
 }
 
 @test "unlinks zsh completions determined from heuristics (completion?(s) directory)" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir -p completion{,s}
@@ -141,7 +141,7 @@ load 'util/init.sh'
 }
 
 @test "unlinks zsh completions determined from heuristics (contrib/completion?(s) directory)" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir -p contrib/completion{,s}
@@ -161,7 +161,7 @@ load 'util/init.sh'
 }
 
 @test "bpm.toml has presidence over package.sh unlink completions" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'BASH_COMPLETIONS="otherdir/c.bash"' > 'package.sh'

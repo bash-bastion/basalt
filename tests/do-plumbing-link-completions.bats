@@ -2,95 +2,109 @@
 
 load 'util/init.sh'
 
-@test "links bash completions from package.sh to prefix/completions" {
-	local package='username/package'
+@test "does not fail if there are no binaries" {
+	local pkg='username/package'
 
-	create_package username/package
-	create_bash_completions username/package comp.bash
-	test_util.fake_clone "$package"
+	test_util.setup_pkg "$pkg"; {
+		:
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$pkg"
+
+	assert_success
+}
+
+@test "adds bash completions determined from package.sh" {
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'completions'
+		touch 'completions/comp.bash'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
 	run do-plumbing-link-completions username/package
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/username/package/completions/comp.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$pkg/completions/comp.bash" ]
 }
 
-@test "links bash completions from bpm.toml to prefix/completions" {
-	local package='username/package'
 
-	create_package "$package"
-	cd "$BPM_ORIGIN_DIR/$package"
-	mkdir 'weird_completions'
-	touch 'weird_completions/comp.bash'
-	echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
-	git add .
-	git commit -m "Add completions"
-	cd "$BPM_CWD"
-	test_util.fake_clone "$package"
+@test "adds bash completions determined from package.sh (and not from heuristics)" {
+	local pkg="username/package"
 
-	run do-plumbing-link-completions "$package"
+	test_util.setup_pkg "$pkg"; {
+		echo "BASH_COMPLETIONS=" > 'package.sh'
+		mkdir 'completions'
+		touch 'completions/prof.bash'
+	}; test_util.finish_pkg
 
-	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$package/weird_completions/comp.bash" ]
-}
-
-@test "links bash completions from ./?(contrib/)completion?(s)" {
-	local -i i=1
-	for completion_dir in completion completions contrib/completion contrib/completions; do
-
-		local package="username/package$i"
-
-		create_package "$package"
-		cd "$BPM_ORIGIN_DIR/$package"
-		mkdir -p "$completion_dir"
-		touch "$completion_dir/c.bash"
-		touch "$completion_dir/c2.sh"
-		git add .
-		git commit -m "Add completions"
-		cd "$BPM_CWD"
-		test_util.fake_clone "$package"
-
-		run do-plumbing-link-completions "$package"
-
-		assert_success
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c.bash")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c.bash" ]
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.sh")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c2.sh" ]
-
-		(( ++i ))
-	done
-}
-
-@test "don't link bash from './?(contrib/)completion?(s)' when BASH_COMPLETIONS is specified in package.sh" {
-	local package="username/package"
-
-	create_package "$package"
-	cd "$BPM_ORIGIN_DIR/$package"
-	mkdir completions
-	touch completions/prog.bash
-	echo "BASH_COMPLETIONS=" >| package.sh
-	git add .
-	git commit -m "Add package.sh"
-	cd "$BPM_CWD"
-	test_util.fake_clone "$package"
-
-	run do-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$pkg"
 
 	! [ -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
 }
 
-@test "do link bash from './?(contrib/)completion?(s)' when ZSH_COMPLETIONS is specified in package.sh" {
-	local package="username/package"
+@test "adds bash completions determined from bpm.toml" {
+	local pkg='username/package'
 
-	create_package "$package"
-	cd "$BPM_ORIGIN_DIR/$package"
-	mkdir completions
-	touch completions/prog.bash
-	echo "ZSH_COMPLETIONS=" >| package.sh
-	git add .
-	git commit -m 'Add package.sh'
-	cd "$BPM_CWD"
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		mkdir 'weird_completions'
+		touch 'weird_completions/comp.bash'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	test_util.fake_clone "$package"
+	run do-plumbing-link-completions "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$pkg/weird_completions/comp.bash" ]
+}
+
+@test "adds bash completions determined from bpm.toml (and not from heuristics)" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		mkdir 'completions'
+		touch 'completions/prof.bash'
+	}; test_util.finish_pkg
+
+	run do-plumbing-link-completions "$pkg"
+
+	! [ -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
+}
+
+@test "adds bash completions determined with heuristics ./?(contrib/)completion?(s)" {
+	local pkg="username/package$i"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir -p ./{contrib/,}completion{,s}
+		touch "completion/c1.bash"
+		touch "completions/c2.bash"
+		touch "contrib/completion/c3.bash"
+		touch "contrib/completions/c4.bash"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BPM_PACKAGES_PATH/$pkg/completion/c1.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.bash")" = "$BPM_PACKAGES_PATH/$pkg/completions/c2.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c3.bash")" = "$BPM_PACKAGES_PATH/$pkg/contrib/completion/c3.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BPM_PACKAGES_PATH/$pkg/contrib/completions/c4.bash" ]
+}
+
+@test "adds bash completions determined from heuristics when when ZSH_COMPLETIONS is specified in package.sh" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {'
+		echo "ZSH_COMPLETIONS="' > 'package.sh'
+		mkdir 'completion'
+		touch "completion/prog.bash"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
 	run do-plumbing-link-completions "$package"
 

@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "properly removes each man page determined from heuristics" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir 'man'
@@ -22,7 +22,7 @@ load 'util/init.sh'
 }
 
 @test "properly removes each man page determined from manDir cfg" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'manDirs = [ "^_^" ]' > 'bpm.toml'

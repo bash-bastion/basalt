@@ -21,6 +21,7 @@ test_util.fake_clone() {
 # @description Clones the repository, and performs any linking, etc.
 test_util.fake_install() {
 		local pkg="$1"
+		ensure.non_zero 'pkg' "$pkg"
 
 		test_util.fake_clone "$pkg"
 		do-plumbing-add-deps "$pkg"
@@ -32,6 +33,7 @@ test_util.fake_install() {
 # @description Creates a 'bpm package', and cd's into it
 test_util.setup_pkg() {
 	local pkg="$1"
+	ensure.non_zero 'pkg' "$pkg"
 
 	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
 	cd "$BPM_ORIGIN_DIR/$pkg"

@@ -39,7 +39,7 @@ load 'util/init.sh'
 }
 
 @test "properly removes package directory" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		touch 'bpm.toml'
@@ -54,7 +54,7 @@ load 'util/init.sh'
 }
 
 @test "properly removes parent of package directory, if it is empty" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		touch 'bpm.toml'
@@ -70,7 +70,7 @@ load 'util/init.sh'
 }
 
 @test "properly removes binaries" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir bin

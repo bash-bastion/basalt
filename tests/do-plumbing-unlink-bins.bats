@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "does not fail if there are no binaries" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		:
@@ -16,7 +16,7 @@ load 'util/init.sh'
 }
 
 @test "removes bins determined from package.sh" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'BINS="somebin/exec1:somebin/exec2.sh"' > 'package.sh'
@@ -37,7 +37,7 @@ load 'util/init.sh'
 }
 
 @test "removes bins determined from bpm.toml" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'binDirs = [ "somebin" ]' > 'bpm.toml'
@@ -58,7 +58,7 @@ load 'util/init.sh'
 }
 
 @test "removes bins determined from heuristics (bin directory)" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir 'bin'
@@ -78,7 +78,7 @@ load 'util/init.sh'
 }
 
 @test "removes bins determined from heuristics (root directory)" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		touch 'exec1'
@@ -98,7 +98,7 @@ load 'util/init.sh'
 }
 
 @test "properly removes binary when REMOVE_EXTENSION is true" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'REMOVE_EXTENSION="true"' > 'package.sh'
@@ -121,7 +121,7 @@ load 'util/init.sh'
 # Even if 'REMOVE_EXTENSION' is set, it is still not true, so we
 # do not  actually remove the extension. i.e. preserve backwards compatibility
 @test "properly removes binary when REMOVE_EXTENSION is set" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'REMOVE_EXTENSION=""' > 'package.sh'
@@ -142,7 +142,7 @@ load 'util/init.sh'
 }
 
 @test "properly removes binary when REMOVE_EXTENSION is false" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'REMOVE_EXTENSION="false"' > 'package.sh'
@@ -163,7 +163,7 @@ load 'util/init.sh'
 }
 
 @test "bpm.toml has presidence over package.sh unlink bins" {
-	local pkg="username/package"
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'BINS="otherbin/e1:otherbin/e2.sh"' > 'package.sh'
