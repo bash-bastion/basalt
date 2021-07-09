@@ -42,5 +42,8 @@ do_actual_uninstall() {
 	do-plumbing-unlink-completions "$package"
 
 	rm -rf "${BPM_PACKAGES_PATH:?}/$package"
-	rmdir --ignore-fail-on-non-empty "${BPM_PACKAGES_PATH:?}/${package%/*}"
+	if ! rmdir "${BPM_PACKAGES_PATH:?}/${package%/*}"; then
+		# Do not exit on failure
+		:
+	fi
 }
