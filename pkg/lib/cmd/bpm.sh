@@ -85,7 +85,9 @@ main() {
 		exit
 		;;
 	*)
-		log.error "Command '$1' not valid"
+		if [ -n "$1" ]; then
+			log.error "Command '$1' not valid"
+		fi
 		util.show_help
 		;;
 	esac
