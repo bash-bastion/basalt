@@ -2,111 +2,191 @@
 
 load 'util/init.sh'
 
-@test "removes each binary in BINS config from the install bin" {
-	local package="username/package"
-
-	create_package username/package
-	create_package_exec username/package exec1
-	create_package_exec username/package exec2.sh
-	do-link "$BPM_ORIGIN_DIR/$package"
-
-	run do-plumbing-unlink-bins 'bpm-local/package'
-
-	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
-}
-
-# @test "remove bpm.toml bin" {
-# 	local package="username/package"
-
-# 	test_util.setup_pkg "$package"; {
-# 		echo 'manDirs = [ "a_dir" ]' > 'bpm.toml'
-# 		# Leave a '_' suffix to directory to be extra flexible
-# 		mkdir -p 'a_dir/man1_'
-# 		touch 'a_dir/man1_/exec.1'
-
-# 		mkdir -p 'a_dir/man5_'
-# 		touch 'a_dir/man5_/execcfg.5'
-# 	}; test_util.finish_pkg
-# 	test_util.fake_clone "$package"
-
-# 	run do-plumbing-unlink-bins "$package"
-
-# 	assert_success
-# 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$package/a_dir/man1_/exec.1" ]
-# 	assert [ "$(readlink "$BPM_INSTALL_MAN/man5/execcfg.5")" = "$BPM_PACKAGES_PATH/$package/a_dir/man5_/execcfg.5" ]
-# }
-
-@test "removes each binary from the install bin" {
-	local package="username/package"
-
-	create_package username/package
-	create_exec username/package exec1
-	create_exec username/package exec2.sh
-	do-link "$BPM_ORIGIN_DIR/$package"
-
-	run do-plumbing-unlink-bins 'bpm-local/package'
-
-	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
-}
-
-@test "removes root binaries from the install bin" {
-	local package="username/package"
-
-	create_package username/package
-	create_root_exec username/package exec3
-	create_root_exec username/package exec4.sh
-	do-link "$BPM_ORIGIN_DIR/$package"
-
-	run do-plumbing-unlink-bins bpm-local/package
-
-	assert_success
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec3)" ]
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec4.sh)" ]
-}
-
 @test "does not fail if there are no binaries" {
-	local package="username/package"
+	local pkg="username/package"
 
-	create_package username/package
-	do-link "$BPM_ORIGIN_DIR/$package"
+	test_util.setup_pkg "$pkg"; {
+		:
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-plumbing-unlink-bins bpm-local/package
+	run do-plumbing-unlink-bins "$pkg"
 
 	assert_success
 }
 
-@test "removes binary when REMOVE_EXTENSION is true" {
-	local package="username/package"
+@test "removes bins determined from package.sh" {
+	local pkg="username/package"
 
-	create_package username/package
-	create_exec username/package exec1
-	create_exec username/package exec2.sh
-	set_remove_extension username/package true
-	do-link "$BPM_ORIGIN_DIR/$package"
+	test_util.setup_pkg "$pkg"; {
+		echo 'BINS="somebin/exec1:somebin/exec2.sh"' > 'package.sh'
+		mkdir 'somebin'
+		touch 'somebin/exec1'
+		touch 'somebin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-plumbing-unlink-bins bpm-local/package
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+
+	run do-plumbing-unlink-bins "$pkg"
 
 	assert_success
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2)" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
 }
 
-@test "removes binary when REMOVE_EXTENSION is false" {
-	local package="username/package"
+@test "removes bins determined from bpm.toml" {
+	local pkg="username/package"
 
-	create_package username/package
-	create_exec username/package exec1
-	create_exec username/package exec2.sh
-	set_remove_extension username/package false
-	do-link "$BPM_ORIGIN_DIR/$package"
+	test_util.setup_pkg "$pkg"; {
+		echo 'binDirs = [ "somebin" ]' > 'bpm.toml'
+		mkdir 'somebin'
+		touch 'somebin/exec1'
+		touch 'somebin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-plumbing-unlink-bins bpm-local/package
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+
+	run do-plumbing-unlink-bins "$pkg"
 
 	assert_success
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2.sh)" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+}
+
+@test "removes bins determined from heuristics (bin directory)" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'bin'
+		touch 'bin/exec1'
+		touch 'bin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+
+	run do-plumbing-unlink-bins "$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+}
+
+@test "removes bins determined from heuristics (root directory)" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		touch 'exec1'
+		touch 'exec2.sh'
+		chmod +x 'exec1' 'exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+
+	run do-plumbing-unlink-bins "$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+}
+
+@test "properly removes binary when REMOVE_EXTENSION is true" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'REMOVE_EXTENSION="true"' > 'package.sh'
+		mkdir 'bin'
+		touch 'bin/exec1'
+		touch 'bin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2" ]
+
+	run do-plumbing-unlink-bins "$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2" ]
+}
+
+# Even if 'REMOVE_EXTENSION' is set, it is still not true, so we
+# do not  actually remove the extension. i.e. preserve backwards compatibility
+@test "properly removes binary when REMOVE_EXTENSION is set" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'REMOVE_EXTENSION=""' > 'package.sh'
+		mkdir 'bin'
+		touch 'bin/exec1'
+		touch 'bin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+
+	run do-plumbing-unlink-bins "$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+}
+
+@test "properly removes binary when REMOVE_EXTENSION is false" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'REMOVE_EXTENSION="false"' > 'package.sh'
+		mkdir 'bin'
+		touch 'bin/exec1'
+		touch 'bin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+
+	run do-plumbing-unlink-bins "$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+}
+
+@test "bpm.toml has presidence over package.sh unlink bins" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'BINS="otherbin/e1:otherbin/e2.sh"' > 'package.sh'
+		mkdir 'otherbin'
+		touch 'otherbin/e1'
+		touch 'otherbin/e2.sh'
+
+		echo 'binDirs = [ "somebin" ]' > 'bpm.toml'
+		mkdir 'somebin'
+		touch 'somebin/exec1'
+		touch 'somebin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ ! -L "$BPM_INSTALL_BIN/e1" ]
+	assert [ ! -L "$BPM_INSTALL_BIN/e2.sh" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
+	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+
+
+	run do-plumbing-unlink-bins "$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
 }

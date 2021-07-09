@@ -12,50 +12,42 @@ test_util.mock_command() {
 # @description Fakes a clone. This is meant to be used for
 # the download step
 test_util.fake_clone() {
-	local package="$1"
+	local pkg="$1"
 
-	git clone "$BPM_ORIGIN_DIR/$package" "$BPM_PACKAGES_PATH/$package"
+	git clone "$BPM_ORIGIN_DIR/$pkg" "$BPM_PACKAGES_PATH/$pkg"
 }
 
-# TODO phase out in favor if do-link?
+# TODO phase out in favor of do-link?
 # @description Clones the repository, and performs any linking, etc.
 test_util.fake_install() {
-		local package="$1"
+		local pkg="$1"
 
-		test_util.fake_clone "$package"
-		do-plumbing-add-deps "$package"
-		do-plumbing-link-bins "$package"
-		do-plumbing-link-completions "$package"
-		do-plumbing-link-man "$package"
-}
-
-test_util.readlink() {
-	if command -v realpath &>/dev/null; then
-		realpath "$1"
-	else
-		readlink -f "$1"
-	fi
+		test_util.fake_clone "$pkg"
+		do-plumbing-add-deps "$pkg"
+		do-plumbing-link-bins "$pkg"
+		do-plumbing-link-completions "$pkg"
+		do-plumbing-link-man "$pkg"
 }
 
 # @description Creates a 'bpm package', and cd's into it
 test_util.setup_pkg() {
-	local package="$1"
+	local pkg="$1"
 
-	mkdir -p "$BPM_ORIGIN_DIR/$package"
-	cd "$BPM_ORIGIN_DIR/$package"
+	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
 
 	git init .
 	touch 'README.md'
 	git add .
 	git commit -m "Initial commit"
 
-	cd "$BPM_ORIGIN_DIR/$package"
+	cd "$BPM_ORIGIN_DIR/$pkg"
 }
 
 # @description Commits changes and cd's out of the package directory
 # into the regular testing directory
 test_util.finish_pkg() {
 	git add .
-	git commit -m "Make changes"
+	git commit --allow-empty -m "Make changes"
 	cd "$BPM_CWD"
 }

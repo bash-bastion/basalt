@@ -167,7 +167,7 @@ create_zsh_compsys_completions() {
 	fi
 
 	git add .
-	git commit -m "Add bash completions"
+	git commit -m "Add zsh completions"
 
 	cd "$BPM_CWD"
 }
@@ -189,7 +189,7 @@ create_zsh_compctl_completions() {
 	fi
 
 	git add .
-	git commit -m "Add bash completions"
+	git commit -m "Add zsh completions"
 
 	cd "$BPM_CWD"
 }

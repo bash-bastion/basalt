@@ -91,7 +91,9 @@ abstract.completions_do_action_bash() {
 		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}"
 		;;
 	unlink)
-		unlink "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}"
+		if [ -f "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}" ]; then
+			unlink "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}"
+		fi
 		;;
 	esac
 
@@ -103,15 +105,15 @@ abstract.completions_do_action_zsh() {
 
 	if grep -qs "^#compdef" "$file"; then
 		# TODO: run mkdir outside of loop
-		# TODO: unlink?
 		case "$action" in
 		link)
 			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
 			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
 			;;
 		unlink)
-			rm -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
-			# unlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
+			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}" ]; then
+				unlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
+			fi
 			;;
 		esac
 	else
@@ -121,8 +123,9 @@ abstract.completions_do_action_zsh() {
 			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
 			;;
 		unlink)
-			rm -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
-			# unlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
+			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}" ]; then
+				unlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
+			fi
 			;;
 		esac
 	fi

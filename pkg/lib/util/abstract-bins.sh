@@ -102,7 +102,9 @@ abstract.bins_do_action() {
 			chmod +x "$BPM_INSTALL_BIN/$binName"
 			;;
 		unlink)
-			unlink "$BPM_INSTALL_BIN/$binName"
+			if [ -f "$BPM_INSTALL_BIN/$binName" ]; then
+				unlink "$BPM_INSTALL_BIN/$binName"
+			fi
 			;;
 	esac
 }

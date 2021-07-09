@@ -2,7 +2,7 @@
 
 load 'util/init.sh'
 
-@test "fails if package is not installed" {
+@test "if package is not installed, fails" {
 	local pkg='user/repo'
 
 	run do-uninstall "$pkg"
@@ -11,7 +11,7 @@ load 'util/init.sh'
 	assert_output -e "Package '$pkg' is not installed"
 }
 
-@test "succeeds if package is a file" {
+@test "if package is a file, succeed, properly remove it" {
 	local pkg='user/repo'
 
 	mkdir -p "$BPM_PACKAGES_PATH/${pkg%/*}"
@@ -25,10 +25,12 @@ load 'util/init.sh'
 	assert [ ! -e "$BPM_ORIGIN_DIR/$pkg" ]
 }
 
-@test "succeeds if package is an empty directory" {
+@test "if package is an empty directory, properly remove it" {
 	local pkg='user/repo'
 
 	mkdir -p "$BPM_PACKAGES_PATH/$pkg"
+
+	assert [ -d "$BPM_PACKAGES_PATH/$pkg" ]
 
 	run do-uninstall "$pkg"
 
@@ -51,7 +53,7 @@ load 'util/init.sh'
 	assert [ ! -d "$BPM_PACKAGES_PATH/$pkg" ]
 }
 
-@test "properly removes package namespace directory, if it is empty" {
+@test "properly removes parent of package directory, if it is empty" {
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {

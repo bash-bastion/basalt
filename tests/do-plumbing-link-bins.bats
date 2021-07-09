@@ -38,10 +38,6 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$package/weird_dir/exec2.sh" ]
 }
 
-@test "bpm.toml has presidence over package.sh" {
-	skip
-}
-
 @test "links each file inside bin folder to install bin" {
 	local package="username/package"
 

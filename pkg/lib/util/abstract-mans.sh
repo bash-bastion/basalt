@@ -66,7 +66,9 @@ abstract.mans_search_heuristics() {
 	done
 }
 
-# @arg $1 The man file to symlink or remove
+# @arg $1 The man file to symlink or remove. Not all the files passed
+# in here are man pages, which is why the regex check exists, to extract
+# the file ending (and the man category)
 abstract.mans_do_action() {
 	local action="$1"
 	local full_man_file="$2"
@@ -83,9 +85,12 @@ abstract.mans_do_action() {
 				ln -sf "$full_man_file" "$BPM_INSTALL_MAN/man$n/$manFile"
 				;;
 			unlink)
-				# TODO unlink?
-				rm -f "$BPM_INSTALL_MAN/man$n/$file"
-				# unlink "$BPM_INSTALL_MAN/man$n/$manFile"
+				# Because 'abstract.mans_search_heuristics' sometimes repeats
+				# directories, and sometimes the stat's are out of dates, we add this
+				# check in case a file was deleted in the meantime
+				if [ -f "$BPM_INSTALL_MAN/man$n/$manFile" ]; then
+					unlink "$BPM_INSTALL_MAN/man$n/$manFile"
+				fi
 				;;
 		esac
 	fi

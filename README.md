@@ -49,7 +49,6 @@ Why not use `bpkg` or `Basher`? Because `bpm`...
 - Is faster (bpm considers exec and subshell creation overhead)
 - Has a _much_ improved help output (basher)
 - Prints why a command failed, rather than just printing the help menu (basher)
-- Has actually been updated recently
 - Better bpm completion scripts
 - More flexibly parses command line arguments (basher)
 

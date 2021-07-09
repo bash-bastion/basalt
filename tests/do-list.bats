@@ -2,12 +2,12 @@
 
 load 'util/init.sh'
 
-@test "list installed packages" {
-	create_package username/p1
-	create_package username2/p2
-	create_package username2/p3
-	test_util.fake_clone username/p1
-	test_util.fake_clone username2/p2
+@test "properly list for 2 installed packages" {
+	create_package 'username/p1'
+	create_package 'username2/p2'
+	create_package 'username2/p3'
+	test_util.fake_clone 'username/p1'
+	test_util.fake_clone 'username2/p2'
 
 	run do-list
 
@@ -17,7 +17,7 @@ load 'util/init.sh'
 	refute_line "username2/p3"
 }
 
-@test "displays nothing if there are no packages" {
+@test "properly list for no installed packages" {
 	create_package username/p1
 
 	run do-list
@@ -26,7 +26,7 @@ load 'util/init.sh'
 	assert_output ""
 }
 
-@test "displays outdated packages" {
+@test "properly list outdated packages" {
 	create_package username/outdated
 	create_package username/uptodate
 	test_util.fake_clone username/outdated

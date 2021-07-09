@@ -2,17 +2,41 @@
 
 load 'util/init.sh'
 
-@test "removes each man page from the install-man" {
-	local package="username/package"
+@test "properly removes each man page determined from heuristics" {
+	local pkg="username/package"
 
-	create_package username/package
-	create_man username/package exec.1
-	create_man username/package exec.2
-	test_util.fake_clone "$package"
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'man'
+		touch 'man/exec.1'
+		touch 'man/exec.2'
+		touch 'exec.3'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-plumbing-unlink-man username/package
+	run do-plumbing-unlink-man "$pkg"
 
 	assert_success
-	assert [ ! -e "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" ]
-	assert [ ! -e "$(readlink "$BPM_INSTALL_MAN/man2/exec.2")" ]
+	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]
+	assert [ ! -e "$BPM_INSTALL_MAN/man2/exec.2" ]
+	assert [ ! -e "$BPM_INSTALL_MAN/man2/exec.3" ]
+}
+
+@test "properly removes each man page determined from manDir cfg" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'manDirs = [ "^_^" ]' > 'bpm.toml'
+		mkdir '^_^'
+		touch '^_^/exec.1'
+		touch '^_^/exec.2'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ -f "$BPM_INSTALL_MAN/man1/exec.1" ]
+
+	run do-plumbing-unlink-man "$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]
+	assert [ ! -e "$BPM_INSTALL_MAN/man2/exec.2" ]
 }

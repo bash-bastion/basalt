@@ -6,28 +6,28 @@ load './util/init.sh'
 	BPM_ROOT=/lol run do-init bash
 
 	assert_success
-	assert_line -e 'export BPM_ROOT="/lol"'
+	assert_line -p 'export BPM_ROOT="/lol"'
 }
 
 @test "exports BPM_PREFIX" {
 	BPM_PREFIX=/lol run do-init bash
 
 	assert_success
-	assert_line -e 'export BPM_PREFIX="/lol"'
+	assert_line -p 'export BPM_PREFIX="/lol"'
 }
 
 @test "exports BPM_PACKAGES_PATH" {
 	BPM_PACKAGES_PATH=/lol run do-init bash
 
 	assert_success
-	assert_line -e 'export BPM_PACKAGES_PATH="/lol"'
+	assert_line -p 'export BPM_PACKAGES_PATH="/lol"'
 }
 
 @test "errors if shell is not available" {
 	run do-init fakesh
 
 	assert_failure
-	assert_line -e "Shell 'fakesh' is not a valid shell"
+	assert_line -p "Shell 'fakesh' is not a valid shell"
 }
 
 @test "bash completion works" {
@@ -47,10 +47,6 @@ load './util/init.sh'
 }
 
 @test "is sh-compatible" {
-	if ! command -v sh &>/dev/null; then
-		skip "Command 'sh' not in PATH"
-	fi
-
-	run sh -ec 'eval "$(bpm init - sh)"'
+	run eval "$(do-init - sh)"
 	assert_success
 }

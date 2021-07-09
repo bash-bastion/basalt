@@ -2,53 +2,65 @@
 
 load 'util/init.sh'
 
-@test "without arguments, prints an error" {
+@test "with no arguments, prints an error" {
 	eval "$(do-init sh)"
+
 	run include
+
 	assert_failure
 	assert_output -p "Usage: include <package> <file>"
 }
 
 @test "with one argument, prints an error" {
 	eval "$(do-init sh)"
-	run include user/repo
+
+	run include 'user/repo'
+
 	assert_failure
 	assert_output -p "Usage: include <package> <file>"
 }
 
 @test "when package is not installed, prints an error" {
+	local pkg='user/repo'
+
 	eval "$(do-init sh)"
-	run include user/repo file
+
+	run include "$pkg" file
+
 	assert_failure
-	assert_output -p "Package not installed: user/repo"
+	assert_output -p "Package '$pkg' not installed"
 }
 
 @test "when file doesn't exist, prints an error" {
-	local package='username/repo'
+	local pkg='username/repo'
 
-	create_package "$package"
-	test_util.fake_install "$package"
+	test_util.setup_pkg "$pkg"; {
+		:
+	}; test_util.finish_pkg
+
+	test_util.fake_install "$pkg"
 
 	eval "$(do-init sh)"
 
-	run include "$package" non_existent
+	run include "$pkg" non_existent
 
 	assert_failure
-	assert_output -p "File '$BPM_PREFIX/packages/$package/non_existent' not found"
+	assert_output -p "File '$BPM_PREFIX/packages/$pkg/non_existent' not found"
 }
 
-@test "sources a file into the current shell" {
-	local package='username/repo'
+@test "when file does exist, properly source file" {
+	local pkg='username/repo'
 
-	create_package "$package"
-	create_file "$package" function.sh "func_name() { echo DONE; }"
-	test_util.fake_install "$package"
+	test_util.setup_pkg "$pkg"; {
+		echo "func_name() { echo 'done'; }" > 'function.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
 	eval "$(do-init sh)"
-	include "$package" function.sh
+	include "$pkg" 'function.sh'
 
 	run func_name
 
 	assert_success
-	assert_output "DONE"
+	assert_output "done"
 }

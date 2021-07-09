@@ -1,6 +1,6 @@
 # Recepies
 
-### Installing packages from Github
+### Installing a package from Github
 
 ```sh
 bpm install sstephenson/bats

@@ -9,10 +9,10 @@ load 'util/init.sh'
 	assert_output -p "Directory 'invalid' not found"
 }
 
-@test "fails with a file path instead of a directory path" {
-	touch file1
+@test "fails with a file" {
+	touch 'file1'
 
-	run do-link file1
+	run do-link 'file1'
 
 	assert_failure
 	assert_output -p "Directory 'file1' not found"
@@ -24,11 +24,11 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir -p subdir/theta
-	do-link subdir/theta
+	mkdir -p 'subdir/theta'
+	do-link 'subdir/theta'
+	mkdir 'theta'
 
-	mkdir theta
-	run do-link theta
+	run do-link 'theta'
 
 	assert_failure
 	assert_line -n 0 -p "Package 'bpm-local/theta' is already present"
@@ -42,26 +42,26 @@ load 'util/init.sh'
 
 	mkdir -p touch "$BPM_PACKAGES_PATH/bpm-local"
 	touch "$BPM_PACKAGES_PATH/bpm-local/theta"
+	mkdir 'theta'
 
-	mkdir theta
-	run do-link theta
+	run do-link 'theta'
 
 	assert_failure
 	assert_line -n 0 -p "Package 'bpm-local/theta' is already present"
 }
 
-@test "links the package to packages under the correct namespace" {
+@test "links the package to packages under the correct namespace (bpm-local)" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir package1
+	mkdir 'package1'
 
-	run do-link package1
+	run do-link 'package1'
 
 	assert_success
-	assert [ "$(test_util.readlink $BPM_PACKAGES_PATH/bpm-local/package1)" = "$(test_util.readlink "$PWD/package1")" ]
+	assert [ "$(readlink -f $BPM_PACKAGES_PATH/bpm-local/package1)" = "$(readlink -f "$PWD/package1")" ]
 }
 
 @test "calls link-bins, link-completions, link-man and deps in order" {
@@ -70,9 +70,9 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir package2
+	mkdir 'package2'
 
-	run do-link package2
+	run do-link 'package2'
 
 	assert_success
 	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
@@ -83,15 +83,15 @@ load 'util/init.sh'
 
 }
 
-@test "respects --no-deps option, in order, with --nodeps" {
+@test "respects the --no-deps option in the correct order" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir package2
+	mkdir 'package2'
 
-	run do-link --no-deps package2
+	run do-link --no-deps 'package2'
 
 	assert_success
 	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
@@ -101,60 +101,59 @@ load 'util/init.sh'
 }
 
 
-@test "respects --no-deps option" {
+@test "respects the --no-deps option" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir package2
+	mkdir 'package2'
 
-	run do-link --no-deps package2
+	run do-link --no-deps 'package2'
 
 	assert_success
 	refute_line "do-plumbing-add-deps bpm-local/package2"
 }
 
-@test "resolves current directory (dot) path" {
+@test "links the current directory" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir package3
-	cd package3
+	mkdir 'package3'
+	cd 'package3'
 
 	run do-link .
 
 	assert_success
-	assert [ "$(test_util.readlink "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(test_util.readlink "$PWD")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(readlink -f "$PWD")" ]
 }
 
-@test "resolves parent directory (dotdot) path" {
+@test "links the parent directory" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir package3
-	cd package3
+	mkdir -p 'sierra/tango'
+	cd 'sierra/tango'
 
-	run do-link ../package3
+	run do-link ..
 
 	assert_success
-	assert [ "$(test_util.readlink "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(test_util.readlink "$PWD")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/bpm-local/sierra")" = "$(readlink -f "$PWD/..")" ]
 }
 
-@test "resolves arbitrary complex relative path" {
+@test "links an arbitrary complex relative path" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir package3
-
+	mkdir 'package3'
 	run do-link ./package3/.././package3
 
 	assert_success
-	assert [ "$(test_util.readlink "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(test_util.readlink "$PWD/package3")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(readlink -f "$PWD/package3")" ]
 }

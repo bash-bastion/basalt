@@ -15,7 +15,7 @@ include() {
 	fi
 
 	if [ ! -d "$BPM_PREFIX/packages/$package" ]; then
-		printf "%s" "Error: Package not installed: $package" >&2
+		printf "%s" "Error: Package '$package' not installed" >&2
 		return 1
 	fi
 

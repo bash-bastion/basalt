@@ -198,7 +198,7 @@ util.extract_shell_variable() {
 	local shellFile="$1"
 	local variableName="$2"
 
-	if [ ! -f "$shellFile" ]; then
+	if [ ! -e "$shellFile" ]; then
 		die "File '$shellFile' not found"
 	fi
 
