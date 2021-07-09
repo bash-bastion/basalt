@@ -64,8 +64,12 @@ _bpm() {
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			install)
+				subcommandOptions=(--ssh)
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			link)
+				subcommandOptions=(--no-deps)
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			list)
 				subcommandOptions=(--outdated)
