@@ -34,6 +34,10 @@ main() {
 	done
 
 	case "$1" in
+	add)
+		shift
+		do-add "$@"
+		;;
 	complete)
 		shift
 		do-complete "$@"
@@ -45,10 +49,6 @@ main() {
 	init)
 		shift
 		do-init "$@"
-		;;
-	install)
-		shift
-		do-install "$@"
 		;;
 	link)
 		shift
@@ -66,9 +66,9 @@ main() {
 		shift
 		bpm-package-path "$@"
 		;;
-	uninstall)
+	remove)
 		shift
-		do-uninstall "$@"
+		do-remove "$@"
 		;;
 	upgrade)
 		shift

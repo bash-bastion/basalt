@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-install() {
+do-add() {
 	local with_ssh='no'
 
 	local -a pkgs=()

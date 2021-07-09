@@ -28,6 +28,6 @@ do-plumbing-add-deps() {
 
 	log.info "Installing dependencies for '$package'"
 	for dep in "${deps[@]}"; do
-		do-install "$dep"
+		do-add "$dep"
 	done
 }

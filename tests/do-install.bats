@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install
+	run do-add
 
 	assert_failure
 	assert_line -n 0 -p "At least one package must be supplied"
@@ -22,7 +22,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install username/package
+	run do-add username/package
 
 	assert_success
 	assert_line -n 0 -p "Installing 'username/package'"
@@ -40,7 +40,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install username/package username2/package2
+	run do-add username/package username2/package2
 
 	assert_success
 	assert_line -n 0 -p "Installing 'username/package'"
@@ -65,7 +65,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install https://gitlab.com/username/package
+	run do-add https://gitlab.com/username/package
 
 	assert_success
 	assert_line "do-plumbing-clone https://gitlab.com/username/package.git username/package"
@@ -78,7 +78,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install http://gitlab.com/username/package
+	run do-add http://gitlab.com/username/package
 
 	assert_success
 	assert_line "do-plumbing-clone http://gitlab.com/username/package.git username/package"
@@ -91,7 +91,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install site/username/package
+	run do-add site/username/package
 
 	assert_success
 	assert_line "do-plumbing-clone https://site/username/package.git username/package"
@@ -104,7 +104,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install username/package
+	run do-add username/package
 
 	assert_success
 	assert_line "do-plumbing-clone https://github.com/username/package.git username/package"
@@ -117,7 +117,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install --ssh username/package
+	run do-add --ssh username/package
 
 	assert_success
 	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
@@ -130,7 +130,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install username/package --ssh
+	run do-add username/package --ssh
 
 	assert_success
 	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
@@ -143,7 +143,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install git@github.com:username/package
+	run do-add git@github.com:username/package
 
 	assert_success
 	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
@@ -156,7 +156,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install username/package@v1.2.3
+	run do-add username/package@v1.2.3
 
 	assert_success
 	assert_line "do-plumbing-clone https://github.com/username/package.git username/package v1.2.3"
@@ -169,7 +169,7 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	run do-install username/package@
+	run do-add username/package@
 
 	assert_success
 	assert_line "do-plumbing-clone https://github.com/username/package.git username/package"

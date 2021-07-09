@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-uninstall() {
+do-remove() {
 	if (( $# == 0 )); then
 		die "You must supply at least one package"
 	fi
@@ -15,7 +15,7 @@ do-uninstall() {
 			local user="${fullPath%/*}"; user="${user##*/}"
 			local repository="${fullPath##*/}"
 			if [ "$fullPath" = "$BPM_PACKAGES_PATH/$user/$repository" ]; then
-				do_actual_uninstall "$user/$repository"
+				do_actual_removal "$user/$repository"
 			fi
 		else
 			local site= user= repository= ref=
@@ -23,7 +23,7 @@ do-uninstall() {
 			IFS=':' read -r site user repository ref <<< "$REPLY"
 
 			if [ -d "$BPM_PACKAGES_PATH/$user/$repository" ]; then
-				do_actual_uninstall "$user/$repository"
+				do_actual_removal "$user/$repository"
 			elif [ -e "$BPM_PACKAGES_PATH/$user/$repository" ]; then
 				rm -f "$BPM_PACKAGES_PATH/$user/$repository"
 			else
@@ -33,7 +33,7 @@ do-uninstall() {
 	done
 }
 
-do_actual_uninstall() {
+do_actual_removal() {
 	local package="$1"
 
 	log.info "Uninstalling '$package'"

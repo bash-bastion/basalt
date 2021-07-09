@@ -9,7 +9,7 @@
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following (as you can see, many formats are supported)
 
 ```sh
-$ bpm install \
+$ bpm add \
   rupa/z \
   github.com/tj/git-extras \
   https://github.com/aristocratos/bashtop \

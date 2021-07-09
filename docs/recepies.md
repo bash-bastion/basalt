@@ -3,7 +3,7 @@
 ### Installing a package from Github
 
 ```sh
-bpm install sstephenson/bats
+bpm add sstephenson/bats
 ```
 
 This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin` to the `PATH`.
@@ -11,7 +11,7 @@ This will install [Bats](https://github.com/sstephenson/bats) and add its `./bin
 ### Installing packages from other sites
 
 ```sh
-bpm install bitbucket.org/user/repo_name
+bpm add bitbucket.org/user/repo_name
 ```
 
 This will install `repo_name` from https://bitbucket.org/user/repo_name

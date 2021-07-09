@@ -1,6 +1,6 @@
 _bpm() {
 	local -ra listPreSubcommandOptions=(--help --version)
-	local -ra listSubcommands=(echo init install link list package-path uninstall upgrade)
+	local -ra listSubcommands=(add echo init link list package-path remove upgrade)
 
 	local -r currentWord="${COMP_WORDS[COMP_CWORD]}"
 
@@ -55,16 +55,16 @@ _bpm() {
 	elif (( COMP_CWORD > subcommandIndex )); then
 		local -a subcommandOptions=()
 		case "$subcommand" in
+			add)
+				subcommandOptions=(--ssh)
+				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
+				;;
 			echo)
 				subcommandOptions=(BPM_ROOT BPM_PREFIX)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			init)
 				subcommandOptions=(sh bash zsh fish)
-				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
-				;;
-			install)
-				subcommandOptions=(--ssh)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			link)
@@ -79,7 +79,7 @@ _bpm() {
 				readarray -t subcommandOptions < <(bpm complete package-path)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
-			uninstall)
+			remove)
 				;;
 			upgrade)
 				readarray -t subcommandOptions < <(bpm complete package-path)

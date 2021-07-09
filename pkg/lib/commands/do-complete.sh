@@ -5,7 +5,7 @@ do-complete() {
 	package-path)
 		do-list
 		;;
-	uninstall)
+	remove)
 		do-list
 		;;
 	upgrade)

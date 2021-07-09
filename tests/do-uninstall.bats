@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "if package is not installed, fails" {
 	local pkg='user/repo'
 
-	run do-uninstall "$pkg"
+	run do-remove "$pkg"
 
 	assert_failure
 	assert_output -e "Package '$pkg' is not installed"
@@ -19,7 +19,7 @@ load 'util/init.sh'
 
 	[ -f "$BPM_PACKAGES_PATH/$pkg" ]
 
-	run do-uninstall "$pkg"
+	run do-remove "$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_ORIGIN_DIR/$pkg" ]
@@ -32,7 +32,7 @@ load 'util/init.sh'
 
 	assert [ -d "$BPM_PACKAGES_PATH/$pkg" ]
 
-	run do-uninstall "$pkg"
+	run do-remove "$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_ORIGIN_DIR/$pkg" ]
@@ -47,7 +47,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-uninstall "$pkg"
+	run do-remove "$pkg"
 
 	assert_success
 	assert [ ! -d "$BPM_PACKAGES_PATH/$pkg" ]
@@ -62,7 +62,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-uninstall "$pkg"
+	run do-remove "$pkg"
 
 	assert_success
 	assert [ ! -d "$BPM_PACKAGES_PATH/$pkg" ]
@@ -80,7 +80,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-uninstall "$pkg"
+	run do-remove "$pkg"
 
 	assert_success
 	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -108,7 +108,7 @@ load 'util/init.sh'
 	assert [ -d "$BPM_PACKAGES_PATH/$pkg2" ]
 	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
 
-	run do-uninstall "$pkg1"
+	run do-remove "$pkg1"
 
 	assert_success
 	assert [ ! -d "$BPM_PACKAGES_PATH/$pkg1" ]

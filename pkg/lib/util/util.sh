@@ -234,10 +234,10 @@ Subcommands:
   init <shell>
     Configure shell environment for Basher
 
-  install [--ssh] [[site/]<package>[@ref]...]
+  add [--ssh] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
 
-  uninstall <package...>
+  remove <package...>
     Uninstalls a package
 
   link [--no-deps] <directory...>
@@ -257,9 +257,9 @@ Subcommands:
     Perform the completion for a particular subcommand. Used by the completion scripts
 
 Examples:
-  bpm install tj/git-extras
-  bpm install github.com/tj/git-extras
-  bpm install https://github.com/tj/git-extras
-  bpm install git@github.com:tj/git-extras
+  bpm add tj/git-extras
+  bpm add github.com/tj/git-extras
+  bpm add https://github.com/tj/git-extras
+  bpm add git@github.com:tj/git-extras
 EOF
 }
