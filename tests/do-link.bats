@@ -83,6 +83,30 @@ load 'util/init.sh'
 
 }
 
+@test "calls link-bins, link-completions, link-man and deps in order for multiple directories" {
+	test_util.mock_command do-plumbing-add-deps
+	test_util.mock_command do-plumbing-link-bins
+	test_util.mock_command do-plumbing-link-completions
+	test_util.mock_command do-plumbing-link-man
+
+	mkdir 'package2' 'package3'
+
+	run do-link 'package2' 'package3'
+
+	assert_success
+	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
+	assert_line -n 1 "do-plumbing-add-deps bpm-local/package2"
+	assert_line -n 2 "do-plumbing-link-bins bpm-local/package2"
+	assert_line -n 3 "do-plumbing-link-completions bpm-local/package2"
+	assert_line -n 4 "do-plumbing-link-man bpm-local/package2"
+	assert_line -n 5 -e "Linking '/(.*)/bpm/cwd/package3'"
+	assert_line -n 6 "do-plumbing-add-deps bpm-local/package3"
+	assert_line -n 7 "do-plumbing-link-bins bpm-local/package3"
+	assert_line -n 8 "do-plumbing-link-completions bpm-local/package3"
+	assert_line -n 9 "do-plumbing-link-man bpm-local/package3"
+
+}
+
 @test "respects the --no-deps option in the correct order" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
