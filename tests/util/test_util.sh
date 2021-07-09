@@ -1,10 +1,10 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2164
 
 # @description This mocks a command by creating a function for it, which
 # prints all the arguments to the command, in addition to the command name
 test_util.mock_command() {
-	# This creates a function with the first argument (the function to
-	# mock). When called, it prints the command name, along with the arguments
+	# This creates a function with a name of the first argument. When called, it prints the command name, along with the arguments
 	# it was called with
 	eval "$1() { echo \"$1 \$*\"; }"
 }
@@ -34,4 +34,20 @@ test_util.readlink() {
 	else
 		readlink -f "$1"
 	fi
+}
+
+# @description Creates a 'bpm package', and cd's into it
+test_util.setup_pkg() {
+	local package="$1"
+
+	create_package "$package"
+	cd "$BPM_ORIGIN_DIR/$package"
+}
+
+# @description Commits changes and cd's out of the package directory
+# into the regular testing directory
+test_util.finish_pkg() {
+	git add .
+	git commit -m "commit"
+	cd "$BPM_CWD"
 }

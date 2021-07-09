@@ -16,11 +16,19 @@ Set the installation and package checkout prefix (default is `$BPM_ROOT/cellar`)
 
 ## `bpm.toml`
 
-Use `bpm.toml` for more fine grained control of where `bpm` searches for binaries, completions, and man pages
+Use `bpm.toml` for more fine grained control of where `bpm` searches for binaries, completions, and man pages. _Note_ that arrays _must only_ span a single line (the line it was defined on) due to limitations with the toml parser. This should be lifted in the future
 
 ### `dependencies`
 
 ### `binDirs`
+
+### `binRemoveExtensions`
+
+TODO: make boolean option
+
+Set to the string `yes` to remove extensions when linking bins
+
+For example if a file in a repository was at `./bin/git-list-all-aliases.sh`, it would be linked and you would call it as `git-list-all-aliases`
 
 ### `completionDirs`
 

@@ -131,6 +131,25 @@ load 'util/init.sh'
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec2)" = "$BPM_PACKAGES_PATH/username/package/bin/exec2.sh" ]
 }
 
+@test "remove extension if binRemoveExtensions is true in bpm.toml" {
+	local package="username/package"
+
+	test_util.setup_pkg "$package"; {
+		echo 'binRemoveExtensions = "yes"' > 'bpm.toml'
+		mkdir bin
+		touch 'bin/exec1'
+		touch 'bin/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$package"
+
+	run do-plumbing-link-bins username/package
+
+	assert_success
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/username/package/bin/exec1" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec2)" = "$BPM_PACKAGES_PATH/username/package/bin/exec2.sh" ]
+}
+
+
 @test "does not remove extension if REMOVE_EXTENSION is false" {
 	local package="username/package"
 
