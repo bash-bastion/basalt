@@ -21,11 +21,13 @@ do-uninstall() {
 			util.parse_package_full "$repoSpec"
 			IFS=':' read -r site user repository ref <<< "$REPLY"
 
-			if [ ! -e "$BPM_PACKAGES_PATH/$user/$repository" ]; then
+			if [ -d "$BPM_PACKAGES_PATH/$user/$repository" ]; then
+				do_actual_uninstall "$user/$repository"
+			elif [ -f "$BPM_PACKAGES_PATH/$user/$repository" ]; then
+				rm -f "$BPM_PACKAGES_PATH/$user/$repository"
+			else
 				die "Package '$user/$repository' is not installed"
 			fi
-
-			do_actual_uninstall "$user/$repository"
 		fi
 	done
 }
