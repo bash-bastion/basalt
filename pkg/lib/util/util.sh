@@ -46,7 +46,7 @@ util.construct_clone_url() {
 	REPLY4=
 
 	local repoSpec="$1"
-	local with_ssh="$2"
+	local with_ssh="${2:-no}"
 
 	if [ -z "$repoSpec" ]; then
 		die "Must supply a repository"

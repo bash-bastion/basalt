@@ -31,10 +31,13 @@ do-list() {
 			fi
 		done
 	else
-		for package_path in "$BPM_PACKAGES_PATH"/*/*; do
+		for package_path in "$BPM_PACKAGES_PATH"/*/*/*; do
+			local site="${package_path%/*}"; site="${site%/*}"; site="${site##*/}"
 			local user="${package_path%/*}"; user="${user##*/}"
 			local repository="${package_path##*/}"
-			printf "%s\n" "$user/$repository"
+			local package="$user/$repository"
+
+			printf "%s\n" "$site/$package"
 		done
 	fi
 }

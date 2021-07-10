@@ -27,10 +27,10 @@ do-add() {
 		local ref="$REPLY4"
 
 		log.info "Installing '$repoSpec'"
-		do-plumbing-clone "$uri" "$package" $ref
-		do-plumbing-add-deps "$package"
-		do-plumbing-link-bins "$package"
-		do-plumbing-link-completions "$package"
-		do-plumbing-link-man "$package"
+		do-plumbing-clone "$uri" "$site/$package" $ref
+		do-plumbing-add-deps "$site/$package"
+		do-plumbing-link-bins "$site/$package"
+		do-plumbing-link-completions "$site/$package"
+		do-plumbing-link-man "$site/$package"
 	done
 }

@@ -1,8 +1,8 @@
 # shellcheck shell=bash
 
 do-plumbing-link-bins() {
-	local pkg="$1"
-	ensure.non_zero 'pkg' "$pkg"
+	local id="$1"
+	ensure.non_zero 'id' "$id"
 
-	abstract.bins 'link' "$pkg"
+	abstract.bins 'link' "$id"
 }

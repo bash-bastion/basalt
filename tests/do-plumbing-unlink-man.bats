@@ -3,6 +3,7 @@
 load 'util/init.sh'
 
 @test "properly removes each man page determined from heuristics" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -13,7 +14,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-unlink-man "$pkg"
+	run do-plumbing-unlink-man "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]
@@ -22,6 +23,7 @@ load 'util/init.sh'
 }
 
 @test "properly removes each man page determined from manDir cfg" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -34,7 +36,7 @@ load 'util/init.sh'
 
 	assert [ -f "$BPM_INSTALL_MAN/man1/exec.1" ]
 
-	run do-plumbing-unlink-man "$pkg"
+	run do-plumbing-unlink-man "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]

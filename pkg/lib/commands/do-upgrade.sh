@@ -34,20 +34,21 @@ do-upgrade() {
 	fi
 
 	for repoSpec; do
-		local site= user= repository= ref=
-		util.parse_package_full "$repoSpec"
-		IFS=':' read -r site user repository ref <<< "$REPLY"
-		local package="$user/$repository"
+		util.construct_clone_url "$repoSpec"
+		local uri="$REPLY1"
+		local site="$REPLY2"
+		local package="$REPLY3"
+		local ref="$REPLY4"
 
 		log.info "Upgrading '$repoSpec'"
-		do-plumbing-remove-deps "$package"
-		do-plumbing-unlink-bins "$package"
-		do-plumbing-unlink-completions "$package"
-		do-plumbing-unlink-man "$package"
-		git -C "$BPM_PACKAGES_PATH/$user/$repository" pull
-		do-plumbing-add-deps "$package"
-		do-plumbing-link-bins "$package"
-		do-plumbing-link-completions "$package"
-		do-plumbing-link-man "$package"
+		do-plumbing-remove-deps "$site/$package"
+		do-plumbing-unlink-bins "$site/$package"
+		do-plumbing-unlink-completions "$site/$package"
+		do-plumbing-unlink-man "$site/$package"
+		git -C "$BPM_PACKAGES_PATH/$site/$package" pull
+		do-plumbing-add-deps "$site/$package"
+		do-plumbing-link-bins "$site/$package"
+		do-plumbing-link-completions "$site/$package"
+		do-plumbing-link-man "$site/$package"
 	done
 }

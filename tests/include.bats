@@ -21,17 +21,19 @@ load 'util/init.sh'
 }
 
 @test "when package is not installed, prints an error" {
+	local site='github.com'
 	local pkg='user/repo'
 
 	eval "$(do-init sh)"
 
-	run include "$pkg" file
+	run include "$site/$pkg" file
 
 	assert_failure
-	assert_output -p "Package '$pkg' not installed"
+	assert_output -p "Package '$site/$pkg' not installed"
 }
 
 @test "when file doesn't exist, prints an error" {
+	local site='github.com'
 	local pkg='username/repo'
 
 	test_util.setup_pkg "$pkg"; {
@@ -42,13 +44,14 @@ load 'util/init.sh'
 
 	eval "$(do-init sh)"
 
-	run include "$pkg" non_existent
+	run include "$site/$pkg" non_existent
 
 	assert_failure
-	assert_output -p "File '$BPM_PREFIX/packages/$pkg/non_existent' not found"
+	assert_output -p "File '$BPM_PREFIX/packages/$site/$pkg/non_existent' not found"
 }
 
 @test "when file does exist, properly source file" {
+	local site='github.com'
 	local pkg='username/repo'
 
 	test_util.setup_pkg "$pkg"; {
@@ -57,7 +60,7 @@ load 'util/init.sh'
 	test_util.fake_install "$pkg"
 
 	eval "$(do-init sh)"
-	include "$pkg" 'function.sh'
+	include "$site/$pkg" 'function.sh'
 
 	run func_name
 

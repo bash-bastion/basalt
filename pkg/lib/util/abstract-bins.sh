@@ -2,24 +2,24 @@
 
 abstract.bins() {
 	local action="$1"
-	local package="$2"
+	local id="$2"
 	ensure.non_zero 'action' "$action"
-	ensure.non_zero 'package' "$package"
+	ensure.non_zero 'id' "$id"
 
 	case "$action" in
 	link)
-		log.info "Linking bin files for '$package'"
+		log.info "Linking bin files for '$id'"
 		;;
 	unlink)
-		log.info "Unlinking bin files for '$package'"
+		log.info "Unlinking bin files for '$id'"
 		;;
 	esac
 
 	local -a bins=()
 	local remove_extension=
 
-	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
-	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
+	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
+	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
 
 	if [ -f "$bpm_toml_file" ]; then
 		if util.get_toml_string "$bpm_toml_file" 'binRemoveExtensions'; then
@@ -30,7 +30,7 @@ abstract.bins() {
 
 		if util.get_toml_array "$bpm_toml_file" 'binDirs'; then
 			for dir in "${REPLIES[@]}"; do
-				for file in "$BPM_PACKAGES_PATH/$package/$dir"/*; do
+				for file in "$BPM_PACKAGES_PATH/$id/$dir"/*; do
 					abstract.bins_do_action "$action" "$file" "$remove_extensions"
 				done
 			done
@@ -38,7 +38,7 @@ abstract.bins() {
 			return
 		fi
 
-		abstract.bins_search_heuristics "$action" "$package" "$remove_extensions"
+		abstract.bins_search_heuristics "$action" "$id" "$remove_extensions"
 	elif [ -f "$package_sh_file" ]; then
 		if util.extract_shell_variable "$package_sh_file" 'REMOVE_EXTENSION'; then
 			remove_extensions="$REPLY"
@@ -48,13 +48,13 @@ abstract.bins() {
 			IFS=':' read -ra bins <<< "$REPLY"
 
 			for file in "${bins[@]}"; do
-				abstract.bins_do_action "$action" "$BPM_PACKAGES_PATH/$package/$file" "$remove_extensions"
+				abstract.bins_do_action "$action" "$BPM_PACKAGES_PATH/$id/$file" "$remove_extensions"
 			done
 		else
-			abstract.bins_search_heuristics "$action" "$package" "$remove_extensions"
+			abstract.bins_search_heuristics "$action" "$id" "$remove_extensions"
 		fi
 	else
-		abstract.bins_search_heuristics "$action" "$package" "$remove_extensions"
+		abstract.bins_search_heuristics "$action" "$id" "$remove_extensions"
 	fi
 }
 
@@ -64,19 +64,19 @@ abstract.bins() {
 # @arg $2 Whether to remove extensions
 abstract.bins_search_heuristics() {
 	local action="$1"
-	local package="$2"
+	local id="$2"
 	local remove_extensions="$3"
 
-	if [ -d "$BPM_PACKAGES_PATH/$package/bin" ]; then
-		for file in "$BPM_PACKAGES_PATH/$package"/bin/*; do
+	if [ -d "$BPM_PACKAGES_PATH/$id/bin" ]; then
+		for file in "$BPM_PACKAGES_PATH/$id"/bin/*; do
 			abstract.bins_do_action "$action" "$file" "$remove_extensions"
 		done
-	elif [ -d "$BPM_PACKAGES_PATH/$package/bins" ]; then
-		for file in "$BPM_PACKAGES_PATH/$package"/bins/*; do
+	elif [ -d "$BPM_PACKAGES_PATH/$id/bins" ]; then
+		for file in "$BPM_PACKAGES_PATH/$id"/bins/*; do
 			abstract.bins_do_action "$action" "$file" "$remove_extensions"
 		done
 	else
-		for file in "$BPM_PACKAGES_PATH/$package"/*; do
+		for file in "$BPM_PACKAGES_PATH/$id"/*; do
 			if [ -x "$file" ]; then
 				abstract.bins_do_action "$action" "$file" "$remove_extensions"
 			fi

@@ -2,27 +2,27 @@
 
 abstract.mans() {
 	local action="$1"
-	local package="$2"
+	local id="$2"
 	ensure.non_zero 'action' "$action"
-	ensure.non_zero 'package' "$package"
-	ensure.package_exists "$package"
+	ensure.non_zero 'id' "$id"
+	ensure.package_exists "$id"
 
 	# TODO: only print when actually linking
 	case "$action" in
 	link)
-		log.info "Linking man files for '$package'"
+		log.info "Linking man files for '$id'"
 		;;
 	unlink)
-		log.info "Unlinking man files for '$package'"
+		log.info "Unlinking man files for '$id'"
 		;;
 	esac
 
-	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
+	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
 
 	if [ -f "$bpm_toml_file" ]; then
 		if util.get_toml_array "$bpm_toml_file" 'manDirs'; then
 			for dir in "${REPLIES[@]}"; do
-				local full_dir="$BPM_PACKAGES_PATH/$package/$dir"
+				local full_dir="$BPM_PACKAGES_PATH/$id/$dir"
 
 				# 'file' can be
 				# 1. A man file
@@ -40,10 +40,10 @@ abstract.mans() {
 				done
 			done
 		else
-			abstract.mans_search_heuristics "$action" "$package"
+			abstract.mans_search_heuristics "$action" "$id"
 		fi
 	else
-		abstract.mans_search_heuristics "$action" "$package"
+		abstract.mans_search_heuristics "$action" "$id"
 	fi
 }
 
@@ -51,9 +51,9 @@ abstract.mans() {
 # the user does not supply any man files/dirs with any config
 abstract.mans_search_heuristics() {
 	local action="$1"
-	local package="$2"
+	local id="$2"
 
-	for file in "$BPM_PACKAGES_PATH/$package"/{,man/}*; do
+	for file in "$BPM_PACKAGES_PATH/$id"/{,man/}*; do
 		if [ -f "$file" ]; then
 			abstract.mans_do_action "$action" "$file"
 		elif [ -d "$file" ]; then

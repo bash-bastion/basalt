@@ -3,6 +3,7 @@
 load 'util/init.sh'
 
 @test "simple upgrade" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -10,21 +11,22 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BPM_ORIGIN_DIR/$site/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
 	cd "$BPM_CWD"
 
-	do-upgrade "$pkg"
+	do-upgrade "$site/$pkg"
 
 	run do-list --outdated
 	assert_output ""
 
-	assert [ -f "$BPM_PACKAGES_PATH/$pkg/script2.sh" ]
+	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
 }
 
 @test "symlinks stay valid after upgrade" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -33,18 +35,19 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BPM_ORIGIN_DIR/$site/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
 	cd "$BPM_CWD"
 
-	do-upgrade "$pkg"
+	do-upgrade "$site/$pkg"
 
-	assert [ "$(readlink "$BPM_INSTALL_BIN/script.sh")" = "$BPM_PACKAGES_PATH/$pkg/script.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/script.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/script.sh" ]
 }
 
 @test "BPM_INSTALL_DIR reflected when package modifies binDirs key" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -56,13 +59,13 @@ load 'util/init.sh'
 
 	[ -f "$BPM_INSTALL_BIN/script3.sh" ]
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BPM_ORIGIN_DIR/$site/$pkg"
 	rm 'bpm.toml'
 	git add .
 	git commit -m 'Remove bpm.toml'
 	cd "$BPM_CWD"
 
-	do-upgrade "$pkg"
+	do-upgrade "$site/$pkg"
 
 	assert [ ! -f "$BPM_INSTALL_BIN/script3.sh" ]
 }
@@ -75,6 +78,7 @@ load 'util/init.sh'
 }
 
 @test "upgrade bpm works" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.mock_command 'git'
@@ -86,6 +90,7 @@ load 'util/init.sh'
 }
 
 @test "upgrade bpm fails when mixing package names" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.mock_command 'git'

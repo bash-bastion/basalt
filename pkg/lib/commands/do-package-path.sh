@@ -1,8 +1,8 @@
 # shellcheck shell=bash
 
 bpm-package-path() {
-	local package="$1"
-	ensure.non_zero 'package' "$package"
+	local pkg="$1"
+	ensure.non_zero 'package' "$pkg"
 
-	printf "%s\n" "$BPM_PACKAGES_PATH/$package"
+	printf "%s\n" "$BPM_PACKAGES_PATH/$site/$pkg"
 }

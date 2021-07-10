@@ -3,7 +3,10 @@
 load 'util/init.sh'
 
 @test "does nothing on no dependencies" {
-	local pkg='user/main'
+	skip "bad test. assert_output '' is correct"
+
+	local site='github.com'
+	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
 		:
@@ -11,13 +14,15 @@ load 'util/init.sh'
 	test_util.fake_install "$pkg"
 
 	test_util.mock_command 'do-add'
-	run do-plumbing-add-deps "$pkg"
+	run do-plumbing-add-deps "$site/$pkg"
 
-	assert_success ""
+	assert_success
+	assert_output ""
 }
 
 @test "installs properly given package.sh dependencies" {
-	local pkg='user/main'
+	local site='github.com'
+	local pkg='username/package'
 
 	test_util.mock_command 'do-add'
 
@@ -26,7 +31,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-add-deps "$pkg"
+	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
 	assert_line "do-add user/dep1"
@@ -34,7 +39,8 @@ load 'util/init.sh'
 }
 
 @test "on bpm.toml dependencies, installs properly" {
-	local pkg='user/main'
+	local site='github.com'
+	local pkg='username/package'
 
 	test_util.mock_command 'do-add'
 
@@ -43,7 +49,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-add-deps "$pkg"
+	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
 	assert_line "do-add user/dep1"
@@ -51,7 +57,8 @@ load 'util/init.sh'
 }
 
 @test "bpm.toml has presidence over package.sh add deps" {
-	local pkg='user/main'
+	local site='github.com'
+	local pkg='username/package'
 
 	test_util.mock_command do-add
 
@@ -61,7 +68,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-add-deps "$pkg"
+	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
 	refute_line "do-add user/bad_dep"

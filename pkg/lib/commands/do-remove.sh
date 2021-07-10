@@ -7,42 +7,49 @@ do-remove() {
 
 	for repoSpec; do
 		# If is local directory
+		# TODO: do this for upgrade as well
 		if [ -d "$repoSpec" ]; then
 			local fullPath=
 			fullPath="$(util.readlink "$repoSpec")"
 			fullPath="${fullPath%/}"
 
+			# TODO: make this a funcion, share it with do-list
+			local site="${fullPath%/*}"; site="${site%/*}"; site="${site##*/}"
 			local user="${fullPath%/*}"; user="${user##*/}"
 			local repository="${fullPath##*/}"
-			if [ "$fullPath" = "$BPM_PACKAGES_PATH/$user/$repository" ]; then
-				do_actual_removal "$user/$repository"
+			local package="$user/$repository"
+
+			if [ "$fullPath" = "$BPM_PACKAGES_PATH/$site/$package" ]; then
+				do_actual_removal "$site/$package"
 			fi
 		else
-			local site= user= repository= ref=
-			util.parse_package_full "$repoSpec"
-			IFS=':' read -r site user repository ref <<< "$REPLY"
+			util.construct_clone_url "$repoSpec"
+			local uri="$REPLY1"
+			local site="$REPLY2"
+			local package="$REPLY3"
+			local ref="$REPLY4"
 
-			if [ -d "$BPM_PACKAGES_PATH/$user/$repository" ]; then
-				do_actual_removal "$user/$repository"
-			elif [ -e "$BPM_PACKAGES_PATH/$user/$repository" ]; then
-				rm -f "$BPM_PACKAGES_PATH/$user/$repository"
+			if [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
+				do_actual_removal "$site/$package"
+			elif [ -e "$BPM_PACKAGES_PATH/$site/$package" ]; then
+				rm -f "$BPM_PACKAGES_PATH/$site/$package"
 			else
-				die "Package '$user/$repository' is not installed"
+				die "Package '$site/$package' is not installed"
 			fi
 		fi
 	done
 }
 
 do_actual_removal() {
-	local package="$1"
+	local id="$1"
 
-	log.info "Uninstalling '$package'"
-	do-plumbing-unlink-man "$package"
-	do-plumbing-unlink-bins "$package"
-	do-plumbing-unlink-completions "$package"
+	log.info "Uninstalling '$id'"
+	do-plumbing-unlink-man "$id"
+	do-plumbing-unlink-bins "$id"
+	do-plumbing-unlink-completions "$id"
 
-	rm -rf "${BPM_PACKAGES_PATH:?}/$package"
-	if ! rmdir "${BPM_PACKAGES_PATH:?}/${package%/*}"; then
+	rm -rf "${BPM_PACKAGES_PATH:?}/$id"
+	if ! rmdir -p "${BPM_PACKAGES_PATH:?}/$id"; then
 		# Do not exit on failure
 		:
 	fi

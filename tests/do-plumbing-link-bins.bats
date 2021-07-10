@@ -3,6 +3,7 @@
 load 'util/init.sh'
 
 @test "does not fail if there are no binaries" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -10,12 +11,13 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
 }
 
 @test "adds bins determined from package.sh" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -26,15 +28,16 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$pkg/binn/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$pkg/binn/exec2.sh" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/binn/exec1" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/binn/exec2.sh" ]
 }
 
 
 @test "adds bins determined from package.sh (and not with heuristics)" {
+	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
@@ -47,15 +50,16 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2)" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec3)" = "$BPM_PACKAGES_PATH/$pkg/ff/exec3" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec3)" = "$BPM_PACKAGES_PATH/$site/$pkg/ff/exec3" ]
 }
 
 @test "adds bins determined from bpm.toml" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -66,14 +70,15 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$pkg/weird_dir/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$pkg/weird_dir/exec2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_dir/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_dir/exec2.sh" ]
 }
 
 @test "adds bins determined from bpm.toml (and not heuristics)" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -86,15 +91,16 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
 	assert [ ! -e "$BPM_INSTALL_BIN/exec2" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec3")" = "$BPM_PACKAGES_PATH/$pkg/weird_dir/exec3" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec3")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_dir/exec3" ]
 }
 
 @test "adds bins determined with heuristics (bin directory)" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -104,14 +110,15 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$pkg/bin/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
 @test "adds bins determined with heuristics (bins directory)" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -121,14 +128,15 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$pkg/bins/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$pkg/bins/exec2.sh" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bins/exec1" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/bins/exec2.sh" ]
 }
 
 @test "adds bins determined with heuristics (root directory)" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -138,14 +146,15 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$pkg/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$pkg/exec2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/exec2.sh" ]
 }
 
 @test "does not add bins that are not executable in root directory)" {
+	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -154,7 +163,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec3" ]
@@ -162,6 +171,7 @@ load 'util/init.sh'
 }
 
 @test "doesn't link root bins if there is a bin folder" {
+	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
@@ -172,14 +182,15 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
 	assert [ ! -e "$(readlink "$BPM_INSTALL_BIN/exec2")" ]
 }
 
 @test "remove extensions if REMOVE_EXTENSION is true in package.sh" {
+	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
@@ -188,17 +199,18 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$pkg"
+	test_util.fake_clone "$site/$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
 # Backwards compatiblity
 @test "does not remove extensions if REMOVE_EXTENSION is set in package.sh" {
+	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
@@ -207,17 +219,18 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$pkg"
+	test_util.fake_clone "$site/$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 	assert [ ! -e "$BPM_INSTALL_BIN/exec2" ]
 }
 
 @test "does not remove extensions if REMOVE_EXTENSION is false in package.sh" {
+	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
@@ -226,16 +239,17 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$pkg"
+	test_util.fake_clone "$site/$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$pkg/bin/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
 @test "remove extensions if binRemoveExtensions is 'yes' in bpm.toml" {
+	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
@@ -244,16 +258,17 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$pkg"
+	test_util.fake_clone "$site/$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
 @test "do not remove extensions if binRemoveExtensions is 'no' in bpm.toml" {
+	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
@@ -262,13 +277,13 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$pkg"
+	test_util.fake_clone "$site/$pkg"
 
-	run do-plumbing-link-bins "$pkg"
+	run do-plumbing-link-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
 @test "does not symlink package itself as bin when linked with bpm link" {

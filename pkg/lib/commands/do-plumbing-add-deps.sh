@@ -7,14 +7,14 @@
 # Example: DEPS=username/repo1:otheruser/repo2
 
 do-plumbing-add-deps() {
-	local package="$1"
-	ensure.non_zero 'package' "$package"
-	ensure.package_exists "$package"
+	local id="$1"
+	ensure.non_zero 'id' "$id"
+	ensure.package_exists "$id"
 
 	local -a deps=()
 
-	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
-	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
+	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
+	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
 
 	if [ -f "$bpm_toml_file" ]; then
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
@@ -26,7 +26,7 @@ do-plumbing-add-deps() {
 		fi
 	fi
 
-	log.info "Installing dependencies for '$package'"
+	log.info "Installing dependencies for '$id'"
 	for dep in "${deps[@]}"; do
 		do-add "$dep"
 	done
