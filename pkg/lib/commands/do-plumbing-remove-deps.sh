@@ -25,7 +25,9 @@ do-plumbing-remove-deps() {
 	for dep in "${deps[@]}"; do
 		util.construct_clone_url "$repoSpec" "$with_ssh"
 		local uri="$REPLY1"
-		local package="$REPLY2"
+		local site="$REPY2"
+		local package="$REPLY3"
+		local ref="$REPLY4"
 
 		rm -rf "${BPM_PACKAGES_PATH:?}/$package"
 	done

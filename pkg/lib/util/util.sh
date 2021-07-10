@@ -43,6 +43,7 @@ util.construct_clone_url() {
 	REPLY1=
 	REPLY2=
 	REPLY3=
+	REPLY4=
 
 	local repoSpec="$1"
 	local with_ssh="$2"
@@ -63,17 +64,19 @@ util.construct_clone_url() {
 		IFS='/' read -r site package <<< "$repoSpec"
 
 		REPLY1="$http://$repoSpec.git"
-		REPLY2="$package"
-		REPLY3=
+		REPLY2="$site"
+		REPLY3="$package"
+		REPLY4=
 	elif [[ "$repoSpec" =~ $regex2 ]]; then
 		repoSpec="${repoSpec#git@}"
 		repoSpec="${repoSpec%.git}"
 
 		IFS=':' read -r site package <<< "$repoSpec"
 
-		REPLY1="git@$repoSpec.git"
-		REPLY2="$package"
-		REPLY3=
+		REPLY1="git@$repoSpec"
+		REPLY2="$site"
+		REPLY3="$package"
+		REPLY4=
 	else
 		repoSpec="${repoSpec%.git}"
 
@@ -91,12 +94,13 @@ util.construct_clone_url() {
 		fi
 
 		if [ "$with_ssh" = yes ]; then
-			REPLY1="git@$site:$package.git"
+			REPLY1="git@$site:$package"
 		else
 			REPLY1="https://$site/$package.git"
 		fi
-		REPLY2="$package"
-		REPLY3="$ref"
+		REPLY2="$site"
+		REPLY3="$package"
+		REPLY4="$ref"
 	fi
 }
 

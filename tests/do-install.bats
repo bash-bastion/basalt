@@ -120,7 +120,7 @@ load 'util/init.sh'
 	run do-add --ssh username/package
 
 	assert_success
-	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
+	assert_line "do-plumbing-clone git@github.com:username/package username/package"
 }
 
 @test "uses ssh protocol, when specified (at end)" {
@@ -133,7 +133,7 @@ load 'util/init.sh'
 	run do-add username/package --ssh
 
 	assert_success
-	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
+	assert_line "do-plumbing-clone git@github.com:username/package username/package"
 }
 
 @test "uses ssh protocol raw, when specified" {
@@ -146,7 +146,7 @@ load 'util/init.sh'
 	run do-add git@github.com:username/package
 
 	assert_success
-	assert_line "do-plumbing-clone git@github.com:username/package.git username/package"
+	assert_line "do-plumbing-clone git@github.com:username/package username/package"
 }
 
 @test "uses custom version, when specified" {

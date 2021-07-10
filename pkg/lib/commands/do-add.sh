@@ -22,8 +22,9 @@ do-add() {
 	for repoSpec in "${pkgs[@]}"; do
 		util.construct_clone_url "$repoSpec" "$with_ssh"
 		local uri="$REPLY1"
-		local package="$REPLY2"
-		local ref="$REPLY3"
+		local site="$REPLY2"
+		local package="$REPLY3"
+		local ref="$REPLY4"
 
 		log.info "Installing '$repoSpec'"
 		do-plumbing-clone "$uri" "$package" $ref
