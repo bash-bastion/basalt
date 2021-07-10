@@ -71,6 +71,10 @@ abstract.bins_search_heuristics() {
 		for file in "$BPM_PACKAGES_PATH/$package"/bin/*; do
 			abstract.bins_do_action "$action" "$file" "$remove_extensions"
 		done
+	elif [ -d "$BPM_PACKAGES_PATH/$package/bins" ]; then
+		for file in "$BPM_PACKAGES_PATH/$package"/bins/*; do
+			abstract.bins_do_action "$action" "$file" "$remove_extensions"
+		done
 	else
 		for file in "$BPM_PACKAGES_PATH/$package"/*; do
 			if [ -x "$file" ]; then

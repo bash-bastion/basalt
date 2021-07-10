@@ -111,6 +111,23 @@ load 'util/init.sh'
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$pkg/bin/exec2.sh" ]
 }
 
+@test "adds bins determined with heuristics (bins directory)" {
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'bins'
+		touch 'bins/exec1'
+		touch 'bins/exec2.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-bins "$pkg"
+
+	assert_success
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$pkg/bins/exec1" ]
+	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$pkg/bins/exec2.sh" ]
+}
+
 @test "adds bins determined with heuristics (root directory)" {
 	local pkg='username/package'
 
