@@ -82,8 +82,6 @@ load 'util/init.sh'
 	assert_output "/usr/local/completions"
 }
 
-
-
 @test "non-global default BPM_ROOT" {
 	touch 'bpm.toml'
 

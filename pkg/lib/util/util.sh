@@ -249,6 +249,20 @@ util.extract_shell_variable() {
 	return 1
 }
 
+# @description Get the working directory of the project. Note
+# that this should always be called within a subshell
+util.get_project_root_dir() {
+	while [[ ! -f "bpm.toml" && "$PWD" != / ]]; do
+		cd ..
+	done
+
+	if [[ $PWD == / ]]; then
+		return 1
+	fi
+
+	printf "%s" "$PWD"
+}
+
 util.show_help() {
 	cat <<"EOF"
 Usage:

@@ -39,10 +39,9 @@ main() {
 		esac
 	done
 
-
 	case "$1" in
 	add)
-		may_reset_bpm_vars "$is_global"
+		must_reset_bpm_vars "$is_global"
 
 		shift
 		do-add "$@"
@@ -52,6 +51,8 @@ main() {
 		do-complete "$@"
 		;;
 	echo)
+		may_reset_bpm_vars "$is_global"
+
 		shift
 		do-echo "$@"
 		;;
@@ -60,37 +61,37 @@ main() {
 		do-init "$@"
 		;;
 	link)
-		may_reset_bpm_vars "$is_global"
+		must_reset_bpm_vars "$is_global"
 
 		shift
 		do-link "$@"
 		;;
 	list)
-		may_reset_bpm_vars "$is_global"
+		must_reset_bpm_vars "$is_global"
 
 		shift
 		do-list "$@"
 		;;
 	outdated)
-		may_reset_bpm_vars "$is_global"
+		must_reset_bpm_vars "$is_global"
 
 		shift
 		bpm-outdated "$@"
 		;;
 	package-path)
-		may_reset_bpm_vars "$is_global"
+		must_reset_bpm_vars "$is_global"
 
 		shift
 		bpm-package-path "$@"
 		;;
 	remove)
-		may_reset_bpm_vars "$is_global"
+		must_reset_bpm_vars "$is_global"
 
 		shift
 		do-remove "$@"
 		;;
 	upgrade)
-		may_reset_bpm_vars "$is_global"
+		must_reset_bpm_vars "$is_global"
 
 		shift
 		do-upgrade "$@"
@@ -104,31 +105,35 @@ main() {
 	esac
 }
 
+must_reset_bpm_vars() {
+	local is_global="$1"
+
+	local project_root_dir=
+	if ! project_root_dir="$(util.get_project_root_dir)"; then
+		die "No 'bpm.toml' file found. Please create one to install local packages or pass the '--global' option"
+	fi
+
+	do_set_bpm_vars "$project_root_dir"
+}
+
 may_reset_bpm_vars() {
 	local is_global="$1"
 
-	if [ "$is_global" = 'no' ]; then
-		if ! project_root_directory="$(
-			while [[ ! -f "bpm.toml" && "$PWD" != / ]]; do
-				cd ..
-			done
-
-			if [[ $PWD == / ]]; then
-				die "No 'bpm.toml' file found. Please create one to install local packages or pass the '--global' option"
-			fi
-
-			printf "%s" "$PWD"
-		)"; then
-			exit 1
-		fi
-
-		BPM_ROOT="$project_root_directory"
-		BPM_PREFIX="$project_root_directory/bpm_packages"
-		BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
-		BPM_INSTALL_BIN="$BPM_PREFIX/bin"
-		BPM_INSTALL_MAN="$BPM_PREFIX/man"
-		BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
+	local project_root_dir=
+	if project_root_dir="$(util.get_project_root_dir)"; then
+		do_set_bpm_vars "$project_root_dir"
 	fi
+}
+
+do_set_bpm_vars() {
+	local project_root_dir="$1"
+
+	BPM_ROOT="$project_root_dir"
+	BPM_PREFIX="$project_root_dir/bpm_packages"
+	BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
+	BPM_INSTALL_BIN="$BPM_PREFIX/bin"
+	BPM_INSTALL_MAN="$BPM_PREFIX/man"
+	BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
 }
 
 main "$@"
