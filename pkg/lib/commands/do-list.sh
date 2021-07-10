@@ -11,6 +11,8 @@ do-list() {
 		esac
 	done
 
+	local has_invalid_packages='no'
+
 	if [ "$should_show_outdated" = 'yes' ]; then
 		local packages
 		readarray -t packages < <(do-list)
@@ -37,7 +39,19 @@ do-list() {
 			local repository="${package_path##*/}"
 			local package="$user/$repository"
 
+			# Users that have installed packages before the switch to namespacing by
+			# site domain name will print incorrectly. So, we check to make sure the site
+			# url is actually is a domain name and not, for example, a GitHub username
+			if [[ "$site" != *.* ]]; then
+				has_invalid_packages='yes'
+				continue
+			fi
+
 			printf "%s\n" "$site/$package"
 		done
+	fi
+
+	if [ "$has_invalid_packages" = 'yes' ]; then
+		log.error "You have invalid packages. To fix this optimally, remove the '${BPM_PACKAGES_PATH%/*}' directory and reinstall all that packages that were deleted in the process"
 	fi
 }
