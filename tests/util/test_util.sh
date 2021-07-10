@@ -42,8 +42,6 @@ test_util.setup_pkg() {
 	touch 'README.md'
 	git add .
 	git commit -m "Initial commit"
-
-	cd "$BPM_ORIGIN_DIR/$pkg"
 }
 
 # @description Commits changes and cd's out of the package directory
@@ -51,5 +49,20 @@ test_util.setup_pkg() {
 test_util.finish_pkg() {
 	git add .
 	git commit --allow-empty -m "Make changes"
+	cd "$BPM_CWD"
+}
+
+test_util.create_package() {
+	local pkg="$1"
+
+	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
+
+	git init .
+	touch 'README.md'
+	touch 'bpm.toml'
+	git add .
+	git commit -m "Initial commit"
+
 	cd "$BPM_CWD"
 }

@@ -5,7 +5,6 @@ shopt -s nullglob extglob
 
 load 'vendor/bats-core/load'
 load 'vendor/bats-assert/load'
-load 'util/package_helpers.sh'
 load 'util/test_util.sh'
 
 export BPM_TEST_DIR="$BATS_TMPDIR/bpm"

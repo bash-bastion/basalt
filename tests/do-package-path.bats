@@ -3,10 +3,12 @@
 load 'util/init.sh'
 
 @test "prints the package path" {
-	create_package username/package
-	test_util.fake_clone username/package
+	local pkg='username/package'
 
-	run bpm-package-path username/package
+	test_util.create_package "$pkg"
+	test_util.fake_install "$pkg"
 
-	assert_success "$BPM_PACKAGES_PATH/username/package"
+	run bpm-package-path "$pkg"
+
+	assert_success "$BPM_PACKAGES_PATH/$pkg"
 }

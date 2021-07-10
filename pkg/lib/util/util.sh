@@ -16,14 +16,14 @@ util.parse_package_full() {
 	repoSpec="${repoSpec#http?(s)://}"
 
 	local site user repository
-	if [[ "$repoSpec" = */*/* ]]; then
+	if [[ "$repoSpec" == */*/* ]]; then
 		IFS='/' read -r site user repository <<< "$repoSpec"
-	elif [[ "$repoSpec" = */* ]]; then
+	elif [[ "$repoSpec" == */* ]]; then
 		site="github.com"
 		IFS='/' read -r user repository <<< "$repoSpec"
 	fi
 
-	if [[ "$repository" = *@* ]]; then
+	if [[ "$repository" == *@* ]]; then
 		IFS='@' read -r repository ref <<< "$repository"
 	else
 		ref=""
@@ -80,7 +80,7 @@ util.construct_clone_url() {
 	else
 		repoSpec="${repoSpec%.git}"
 
-		if [[ "$repoSpec" = */*/* ]]; then
+		if [[ "$repoSpec" == */*/* ]]; then
 			IFS='/' read -r site package <<< "$repoSpec"
 		elif [[ "$repoSpec" = */* ]]; then
 			site="github.com"
@@ -89,7 +89,7 @@ util.construct_clone_url() {
 			die "Invalid repository '$repoSpec'"
 		fi
 
-		if [[ "$package" = *@* ]]; then
+		if [[ "$package" == *@* ]]; then
 			IFS='@' read -r package ref <<< "$package"
 		fi
 
