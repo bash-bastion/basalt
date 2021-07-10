@@ -20,7 +20,7 @@ do-remove() {
 				do_actual_removal "$site/$package"
 			fi
 		else
-			util.construct_clone_url "$repoSpec"
+			util.extract_data_from_input "$repoSpec"
 			local site="$REPLY2"
 			local package="$REPLY3"
 			local ref="$REPLY4"

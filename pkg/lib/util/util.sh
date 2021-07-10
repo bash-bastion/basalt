@@ -3,43 +3,12 @@
 # @file util.sh
 # @brief Utility functions for all subcommands
 
-# @description Given input of a particular package on the internet
-# parse it into its components
-util.parse_package_full() {
-	local repoSpec="$1"
-
-	if [ -z "$repoSpec" ]; then
-		die "Must supply a repository"
-	fi
-
-	# Remove any http(s) prefixes
-	repoSpec="${repoSpec#http?(s)://}"
-
-	local site user repository
-	if [[ "$repoSpec" == */*/* ]]; then
-		IFS='/' read -r site user repository <<< "$repoSpec"
-	elif [[ "$repoSpec" == */* ]]; then
-		site="github.com"
-		IFS='/' read -r user repository <<< "$repoSpec"
-	fi
-
-	if [[ "$repository" == *@* ]]; then
-		IFS='@' read -r repository ref <<< "$repository"
-	else
-		ref=""
-	fi
-
-	ensure.non_zero 'site' "$site"
-	ensure.non_zero 'user' "$user"
-	ensure.non_zero 'repository' "$repository"
-
-	REPLY="$site:$user:$repository:$ref"
-}
-
-# @description Generate the final URL to clone from
+# @description Given some user input, this extracts
+# data like the site it was cloned from, the owner of
+# the repository, and the name of the repository
 # @arg $1 repoSpec
 # @arg $2 with_ssh Whether to clone with SSH (yes/no)
-util.construct_clone_url() {
+util.extract_data_from_input() {
 	REPLY1=
 	REPLY2=
 	REPLY3=
@@ -111,6 +80,7 @@ util.extract_data_from_package_dir() {
 	REPLY1=
 	REPLY2=
 	REPLY3=
+	REPLY4=
 
 	local dir="$1"
 	ensure.non_zero 'dir' "$dir"
@@ -122,6 +92,7 @@ util.extract_data_from_package_dir() {
 	REPLY1="$site"
 	REPLY2="$user"
 	REPLY3="$repository"
+	REPLY4=
 }
 
 util.readlink() {

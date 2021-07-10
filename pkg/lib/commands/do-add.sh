@@ -20,7 +20,7 @@ do-add() {
 	fi
 
 	for repoSpec in "${pkgs[@]}"; do
-		util.construct_clone_url "$repoSpec" "$with_ssh"
+		util.extract_data_from_input "$repoSpec" "$with_ssh"
 		local uri="$REPLY1"
 		local site="$REPLY2"
 		local package="$REPLY3"

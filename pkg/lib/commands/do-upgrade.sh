@@ -46,7 +46,7 @@ do-upgrade() {
 
 			do_actual_upgrade "$site/$package"
 		else
-			util.construct_clone_url "$repoSpec"
+			util.extract_data_from_input "$repoSpec"
 			local site="$REPLY2"
 			local package="$REPLY3"
 			local ref="$REPLY4"

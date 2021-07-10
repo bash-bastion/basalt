@@ -22,7 +22,7 @@ do-plumbing-remove-deps() {
 
 	log.info "Removing dependencies for '$package'"
 	for dep in "${deps[@]}"; do
-		util.construct_clone_url "$repoSpec" "$with_ssh"
+		util.extract_data_from_input "$repoSpec" "$with_ssh"
 		local site="$REPY2"
 		local package="$REPLY3"
 		local ref="$REPLY4"

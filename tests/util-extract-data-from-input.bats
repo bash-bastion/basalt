@@ -4,14 +4,14 @@ load 'util/init.sh'
 
 
 @test "fails on no arguments" {
-	run util.construct_clone_url
+	run util.extract_data_from_input
 
 	assert_failure
 	assert_line -p "Must supply a repository"
 }
 
 @test "parses with full https url" {
-	util.construct_clone_url 'https://gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'https://gitlab.com/eankeen/proj'
 
 	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -20,7 +20,7 @@ load 'util/init.sh'
 }
 
 @test "parses with full http url" {
-	util.construct_clone_url 'http://gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'http://gitlab.com/eankeen/proj'
 
 	assert [ "$REPLY1" = 'http://gitlab.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -29,7 +29,7 @@ load 'util/init.sh'
 }
 
 @test "parses with full https url with .git ending" {
-	util.construct_clone_url 'https://gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'https://gitlab.com/eankeen/proj'
 
 	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -38,7 +38,7 @@ load 'util/init.sh'
 }
 
 @test "parses with full http url with .git ending" {
-	util.construct_clone_url 'http://gitlab.com/eankeen/proj.git'
+	util.extract_data_from_input 'http://gitlab.com/eankeen/proj.git'
 
 	assert [ "$REPLY1" = 'http://gitlab.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -47,7 +47,7 @@ load 'util/init.sh'
 }
 
 @test "parses with full ssh url" {
-	util.construct_clone_url 'git@gitlab.com:eankeen/proj.git'
+	util.extract_data_from_input 'git@gitlab.com:eankeen/proj.git'
 
 	assert [ "$REPLY1" = 'git@gitlab.com:eankeen/proj' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -56,7 +56,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package and domain" {
-	util.construct_clone_url 'gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'gitlab.com/eankeen/proj'
 
 	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -65,7 +65,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package and domain and ref" {
-	util.construct_clone_url 'gitlab.com/eankeen/proj@v0.1.0'
+	util.extract_data_from_input 'gitlab.com/eankeen/proj@v0.1.0'
 
 	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -74,7 +74,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package and domain with ssh" {
-	util.construct_clone_url 'gitlab.com/eankeen/proj' 'yes'
+	util.extract_data_from_input 'gitlab.com/eankeen/proj' 'yes'
 
 	assert [ "$REPLY1" = 'git@gitlab.com:eankeen/proj' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -83,7 +83,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package and domain and ref with ssh" {
-	util.construct_clone_url 'gitlab.com/eankeen/proj@v0.1.0' 'yes'
+	util.extract_data_from_input 'gitlab.com/eankeen/proj@v0.1.0' 'yes'
 
 	assert [ "$REPLY1" = 'git@gitlab.com:eankeen/proj' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
@@ -92,7 +92,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package" {
-	util.construct_clone_url 'eankeen/proj'
+	util.extract_data_from_input 'eankeen/proj'
 
 	assert [ "$REPLY1" = 'https://github.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'github.com' ]
@@ -101,7 +101,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package and ref" {
-	util.construct_clone_url 'eankeen/proj@v0.2.0'
+	util.extract_data_from_input 'eankeen/proj@v0.2.0'
 
 	assert [ "$REPLY1" = 'https://github.com/eankeen/proj.git' ]
 	assert [ "$REPLY2" = 'github.com' ]
@@ -110,7 +110,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package with ssh" {
-	util.construct_clone_url 'eankeen/proj' 'yes'
+	util.extract_data_from_input 'eankeen/proj' 'yes'
 
 	assert [ "$REPLY1" = 'git@github.com:eankeen/proj' ]
 	assert [ "$REPLY2" = 'github.com' ]
@@ -119,7 +119,7 @@ load 'util/init.sh'
 }
 
 @test "parses with package with ssh and ref" {
-	util.construct_clone_url 'eankeen/proj@v0.2.0' 'yes'
+	util.extract_data_from_input 'eankeen/proj@v0.2.0' 'yes'
 
 	assert [ "$REPLY1" = 'git@github.com:eankeen/proj' ]
 	assert [ "$REPLY2" = 'github.com' ]
