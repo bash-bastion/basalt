@@ -56,6 +56,23 @@ load 'util/init.sh'
 	assert [ ! -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 }
 
+@test "fails to remove package directory with wrong site name" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		touch 'bpm.toml'
+		touch 'file.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
+
+	run do-remove "gitlab.com/$pkg"
+
+	assert_failure
+}
+
 @test "properly removes parent of package directory, if it is empty" {
 	local site='github.com'
 	local pkg='username/package'
