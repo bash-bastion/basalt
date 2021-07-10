@@ -20,10 +20,10 @@ This symlinks all executable scripts to a common directory. It does this for com
 
 ```sh
 $ ls -l --color=always ~/.local/share/bpm/cellar/bin/
-... bash2048.sh -> /home/edwin/.local/share/bpm/cellar/packages/JosefZIla/bash2048/bash2048.sh
-... bashtop -> /home/edwin/.local/share/bpm/cellar/packages/aristocratos/bashtop/bashtop
-... git-alias -> /home/edwin/.local/share/bpm/cellar/packages/tj/git-extras/bin/git-alias
-... git-archive-file -> /home/edwin/.local/share/bpm/cellar/packages/tj/git-extras/bin/git-archive-file
+... bash2048.sh -> /home/edwin/.local/share/bpm/cellar/packages/github.com/JosefZIla/bash2048/bash2048.sh
+... bashtop -> /home/edwin/.local/share/bpm/cellar/packages/github.com/aristocratos/bashtop/bashtop
+... git-alias -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-alias
+... git-archive-file -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-archive-file
 ...
 ```
 
@@ -34,7 +34,44 @@ export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin:$PATH"
 eval "$(bpm init bash)" # replace 'bash' with your shell
 ```
 
+STATUS: ALPHA
+
 See [Getting Started](./docs/getting-started.md) for more details
+
+## Local Package Development
+
+If you are working on a project, and want to pull in a dependency, say [bash-args](https://github.com/eankeen/bash-args), the workflow looks like this
+
+To use the packages, simply append to the `PATH` variable in your script entrypoint (script.sh in the example below). Note that exporting it isn't required because it's already an exported variable
+
+```sh
+mkdir 'my-project' && cd 'my-project'
+
+# Creating a 'bpm.toml' is required so bpm knows where
+# the root of the project is
+touch 'bpm.toml'
+
+bpm add 'eankeen/bash-args'
+
+cat > 'script.sh' <<-"OUTEREOF"
+#!/usr/bin/env bash
+
+PATH="$PWD/bpm_packages/bin:$PATH"
+
+declare -A args=()
+
+# 'bash-args' requires that we use `source`
+source bash-args parse "$@" <<-"EOF"
+@flag [port.p] {3000} - The port to open on
+EOF
+
+echo "Using port '${args[port]}'"
+OUTEREOF
+
+chmod +x './script.sh'
+./script.sh # Using port '3000'
+./script.sh --port 4000 # Using port '4000'
+```
 
 ## Alternatives Comparison
 

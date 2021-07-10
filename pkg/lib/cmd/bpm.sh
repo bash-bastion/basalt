@@ -127,6 +127,7 @@ may_reset_bpm_vars() {
 
 do_set_bpm_vars() {
 	local project_root_dir="$1"
+	ensure.non_zero 'project_root_dir' "$project_root_dir"
 
 	BPM_ROOT="$project_root_dir"
 	BPM_PREFIX="$project_root_dir/bpm_packages"
