@@ -20,15 +20,13 @@ do-plumbing-remove-deps() {
 		fi
 	fi
 
-	# TODO: bug: this removes dependencies specified with incorrect URLs
 	log.info "Removing dependencies for '$package'"
 	for dep in "${deps[@]}"; do
 		util.construct_clone_url "$repoSpec" "$with_ssh"
-		local uri="$REPLY1"
 		local site="$REPY2"
 		local package="$REPLY3"
 		local ref="$REPLY4"
 
-		rm -rf "${BPM_PACKAGES_PATH:?}/$package"
+		rm -rf "${BPM_PACKAGES_PATH:?}/$site/$package"
 	done
 }

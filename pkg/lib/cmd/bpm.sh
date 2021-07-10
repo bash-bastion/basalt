@@ -15,6 +15,8 @@ main() {
 		source "$f"
 	done
 
+	local is_global='no'
+
 	for arg; do
 		case "$arg" in
 		--help)
@@ -28,13 +30,36 @@ main() {
 			exit
 			;;
 		--global)
-			declare -rg BPM_MODE_GLOBAL=
+			is_global='yes'
+			shift
 			;;
 		*)
 			break
 			;;
 		esac
 	done
+
+	if [ "$is_global" = 'no' ]; then
+		if ! project_root_directory="$(
+			while [[ ! -f "bpm.toml" && "$PWD" != / ]]; do
+				cd ..
+			done
+
+			if [[ $PWD == / ]]; then
+				die "No 'bpm.toml' file found. Please create one to install local packages or pass the '--global' option"
+			fi
+
+			printf "%s" "$PWD"
+		)"; then
+			exit 1
+		fi
+
+		BPM_PREFIX="$project_root_directory/bpm_packages"
+		BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
+		BPM_INSTALL_BIN="$BPM_PREFIX/bin"
+		BPM_INSTALL_MAN="$BPM_PREFIX/man"
+		BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
+	fi
 
 	case "$1" in
 	add)
