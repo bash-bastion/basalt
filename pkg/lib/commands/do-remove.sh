@@ -9,22 +9,19 @@ do-remove() {
 		# If is local directory
 		# TODO: do this for upgrade as well
 		if [ -d "$repoSpec" ]; then
-			local fullPath=
-			fullPath="$(util.readlink "$repoSpec")"
-			fullPath="${fullPath%/}"
+			local dir=
+			dir="$(util.readlink "$repoSpec")"
+			dir="${dir%/}"
 
-			# TODO: make this a funcion, share it with do-list
-			local site="${fullPath%/*}"; site="${site%/*}"; site="${site##*/}"
-			local user="${fullPath%/*}"; user="${user##*/}"
-			local repository="${fullPath##*/}"
-			local package="$user/$repository"
+			util.extract_data_from_package_dir "$dir"
+			local site="$REPLY1"
+			local package="$REPLY2/$REPLY3"
 
-			if [ "$fullPath" = "$BPM_PACKAGES_PATH/$site/$package" ]; then
+			if [ "$dir" = "$BPM_PACKAGES_PATH/$site/$package" ]; then
 				do_actual_removal "$site/$package"
 			fi
 		else
 			util.construct_clone_url "$repoSpec"
-			local uri="$REPLY1"
 			local site="$REPLY2"
 			local package="$REPLY3"
 			local ref="$REPLY4"

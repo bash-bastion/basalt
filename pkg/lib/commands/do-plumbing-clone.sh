@@ -6,7 +6,7 @@ do-plumbing-clone() {
 	local ref="$3"
 
 	ensure.non_zero 'uri' "$uri"
-	# TODO: ensure.non_zero 'id'
+	ensure.non_zero 'id' "$id"
 
 	if [ -e "$BPM_PACKAGES_PATH/$id" ]; then
 		die "Package '$id' is already present"

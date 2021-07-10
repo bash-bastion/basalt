@@ -34,10 +34,9 @@ do-list() {
 		done
 	else
 		for package_path in "$BPM_PACKAGES_PATH"/*/*/*; do
-			local site="${package_path%/*}"; site="${site%/*}"; site="${site##*/}"
-			local user="${package_path%/*}"; user="${user##*/}"
-			local repository="${package_path##*/}"
-			local package="$user/$repository"
+			util.extract_data_from_package_dir "$package_path"
+			local site="$REPLY1"
+			local package="$REPLY2/$REPLY3"
 
 			# Users that have installed packages before the switch to namespacing by
 			# site domain name will print incorrectly. So, we check to make sure the site

@@ -104,6 +104,26 @@ util.construct_clone_url() {
 	fi
 }
 
+# @description Given a path to a package directory, this extracts
+# data like the site it was cloned from, the owner of
+# the repository, and the name of the repository
+util.extract_data_from_package_dir() {
+	REPLY1=
+	REPLY2=
+	REPLY3=
+
+	local dir="$1"
+	ensure.non_zero 'dir' "$dir"
+
+	local site="${dir%/*}"; site="${site%/*}"; site="${site##*/}"
+	local user="${dir%/*}"; user="${user##*/}"
+	local repository="${dir##*/}"
+
+	REPLY1="$site"
+	REPLY2="$user"
+	REPLY3="$repository"
+}
+
 util.readlink() {
 	if command -v realpath &>/dev/null; then
 		realpath "$1"

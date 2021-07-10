@@ -104,7 +104,6 @@ abstract.completions_do_action_zsh() {
 	local file="$2"
 
 	if grep -qs "^#compdef" "$file"; then
-		# TODO: run mkdir outside of loop
 		case "$action" in
 		link)
 			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
