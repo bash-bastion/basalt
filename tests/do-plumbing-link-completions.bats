@@ -2,7 +2,7 @@
 
 load 'util/init.sh'
 
-@test "does not fail if there are no binaries" {
+@test "does not fail if there are no completions" {
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
@@ -14,6 +14,9 @@ load 'util/init.sh'
 
 	assert_success
 }
+
+
+## BASH ##
 
 @test "adds bash completions determined from package.sh" {
 	local pkg='username/package'
@@ -75,7 +78,7 @@ load 'util/init.sh'
 	! [ -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
 }
 
-@test "adds bash completions determined with heuristics ./?(contrib/)completion?(s)" {
+@test "adds bash completions determined with heuristics (./?(contrib/)completion?(s))" {
 	local pkg="username/package$i"
 
 	test_util.setup_pkg "$pkg"; {
@@ -99,116 +102,180 @@ load 'util/init.sh'
 @test "adds bash completions determined from heuristics when when ZSH_COMPLETIONS is specified in package.sh" {
 	local pkg="username/package"
 
-	test_util.setup_pkg "$pkg"; {'
-		echo "ZSH_COMPLETIONS="' > 'package.sh'
+	test_util.setup_pkg "$pkg"; {
+		echo 'ZSH_COMPLETIONS=""' > 'package.sh'
 		mkdir 'completion'
 		touch "completion/prog.bash"
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$pkg"
 
 	[ -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
-@test "links zsh compsys completions to prefix/completions" {
-	local package="username/package"
+@test "do not add bash completions from heuristics when BASH_COMPLETIONS is specified in package.sh" {
+	local pkg="username/package"
 
-	create_package username/package
-	create_zsh_compsys_completions username/package _exec
-	test_util.fake_clone "$package"
+	test_util.setup_pkg "$pkg"; {
+		echo 'BASH_COMPLETIONS=""' > 'package.sh'
+		mkdir 'completion'
+		touch "completion/prog.bash"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-completions username/package
+	run do-plumbing-link-completions "$pkg"
 
-	assert_success
-	assert [ "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec)" = "$BPM_PACKAGES_PATH/username/package/completions/_exec" ]
+	[ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
-@test "links zsh compctl completions to prefix/completions" {
-	local package="username/package"
+@test "do not add bash completions from heuristics when completionDirs is specified in bpm.toml" {
+	local pkg="username/package"
 
-	create_package username/package
-	create_zsh_compctl_completions username/package exec
-	test_util.fake_clone "$package"
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		mkdir 'completion'
+		touch "completion/prog.bash"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-completions username/package
+	run do-plumbing-link-completions "$pkg"
 
-	assert_success
-	assert [ "$(readlink $BPM_INSTALL_COMPLETIONS/zsh/compctl/exec)" = "$BPM_PACKAGES_PATH/username/package/completions/exec" ]
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
-@test "links zsh completions from ./?(contrib/)completion?(s)" {
-	local -i i=1
-	for completion_dir in completion completions contrib/completion contrib/completions; do
-		local package="username/package$i"
+## ZSH ##
 
-		create_package "$package"
-		cd "$BPM_ORIGIN_DIR/$package"
-		mkdir -p "$completion_dir"
-		touch "$completion_dir/c.zsh"
-		echo "#compdef" >| "$completion_dir/c2.zsh"
-		git add .
-		git commit -m "Add completions"
-		cd "$BPM_CWD"
-		test_util.fake_clone "$package"
+@test "adds zsh compsys completions determined from package.sh" {
+	local pkg="username/package"
 
-		run do-plumbing-link-completions "$package"
+	test_util.setup_pkg "$pkg"; {
+		echo 'ZSH_COMPLETIONS="dirr/_exec"' > 'package.sh'
+		mkdir 'dirr'
+		echo '#compdef' > "dirr/_exec"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-		assert_success
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/c2.zsh")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c2.zsh" ]
-		assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c.zsh")" = "$BPM_PACKAGES_PATH/$package/$completion_dir/c.zsh" ]
-
-		(( ++i ))
-	done
-}
-
-@test "don't link bash from './?(contrib/)completion?(s)' when ZSH_COMPLETIONS is specified in package.sh" {
-	local package="username/package"
-
-	create_package "$package"
-	cd "$BPM_ORIGIN_DIR/$package"
-	mkdir completions
-	touch completions/prog.zsh
-	echo "ZSH_COMPLETIONS=" >| package.sh
-	git add .
-	git commit -m 'Add package.sh'
-	cd "$BPM_CWD"
-	test_util.fake_clone "$package"
-
-	run do-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$pkg"
 
 	assert_success
-	! [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prof.zsh" ]
-	! [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prof.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec")" = "$BPM_PACKAGES_PATH/$pkg/dirr/_exec" ]
 }
 
-@test "do link zsh from './?(contrib/)completion?(s)' when BASH_COMPLETIONS is specified in package.sh" {
-	local package="username/package"
+@test "adds zsh compctl completions determined from pacakge.sh" {
+	local pkg="username/package"
 
-	create_package "$package"
-	cd "$BPM_ORIGIN_DIR/$package"
-	mkdir completions
-	touch completions/prog.zsh
-	echo "BASH_COMPLETIONS=" >| package.sh
-	git add .
-	git commit -m 'Add package.sh'
-	cd "$BPM_CWD"
-	test_util.fake_clone "$package"
+	test_util.setup_pkg "$pkg"; {
+		echo 'ZSH_COMPLETIONS="dirr/exec"' > 'package.sh'
+		mkdir 'dirr'
+		touch "dirr/exec"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	run do-plumbing-link-completions "$package"
+	run do-plumbing-link-completions "$pkg"
 
 	assert_success
-	[ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/exec")" = "$BPM_PACKAGES_PATH/$pkg/dirr/exec" ]
 }
 
+@test "adds zsh compsys completions determined from bpm.toml" {
+	local pkg="username/package"
 
-@test "does not fail if package doesn't have any completions" {
-	local package="username/package"
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		mkdir 'dirr'
+		echo '#compdef' > "dirr/_exec.zsh"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
 
-	create_package username/package
-	test_util.fake_clone "$package"
-
-	run do-plumbing-link-completions username/package
+	run do-plumbing-link-completions "$pkg"
 
 	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec.zsh")" = "$BPM_PACKAGES_PATH/$pkg/dirr/_exec.zsh" ]
+}
+
+@test "adds zsh compctl completions determined from bpm.toml" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		mkdir 'dirr'
+		touch "dirr/exec.zsh"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/exec.zsh")" = "$BPM_PACKAGES_PATH/$pkg/dirr/exec.zsh" ]
+}
+
+@test "adds zsh completions determined with heuristics (./?(contrib/)completion?(s))" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir -p ./{contrib/,}completion{,s}
+		touch "completion/c1.zsh"
+		echo '#compdef' > "completions/c2.zsh"
+		touch "contrib/completion/c3.zsh"
+		echo '#compdef' > "contrib/completions/c4.zsh"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c1.zsh")" = "$BPM_PACKAGES_PATH/$pkg/completion/c1.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys//c2.zsh")" = "$BPM_PACKAGES_PATH/$pkg/completions/c2.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c3.zsh")" = "$BPM_PACKAGES_PATH/$pkg/contrib/completion/c3.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys//c4.zsh")" = "$BPM_PACKAGES_PATH/$pkg/contrib/completions/c4.zsh" ]
+}
+
+@test "adds zsh completions determined from heuristics when when BASH_COMPLETIONS is specified in package.sh" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'BASH_COMPLETIONS=""' > 'package.sh'
+		mkdir completion{,s}
+		touch "completion/c1.zsh"
+		echo '#compdef' > "completions/c2.zsh"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c1.zsh")" = "$BPM_PACKAGES_PATH/$pkg/completion/c1.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys//c2.zsh")" = "$BPM_PACKAGES_PATH/$pkg/completions/c2.zsh" ]
+}
+
+@test "do not add zsh completions from heuristics when ZSH_COMPLETIONS is specified in package.sh" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'ZSH_COMPLETIONS=""' > 'package.sh'
+		mkdir 'completion'
+		touch "completion/prog.zsh"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$pkg"
+
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
+}
+
+@test "do not add zsh completions from heuristics when completionDirs is specified in bpm.toml" {
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		mkdir 'completion'
+		touch "completion/prog.zsh"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$pkg"
+
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
 }
