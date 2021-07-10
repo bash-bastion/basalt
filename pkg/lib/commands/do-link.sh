@@ -19,26 +19,27 @@ do-link() {
 		die "You must supply at least one directory"
 	fi
 
-	for directory in "${dirs[@]}"; do
-		if [ ! -d "$directory" ]; then
-			die "Directory '$directory' not found"
+	for dir in "${dirs[@]}"; do
+		if [ ! -d "$dir" ]; then
+			die "Directory '$dir' not found"
 		fi
 
-		directory="$(util.readlink "$directory")"
+		dir="$(util.readlink "$dir")"
+		dir="${dir%/}"
 
-		local namespace="bpm-local"
-		local repository="${directory##*/}"
-		local package="$namespace/$repository"
+
+		local user="local"
+		local repository="${dir##*/}"
+		local package="$user/$repository"
 
 		if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
 			die "Package '$package' is already present"
 		fi
 
-		# TODO: local git clone
-		mkdir -p "$BPM_PACKAGES_PATH/$namespace"
-		ln -s "$directory" "$BPM_PACKAGES_PATH/$package"
+		mkdir -p "$BPM_PACKAGES_PATH/$user"
+		ln -s "$dir" "$BPM_PACKAGES_PATH/$package"
 
-		log.info "Linking '$directory'"
+		log.info "Linking '$dir'"
 		if [ "$install_deps" = 'yes' ]; then
 			do-plumbing-add-deps "$package"
 		fi

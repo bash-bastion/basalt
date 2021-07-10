@@ -94,6 +94,21 @@ load 'util/init.sh'
 	assert [ ! -f "$BPM_INSTALL_BIN/script3.sh" ]
 }
 
+@test "prints warning if user tries to upgrade a 'link'ed package" {
+	test_util.mock_command do-plumbing-add-deps
+	test_util.mock_command do-plumbing-link-bins
+	test_util.mock_command do-plumbing-link-completions
+	test_util.mock_command do-plumbing-link-man
+
+	mkdir 'theta'
+
+	do-link 'theta'
+	run 'do-upgrade' 'local/theta'
+
+	assert_success
+	assert_line -p "Package 'github.com/local/theta' has been added with 'bpm link'. It cannot be upgraded"
+}
+
 @test "errors when no packages are given" {
 	run do-upgrade
 

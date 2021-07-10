@@ -252,7 +252,7 @@ util.extract_shell_variable() {
 util.show_help() {
 	cat <<"EOF"
 Usage:
-  bpm [--help|--version] <command> [args...]
+  bpm [--help|--version|--global] <command> [args...]
 
 Subcommands:
   init <shell>
@@ -266,7 +266,7 @@ Subcommands:
 
   link [--no-deps] <directory...>
     Installs a local directory as a bpm package. These show up with
-    a namespace of 'bpm-local'
+    a namespace of 'local'
 
   list [--outdated]
     List installed packages

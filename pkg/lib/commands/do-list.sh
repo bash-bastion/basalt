@@ -41,7 +41,7 @@ do-list() {
 			# Users that have installed packages before the switch to namespacing by
 			# site domain name will print incorrectly. So, we check to make sure the site
 			# url is actually is a domain name and not, for example, a GitHub username
-			if [[ "$site" != *.* ]]; then
+			if [[ "$site" != *.* ]] && [ "$site" != 'local' ]; then
 				has_invalid_packages='yes'
 				continue
 			fi

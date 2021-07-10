@@ -31,7 +31,7 @@ load 'util/init.sh'
 	run do-link 'theta'
 
 	assert_failure
-	assert_line -n 0 -p "Package 'bpm-local/theta' is already present"
+	assert_line -n 0 -p "Package 'local/theta' is already present"
 }
 
 @test "fails if package already present (as erroneous file)" {
@@ -40,17 +40,17 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir -p touch "$BPM_PACKAGES_PATH/bpm-local"
-	touch "$BPM_PACKAGES_PATH/bpm-local/theta"
+	mkdir -p touch "$BPM_PACKAGES_PATH/local"
+	touch "$BPM_PACKAGES_PATH/local/theta"
 	mkdir 'theta'
 
 	run do-link 'theta'
 
 	assert_failure
-	assert_line -n 0 -p "Package 'bpm-local/theta' is already present"
+	assert_line -n 0 -p "Package 'local/theta' is already present"
 }
 
-@test "links the package to packages under the correct namespace (bpm-local)" {
+@test "links the package to packages under the correct namespace (local)" {
 	test_util.mock_command do-plumbing-add-deps
 	test_util.mock_command do-plumbing-link-bins
 	test_util.mock_command do-plumbing-link-completions
@@ -61,7 +61,7 @@ load 'util/init.sh'
 	run do-link 'package1'
 
 	assert_success
-	assert [ "$(readlink -f $BPM_PACKAGES_PATH/bpm-local/package1)" = "$(readlink -f "$PWD/package1")" ]
+	assert [ "$(readlink -f $BPM_PACKAGES_PATH/local/package1)" = "$(readlink -f "$PWD/package1")" ]
 }
 
 @test "calls link-bins, link-completions, link-man and deps in order" {
@@ -76,10 +76,10 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
-	assert_line -n 1 "do-plumbing-add-deps bpm-local/package2"
-	assert_line -n 2 "do-plumbing-link-bins bpm-local/package2"
-	assert_line -n 3 "do-plumbing-link-completions bpm-local/package2"
-	assert_line -n 4 "do-plumbing-link-man bpm-local/package2"
+	assert_line -n 1 "do-plumbing-add-deps local/package2"
+	assert_line -n 2 "do-plumbing-link-bins local/package2"
+	assert_line -n 3 "do-plumbing-link-completions local/package2"
+	assert_line -n 4 "do-plumbing-link-man local/package2"
 
 }
 
@@ -95,15 +95,15 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
-	assert_line -n 1 "do-plumbing-add-deps bpm-local/package2"
-	assert_line -n 2 "do-plumbing-link-bins bpm-local/package2"
-	assert_line -n 3 "do-plumbing-link-completions bpm-local/package2"
-	assert_line -n 4 "do-plumbing-link-man bpm-local/package2"
+	assert_line -n 1 "do-plumbing-add-deps local/package2"
+	assert_line -n 2 "do-plumbing-link-bins local/package2"
+	assert_line -n 3 "do-plumbing-link-completions local/package2"
+	assert_line -n 4 "do-plumbing-link-man local/package2"
 	assert_line -n 5 -e "Linking '/(.*)/bpm/cwd/package3'"
-	assert_line -n 6 "do-plumbing-add-deps bpm-local/package3"
-	assert_line -n 7 "do-plumbing-link-bins bpm-local/package3"
-	assert_line -n 8 "do-plumbing-link-completions bpm-local/package3"
-	assert_line -n 9 "do-plumbing-link-man bpm-local/package3"
+	assert_line -n 6 "do-plumbing-add-deps local/package3"
+	assert_line -n 7 "do-plumbing-link-bins local/package3"
+	assert_line -n 8 "do-plumbing-link-completions local/package3"
+	assert_line -n 9 "do-plumbing-link-man local/package3"
 
 }
 
@@ -119,9 +119,9 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
-	assert_line -n 1 "do-plumbing-link-bins bpm-local/package2"
-	assert_line -n 2 "do-plumbing-link-completions bpm-local/package2"
-	assert_line -n 3 "do-plumbing-link-man bpm-local/package2"
+	assert_line -n 1 "do-plumbing-link-bins local/package2"
+	assert_line -n 2 "do-plumbing-link-completions local/package2"
+	assert_line -n 3 "do-plumbing-link-man local/package2"
 }
 
 
@@ -136,7 +136,7 @@ load 'util/init.sh'
 	run do-link --no-deps 'package2'
 
 	assert_success
-	refute_line "do-plumbing-add-deps bpm-local/package2"
+	refute_line "do-plumbing-add-deps local/package2"
 }
 
 @test "respects the --no-deps option (at end)" {
@@ -150,7 +150,7 @@ load 'util/init.sh'
 	run do-link 'package2' --no-deps
 
 	assert_success
-	refute_line "do-plumbing-add-deps bpm-local/package2"
+	refute_line "do-plumbing-add-deps local/package2"
 }
 
 @test "links the current directory" {
@@ -165,7 +165,7 @@ load 'util/init.sh'
 	run do-link .
 
 	assert_success
-	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(readlink -f "$PWD")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/package3")" = "$(readlink -f "$PWD")" ]
 }
 
 @test "links the parent directory" {
@@ -180,7 +180,7 @@ load 'util/init.sh'
 	run do-link ..
 
 	assert_success
-	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/bpm-local/sierra")" = "$(readlink -f "$PWD/..")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/sierra")" = "$(readlink -f "$PWD/..")" ]
 }
 
 @test "links an arbitrary complex relative path" {
@@ -193,5 +193,5 @@ load 'util/init.sh'
 	run do-link ./package3/.././package3
 
 	assert_success
-	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/bpm-local/package3")" = "$(readlink -f "$PWD/package3")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/package3")" = "$(readlink -f "$PWD/package3")" ]
 }

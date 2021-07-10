@@ -53,18 +53,11 @@ test_util.finish_pkg() {
 	cd "$BPM_CWD"
 }
 
-# TODO: use setup_pkg and finish_pkg
 test_util.create_package() {
 	local pkg="$1"
+	ensure.non_zero 'pkg' "$pkg"
 
-	mkdir -p "$BPM_ORIGIN_DIR/github.com/$pkg"
-	cd "$BPM_ORIGIN_DIR/github.com/$pkg"
-
-	git init .
-	touch 'README.md'
-	touch 'bpm.toml'
-	git add .
-	git commit -m "Initial commit"
-
-	cd "$BPM_CWD"
+	test_util.setup_pkg "$pkg"; {
+		:
+	}; test_util.finish_pkg
 }

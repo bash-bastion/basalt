@@ -27,6 +27,9 @@ main() {
 			EOF
 			exit
 			;;
+		--global)
+			declare -rg BPM_MODE_GLOBAL=
+			;;
 		*)
 			break
 			;;

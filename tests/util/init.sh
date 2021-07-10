@@ -21,6 +21,7 @@ export BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
 export BPM_INSTALL_BIN="$BPM_PREFIX/bin"
 export BPM_INSTALL_MAN="$BPM_PREFIX/man"
 export BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
+export BPM_MODE_GLOBAL=
 
 for f in "$BPM_ROOT"/pkg/lib/{commands,util}/?*.sh; do
 	source "$f"
