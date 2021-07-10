@@ -34,21 +34,39 @@ do-upgrade() {
 	fi
 
 	for repoSpec; do
-		util.construct_clone_url "$repoSpec"
-		local uri="$REPLY1"
-		local site="$REPLY2"
-		local package="$REPLY3"
-		local ref="$REPLY4"
+		# If is local directory
+		if [ -d "$repoSpec" ]; then
+			local dir=
+			dir="$(util.readlink "$repoSpec")"
+			dir="${dir%/}"
 
-		log.info "Upgrading '$repoSpec'"
-		do-plumbing-remove-deps "$site/$package"
-		do-plumbing-unlink-bins "$site/$package"
-		do-plumbing-unlink-completions "$site/$package"
-		do-plumbing-unlink-man "$site/$package"
-		git -C "$BPM_PACKAGES_PATH/$site/$package" pull
-		do-plumbing-add-deps "$site/$package"
-		do-plumbing-link-bins "$site/$package"
-		do-plumbing-link-completions "$site/$package"
-		do-plumbing-link-man "$site/$package"
+			util.extract_data_from_package_dir "$dir"
+			local site="$REPLY1"
+			local package="$REPLY2/$REPLY3"
+
+			do_actual_upgrade "$site/$package"
+		else
+			util.construct_clone_url "$repoSpec"
+			local site="$REPLY2"
+			local package="$REPLY3"
+			local ref="$REPLY4"
+
+			do_actual_upgrade "$site/$package"
+		fi
 	done
+}
+
+do_actual_upgrade() {
+	local id="$1"
+
+	log.info "Upgrading '$id'"
+	do-plumbing-remove-deps "$id"
+	do-plumbing-unlink-bins "$id"
+	do-plumbing-unlink-completions "$id"
+	do-plumbing-unlink-man "$id"
+	git -C "$BPM_PACKAGES_PATH/$id" pull
+	do-plumbing-add-deps "$id"
+	do-plumbing-link-bins "$id"
+	do-plumbing-link-completions "$id"
+	do-plumbing-link-man "$id"
 }

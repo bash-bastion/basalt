@@ -25,6 +25,30 @@ load 'util/init.sh'
 	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
 }
 
+@test "simple upgrade (specifying with directory)" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		touch 'script.sh'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	cd "$BPM_ORIGIN_DIR/$site/$pkg"
+	touch 'script2.sh'
+	git add .
+	git commit -m 'Add script'
+	cd "$BPM_CWD"
+
+	do-upgrade "$BPM_ORIGIN_DIR/$site/$pkg"
+
+	run do-list --outdated
+	assert_output ""
+
+	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
+}
+
+
 @test "symlinks stay valid after upgrade" {
 	local site='github.com'
 	local pkg='username/package'

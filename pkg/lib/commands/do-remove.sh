@@ -7,7 +7,6 @@ do-remove() {
 
 	for repoSpec; do
 		# If is local directory
-		# TODO: do this for upgrade as well
 		if [ -d "$repoSpec" ]; then
 			local dir=
 			dir="$(util.readlink "$repoSpec")"
