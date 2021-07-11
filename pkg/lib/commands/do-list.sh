@@ -57,7 +57,9 @@ do-list() {
 			printf -v pkg_output "%s\n" "$id"
 
 			if [ "$flag_simple" = 'no' ]; then
-				ensure.git_repository "$pkg_path" "$id"
+				if [ ! -d "$pkg_path/.git" ]; then
+					die "Package '$id' is not a Git repository. Unlink or otherwise remove it at '$pkg_path'"
+				fi
 
 				local repo_branch_str= repo_outdated_str=
 

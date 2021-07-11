@@ -86,26 +86,14 @@ $site/username/p1
   Branch: master"
 }
 
-@test "properly list outdated packages" {
+@test "error if tries to list a non-git repository with details" {
 	local site="github.com"
-	local pkg1='username/outdated'
-	local pkg2='username/uptodate'
+	local pkg='username/outdated'
 
-	test_util.create_package "$pkg1"
-	test_util.create_package "$pkg2"
-	test_util.fake_clone "$site/$pkg1"
-	test_util.fake_clone "$site/$pkg2"
+	mkdir -p "$BPM_PACKAGES_PATH/$site/$pkg"
 
-	# Make pkg1 outdated by commiting to it
-	cd "$BPM_ORIGIN_DIR/$site/$pkg1"; {
-		mkdir -p bin
-		touch "bin/exec"
-		git add .
-		git commit -m "Add exec"
-	}; cd "$BPM_CWD"
+	run do-list
 
-	run do-list --outdated
-
-	assert_success
-	assert_output 'github.com/username/outdated'
+	assert_failure
+	assert_line -n 0 -p "Package '$site/$pkg' is not a Git repository. Unlink or"
 }
