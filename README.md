@@ -4,16 +4,14 @@
 
 ---
 
+STATUS: ALPHA
+
 `bpm` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
 
-Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following (as you can see, many formats are supported)
+Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
 
 ```sh
-$ bpm add \
-  rupa/z \
-  github.com/tj/git-extras \
-  https://github.com/aristocratos/bashtop \
-  git@github.com:JosefZIla/bash2048
+$ bpm add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 ```
 
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
@@ -27,57 +25,22 @@ $ ls -l --color=always ~/.local/share/bpm/cellar/bin/
 ...
 ```
 
-If you want to automatically add the bin directory to your path, source the completion files, and add the man pages to your man path, simply add a two-liner in your shell configuration
+To be able to access the binaries, completion files, and man pages in your shell, simply add a two-liner in your shell configuration
 
 ```sh
+# ~/.bashrc
 export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin:$PATH"
-eval "$(bpm init bash)" # replace 'bash' with your shell
+eval "$(bpm init bash)" # zsh and fish are also supported
 ```
 
-STATUS: ALPHA
-
-See [Getting Started](./docs/getting-started.md) for more details
-
-## Local Package Development
-
-If you are working on a project, and want to pull in a dependency, say [bash-args](https://github.com/eankeen/bash-args), the workflow looks like this
-
-To use the packages, simply append to the `PATH` variable in your script entrypoint (script.sh in the example below). Note that exporting it isn't required because it's already an exported variable
-
-```sh
-mkdir 'my-project' && cd 'my-project'
-
-# Creating a 'bpm.toml' is required so bpm knows where
-# the root of the project is
-touch 'bpm.toml'
-
-bpm add 'eankeen/bash-args'
-
-cat > 'script.sh' <<-"OUTEREOF"
-#!/usr/bin/env bash
-
-PATH="$PWD/bpm_packages/bin:$PATH"
-
-declare -A args=()
-
-# 'bash-args' requires that we use `source`
-source bash-args parse "$@" <<-"EOF"
-@flag [port.p] {3000} - The port to open on
-EOF
-
-echo "Using port '${args[port]}'"
-OUTEREOF
-
-chmod +x './script.sh'
-./script.sh # Using port '3000'
-./script.sh --port 4000 # Using port '4000'
-```
+See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-started.md) for more details
 
 ## Alternatives Comparison
 
 Why not use `bpkg` or `Basher`? Because `bpm`...
 
 - Can install multiple packages at once
+- Install local dependencies for a particular project (bpkg and basher)
 - Does not use a `package.json` that clobbers with NPM's `package.json` (bpkg)
 - Does not automatically invoke `make` commands on your behalf (bpkg)
 - Does not automatically source a `package.sh` for package configuration (basher)
@@ -88,5 +51,6 @@ Why not use `bpkg` or `Basher`? Because `bpm`...
 - Prints why a command failed, rather than just printing the help menu (basher)
 - Better bpm completion scripts
 - More flexibly parses command line arguments (basher)
+- Install local directories as packages (bpkg)
 
-I originally created a [different](https://github.com/eankeen/shell-installer) Shell package manager but later abandoned it. When I _really_ needed the functionality, I forked Basher because it had an excellent test suite and its behavior for installing packages actually made sense, compared to `bpkg`
+I I forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me, compared to `bpkg`
