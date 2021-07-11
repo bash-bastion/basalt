@@ -28,6 +28,24 @@ load 'util/init.sh'
 	assert_output ""
 }
 
+@test "properly list for local packages" {
+	local site='github.com'
+	local pkg='somepath/project2'
+
+	test_util.mock_command do-plumbing-add-deps
+	test_util.mock_command do-plumbing-link-bins
+	test_util.mock_command do-plumbing-link-completions
+	test_util.mock_command do-plumbing-link-man
+
+	test_util.create_package "$pkg"
+	do-link "$BPM_ORIGIN_DIR/$site/$pkg"
+
+	run do-list
+
+	assert_success
+	assert_output "local/project2"
+}
+
 @test "properly list outdated packages" {
 	local site="github.com"
 	local pkg1='username/outdated'

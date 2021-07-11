@@ -36,7 +36,9 @@ do-list() {
 		for package_path in "$BPM_PACKAGES_PATH"/*/*/*; do
 			util.extract_data_from_package_dir "$package_path"
 			local site="$REPLY1"
-			local package="$REPLY2/$REPLY3"
+			local user="$REPLY2"
+			local repository="$REPLY3"
+			local package="$user/$repository"
 
 			# Users that have installed packages before the switch to namespacing by
 			# site domain name will print incorrectly. So, we check to make sure the site
@@ -46,7 +48,11 @@ do-list() {
 				continue
 			fi
 
-			printf "%s\n" "$site/$package"
+			if [ "$site" = 'local' ]; then
+				printf "%s\n" "$site/$user"
+			else
+				printf "%s\n" "$site/$package"
+			fi
 		done
 	fi
 
