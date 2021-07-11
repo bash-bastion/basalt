@@ -20,6 +20,11 @@ do-add() {
 	fi
 
 	for repoSpec in "${pkgs[@]}"; do
+		if [[ -d "$repoSpec" && "${repoSpec::1}" == / ]]; then
+			log.warn "Identifier '$repoSpec' is a directory, not a package. Skipping"
+			continue
+		fi
+
 		util.extract_data_from_input "$repoSpec" "$with_ssh"
 		local uri="$REPLY1"
 		local site="$REPLY2"
