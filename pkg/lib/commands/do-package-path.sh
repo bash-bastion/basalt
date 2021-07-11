@@ -9,5 +9,10 @@ bpm-package-path() {
 	local package="$REPLY3"
 	local ref="$REPLY4"
 
-	printf "%s\n" "$BPM_PACKAGES_PATH/$site/$package"
+	local dir="$BPM_PACKAGES_PATH/$site/$package"
+	if [ -d "$dir" ]; then
+		printf "%s\n" "$dir"
+	else
+		die "Package '$site/$package' not found"
+	fi
 }
