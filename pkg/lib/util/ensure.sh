@@ -39,3 +39,12 @@ ensure.package_exists() {
 		die "Package '$package' does not exist"
 	fi
 }
+
+ensure.git_repository() {
+	local dir="$1"
+	local id="$2"
+
+	if [ ! -d "$dir/.git" ]; then
+		die "Package '$id' is not a Git repository. Unlink or otherwise remove it at '$dir'"
+	fi
+}

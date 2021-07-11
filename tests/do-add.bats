@@ -15,6 +15,36 @@ load 'util/init.sh'
 	assert_line -n 0 -p "At least one package must be supplied"
 }
 
+@test "fails when the remote repository is owned by a user with username 'local'" {
+	test_util.mock_command do-plumbing-clone
+	test_util.mock_command do-plumbing-add-deps
+	test_util.mock_command do-plumbing-link-bins
+	test_util.mock_command do-plumbing-link-completions
+	test_util.mock_command do-plumbing-link-man
+
+	run do-add 'local/pkg'
+
+	assert_failure
+	assert_line -n 0 -p  "Cannot install packages owned by username 'local' because that conflicts with linked packages"
+}
+
+@test "fails when input is an absolute path to a directory" {
+	local site='github.com'
+	local pkg='username/main'
+
+	test_util.mock_command do-plumbing-clone
+	test_util.mock_command do-plumbing-add-deps
+	test_util.mock_command do-plumbing-link-bins
+	test_util.mock_command do-plumbing-link-completions
+	test_util.mock_command do-plumbing-link-man
+
+	test_util.create_package "$pkg"
+	run do-add "$BPM_ORIGIN_DIR/$site/$pkg"
+
+	assert_failure
+	assert_line -p "Identifier '$BPM_ORIGIN_DIR/$site/$pkg' is a directory, not a package"
+}
+
 @test "executes install steps in right order" {
 	test_util.mock_command do-plumbing-clone
 	test_util.mock_command do-plumbing-add-deps

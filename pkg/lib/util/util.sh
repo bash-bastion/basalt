@@ -89,9 +89,15 @@ util.extract_data_from_package_dir() {
 	local user="${dir%/*}"; user="${user##*/}"
 	local repository="${dir##*/}"
 
-	REPLY1="$site"
-	REPLY2="$user"
-	REPLY3="$repository"
+	if [ "$user" = 'local' ]; then
+		REPLY1="$user"
+		REPLY2=''
+		REPLY3="$repository"
+	else
+		REPLY1="$site"
+		REPLY2="$user"
+		REPLY3="$repository"
+	fi
 	REPLY4=
 }
 

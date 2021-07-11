@@ -21,8 +21,7 @@ do-add() {
 
 	for repoSpec in "${pkgs[@]}"; do
 		if [[ -d "$repoSpec" && "${repoSpec::1}" == / ]]; then
-			log.warn "Identifier '$repoSpec' is a directory, not a package. Skipping"
-			continue
+			die "Identifier '$repoSpec' is a directory, not a package"
 		fi
 
 		util.extract_data_from_input "$repoSpec" "$with_ssh"
@@ -30,6 +29,10 @@ do-add() {
 		local site="$REPLY2"
 		local package="$REPLY3"
 		local ref="$REPLY4"
+
+		if [ "${package%/*}" = 'local' ]; then
+			die "Cannot install packages owned by username 'local' because that conflicts with linked packages"
+		fi
 
 		log.info "Installing '$repoSpec'"
 		do-plumbing-clone "$uri" "$site/$package" $ref

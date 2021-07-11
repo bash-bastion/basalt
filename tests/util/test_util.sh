@@ -58,6 +58,6 @@ test_util.create_package() {
 	ensure.non_zero 'pkg' "$pkg"
 
 	test_util.setup_pkg "$pkg"; {
-		:
+		git branch -M master
 	}; test_util.finish_pkg
 }
