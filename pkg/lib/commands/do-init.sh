@@ -46,6 +46,9 @@ do-init() {
 		  set -gx PATH \$BPM_ROOT/cellar/bin \$PATH
 		end
 
+		# bpm packages completions
+		set -g fish_complete_path $BPM_ROOT/cellar/completions/fish \$fish_complete_path
+
 		EOF
 		;;
 	bash)

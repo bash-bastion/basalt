@@ -1,24 +1,38 @@
-function __fish_bpm_needs_command
-	set cmd (commandline -opc)
-	if [ (count $cmd) -eq 1 -a $cmd[1] = 'bpm' ]
-		return 0
-	end
-	return 1
-end
+set cmd bpm
+set -l listSubcommands add echo init link list package-path remove upgrade
 
-function __fish_bpm_using_command
-	set cmd (commandline -opc)
-	if [ (count $cmd) -gt 1 ]
-		if [ $argv[1] = $cmd[2] ]
-		return 0
-		end
-	end
-	return 1
-end
+# Not only does this prevent appending completion properties to $cmd (we
+# want to start from a completely new definition), it also removes incorrect
+# completions inferred from '$cmd --help' (by erasing the previous definition)
+complete -e $cmd
 
-complete -f -c bpm -n '__fish_bpm_needs_command
-' -a '(bpm commands)'
+complete -c $cmd -f -n "not __fish_seen_subcommand_from $listSubcommands" -a "$listSubcommands"
 
-for cmd in (bpm commands)
-	complete -f -c bpm -n "__fish_bpm_using_command $cmd" -a "(bpm completions $cmd)"
-end
+set subcmd add
+set -l subcommandOptions --shh
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
+
+set subcmd echo
+set -l subcommandOptions BPM_ROOT BPM_PREFIX
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
+
+set subcmd init
+set -l subcommandOptions sh bash zsh fish
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
+
+set subcmd link
+set -l subcommandOptions --no-deps
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
+
+set subcmd list
+set -l subcommandOptions --outdated
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
+
+set subcmd package-path
+set -l subcommandOptions
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (bpm complete package-path)"
+
+set subcmd upgrade
+set -l subcommandOptions
+# TODO: only complete if (bpm complete upgrade) was successfull
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (bpm complete upgrade)"

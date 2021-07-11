@@ -108,12 +108,15 @@ main() {
 must_reset_bpm_vars() {
 	local is_global="$1"
 
-	local project_root_dir=
-	if ! project_root_dir="$(util.get_project_root_dir)"; then
-		die "No 'bpm.toml' file found. Please create one to install local packages or pass the '--global' option"
-	fi
+	# TEST this
+	if [ "$is_global" = 'no' ]; then
+		local project_root_dir=
+		if ! project_root_dir="$(util.get_project_root_dir)"; then
+			die "No 'bpm.toml' file found. Please create one to install local packages or pass the '--global' option"
+		fi
 
-	do_set_bpm_vars "$project_root_dir"
+		do_set_bpm_vars "$project_root_dir"
+	fi
 }
 
 may_reset_bpm_vars() {

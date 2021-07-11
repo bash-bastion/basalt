@@ -76,6 +76,9 @@ abstract.completions_search_heuristics() {
 				abstract.completions_do_action_bash "$action" "$file"
 			elif [[ $fileName == *.zsh ]] && [[ $type == all || $type == zsh ]]; then
 				abstract.completions_do_action_zsh "$action" "$file"
+			# TODO: do this for non heuristic
+			elif [[ $fileName == *.fish ]] && [[ $type == all || $type == fish ]]; then
+				abstract.completions_do_action_fish "$action" "$file"
 			fi
 		done
 	done
@@ -128,4 +131,21 @@ abstract.completions_do_action_zsh() {
 			;;
 		esac
 	fi
+}
+
+abstract.completions_do_action_fish() {
+	local action="$1"
+	local file="$2"
+
+	case "$action" in
+	link)
+		mkdir -p "$BPM_INSTALL_COMPLETIONS/fish"
+		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"
+		;;
+	unlink)
+		if [ -f "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}" ]; then
+			unlink "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"
+		fi
+		;;
+	esac
 }
