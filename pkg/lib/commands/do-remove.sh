@@ -44,6 +44,8 @@ do_actual_removal() {
 	do-plumbing-unlink-bins "$id"
 	do-plumbing-unlink-completions "$id"
 
+	echo "removing"
+
 	rm -rf "${BPM_PACKAGES_PATH:?}/$id"
 	if ! rmdir -p "${BPM_PACKAGES_PATH:?}/$id"; then
 		# Do not exit on failure

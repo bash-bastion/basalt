@@ -30,6 +30,8 @@ abstract.completions() {
 						abstract.completions_do_action_bash "$action" "$file"
 					elif [[ $fileName == *.zsh ]]; then
 						abstract.completions_do_action_zsh "$action" "$file"
+					elif [[ $fileName == *.fish ]]; then
+						abstract.completions_do_action_fish "$action" "$file"
 					fi
 				done
 			done
@@ -76,7 +78,6 @@ abstract.completions_search_heuristics() {
 				abstract.completions_do_action_bash "$action" "$file"
 			elif [[ $fileName == *.zsh ]] && [[ $type == all || $type == zsh ]]; then
 				abstract.completions_do_action_zsh "$action" "$file"
-			# TODO: do this for non heuristic
 			elif [[ $fileName == *.fish ]] && [[ $type == all || $type == fish ]]; then
 				abstract.completions_do_action_fish "$action" "$file"
 			fi

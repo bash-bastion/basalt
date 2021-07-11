@@ -20,19 +20,22 @@ load 'util/init.sh'
 ## BASH ##
 
 @test "adds bash completions determined from package.sh" {
+	skip "broken test?"
+
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		mkdir 'completions'
-		touch 'completions/comp.bash'
+		echo "BASH_COMPLETIONS='ff'" > 'package.sh'
+		mkdir 'ff'
+		touch 'ff/comp.bash'
 	}; test_util.finish_pkg
 	test_util.fake_install "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/comp.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/ff/comp.bash" ]
 }
 
 
@@ -294,4 +297,77 @@ load 'util/init.sh'
 
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
+}
+
+
+## FISH ##
+
+@test "adds fish completions determined from bpm.toml" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		mkdir 'weird_completions'
+		touch 'weird_completions/comp.fish'
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/comp.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_completions/comp.fish" ]
+}
+
+@test "adds fish completions determined from bpm.toml (and not from heuristics)" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		mkdir 'completions'
+		touch 'completions/prof.fish'
+	}; test_util.finish_pkg
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	! [ -f "$BPM_INSTALL_COMPLETIONS/fish/prof.fish" ]
+}
+
+@test "adds fish completions determined with heuristics (./?(contrib/)completion?(s))" {
+	local site='github.com'
+	local pkg="username/package$i"
+	test_util.setup_pkg "$pkg"; {
+		mkdir -p ./{contrib/,}completion{,s}
+		touch "completion/c1.fish"
+		touch "completions/c2.fish"
+		touch "contrib/completion/c3.fish"
+		touch "contrib/completions/c4.fish"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c1.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.fish" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c2.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/c2.fish" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c3.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completion/c3.fish" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c4.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.fish" ]
+}
+
+@test "do not add fish completions from heuristics when completionDirs is specified in bpm.toml" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		mkdir 'completion'
+		touch "completion/prog.fish"
+	}; test_util.finish_pkg
+	test_util.fake_install "$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prog.fish" ]
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prog.fish" ]
 }
