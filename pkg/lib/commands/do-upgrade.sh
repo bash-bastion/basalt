@@ -61,18 +61,18 @@ do_actual_upgrade() {
 
 	# Only upgrade if the package is a Git repository. If it is not, then
 	# it's a package installed with 'link'
-	if [ -d "$BPM_PACKAGES_PATH/$id/.git" ]; then
-		log.info "Upgrading '$id'"
-		do-plumbing-remove-deps "$id"
-		do-plumbing-unlink-bins "$id"
-		do-plumbing-unlink-completions "$id"
-		do-plumbing-unlink-man "$id"
-		git -C "$BPM_PACKAGES_PATH/$id" pull
-		do-plumbing-add-deps "$id"
-		do-plumbing-link-bins "$id"
-		do-plumbing-link-completions "$id"
-		do-plumbing-link-man "$id"
-	else
-		log.warn "Package '$id' has been added with 'bpm link'. It cannot be upgraded"
+	if [ ! -d "$BPM_PACKAGES_PATH/$id/.git" ]; then
+		die "Package at '$BPM_PACKAGES_PATH/$id' is not a Git repository"
 	fi
+
+	log.info "Upgrading '$id'"
+	do-plumbing-remove-deps "$id"
+	do-plumbing-unlink-bins "$id"
+	do-plumbing-unlink-completions "$id"
+	do-plumbing-unlink-man "$id"
+	git -C "$BPM_PACKAGES_PATH/$id" pull
+	do-plumbing-add-deps "$id"
+	do-plumbing-link-bins "$id"
+	do-plumbing-link-completions "$id"
+	do-plumbing-link-man "$id"
 }

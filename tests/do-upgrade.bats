@@ -113,7 +113,7 @@ load 'util/init.sh'
 	run 'do-upgrade' 'local/theta'
 
 	assert_success
-	assert_line -p "Package 'github.com/local/theta' has been added with 'bpm link'. It cannot be upgraded"
+	assert_line -p "Package at '$BPM_PACKAGES_PATH/local/theta' is not a Git repository"
 }
 
 @test "errors when no packages are given" {
