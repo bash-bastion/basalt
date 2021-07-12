@@ -107,6 +107,34 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.bash" ]
 }
 
+@test "adds bash completions determined with heuristics (share/etc)" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir -p 'share/bash-completion/completions'
+		mkdir -p 'etc/bash_completion.d'
+
+		touch 'share/bash-completion/completions/c1'
+		touch 'share/bash-completion/completions/c2.sh'
+		touch 'share/bash-completion/completions/c3.bash'
+		touch 'etc/bash_completion.d/c4'
+		touch 'etc/bash_completion.d/c5.sh'
+		touch 'etc/bash_completion.d/c6.bash'
+	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c1" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c2.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c3.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c3.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c4" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c5.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c5.sh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c6.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c6.bash" ]
+}
+
 @test "adds bash completions determined from heuristics when when ZSH_COMPLETIONS is specified in package.sh" {
 	local site='github.com'
 	local pkg="username/package"

@@ -83,20 +83,36 @@ abstract.completions_search_heuristics() {
 			fi
 		done
 	done
+
+	if [[ $type == all || $type == bash ]]; then
+		for completion_dir in share/bash-completion/completions etc/bash_completion.d; do
+			for file in "$BPM_PACKAGES_PATH/$id/$completion_dir"/*; do
+				local fileName="${file##*/}"
+
+				abstract.completions_do_action_bash "$action" "$file"
+			done
+		done
+	fi
 }
 
 abstract.completions_do_action_bash() {
 	local action="$1"
 	local file="$2"
 
+	local fileName="${file##*/}"
+	if [[ $fileName != *.* ]]; then
+		fileName="$fileName.bash"
+	fi
+
+
 	case "$action" in
 	link)
 		mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
-		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}"
+		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/bash/$fileName"
 		;;
 	unlink)
-		if [ -f "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}" ]; then
-			unlink "$BPM_INSTALL_COMPLETIONS/bash/${file##*/}"
+		if [ -f "$BPM_INSTALL_COMPLETIONS/bash/$fileName" ]; then
+			unlink "$BPM_INSTALL_COMPLETIONS/bash/$fileName"
 		fi
 		;;
 	esac
