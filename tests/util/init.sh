@@ -11,6 +11,9 @@ export BPM_TEST_DIR="$BATS_TMPDIR/bpm"
 export BPM_CWD="$BPM_TEST_DIR/cwd"
 export BPM_ORIGIN_DIR="$BPM_TEST_DIR/origin"
 
+export LANG="C"
+export LANGUAGE="C"
+export LC_ALL="C"
 export XDG_DATA_HOME=
 export PATH="$BPM_ROOT/pkg/bin:$PATH"
 
