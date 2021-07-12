@@ -12,7 +12,7 @@ load 'util/init.sh'
 		touch 'man/exec.2'
 		touch 'exec.3'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-unlink-man "$site/$pkg"
 
@@ -32,7 +32,7 @@ load 'util/init.sh'
 		touch '^_^/exec.1'
 		touch '^_^/exec.2'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -f "$BPM_INSTALL_MAN/man1/exec.1" ]
 

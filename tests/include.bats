@@ -40,7 +40,7 @@ load 'util/init.sh'
 		:
 	}; test_util.finish_pkg
 
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	eval "$(do-init sh)"
 
@@ -57,7 +57,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo "func_name() { echo 'done'; }" > 'function.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	eval "$(do-init sh)"
 	include "$site/$pkg" 'function.sh'

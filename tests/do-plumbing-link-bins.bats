@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		:
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -26,7 +26,7 @@ load 'util/init.sh'
 		touch 'binn/exec1'
 		touch 'binn/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -48,7 +48,7 @@ load 'util/init.sh'
 		mkdir 'ff'
 		touch 'ff/exec3'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -68,7 +68,7 @@ load 'util/init.sh'
 		touch 'weird_dir/exec1'
 		touch 'weird_dir/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -89,7 +89,7 @@ load 'util/init.sh'
 		mkdir 'weird_dir'
 		touch 'weird_dir/exec3'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -108,7 +108,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -126,7 +126,7 @@ load 'util/init.sh'
 		touch 'bins/exec1'
 		touch 'bins/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -144,7 +144,7 @@ load 'util/init.sh'
 		touch 'exec2.sh'
 		chmod +x 'exec1' 'exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -161,7 +161,7 @@ load 'util/init.sh'
 		touch 'exec1'
 		touch 'exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -180,7 +180,7 @@ load 'util/init.sh'
 		touch 'exec2'
 		chmod +x 'exec2'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -287,10 +287,14 @@ load 'util/init.sh'
 }
 
 @test "does not symlink package itself as bin when linked with bpm link" {
-	mkdir -p 'package' 'username/package2'
+	local dir='package'
+	local dir2='username/package2'
+
+	test_util.create_pkg_dir "$dir"
+	test_util.create_pkg_dir "$dir2"
 
 	# implicit call to do-plumbing-link-bins
-	run do-link 'package' 'username/package2'
+	run do-link "$BPM_ORIGIN_DIR/$dir" "$BPM_ORIGIN_DIR/$dir2"
 
 	assert_success
 	assert [ ! -e "$BPM_PREFIX/bin/package" ]

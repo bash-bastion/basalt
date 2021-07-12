@@ -46,7 +46,7 @@ load 'util/init.sh'
 		touch 'bpm.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 
@@ -64,7 +64,7 @@ load 'util/init.sh'
 		touch 'bpm.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 
@@ -81,7 +81,7 @@ load 'util/init.sh'
 		touch 'bpm.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-remove "$pkg"
 
@@ -100,7 +100,7 @@ load 'util/init.sh'
 		touch 'exec2.sh'
 		chmod +x 'exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run do-remove "$pkg"
 
@@ -118,13 +118,13 @@ load 'util/init.sh'
 		mkdir bin
 		touch 'bin/exec1'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg1"
+	test_util.fake_add "$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		mkdir bin
 		touch 'bin/exec2'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg2"
+	test_util.fake_add "$pkg2"
 
 	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg1" ]
 	assert [ -e "$BPM_INSTALL_BIN/exec1" ]

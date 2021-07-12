@@ -18,9 +18,8 @@ test_util.fake_clone() {
 	git clone "$BPM_ORIGIN_DIR/$id" "$BPM_PACKAGES_PATH/$id"
 }
 
-# TODO phase out in favor of do-link?
 # @description Clones the repository, and performs any linking, etc.
-test_util.fake_install() {
+test_util.fake_add() {
 		local pkg="$1"
 		ensure.non_zero 'pkg' "$pkg"
 
@@ -60,4 +59,37 @@ test_util.create_package() {
 	test_util.setup_pkg "$pkg"; {
 		git branch -M master
 	}; test_util.finish_pkg
+}
+
+test_util.create_pkg_dir() {
+	local pkg="$1"
+	ensure.non_zero 'pkg' "$pkg"
+
+	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
+
+	git init .
+	touch 'README.md'
+	git add .
+	git commit -m "Initial commit"
+
+	cd "$BPM_CWD"
+}
+
+test_util.create_remote_and_local() {
+	local site='github.com'
+	local remote_dir="remote"
+	local local_dir="local"
+
+	mkdir -p "$BPM_ORIGIN_DIR/$remote_dir"
+	cd "$BPM_ORIGIN_DIR/$remote_dir"
+	git init .
+	touch 'README.md'
+	git add .
+	git commit -m "Initial commit"
+
+	cd "$BPM_ORIGIN_DIR"
+	git clone "file://$BPM_ORIGIN_DIR/$remote_dir" "$BPM_PACKAGES_PATH/$site/username/$local_dir"
+
+	cd "$BPM_CWD"
 }

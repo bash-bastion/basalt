@@ -11,7 +11,7 @@ load 'util/init.sh'
 		mkdir 'somedir'
 		touch 'somedir/comp.bash'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 
@@ -30,7 +30,7 @@ load 'util/init.sh'
 		mkdir 'somedir'
 		touch 'somedir/comp.bash'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 
@@ -49,7 +49,7 @@ load 'util/init.sh'
 		touch 'completions/comp.bash'
 		touch 'completion/comp2.bash'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp2.bash" ]
@@ -70,7 +70,7 @@ load 'util/init.sh'
 		touch 'contrib/completion/comp.bash'
 		touch 'contrib/completions/comp2.bash'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp2.bash" ]
@@ -92,7 +92,7 @@ load 'util/init.sh'
 		touch 'somedir/comp1.zsh'
 		echo '#compdef' > 'otherdir/comp3.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/comp1.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/comp3.zsh" ]
@@ -114,7 +114,7 @@ load 'util/init.sh'
 		touch 'somedir/comp1.zsh'
 		echo '#compdef' > 'otherdir/comp3.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/comp1.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/comp3.zsh" ]
@@ -135,7 +135,7 @@ load 'util/init.sh'
 		touch 'completion/comp.zsh'
 		echo '#compdef' > 'completions/comp2.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/comp.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/comp2.zsh" ]
@@ -156,7 +156,7 @@ load 'util/init.sh'
 		touch 'contrib/completion/comp.zsh'
 		echo '#compdef' > 'contrib/completions/comp2.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/comp.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/comp2.zsh" ]
@@ -181,7 +181,7 @@ load 'util/init.sh'
 		mkdir 'somedir'
 		touch 'somedir/comp.bash'
 	}; test_util.finish_pkg
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	assert [ ! -L "$BPM_INSTALL_COMPLETIONS/bash/c.bash" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]

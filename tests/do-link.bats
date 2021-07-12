@@ -24,14 +24,28 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir -p 'subdir/theta'
-	do-link 'subdir/theta'
-	mkdir 'theta'
+	local pkg1='subdir/theta'
+	local pkg2='theta'
 
-	run do-link 'theta'
+	mkdir -p "$pkg1"
+	git -C "$pkg1" init
+	do-link "$pkg1"
+
+	mkdir "$pkg2"
+	git -C "$pkg2" init
+	run do-link "$pkg2"
 
 	assert_failure
 	assert_line -n 0 -p "Package 'local/theta' is already present"
+}
+
+@test "fails if not a Git repository" {
+	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
+
+	run do-link "$BPM_ORIGIN_DIR/$pkg"
+
+	assert_failure
+	assert_line -n 0 -p "Package must be a Git repository"
 }
 
 @test "fails if package already present (as erroneous file)" {
@@ -42,9 +56,11 @@ load 'util/init.sh'
 
 	mkdir -p touch "$BPM_PACKAGES_PATH/local"
 	touch "$BPM_PACKAGES_PATH/local/theta"
+
+	test_util.create_pkg_dir 'theta'
 	mkdir 'theta'
 
-	run do-link 'theta'
+	run do-link "$BPM_ORIGIN_DIR/theta"
 
 	assert_failure
 	assert_line -n 0 -p "Package 'local/theta' is already present"
@@ -56,12 +72,14 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package1'
+	local dir='package1'
 
-	run do-link 'package1'
+	test_util.create_pkg_dir "$dir"
+
+	run do-link "$BPM_ORIGIN_DIR/$dir"
 
 	assert_success
-	assert [ "$(readlink -f $BPM_PACKAGES_PATH/local/package1)" = "$(readlink -f "$PWD/package1")" ]
+	assert [ "$(readlink -f $BPM_PACKAGES_PATH/local/package1)" = "$(readlink -f "$BPM_ORIGIN_DIR/$dir")" ]
 }
 
 @test "calls link-bins, link-completions, link-man and deps in order" {
@@ -70,16 +88,18 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package2'
+	local dir='package2'
 
-	run do-link 'package2'
+	test_util.create_pkg_dir "$dir"
+
+	run do-link "$BPM_ORIGIN_DIR/$dir"
 
 	assert_success
-	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
-	assert_line -n 1 "do-plumbing-add-deps local/package2"
-	assert_line -n 2 "do-plumbing-link-bins local/package2"
-	assert_line -n 3 "do-plumbing-link-completions local/package2"
-	assert_line -n 4 "do-plumbing-link-man local/package2"
+	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir'"
+	assert_line -n 1 "do-plumbing-add-deps local/$dir"
+	assert_line -n 2 "do-plumbing-link-bins local/$dir"
+	assert_line -n 3 "do-plumbing-link-completions local/$dir"
+	assert_line -n 4 "do-plumbing-link-man local/$dir"
 
 }
 
@@ -89,21 +109,25 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package2' 'package3'
+	local dir1='package2'
+	local dir2='package3'
 
-	run do-link 'package2' 'package3'
+	test_util.create_pkg_dir "$dir1"
+	test_util.create_pkg_dir "$dir2"
+
+	run do-link "$BPM_ORIGIN_DIR/$dir1" "$BPM_ORIGIN_DIR/$dir2"
 
 	assert_success
-	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
-	assert_line -n 1 "do-plumbing-add-deps local/package2"
-	assert_line -n 2 "do-plumbing-link-bins local/package2"
-	assert_line -n 3 "do-plumbing-link-completions local/package2"
-	assert_line -n 4 "do-plumbing-link-man local/package2"
-	assert_line -n 5 -e "Linking '/(.*)/bpm/cwd/package3'"
-	assert_line -n 6 "do-plumbing-add-deps local/package3"
-	assert_line -n 7 "do-plumbing-link-bins local/package3"
-	assert_line -n 8 "do-plumbing-link-completions local/package3"
-	assert_line -n 9 "do-plumbing-link-man local/package3"
+	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir1'"
+	assert_line -n 1 "do-plumbing-add-deps local/$dir1"
+	assert_line -n 2 "do-plumbing-link-bins local/$dir1"
+	assert_line -n 3 "do-plumbing-link-completions local/$dir1"
+	assert_line -n 4 "do-plumbing-link-man local/$dir1"
+	assert_line -n 5 -p "Linking '$BPM_ORIGIN_DIR/$dir2'"
+	assert_line -n 6 "do-plumbing-add-deps local/$dir2"
+	assert_line -n 7 "do-plumbing-link-bins local/$dir2"
+	assert_line -n 8 "do-plumbing-link-completions local/$dir2"
+	assert_line -n 9 "do-plumbing-link-man local/$dir2"
 
 }
 
@@ -113,15 +137,17 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package2'
+	local dir='package2'
 
-	run do-link --no-deps 'package2'
+	test_util.create_pkg_dir "$dir"
+
+	run do-link --no-deps "$BPM_ORIGIN_DIR/$dir"
 
 	assert_success
-	assert_line -n 0 -e "Linking '/(.*)/bpm/cwd/package2'"
-	assert_line -n 1 "do-plumbing-link-bins local/package2"
-	assert_line -n 2 "do-plumbing-link-completions local/package2"
-	assert_line -n 3 "do-plumbing-link-man local/package2"
+	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir'"
+	assert_line -n 1 "do-plumbing-link-bins local/$dir"
+	assert_line -n 2 "do-plumbing-link-completions local/$dir"
+	assert_line -n 3 "do-plumbing-link-man local/$dir"
 }
 
 
@@ -131,9 +157,11 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package2'
+	local dir='package2'
 
-	run do-link --no-deps 'package2'
+	test_util.create_pkg_dir "$dir"
+
+	run do-link --no-deps "$BPM_ORIGIN_DIR/$dir"
 
 	assert_success
 	refute_line "do-plumbing-add-deps local/package2"
@@ -145,9 +173,11 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package2'
+	local dir='package2'
 
-	run do-link 'package2' --no-deps
+	test_util.create_pkg_dir "$dir"
+
+	run do-link "$BPM_ORIGIN_DIR/$dir" --no-deps
 
 	assert_success
 	refute_line "do-plumbing-add-deps local/package2"
@@ -159,13 +189,15 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package3'
-	cd 'package3'
+	local dir='package2'
 
+	test_util.create_pkg_dir "$dir"
+
+	cd "$BPM_ORIGIN_DIR/$dir"
 	run do-link .
 
 	assert_success
-	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/package3")" = "$(readlink -f "$PWD")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/$dir")" = "$(readlink -f "$BPM_ORIGIN_DIR/$dir")" ]
 }
 
 @test "links the parent directory" {
@@ -174,13 +206,18 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir -p 'sierra/tango'
-	cd 'sierra/tango'
+	local dir='package2'
+
+	test_util.create_pkg_dir "$dir"
+
+	cd "$BPM_ORIGIN_DIR/$dir"
+	mkdir -p 'tango'
+	cd 'tango'
 
 	run do-link ..
 
 	assert_success
-	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/sierra")" = "$(readlink -f "$PWD/..")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/$dir")" = "$(readlink -f "$BPM_ORIGIN_DIR/$dir")" ]
 }
 
 @test "links an arbitrary complex relative path" {
@@ -189,9 +226,13 @@ load 'util/init.sh'
 	test_util.mock_command do-plumbing-link-completions
 	test_util.mock_command do-plumbing-link-man
 
-	mkdir 'package3'
-	run do-link ./package3/.././package3
+	local dir='package2'
+
+	test_util.create_pkg_dir "parent/$dir"
+
+	cd "$BPM_ORIGIN_DIR/parent"
+	run do-link "./$dir/.././$dir"
 
 	assert_success
-	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/package3")" = "$(readlink -f "$PWD/package3")" ]
+	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/$dir")" = "$(readlink -f "$BPM_ORIGIN_DIR/parent/$dir")" ]
 }

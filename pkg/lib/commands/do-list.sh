@@ -6,9 +6,6 @@ do-list() {
 
 	for arg; do
 		case "$arg" in
-		--outdated)
-			flag_outdated='yes'
-			;;
 		--simple)
 			flag_simple='yes'
 			;;

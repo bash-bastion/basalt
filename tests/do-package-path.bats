@@ -7,7 +7,7 @@ load 'util/init.sh'
 	local pkg='username/package'
 
 	test_util.create_package "$pkg"
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run bpm-package-path "$pkg"
 
@@ -20,7 +20,7 @@ load 'util/init.sh'
 	local pkg='username/package'
 
 	test_util.create_package "$pkg"
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run bpm-package-path "$site/$pkg"
 
@@ -33,7 +33,7 @@ load 'util/init.sh'
 	local pkg='username/package'
 
 	test_util.create_package "$pkg"
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run bpm-package-path "https://$site/$pkg"
 
@@ -46,7 +46,7 @@ load 'util/init.sh'
 	local pkg='username/package'
 
 	test_util.create_package "$pkg"
-	test_util.fake_install "$pkg"
+	test_util.fake_add "$pkg"
 
 	run bpm-package-path "other/package"
 

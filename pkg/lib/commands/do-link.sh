@@ -27,6 +27,9 @@ do-link() {
 		dir="$(util.readlink "$dir")"
 		dir="${dir%/}"
 
+		if [ ! -d "$dir/.git" ]; then
+			die "Package must be a Git repository"
+		fi
 
 		local user="local"
 		local repository="${dir##*/}"
