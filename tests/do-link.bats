@@ -92,7 +92,7 @@ load 'util/init.sh'
 
 	test_util.create_pkg_dir "$dir"
 
-	run do-link "$BPM_ORIGIN_DIR/$dir"
+	run do-link "$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
 
 	assert_success
 	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir'"
@@ -115,7 +115,7 @@ load 'util/init.sh'
 	test_util.create_pkg_dir "$dir1"
 	test_util.create_pkg_dir "$dir2"
 
-	run do-link "$BPM_ORIGIN_DIR/$dir1" "$BPM_ORIGIN_DIR/$dir2"
+	run do-link "$(util.readlink "$BPM_ORIGIN_DIR/$dir1")" "$(test_util.readlink "$BPM_ORIGIN_DIR/$dir2")"
 
 	assert_success
 	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir1'"
