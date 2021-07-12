@@ -48,10 +48,12 @@ load 'util/init.sh'
 		mkdir 'completions'
 		touch 'completions/prof.bash'
 	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
-	! [ -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
+	assert_success
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
 }
 
 @test "adds bash completions determined from bpm.toml" {
@@ -80,15 +82,18 @@ load 'util/init.sh'
 		mkdir 'completions'
 		touch 'completions/prof.bash'
 	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
-	! [ -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
+	assert_success
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
 }
 
 @test "adds bash completions determined with heuristics (./?(contrib/)completion?(s))" {
 	local site='github.com'
-	local pkg="username/package$i"
+	local pkg="username/package"
+
 	test_util.setup_pkg "$pkg"; {
 		mkdir -p ./{contrib/,}completion{,s}
 		touch "completion/c1.bash"
@@ -105,6 +110,23 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/c2.bash" ]
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c3.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completion/c3.bash" ]
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.bash" ]
+}
+
+@test "adds bash completions determined with heuristics (root directory)" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'etc'
+
+		touch 'git-flow-completion.bash'
+		touch 'etc/some-completion.bash'
+	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/git-flow-completion.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.bash" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/some-completion.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/some-completion.bash" ]
 }
 
 @test "adds bash completions determined with heuristics (share/etc)" {
@@ -148,7 +170,8 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
-	[ -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert_success
+	assert [ -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
 @test "do not add bash completions from heuristics when BASH_COMPLETIONS is specified in package.sh" {
@@ -164,7 +187,8 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
-	[ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert_success
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
 @test "do not add bash completions from heuristics when completionDirs is specified in bpm.toml" {
@@ -180,9 +204,31 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
+
+@test "bash completions without file extension have an extension appended" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir -p 'share/bash-completion/completions'
+
+		touch 'share/bash-completion/completions/seven'
+	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/seven.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/seven" ]
+
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+}
+
 
 ## ZSH ##
 
@@ -274,6 +320,23 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys//c4.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.zsh" ]
 }
 
+@test "adds zsh completions determined with heuristics (root directory)" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'etc'
+
+		touch 'git-flow-completion.zsh'
+		touch 'etc/some-completion.zsh'
+	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/git-flow-completion.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/some-completion.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/some-completion.zsh" ]
+}
+
 @test "adds zsh completions determined from heuristics when when BASH_COMPLETIONS is specified in package.sh" {
 	local site='github.com'
 	local pkg="username/package"
@@ -306,6 +369,7 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
 }
@@ -323,8 +387,13 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
+}
+
+@test "zsh completions without file extension have an extension appended" {
+	skip
 }
 
 
@@ -356,15 +425,18 @@ load 'util/init.sh'
 		mkdir 'completions'
 		touch 'completions/prof.fish'
 	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
-	! [ -f "$BPM_INSTALL_COMPLETIONS/fish/prof.fish" ]
+	assert_success
+	assert_success [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prof.fish" ]
 }
 
 @test "adds fish completions determined with heuristics (./?(contrib/)completion?(s))" {
 	local site='github.com'
-	local pkg="username/package$i"
+	local pkg="username/package"
+
 	test_util.setup_pkg "$pkg"; {
 		mkdir -p ./{contrib/,}completion{,s}
 		touch "completion/c1.fish"
@@ -383,6 +455,23 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c4.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.fish" ]
 }
 
+@test "adds fish completions determined with heuristics (root directory)" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'etc'
+
+		touch 'git-flow-completion.fish'
+		touch 'etc/some-completion.fish'
+	}; test_util.finish_pkg
+	test_util.fake_add "$pkg"
+
+	assert_success
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/git-flow-completion.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.fish" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/some-completion.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/some-completion.fish" ]
+}
+
 @test "do not add fish completions from heuristics when completionDirs is specified in bpm.toml" {
 	local site='github.com'
 	local pkg="username/package"
@@ -396,6 +485,7 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prog.fish" ]
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prog.fish" ]
 }
@@ -418,6 +508,7 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/prog.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/prog.fish" ]
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/prog1.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/prog1.bash" ]
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/prog2.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/prog2.bash" ]

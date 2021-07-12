@@ -93,6 +93,17 @@ abstract.completions_search_heuristics() {
 			done
 		done
 	fi
+
+	for file in "$BPM_PACKAGES_PATH/$id"/{,etc/}*; do
+		local fileName="${file##*/}"
+		if [[ $fileName == *-completion.* ]]; then
+			case "$fileName" in
+				*.@(sh|bash)) abstract.completions_do_action_bash "$action" "$file" ;;
+				*.zsh) abstract.completions_do_action_zsh "$action" "$file" ;;
+				*.fish) abstract.completions_do_action_fish "$action" "$file" ;;
+			esac
+		fi
+done
 }
 
 abstract.completions_do_action_bash() {

@@ -59,8 +59,6 @@ do-upgrade() {
 do_actual_upgrade() {
 	local id="$1"
 
-	# Only upgrade if the package is a Git repository. If it is not, then
-	# it's a package installed with 'link'
 	if [ ! -d "$BPM_PACKAGES_PATH/$id/.git" ]; then
 		die "Package at '$BPM_PACKAGES_PATH/$id' is not a Git repository"
 	fi
