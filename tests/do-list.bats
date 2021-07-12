@@ -23,8 +23,8 @@ load 'util/init.sh'
 	run do-list --simple
 
 	assert_success
-	assert_line -n 0 "$site/username2/p2"
-	assert_line -n 1 "$site/username/p1"
+	assert_line -n 0 "$site/username/p1"
+	assert_line -n 1 "$site/username2/p2"
 	refute_line "$site/username2/p3"
 }
 
@@ -60,9 +60,9 @@ load 'util/init.sh'
 	# Note that all the tests for non-simple list do not include 'state' up to date since that is not emulated
 	# in the test
 	assert_success
-	assert_output "$site/username2/p2
+	assert_output "$site/username/p1
   Branch: master
-$site/username/p1
+$site/username2/p2
   Branch: master"
 }
 
