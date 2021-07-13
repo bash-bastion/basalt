@@ -512,3 +512,69 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/prog2.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/prog2.bash" ]
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/prog.zsh" ]
 }
+
+@test "fails bash link completions when specifying directory in package.sh" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'BASH_COMPLETIONS="dir"' > 'package.sh'
+
+		mkdir 'dir'
+		touch 'dir/.gitkeep'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_failure
+	assert_line -p "Specified directory 'dir' in package.sh; only files are valid"
+}
+
+@test "fails zsh link completions when specifying directory in package.sh" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'ZSH_COMPLETIONS="dir"' > 'package.sh'
+
+		mkdir 'dir'
+		touch 'dir/.gitkeep'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_failure
+	assert_line -p "Specified directory 'dir' in package.sh; only files are valid"
+}
+
+
+@test "warns bash link completions when specifying non-existent file in package.sh" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'BASH_COMPLETIONS="some_file"' > 'package.sh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_line -p "Completion file 'some_file' not found in repository. Skipping"
+}
+
+
+@test "warns zsh link completions when specifying non-existent file in package.sh" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'ZSH_COMPLETIONS="some_file"' > 'package.sh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_line -p "Completion file 'some_file' not found in repository. Skipping"
+}

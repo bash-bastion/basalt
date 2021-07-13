@@ -204,3 +204,6 @@ load 'util/init.sh'
 	assert_success
 	assert_line "do-plumbing-clone https://github.com/username/package.git github.com/username/package"
 }
+
+
+

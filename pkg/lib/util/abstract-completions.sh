@@ -38,7 +38,14 @@ abstract.completions() {
 			IFS=':' read -ra bash_completion_files <<< "$REPLY"
 
 			for file in "${bash_completion_files[@]}"; do
-				abstract.completions_do_action_bash "$action" "$BPM_PACKAGES_PATH/$id/$file"
+				local full_path="$BPM_PACKAGES_PATH/$id/$file"
+				if [ -d "$full_path" ]; then
+					die "Specified directory '$file' in package.sh; only files are valid"
+				elif [ ! -f "$full_path" ]; then
+					log.warn "Completion file '$file' not found in repository. Skipping"
+				else
+					abstract.completions_do_action_bash "$action" "$full_path"
+				fi
 			done
 		else
 			abstract.completions_search_heuristics "$action" "$id" 'bash'
@@ -48,7 +55,14 @@ abstract.completions() {
 			IFS=':' read -ra zsh_completion_files <<< "$REPLY"
 
 			for file in "${zsh_completion_files[@]}"; do
-				abstract.completions_do_action_zsh "$action" "$BPM_PACKAGES_PATH/$id/$file"
+				local full_path="$BPM_PACKAGES_PATH/$id/$file"
+				if [ -d "$full_path" ]; then
+					die "Specified directory '$file' in package.sh; only files are valid"
+				elif [ ! -f "$full_path" ]; then
+					log.warn "Completion file '$file' not found in repository. Skipping"
+				else
+					abstract.completions_do_action_zsh "$action" "$full_path"
+				fi
 			done
 		else
 			abstract.completions_search_heuristics "$action" "$id" 'zsh'

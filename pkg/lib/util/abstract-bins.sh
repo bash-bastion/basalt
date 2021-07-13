@@ -41,7 +41,14 @@ abstract.bins() {
 			IFS=':' read -ra bins <<< "$REPLY"
 
 			for file in "${bins[@]}"; do
-				abstract.bins_do_action "$action" "$BPM_PACKAGES_PATH/$id/$file" "$remove_extensions"
+				local full_path="$BPM_PACKAGES_PATH/$id/$file"
+				if [ -d "$full_path" ]; then
+					die "Specified directory '$file' in package.sh; only files are valid"
+				elif [ ! -f "$full_path" ]; then
+					log.warn "Executable file '$file' not found in repository. Skipping"
+				else
+					abstract.bins_do_action "$action" "$full_path" "$remove_extensions"
+				fi
 			done
 		else
 			abstract.bins_search_heuristics "$action" "$id" "$remove_extensions"

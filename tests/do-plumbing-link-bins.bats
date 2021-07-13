@@ -300,3 +300,35 @@ load 'util/init.sh'
 	assert [ ! -e "$BPM_PREFIX/bin/package" ]
 	assert [ ! -e "$BPM_PREFIX/bin/package2" ]
 }
+
+@test "fails link bins when specifying directory in package.sh" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'BINS="dir"' > 'package.sh'
+
+		mkdir 'dir'
+		touch 'dir/.gitkeep'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-bins "$site/$pkg"
+
+	assert_failure
+	assert_line -p "Specified directory 'dir' in package.sh; only files are valid"
+}
+
+@test "warns link bins when specifying non-existent file in package.sh" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'BINS="some_file"' > 'package.sh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-bins "$site/$pkg"
+
+	assert_line -p "Executable file 'some_file' not found in repository. Skipping"
+}
