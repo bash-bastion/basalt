@@ -9,7 +9,7 @@ abstract.bins() {
 	ensure.non_zero 'id' "$id"
 
 	local -a bins=()
-	local remove_extension=
+	local remove_extensions=
 
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
 	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
@@ -118,8 +118,13 @@ abstract.bins_do_action() {
 	case "$action" in
 		link)
 			mkdir -p "$BPM_INSTALL_BIN"
-			ln -sf "$fullBinFile" "$BPM_INSTALL_BIN/$binName"
-			chmod +x "$BPM_INSTALL_BIN/$binName"
+
+			if [ -L "$BPM_INSTALL_BIN/$binName" ]; then
+				log.error "Skipping '$binName' since an existing symlink with the same name already exists"
+			else
+				ln -sf "$fullBinFile" "$BPM_INSTALL_BIN/$binName"
+				chmod +x "$BPM_INSTALL_BIN/$binName"
+			fi
 			;;
 		unlink)
 			if [ -f "$BPM_INSTALL_BIN/$binName" ]; then

@@ -175,3 +175,24 @@ load 'util/init.sh'
 
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }
+
+@test "warns link man if man page already exists" {
+	local site='github.com'
+	local pkg1="username/package"
+	local pkg2='username/package2'
+
+	test_util.setup_pkg "$pkg1"; {
+		touch 'exec.3'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg1"
+
+	test_util.setup_pkg "$pkg2"; {
+		touch 'exec.3'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg2"
+
+	do-plumbing-link-man "$site/$pkg1"
+	run do-plumbing-link-man "$site/$pkg2"
+
+	assert_line -p "Skipping 'exec.3' since an existing symlink with the same name already exists"
+}

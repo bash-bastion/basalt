@@ -89,8 +89,12 @@ abstract.mans_do_action() {
 
 		case "$action" in
 			link)
-				mkdir -p "$BPM_INSTALL_MAN/man$n"
-				ln -sf "$full_man_file" "$BPM_INSTALL_MAN/man$n/$manFile"
+				if [ -L "$BPM_INSTALL_MAN/man$n/$manFile" ]; then
+					log.error "Skipping '$manFile' since an existing symlink with the same name already exists"
+				else
+					mkdir -p "$BPM_INSTALL_MAN/man$n"
+					ln -sf "$full_man_file" "$BPM_INSTALL_MAN/man$n/$manFile"
+				fi
 				;;
 			unlink)
 				# Because 'abstract.mans_search_heuristics' sometimes repeats

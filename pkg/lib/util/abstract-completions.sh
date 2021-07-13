@@ -134,8 +134,12 @@ abstract.completions_do_action_bash() {
 
 	case "$action" in
 	link)
-		mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
-		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/bash/$fileName"
+		if [ -L "$BPM_INSTALL_COMPLETIONS/bash/$fileName" ]; then
+			log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
+		else
+			mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
+			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/bash/$fileName"
+		fi
 		;;
 	unlink)
 		if [ -f "$BPM_INSTALL_COMPLETIONS/bash/$fileName" ]; then
@@ -155,8 +159,12 @@ abstract.completions_do_action_zsh() {
 	if grep -qs "^#compdef" "$file"; then
 		case "$action" in
 		link)
-			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
-			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
+			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}" ]; then
+				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
+			else
+				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
+				ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
+			fi
 			;;
 		unlink)
 			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}" ]; then
@@ -167,8 +175,12 @@ abstract.completions_do_action_zsh() {
 	else
 		case "$action" in
 		link)
-			mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compctl"
-			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
+			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}" ]; then
+				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
+			else
+				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compctl"
+				ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
+			fi
 			;;
 		unlink)
 			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}" ]; then
@@ -187,8 +199,12 @@ abstract.completions_do_action_fish() {
 
 	case "$action" in
 	link)
-		mkdir -p "$BPM_INSTALL_COMPLETIONS/fish"
-		ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"
+		if [ -L "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}" ]; then
+				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
+		else
+			mkdir -p "$BPM_INSTALL_COMPLETIONS/fish"
+			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"
+		fi
 		;;
 	unlink)
 		if [ -f "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}" ]; then

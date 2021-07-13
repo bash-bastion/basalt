@@ -362,3 +362,26 @@ load 'util/init.sh'
 
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }
+
+@test "warns link bins if binary already exists" {
+	local site='github.com'
+	local pkg1="username/package"
+	local pkg2='username/package2'
+
+	test_util.setup_pkg "$pkg1"; {
+		touch 'file2.bash'
+		chmod +x 'file2.bash'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg1"
+
+	test_util.setup_pkg "$pkg2"; {
+		touch 'file2.bash'
+		chmod +x 'file2.bash'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg2"
+
+	do-plumbing-link-bins "$site/$pkg1"
+	run do-plumbing-link-bins "$site/$pkg2"
+
+	assert_line -p "Skipping 'file.sh' since an existing symlink with the same name already exists"
+}

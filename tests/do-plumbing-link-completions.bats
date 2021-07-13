@@ -561,6 +561,7 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert_line -p "Completion file 'some_file' not found. Skipping"
 }
 
@@ -576,10 +577,11 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert_line -p "Completion file 'some_file' not found. Skipping"
 }
 
-@test "fails link completions when specifying file in bpm.toml" {
+@test "warns link completions when specifying file in bpm.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
@@ -590,6 +592,7 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }
 
@@ -604,5 +607,102 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
+	assert_success
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
+}
+
+@test "warns link bash completions if completion already exists" {
+	local site='github.com'
+	local pkg1="username/package"
+	local pkg2='username/package2'
+
+	test_util.setup_pkg "$pkg1"; {
+		touch 'file2-completion.bash'
+		chmod +x 'file2-completion.bash'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg1"
+
+	test_util.setup_pkg "$pkg2"; {
+		touch 'file2-completion.bash'
+		chmod +x 'file2-completion.bash'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg2"
+
+	do-plumbing-link-completions "$site/$pkg1"
+	run do-plumbing-link-completions "$site/$pkg2"
+
+	assert_success
+	assert_line -p "Skipping 'file2-completion.bash' since an existing symlink with the same name already exists"
+}
+
+@test "warns link zsh compctl completions if completion already exists" {
+	local site='github.com'
+	local pkg1="username/package"
+	local pkg2='username/package2'
+
+	test_util.setup_pkg "$pkg1"; {
+		touch 'file2-completion.zsh'
+		chmod +x 'file2-completion.zsh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg1"
+
+	test_util.setup_pkg "$pkg2"; {
+		touch 'file2-completion.zsh'
+		chmod +x 'file2-completion.zsh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg2"
+
+	do-plumbing-link-completions "$site/$pkg1"
+	run do-plumbing-link-completions "$site/$pkg2"
+
+	assert_success
+	assert_line -p "Skipping 'file2-completion.zsh' since an existing symlink with the same name already exists"
+}
+
+@test "warns link zsh compsys completions if completion already exists" {
+	local site='github.com'
+	local pkg1="username/package"
+	local pkg2='username/package2'
+
+	test_util.setup_pkg "$pkg1"; {
+		echo '#compdef' > "file2-completion.zsh"
+		chmod +x 'file2-completion.zsh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg1"
+
+	test_util.setup_pkg "$pkg2"; {
+		echo '#compdef' > "file2-completion.zsh"
+		chmod +x 'file2-completion.zsh'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg2"
+
+	do-plumbing-link-completions "$site/$pkg1"
+	run do-plumbing-link-completions "$site/$pkg2"
+
+	assert_success
+	assert_line -p "Skipping 'file2-completion.zsh' since an existing symlink with the same name already exists"
+}
+
+@test "warns link fish completions if completion already exists" {
+	local site='github.com'
+	local pkg1="username/package"
+	local pkg2='username/package2'
+
+	test_util.setup_pkg "$pkg1"; {
+		touch "file2-completion.fish"
+		chmod +x 'file2-completion.fish'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg1"
+
+	test_util.setup_pkg "$pkg2"; {
+		touch "file2-completion.fish"
+		chmod +x 'file2-completion.fish'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg2"
+
+	do-plumbing-link-completions "$site/$pkg1"
+	run do-plumbing-link-completions "$site/$pkg2"
+
+	assert_success
+	assert_line -p "Skipping 'file2-completion.fish' since an existing symlink with the same name already exists"
 }
