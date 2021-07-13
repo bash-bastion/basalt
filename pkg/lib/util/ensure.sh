@@ -33,9 +33,9 @@ ensure.non_zero() {
 # that is not an expectation
 # @arg $1 package
 ensure.package_exists() {
-	local package="$1"
+	local id="$1"
 
-	if [ ! -d "$BPM_PACKAGES_PATH/$package" ]; then
-		die "Package '$package' does not exist"
+	if [ ! -d "$BPM_PACKAGES_PATH/$id" ]; then
+		die "Package '$id' does not exist"
 	fi
 }

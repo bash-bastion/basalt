@@ -23,11 +23,29 @@ test_util.fake_add() {
 		local pkg="$1"
 		ensure.non_zero 'pkg' "$pkg"
 
-		test_util.fake_clone "github.com/$pkg"
+		git clone "$BPM_ORIGIN_DIR/github.com/$pkg" "$BPM_PACKAGES_PATH/github.com/$pkg"
 		do-plumbing-add-deps "github.com/$pkg"
 		do-plumbing-link-bins "github.com/$pkg"
 		do-plumbing-link-completions "github.com/$pkg"
 		do-plumbing-link-man "github.com/$pkg"
+}
+
+# @description Mocks a 'bpm link'
+test_util.fake_link() {
+	local pkg="$1"
+	ensure.non_zero 'pkg' "$pkg"
+
+	mkdir -p "$BPM_PACKAGES_PATH/local"
+
+	ls -al "$BPM_ORIGIN_DIR/github.com/$pkg" >&3
+	ls -al "$BPM_PACKAGES_PATH/local" >&3
+	mkdir -p "$BPM_PACKAGES_PATH/local"
+	ln -s "$BPM_ORIGIN_DIR/github.com/$pkg" "$BPM_PACKAGES_PATH/local"
+
+	do-plumbing-add-deps "$pkg"
+	do-plumbing-link-bins "$pkg"
+	do-plumbing-link-completions "$pkg"
+	do-plumbing-link-man "$pkg"
 }
 
 # @description Creates a 'bpm package', and cd's into it
@@ -39,6 +57,7 @@ test_util.setup_pkg() {
 	cd "$BPM_ORIGIN_DIR/github.com/$pkg"
 
 	git init .
+	git branch -M master
 	touch 'README.md'
 	git add .
 	git commit -m "Initial commit"
@@ -57,7 +76,7 @@ test_util.create_package() {
 	ensure.non_zero 'pkg' "$pkg"
 
 	test_util.setup_pkg "$pkg"; {
-		git branch -M master
+		:
 	}; test_util.finish_pkg
 }
 

@@ -17,8 +17,8 @@ load 'util/init.sh'
 	test_util.create_package 'username/p1'
 	test_util.create_package 'username2/p2'
 	test_util.create_package 'username2/p3'
-	test_util.fake_clone "$site/username/p1"
-	test_util.fake_clone "$site/username2/p2"
+	test_util.fake_add "username/p1"
+	test_util.fake_add "username2/p2"
 
 	run do-list --simple
 
@@ -52,8 +52,8 @@ load 'util/init.sh'
 	test_util.create_package 'username/p1'
 	test_util.create_package 'username2/p2'
 	test_util.create_package 'username2/p3'
-	test_util.fake_clone "$site/username/p1"
-	test_util.fake_clone "$site/username2/p2"
+	test_util.fake_add "username/p1"
+	test_util.fake_add "username2/p2"
 
 	run do-list
 
