@@ -25,7 +25,7 @@ main() {
 			;;
 		--version|-v)
 			cat <<-EOF
-			Version: $PROGRAM_VERSION
+			Version: v0.6.0
 			EOF
 			exit
 			;;
