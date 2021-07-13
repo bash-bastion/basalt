@@ -92,10 +92,15 @@ load 'util/init.sh'
 
 	test_util.create_pkg_dir "$dir"
 
-	run do-link "$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
+	# On macOS, the temporary folder '/var' is symlinked to '/private/var'
+	# Since BATS appears to be using '/var' directly, we have to resolve the
+	# symlink so the output matches properly
+	local srcDir="$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
+
+	run do-link "$srcDir"
 
 	assert_success
-	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir'"
+	assert_line -n 0 -p "Linking '$srcDir'"
 	assert_line -n 1 "do-plumbing-add-deps local/$dir"
 	assert_line -n 2 "do-plumbing-link-bins local/$dir"
 	assert_line -n 3 "do-plumbing-link-completions local/$dir"
@@ -115,15 +120,18 @@ load 'util/init.sh'
 	test_util.create_pkg_dir "$dir1"
 	test_util.create_pkg_dir "$dir2"
 
-	run do-link "$(util.readlink "$BPM_ORIGIN_DIR/$dir1")" "$(util.readlink "$BPM_ORIGIN_DIR/$dir2")"
+	local srcDir1="$(util.readlink "$BPM_ORIGIN_DIR/$dir1")"
+	local srcDir2="$(util.readlink "$BPM_ORIGIN_DIR/$dir2")"
+
+	run do-link "$srcDir1" "$srcDir2"
 
 	assert_success
-	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir1'"
+	assert_line -n 0 -p "Linking '$srcDir1'"
 	assert_line -n 1 "do-plumbing-add-deps local/$dir1"
 	assert_line -n 2 "do-plumbing-link-bins local/$dir1"
 	assert_line -n 3 "do-plumbing-link-completions local/$dir1"
 	assert_line -n 4 "do-plumbing-link-man local/$dir1"
-	assert_line -n 5 -p "Linking '$BPM_ORIGIN_DIR/$dir2'"
+	assert_line -n 5 -p "Linking '$srcDir2'"
 	assert_line -n 6 "do-plumbing-add-deps local/$dir2"
 	assert_line -n 7 "do-plumbing-link-bins local/$dir2"
 	assert_line -n 8 "do-plumbing-link-completions local/$dir2"
@@ -141,10 +149,13 @@ load 'util/init.sh'
 
 	test_util.create_pkg_dir "$dir"
 
-	run do-link --no-deps "$BPM_ORIGIN_DIR/$dir"
+
+	local srcDir="$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
+
+	run do-link --no-deps "$srcDir"
 
 	assert_success
-	assert_line -n 0 -p "Linking '$BPM_ORIGIN_DIR/$dir'"
+	assert_line -n 0 -p "Linking '$srcDir'"
 	assert_line -n 1 "do-plumbing-link-bins local/$dir"
 	assert_line -n 2 "do-plumbing-link-completions local/$dir"
 	assert_line -n 3 "do-plumbing-link-man local/$dir"
