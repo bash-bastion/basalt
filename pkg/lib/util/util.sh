@@ -243,7 +243,7 @@ util.get_project_root_dir() {
 util.show_help() {
 	cat <<"EOF"
 Usage:
-  bpm [--help|--version|--global] <command> [args...]
+  bpm [--help|--version|--global|-g] <command> [args...]
 
 Subcommands:
   init <shell>

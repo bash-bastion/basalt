@@ -19,17 +19,17 @@ main() {
 
 	for arg; do
 		case "$arg" in
-		--help)
+		--help|-h)
 			util.show_help
 			exit
 			;;
-		--version)
+		--version|-v)
 			cat <<-EOF
 			Version: $PROGRAM_VERSION
 			EOF
 			exit
 			;;
-		--global)
+		--global|-g)
 			is_global='yes'
 			shift
 			;;
