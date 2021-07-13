@@ -57,9 +57,9 @@ test_util.setup_pkg() {
 	cd "$BPM_ORIGIN_DIR/github.com/$pkg"
 
 	git init .
-	git branch -M master
 	touch 'README.md'
 	git add .
+	git branch -M master
 	git commit -m "Initial commit"
 }
 
