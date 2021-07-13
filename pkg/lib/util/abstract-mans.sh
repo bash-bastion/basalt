@@ -16,6 +16,13 @@ abstract.mans() {
 			for dir in "${REPLIES[@]}"; do
 				local full_dir="$BPM_PACKAGES_PATH/$id/$dir"
 
+				if [ -f "$full_dir" ]; then
+					die "Specified file '$dir' in bpm.toml; only directories are valid"
+				elif [ ! -d "$full_dir" ]; then
+					log.warn "Directory '$dir' with executable files not found. Skipping"
+					continue
+				fi
+
 				# 'file' can be
 				# 1. A man file
 				# 2. A directory (man1, man2), that contains man files

@@ -330,5 +330,35 @@ load 'util/init.sh'
 
 	run do-plumbing-link-bins "$site/$pkg"
 
-	assert_line -p "Executable file 'some_file' not found in repository. Skipping"
+	assert_line -p "Executable file 'some_file' not found. Skipping"
+}
+
+@test "fails link bins when specifying file in bpm.toml" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'binDirs = ["file"]' > 'bpm.toml'
+		touch 'file'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-bins "$site/$pkg"
+
+	assert_failure
+	assert_line -p "Specified file 'file' in bpm.toml; only directories are valid"
+}
+
+@test "warns link bins when specifying non-existent directory in bpm.toml" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'binDirs = ["dir"]' > 'bpm.toml'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-bins "$site/$pkg"
+
+	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }

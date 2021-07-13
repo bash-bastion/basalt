@@ -23,9 +23,16 @@ abstract.bins() {
 
 		if util.get_toml_array "$bpm_toml_file" 'binDirs'; then
 			for dir in "${REPLIES[@]}"; do
-				for file in "$BPM_PACKAGES_PATH/$id/$dir"/*; do
-					abstract.bins_do_action "$action" "$file" "$remove_extensions"
-				done
+				local full_path="$BPM_PACKAGES_PATH/$id/$dir"
+				if [ -f "$full_path" ]; then
+					die "Specified file '$dir' in bpm.toml; only directories are valid"
+				elif [ ! -d "$full_path" ]; then
+					log.warn "Directory '$dir' with executable files not found. Skipping"
+				else
+					for file in "$full_path"/*; do
+						abstract.bins_do_action "$action" "$file" "$remove_extensions"
+					done
+				fi
 			done
 
 			return
@@ -45,7 +52,7 @@ abstract.bins() {
 				if [ -d "$full_path" ]; then
 					die "Specified directory '$file' in package.sh; only files are valid"
 				elif [ ! -f "$full_path" ]; then
-					log.warn "Executable file '$file' not found in repository. Skipping"
+					log.warn "Executable file '$file' not found. Skipping"
 				else
 					abstract.bins_do_action "$action" "$full_path" "$remove_extensions"
 				fi

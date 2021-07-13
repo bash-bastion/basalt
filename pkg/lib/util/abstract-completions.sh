@@ -16,7 +16,15 @@ abstract.completions() {
 	if [ -f "$bpm_toml_file" ]; then
 		if util.get_toml_array "$bpm_toml_file" 'completionDirs'; then
 			for dir in "${REPLIES[@]}"; do
-				for file in "$BPM_PACKAGES_PATH/$id/$dir"/*; do
+				local full_dir="$BPM_PACKAGES_PATH/$id/$dir"
+				if [ -f "$full_dir" ]; then
+					die "Specified file '$dir' in bpm.toml; only directories are valid"
+				elif [ ! -d "$full_dir" ]; then
+					log.warn "Directory '$dir' with executable files not found. Skipping"
+					continue
+				fi
+
+				for file in "$full_dir"/*; do
 					local fileName="${file##*/}"
 
 					if [[ $fileName == *.@(sh|bash) ]]; then
@@ -42,7 +50,7 @@ abstract.completions() {
 				if [ -d "$full_path" ]; then
 					die "Specified directory '$file' in package.sh; only files are valid"
 				elif [ ! -f "$full_path" ]; then
-					log.warn "Completion file '$file' not found in repository. Skipping"
+					log.warn "Completion file '$file' not found. Skipping"
 				else
 					abstract.completions_do_action_bash "$action" "$full_path"
 				fi
@@ -59,7 +67,7 @@ abstract.completions() {
 				if [ -d "$full_path" ]; then
 					die "Specified directory '$file' in package.sh; only files are valid"
 				elif [ ! -f "$full_path" ]; then
-					log.warn "Completion file '$file' not found in repository. Skipping"
+					log.warn "Completion file '$file' not found. Skipping"
 				else
 					abstract.completions_do_action_zsh "$action" "$full_path"
 				fi

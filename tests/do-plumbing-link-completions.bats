@@ -561,7 +561,7 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
-	assert_line -p "Completion file 'some_file' not found in repository. Skipping"
+	assert_line -p "Completion file 'some_file' not found. Skipping"
 }
 
 
@@ -576,5 +576,33 @@ load 'util/init.sh'
 
 	run do-plumbing-link-completions "$site/$pkg"
 
-	assert_line -p "Completion file 'some_file' not found in repository. Skipping"
+	assert_line -p "Completion file 'some_file' not found. Skipping"
+}
+
+@test "fails link completions when specifying file in bpm.toml" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = ["dir"]' > 'bpm.toml'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_line -p "Directory 'dir' with executable files not found. Skipping"
+}
+
+@test "warns link completions when specifying non-existent directory in bpm.toml" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'completionDirs = ["dir"]' > 'bpm.toml'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }

@@ -147,3 +147,31 @@ load 'util/init.sh'
 	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]
 	assert [ ! -e "$BPM_INSTALL_MAN/man5/2man/exec.2" ]
 }
+
+@test "fails link man when specifying file in bpm.toml" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'manDirs = ["dir"]' > 'bpm.toml'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-man "$site/$pkg"
+
+	assert_line -p "Directory 'dir' with executable files not found. Skipping"
+}
+
+@test "warns link man when specifying non-existent directory in bpm.toml" {
+	local site='github.com'
+	local pkg="username/package"
+
+	test_util.setup_pkg "$pkg"; {
+		echo 'manDirs = ["dir"]' > 'bpm.toml'
+	}; test_util.finish_pkg
+	test_util.fake_clone "$site/$pkg"
+
+	run do-plumbing-link-man "$site/$pkg"
+
+	assert_line -p "Directory 'dir' with executable files not found. Skipping"
+}
