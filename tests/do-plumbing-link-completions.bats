@@ -20,13 +20,11 @@ load 'util/init.sh'
 ## BASH ##
 
 @test "adds bash completions determined from package.sh" {
-	skip "broken test?"
-
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		echo "BASH_COMPLETIONS='ff'" > 'package.sh'
+		echo "BASH_COMPLETIONS='ff/comp.bash'" > 'package.sh'
 		mkdir 'ff'
 		touch 'ff/comp.bash'
 	}; test_util.finish_pkg

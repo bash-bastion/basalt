@@ -3,8 +3,6 @@
 load 'util/init.sh'
 
 @test "does nothing on no dependencies" {
-	skip "bad test. assert_output '' is correct"
-
 	local site='github.com'
 	local pkg='username/package'
 
@@ -17,7 +15,7 @@ load 'util/init.sh'
 	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
-	assert_output ""
+	assert_output ''
 }
 
 @test "installs properly given package.sh dependencies" {
