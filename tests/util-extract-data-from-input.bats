@@ -126,3 +126,19 @@ load 'util/init.sh'
 	assert [ "$REPLY3" = 'eankeen/proj' ]
 	assert [ "$REPLY4" = 'v0.2.0' ]
 }
+
+@test "works with local" {
+	util.extract_data_from_input 'local/project2' 'no'
+	assert [ "$REPLY1" = '' ]
+	assert [ "$REPLY2" = 'local' ]
+	assert [ "$REPLY3" = 'project2' ]
+	assert [ "$REPLY4" = '' ]
+}
+
+@test "works with local and ref" {
+	util.extract_data_from_input 'local/project2@v0.2.0' 'no'
+	assert [ "$REPLY1" = '' ]
+	assert [ "$REPLY2" = 'local' ]
+	assert [ "$REPLY3" = 'project2' ]
+	assert [ "$REPLY4" = 'v0.2.0' ]
+}

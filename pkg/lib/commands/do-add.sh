@@ -30,7 +30,7 @@ do-add() {
 		local package="$REPLY3"
 		local ref="$REPLY4"
 
-		if [ "${package%/*}" = 'local' ]; then
+		if [ "$site" = 'local' ]; then
 			die "Cannot install packages owned by username 'local' because that conflicts with linked packages"
 		fi
 

@@ -25,6 +25,7 @@ util.extract_data_from_input() {
 
 	local regex="^https?://"
 	local regex2="^git@"
+	local regex3="^local/"
 	if [[ "$repoSpec" =~ $regex ]]; then
 		local http="${repoSpec%%://*}"
 		repoSpec="${repoSpec#http?(s)://}"
@@ -46,6 +47,14 @@ util.extract_data_from_input() {
 		REPLY2="$site"
 		REPLY3="$package"
 		REPLY4=
+	elif [[ "$repoSpec" =~ $regex3 ]]; then
+		repoSpec="${repoSpec#local\/}"
+		IFS='@' read -r package ref <<< "$repoSpec"
+
+		REPLY1=
+		REPLY2='local'
+		REPLY3="$package"
+		REPLY4="$ref"
 	else
 		repoSpec="${repoSpec%.git}"
 

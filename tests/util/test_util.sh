@@ -32,20 +32,18 @@ test_util.fake_add() {
 
 # @description Mocks a 'bpm link'
 test_util.fake_link() {
-	local pkg="$1"
-	ensure.non_zero 'pkg' "$pkg"
+	local dir="$1"
+	ensure.non_zero 'dir' "$dir"
 
 	mkdir -p "$BPM_PACKAGES_PATH/local"
 
-	ls -al "$BPM_ORIGIN_DIR/github.com/$pkg" >&3
-	ls -al "$BPM_PACKAGES_PATH/local" >&3
 	mkdir -p "$BPM_PACKAGES_PATH/local"
-	ln -s "$BPM_ORIGIN_DIR/github.com/$pkg" "$BPM_PACKAGES_PATH/local"
+	ln -s "$BPM_ORIGIN_DIR/github.com/$dir" "$BPM_PACKAGES_PATH/local"
 
-	do-plumbing-add-deps "$pkg"
-	do-plumbing-link-bins "$pkg"
-	do-plumbing-link-completions "$pkg"
-	do-plumbing-link-man "$pkg"
+	do-plumbing-add-deps "local/$dir"
+	do-plumbing-link-bins "local/$dir"
+	do-plumbing-link-completions "local/$dir"
+	do-plumbing-link-man "local/$dir"
 }
 
 # @description Creates a 'bpm package', and cd's into it

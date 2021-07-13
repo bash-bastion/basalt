@@ -56,6 +56,23 @@ load 'util/init.sh'
 	assert [ ! -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 }
 
+@test "properly remove (unlink) locally installed packages" {
+	local site='github.com'
+	local dir='project3'
+
+	test_util.setup_pkg "$dir"; {
+		touch 'file.sh'
+	}; test_util.finish_pkg
+	test_util.fake_link "$dir"
+
+	assert [ -d "$BPM_PACKAGES_PATH/local/$dir" ]
+
+	run do-remove "local/$dir"
+
+	assert_success
+	assert [ ! -d "$BPM_PACKAGES_PATH/local/$dir" ]
+}
+
 @test "fails to remove package directory with wrong site name" {
 	local site='github.com'
 	local pkg='username/package'

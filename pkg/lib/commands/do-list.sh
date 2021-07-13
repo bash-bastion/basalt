@@ -63,7 +63,7 @@ do-list() {
 				repo_branch_str="Branch: $(git -C "$pkg_path" branch --show-current)"
 				printf -v pkg_output "%s  %s\n" "$pkg_output" "$repo_branch_str"
 
-				if git config remote.origin.url &>/dev/null; then
+				if git -C "$pkg_path" config remote.origin.url &>/dev/null; then
 					# shellcheck disable=SC1083
 					if [ "$(git -C "$pkg_path" rev-list --count HEAD...HEAD@{upstream})" -gt 0 ]; then
 						if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
