@@ -62,8 +62,10 @@ load 'util/init.sh'
 	assert_success
 	assert_output "$site/username/p1
   Branch: master
+  State: Up to date
 $site/username2/p2
-  Branch: master"
+  Branch: master
+  State: Up to date"
 }
 
 
