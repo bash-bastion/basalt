@@ -383,5 +383,5 @@ load 'util/init.sh'
 	do-plumbing-link-bins "$site/$pkg1"
 	run do-plumbing-link-bins "$site/$pkg2"
 
-	assert_line -p "Skipping 'file.sh' since an existing symlink with the same name already exists"
+	assert_line -p "Skipping 'file2.bash' since an existing symlink with the same name already exists"
 }
