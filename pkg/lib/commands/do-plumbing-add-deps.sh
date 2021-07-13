@@ -26,7 +26,10 @@ do-plumbing-add-deps() {
 		fi
 	fi
 
-	log.info "Installing dependencies for '$id'"
+	if (( ${#deps[@]} > 0 )); then
+		log.info "Installing dependencies for '$id'"
+	fi
+
 	for dep in "${deps[@]}"; do
 		do-add "$dep"
 	done

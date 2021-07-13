@@ -10,6 +10,7 @@ load 'util/test_util.sh'
 export BPM_TEST_DIR="$BATS_TMPDIR/bpm"
 export BPM_CWD="$BPM_TEST_DIR/cwd"
 export BPM_ORIGIN_DIR="$BPM_TEST_DIR/origin"
+export BPM_MODE_TEST=
 
 export LANG="C"
 export LANGUAGE="C"
@@ -24,7 +25,6 @@ export BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
 export BPM_INSTALL_BIN="$BPM_PREFIX/bin"
 export BPM_INSTALL_MAN="$BPM_PREFIX/man"
 export BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
-export BPM_MODE_GLOBAL=
 
 for f in "$BPM_ROOT"/pkg/lib/{commands,util}/?*.sh; do
 	source "$f"

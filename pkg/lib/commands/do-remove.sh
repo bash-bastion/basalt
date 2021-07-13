@@ -39,15 +39,15 @@ do-remove() {
 do_actual_removal() {
 	local id="$1"
 
-	log.info "Uninstalling '$id'"
+	log.info "Removing '$id'"
 	do-plumbing-unlink-man "$id"
 	do-plumbing-unlink-bins "$id"
 	do-plumbing-unlink-completions "$id"
 
-	echo "removing"
-
+	printf '%s\n' "  -> Deleting Git repository"
+	echo "${BPM_PACKAGES_PATH:?}/$id"
 	rm -rf "${BPM_PACKAGES_PATH:?}/$id"
-	if ! rmdir -p "${BPM_PACKAGES_PATH:?}/$id"; then
+	if ! rmdir -p "${BPM_PACKAGES_PATH:?}/${id%/*}" &>/dev/null; then
 		# Do not exit on failure
 		:
 	fi

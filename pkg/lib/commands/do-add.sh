@@ -34,7 +34,7 @@ do-add() {
 			die "Cannot install packages owned by username 'local' because that conflicts with linked packages"
 		fi
 
-		log.info "Installing '$repoSpec'"
+		log.info "Adding '$repoSpec'"
 		do-plumbing-clone "$uri" "$site/$package" $ref
 		do-plumbing-add-deps "$site/$package"
 		do-plumbing-link-bins "$site/$package"

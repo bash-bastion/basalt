@@ -68,7 +68,18 @@ do_actual_upgrade() {
 	do-plumbing-unlink-bins "$id"
 	do-plumbing-unlink-completions "$id"
 	do-plumbing-unlink-man "$id"
-	git -C "$BPM_PACKAGES_PATH/$id" pull
+	local git_output=
+
+	if ! git_output="$(git -C "$BPM_PACKAGES_PATH/$id" pull 2>&1)"; then
+		log.error "Could not update Git repository"
+		printf "%s" "$git_output"
+		exit 1
+	fi
+
+	if [ -n "${BPM_MODE_TEST+x}" ]; then
+		printf "%s" "$git_output"
+	fi
+
 	do-plumbing-add-deps "$id"
 	do-plumbing-link-bins "$id"
 	do-plumbing-link-completions "$id"

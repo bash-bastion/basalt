@@ -1,20 +1,13 @@
 # shellcheck shell=bash
 
+abstract_completions_did=no
+
 abstract.completions() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
 	ensure.non_zero 'id' "$id"
 	ensure.package_exists "$id"
-
-	case "$action" in
-	link)
-		log.info "Linking completion files for '$id'"
-		;;
-	unlink)
-		log.info "Unlinking completion files for '$id'"
-		;;
-	esac
 
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
 	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
@@ -110,11 +103,12 @@ abstract.completions_do_action_bash() {
 	local action="$1"
 	local file="$2"
 
+	abstract.completions_do_echo
+
 	local fileName="${file##*/}"
 	if [[ $fileName != *.* ]]; then
 		fileName="$fileName.bash"
 	fi
-
 
 	case "$action" in
 	link)
@@ -133,6 +127,8 @@ abstract.completions_do_action_bash() {
 abstract.completions_do_action_zsh() {
 	local action="$1"
 	local file="$2"
+
+	abstract.completions_do_echo
 
 	if grep -qs "^#compdef" "$file"; then
 		case "$action" in
@@ -165,6 +161,8 @@ abstract.completions_do_action_fish() {
 	local action="$1"
 	local file="$2"
 
+	abstract.completions_do_echo
+
 	case "$action" in
 	link)
 		mkdir -p "$BPM_INSTALL_COMPLETIONS/fish"
@@ -176,4 +174,15 @@ abstract.completions_do_action_fish() {
 		fi
 		;;
 	esac
+}
+
+abstract.completions_do_echo() {
+	if [ "$abstract_completions_did" = no ]; then
+		abstract_completions_did=yes
+
+		case "$action" in
+			link) printf '%s\n' "  -> Linking completion files" ;;
+			unlink) printf '%s\n' "  -> Unlinking completion files" ;;
+		esac
+	fi
 }

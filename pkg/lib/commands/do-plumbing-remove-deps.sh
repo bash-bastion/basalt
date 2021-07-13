@@ -20,9 +20,12 @@ do-plumbing-remove-deps() {
 		fi
 	fi
 
-	log.info "Removing dependencies for '$package'"
+	if (( #${deps[@]} > 0 )); then
+		log.info "Removing dependencies for '$package'"
+	fi
+
 	for dep in "${deps[@]}"; do
-		util.extract_data_from_input "$repoSpec" "$with_ssh"
+		util.extract_data_from_input "$dep"
 		local site="$REPY2"
 		local package="$REPLY3"
 		local ref="$REPLY4"

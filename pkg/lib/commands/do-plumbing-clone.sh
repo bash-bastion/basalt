@@ -25,6 +25,15 @@ do-plumbing-clone() {
 	git_args+=("$uri")
 	git_args+=("$BPM_PACKAGES_PATH/$id")
 
-	log.info "Cloning package '$id'"
-	git clone "${git_args[@]}"
+	printf '%s\n' "  -> Cloning Git repository"
+	local git_output=
+	if ! git_output="$(git clone "${git_args[@]}" 2>&1)"; then
+		log.error "Could not clone repository"
+		printf "%s" "$git_output"
+		exit 1
+	fi
+
+	if [ -n "${BPM_MODE_TEST+x}" ]; then
+		printf "%s" "$git_output"
+	fi
 }

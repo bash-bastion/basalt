@@ -17,7 +17,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
 	assert_failure
-	assert_line -n 0 -p "Package 'username/package' is already present"
+	assert_line -p "Package 'username/package' is already present"
 }
 
 @test "does nothing if package is already present (as erroneous file)" {
@@ -27,7 +27,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
 	assert_failure
-	assert_line -n 0 -p "Package 'username/package' is already present"
+	assert_line -p "Package 'username/package' is already present"
 }
 
 @test "using a different site" {
@@ -38,7 +38,6 @@ load 'util/init.sh'
 	assert_success
 	assert_line -n 1 "git clone --recursive --depth=1 https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
 }
-
 
 # This is a difference in behavior compared to Basher. Setting
 # the variable at all will result in a full clone

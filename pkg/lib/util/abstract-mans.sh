@@ -1,21 +1,13 @@
 # shellcheck shell=bash
 
+abstract_mans_did=no
+
 abstract.mans() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
 	ensure.non_zero 'id' "$id"
 	ensure.package_exists "$id"
-
-	# TODO: only print when actually linking
-	case "$action" in
-	link)
-		log.info "Linking man files for '$id'"
-		;;
-	unlink)
-		log.info "Unlinking man files for '$id'"
-		;;
-	esac
 
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
 
@@ -78,6 +70,15 @@ abstract.mans_do_action() {
 	local regex="\.([1-9])\$"
 	if [[ "$full_man_file" =~ $regex ]]; then
 		local n="${BASH_REMATCH[1]}"
+
+		if [ "$abstract_mans_did" = no ]; then
+			abstract_mans_did=yes
+
+			case "$action" in
+				link) printf '%s\n' "  -> Linking man files" ;;
+				unlink) printf '%s\n' "  -> Unlinking man files" ;;
+			esac
+		fi
 
 		case "$action" in
 			link)

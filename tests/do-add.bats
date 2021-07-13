@@ -55,7 +55,7 @@ load 'util/init.sh'
 	run do-add username/package
 
 	assert_success
-	assert_line -n 0 -p "Installing 'username/package'"
+	assert_line -n 0 -p "Adding 'username/package'"
 	assert_line -n 1 'do-plumbing-clone https://github.com/username/package.git github.com/username/package'
 	assert_line -n 2 'do-plumbing-add-deps github.com/username/package'
 	assert_line -n 3 'do-plumbing-link-bins github.com/username/package'
@@ -73,13 +73,13 @@ load 'util/init.sh'
 	run do-add username/package username2/package2
 
 	assert_success
-	assert_line -n 0 -p "Installing 'username/package'"
+	assert_line -n 0 -p "Adding 'username/package'"
 	assert_line -n 1 'do-plumbing-clone https://github.com/username/package.git github.com/username/package'
 	assert_line -n 2 'do-plumbing-add-deps github.com/username/package'
 	assert_line -n 3 'do-plumbing-link-bins github.com/username/package'
 	assert_line -n 4 'do-plumbing-link-completions github.com/username/package'
 	assert_line -n 5 'do-plumbing-link-man github.com/username/package'
-	assert_line -n 6 -p "Installing 'username2/package2'"
+	assert_line -n 6 -p "Adding 'username2/package2'"
 	assert_line -n 7 'do-plumbing-clone https://github.com/username2/package2.git github.com/username2/package2'
 	assert_line -n 8 'do-plumbing-add-deps github.com/username2/package2'
 	assert_line -n 9 'do-plumbing-link-bins github.com/username2/package2'

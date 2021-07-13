@@ -1,19 +1,12 @@
 # shellcheck shell=bash
 
+abstract_bins_did=no
+
 abstract.bins() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
 	ensure.non_zero 'id' "$id"
-
-	case "$action" in
-	link)
-		log.info "Linking bin files for '$id'"
-		;;
-	unlink)
-		log.info "Unlinking bin files for '$id'"
-		;;
-	esac
 
 	local -a bins=()
 	local remove_extension=
@@ -92,6 +85,15 @@ abstract.bins_do_action() {
 	local action="$1"
 	local fullBinFile="$2"
 	local remove_extensions="$3"
+
+	if [ "$abstract_bins_did" = no ]; then
+		abstract_bins_did='yes'
+
+		case "$action" in
+			link) printf '%s\n' "  -> Linking bin files" ;;
+			unlink) printf '%s\n' "  -> Unlinking bin files" ;;
+		esac
+	fi
 
 	local binName="${fullBinFile##*/}"
 
