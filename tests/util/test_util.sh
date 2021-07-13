@@ -59,8 +59,8 @@ test_util.setup_pkg() {
 	git init .
 	touch 'README.md'
 	git add .
-	git branch -M master
 	git commit -m "Initial commit"
+	git branch -M master
 }
 
 # @description Commits changes and cd's out of the package directory
