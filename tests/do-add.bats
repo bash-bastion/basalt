@@ -204,3 +204,22 @@ load 'util/init.sh'
 	assert_success
 	assert_line "do-plumbing-clone https://github.com/username/package.git github.com/username/package"
 }
+
+@test "--all prints warning when no dependencies are specified in bpm.toml" {
+	touch 'bpm.toml'
+
+	run do-add --all
+
+	assert_success
+	assert_line -p "No dependencies specified in 'dependencies' key"
+	refute_line -p "Installing"
+}
+
+@test "--all errors when a package is specified as argument" {
+	touch 'bpm.toml'
+
+	run do-add --all pkg
+
+	assert_failure
+	assert_line -p "You must not supply any packages when using '--all'"
+}

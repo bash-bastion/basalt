@@ -258,10 +258,10 @@ Subcommands:
   init <shell>
     Configure shell environment for Basher
 
-  add [--ssh] [[site/]<package>[@ref]...]
+  add [--ssh] [--all] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
 
-  remove <package...>
+  remove [--all] <package...>
     Uninstalls a package
 
   link [--no-deps] <directory...>

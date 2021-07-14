@@ -156,3 +156,22 @@ load 'util/init.sh'
 	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg2" ]
 	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
 }
+
+@test "--all prints warning when no dependencies are specified in bpm.toml" {
+	touch 'bpm.toml'
+
+	run do-remove --all
+
+	assert_success
+	assert_line -p "No dependencies specified in 'dependencies' key"
+	refute_line -p "Installing"
+}
+
+@test "--all errors when a package is specified as argument" {
+	touch 'bpm.toml'
+
+	run do-remove --all pkg
+
+	assert_failure
+	assert_line -p "You must not supply any packages when using '--all'"
+}

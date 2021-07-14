@@ -1,7 +1,8 @@
 # shellcheck shell=bash
 
 do-add() {
-	local with_ssh='no'
+	local with_ssh='no' # TODO: refactor flag_
+	local flag_all='no'
 
 	local -a pkgs=()
 	for arg; do
@@ -9,11 +10,34 @@ do-add() {
 		--ssh)
 			with_ssh='yes'
 			;;
+		--all)
+			flag_all='yes'
+			;;
 		*)
 			pkgs+=("$arg")
 			;;
 		esac
 	done
+
+	if [ "$flag_all" = yes ]; then
+		local bpm_toml_file="$BPM_ROOT/bpm.toml"
+
+		if (( ${#pkgs[@]} > 0 )); then
+			die "You must not supply any packages when using '--all'"
+		fi
+
+		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
+			log.info "Adding all dependencies"
+
+			for pkg in "${REPLIES[@]}"; do
+				do-add "$pkg"
+			done
+		else
+			log.warn "No dependencies specified in 'dependencies' key"
+		fi
+
+		return
+	fi
 
 	if (( ${#pkgs[@]} == 0 )); then
 		die "At least one package must be supplied"

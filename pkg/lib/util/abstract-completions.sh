@@ -200,7 +200,7 @@ abstract.completions_do_action_fish() {
 	case "$action" in
 	link)
 		if [ -L "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}" ]; then
-				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
+			log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 		else
 			mkdir -p "$BPM_INSTALL_COMPLETIONS/fish"
 			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"
