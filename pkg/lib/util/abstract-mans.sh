@@ -52,7 +52,7 @@ abstract.mans_search_heuristics() {
 	local action="$1"
 	local id="$2"
 
-	for file in "$BPM_PACKAGES_PATH/$id"/{,man/}*; do
+	for file in "$BPM_PACKAGES_PATH/$id"/man/*; do
 		if [ -f "$file" ]; then
 			abstract.mans_do_action "$action" "$file"
 		elif [ -d "$file" ]; then
@@ -61,6 +61,12 @@ abstract.mans_search_heuristics() {
 					abstract.mans_do_action "$action" "$actualFile"
 				fi
 			done
+		fi
+	done
+
+	for file in "$BPM_PACKAGES_PATH/$id"/*; do
+		if [ -f "$file" ]; then
+			abstract.mans_do_action "$action" "$file"
 		fi
 	done
 }

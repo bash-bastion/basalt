@@ -94,24 +94,6 @@ load 'util/init.sh'
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man2/exec.2")" = "$BPM_PACKAGES_PATH/$site/$pkg/man/2man/exec.2" ]
 }
 
-@test "adds man page determined from heuristics (manN directory)" {
-	local site='github.com'
-	local pkg='username/package'
-
-	test_util.setup_pkg "$pkg"; {
-		mkdir {1,2}man
-		touch '1man/exec.1'
-		touch '2man/exec.2'
-	}; test_util.finish_pkg
-	test_util.mock_add "$pkg"
-
-	run do-plumbing-link-man "$site/$pkg"
-
-	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$site/$pkg/1man/exec.1" ]
-	assert [ "$(readlink "$BPM_INSTALL_MAN/man2/exec.2")" = "$BPM_PACKAGES_PATH/$site/$pkg/2man/exec.2" ]
-}
-
 @test "adds man page determined from heuristics (root directory)" {
 	local site='github.com'
 	local pkg='username/package'
