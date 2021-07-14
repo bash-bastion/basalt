@@ -61,7 +61,7 @@ do-add() {
 		fi
 
 		log.info "Adding '$repoSpec'"
-		do-plumbing-clone "$uri" "$site/$package" $ref
+		do-plumbing-clone "$uri" "$site/$package" "$ref"
 		do-plumbing-add-deps "$site/$package"
 		do-plumbing-link-bins "$site/$package"
 		do-plumbing-link-completions "$site/$package"
