@@ -2,15 +2,17 @@
 
 load 'util/init.sh'
 
-@test "install a specific version" {
-	skip
+@test "installs a specific version" {
+	local site='github.com'
+	local pkg='username/package'
 
 	test_util.stub_command git
 
-	run do-plumbing-clone https://site/username/package.git username/package version
+	run do-plumbing-clone https://github.com/username/package.git github.com/username/package v1.2.3
 
 	assert_success
-	assert_line -n 1 "git clone --recursive --depth=1 --branch version https://site/username/package.git $BPM_PACKAGES_PATH/username/package"
+		assert_line "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/$site/$pkg"
+	assert_line "git -C $BPM_PACKAGES_PATH/$site/$pkg reset --hard v1.2.3"
 }
 
 @test "does nothing if package is already present" {
@@ -85,10 +87,13 @@ load 'util/init.sh'
 }
 
 @test "setting branch works" {
+	local site='github.com'
+	local pkg='username/package'
+
 	test_util.stub_command git
 
 	run do-plumbing-clone https://github.com/username/package.git github.com/username/package '' a_branch
 
 	assert_success
-	assert_line -n 1 "git clone --recursive --depth=1 --single-branch --branch a_branch https://github.com/username/package.git $BPM_PACKAGES_PATH/github.com/username/package"
+	assert_line -n 1 "git clone --recursive --depth=1 --single-branch --branch a_branch https://github.com/username/package.git $BPM_PACKAGES_PATH/$site/username/package"
 }

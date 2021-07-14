@@ -60,11 +60,13 @@ load 'util/init.sh'
 	# Note that all the tests for non-simple list do not include 'state' up to date since that is not emulated
 	# in the test
 	assert_success
-	assert_output "$site/username/p1
+	assert_output -e "$site/username/p1
   Branch: master
+  Revision: ([a-z0-9]*)
   State: Up to date
 $site/username2/p2
   Branch: master
+  Revision: ([a-z0-9]*)
   State: Up to date"
 }
 
@@ -105,8 +107,9 @@ $site/username2/p2
 	run do-list
 
 	assert_success
-	assert_output "github.com/$pkg
+	assert_output -e "github.com/$pkg
   Branch: master
+  Revision: ([a-z0-9]*)
   State: Out of date"
 }
 

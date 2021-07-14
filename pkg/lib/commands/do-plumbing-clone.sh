@@ -31,11 +31,23 @@ do-plumbing-clone() {
 	local git_output=
 	if ! git_output="$(git clone "${git_args[@]}" 2>&1)"; then
 		log.error "Could not clone repository"
-		printf "%s" "$git_output"
+		printf "%s\n" "$git_output"
 		exit 1
 	fi
 
 	if [ -n "${BPM_MODE_TEST+x}" ]; then
-		printf "%s" "$git_output"
+		printf "%s\n" "$git_output"
+	fi
+
+	# If we are going to a specific revision, do it now
+	local git_output=
+	if git_output="$(git -C "$BPM_PACKAGES_PATH/$id" reset --hard "$ref")"; then
+		printf "%s\n" "  -> Reseting to revision '$ref'"
+	else
+		printf "%s\n" "$git_output"
+	fi
+
+	if [ -n "${BPM_MODE_TEST+x}" ]; then
+		printf "%s\n" "$git_output"
 	fi
 }

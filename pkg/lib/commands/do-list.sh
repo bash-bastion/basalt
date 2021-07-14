@@ -63,7 +63,7 @@ do-list() {
 					die "Package '$id' is not a Git repository. Unlink or otherwise remove it at '$pkg_path'"
 				fi
 
-				local repo_branch_str= repo_outdated_str=
+				local repo_branch_str= repo_revision_str= repo_outdated_str=
 
 				repo_branch_str="Branch: $(git -C "$pkg_path" branch --show-current)"
 				printf -v pkg_output "%s  %s\n" "$pkg_output" "$repo_branch_str"
@@ -72,22 +72,25 @@ do-list() {
 					if [ "$flag_fetch" = yes ]; then
 						local git_output=
 						if ! git_output="$(git -C "$pkg_path" fetch)"; then
-							printf "%s" "$git_output"
+							printf "%s\n" "$git_output"
 						fi
 					fi
 
+					local git_tag= git_sha1=
+					git_sha1="$(git -C "$pkg_path" rev-parse --short HEAD)"
+					if git_tag="$(git -C "$pkg_path" describe --exact-match --tags 2>/dev/null)"; then
+						repo_revision_str="Revision: $git_tag ($git_sha1)"
+					else
+						repo_revision_str="Revision: $git_sha1"
+					fi
+					printf -v pkg_output "%s  %s\n" "$pkg_output" "$repo_revision_str"
+
 					# shellcheck disable=SC1083
 					if [ "$(git -C "$pkg_path" rev-list --count HEAD...HEAD@{upstream})" -gt 0 ]; then
-						if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-							repo_outdated_str="State: Out of date"
-						else
-							printf -v repo_outdated_str "\033[1;33m%s\033[0m\n" "State: Out of date"
-						fi
 						repo_outdated_str="State: Out of date"
 					else
 						repo_outdated_str="State: Up to date"
 					fi
-
 					printf -v pkg_output "%s  %s\n" "$pkg_output" "$repo_outdated_str"
 				fi
 			fi

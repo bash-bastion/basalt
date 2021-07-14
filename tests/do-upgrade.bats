@@ -20,8 +20,9 @@ load 'util/init.sh'
 	run do-list
 
 	assert_success
-	assert_output "github.com/$pkg
+	assert_output -e "github.com/$pkg
   Branch: master
+  Revision: ([a-z0-9]*)
   State: Up to date"
 	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
 }
