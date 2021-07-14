@@ -8,7 +8,8 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.create_remote_and_local
+	test_util.create_package 'remote'
+	test_util.mock_clone add 'remote'
 
 	cd "$BPM_ORIGIN_DIR/$site/username/local"
 	touch 'script2.sh'
@@ -19,8 +20,9 @@ load 'util/init.sh'
 	do-upgrade "$site/$pkg"
 
 	run do-list
-	assert_output ""
 
+	assert_success
+	assert_output ""
 	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
 }
 

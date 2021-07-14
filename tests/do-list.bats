@@ -38,7 +38,7 @@ load 'util/init.sh'
 	test_util.stub_command do-plumbing-link-man
 
 	test_util.create_package "$pkg"
-	do-link "$BPM_ORIGIN_DIR/$site/$pkg"
+	do-link "$BPM_ORIGIN_DIR/$pkg"
 
 	run do-list --simple
 
@@ -93,7 +93,6 @@ $site/username2/p2
 	local pkg='username/outdated'
 
 	mkdir -p "$BPM_PACKAGES_PATH/$site/$pkg"
-
 	run do-list
 
 	assert_failure

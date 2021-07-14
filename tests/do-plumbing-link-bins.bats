@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		:
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -26,7 +26,7 @@ load 'util/init.sh'
 		touch 'binn/exec1'
 		touch 'binn/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -48,7 +48,7 @@ load 'util/init.sh'
 		mkdir 'ff'
 		touch 'ff/exec3'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -68,7 +68,7 @@ load 'util/init.sh'
 		touch 'weird_dir/exec1'
 		touch 'weird_dir/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -89,7 +89,7 @@ load 'util/init.sh'
 		mkdir 'weird_dir'
 		touch 'weird_dir/exec3'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -108,7 +108,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -126,7 +126,7 @@ load 'util/init.sh'
 		touch 'bins/exec1'
 		touch 'bins/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -144,7 +144,7 @@ load 'util/init.sh'
 		touch 'exec2.sh'
 		chmod +x 'exec1' 'exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -161,7 +161,7 @@ load 'util/init.sh'
 		touch 'exec1'
 		touch 'exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -180,7 +180,7 @@ load 'util/init.sh'
 		touch 'exec2'
 		chmod +x 'exec2'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -199,7 +199,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -219,7 +219,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -239,7 +239,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -258,7 +258,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -277,7 +277,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -290,8 +290,8 @@ load 'util/init.sh'
 	local dir='package'
 	local dir2='username/package2'
 
-	test_util.create_pkg_dir "$dir"
-	test_util.create_pkg_dir "$dir2"
+	test_util.create_package "$dir"
+	test_util.create_package "$dir2"
 
 	# implicit call to do-plumbing-link-bins
 	run do-link "$BPM_ORIGIN_DIR/$dir" "$BPM_ORIGIN_DIR/$dir2"
@@ -311,7 +311,7 @@ load 'util/init.sh'
 		mkdir 'dir'
 		touch 'dir/.gitkeep'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -326,7 +326,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'BINS="some_file"' > 'package.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -341,7 +341,7 @@ load 'util/init.sh'
 		echo 'binDirs = ["file"]' > 'bpm.toml'
 		touch 'file'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -356,7 +356,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'binDirs = ["dir"]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-bins "$site/$pkg"
 
@@ -372,13 +372,13 @@ load 'util/init.sh'
 		touch 'file2.bash'
 		chmod +x 'file2.bash'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg1"
+	test_util.mock_clone "$pkg1" "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch 'file2.bash'
 		chmod +x 'file2.bash'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg2"
+	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
 	do-plumbing-link-bins "$site/$pkg1"
 	run do-plumbing-link-bins "$site/$pkg2"

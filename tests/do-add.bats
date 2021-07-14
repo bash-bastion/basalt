@@ -39,10 +39,10 @@ load 'util/init.sh'
 	test_util.stub_command do-plumbing-link-man
 
 	test_util.create_package "$pkg"
-	run do-add "$BPM_ORIGIN_DIR/$site/$pkg"
+	run do-add "$BPM_ORIGIN_DIR/$pkg"
 
 	assert_failure
-	assert_line -p "Identifier '$BPM_ORIGIN_DIR/$site/$pkg' is a directory, not a package"
+	assert_line -p "Identifier '$BPM_ORIGIN_DIR/$pkg' is a directory, not a package"
 }
 
 @test "executes install steps in right order" {

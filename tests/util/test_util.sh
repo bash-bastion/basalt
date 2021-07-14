@@ -7,13 +7,17 @@ test_util.stub_command() {
 	eval "$1() { echo \"$1 \$*\"; }"
 }
 
-# @description Fakes a clone. This is meant to be used for
-# the download step
+# @description Fakes a clone. It accepts a directory
 test_util.mock_clone() {
-	local id="$1"
-	ensure.non_zero 'id' "$id"
+	local srcDir="$1"
+	local destDir="$2"
 
-	git clone "$BPM_ORIGIN_DIR/$id" "$BPM_PACKAGES_PATH/$id"
+	ensure.non_zero 'srcDir' "$srcDir"
+	ensure.non_zero 'destDir' "$destDir"
+
+	# Be explicit with the 'file' protocol. The upstream "repository"
+	# is just another (non-bare) Git repository. By default, packages are usually
+	git clone "file://$BPM_ORIGIN_DIR/$srcDir" "$BPM_PACKAGES_PATH/$destDir"
 }
 
 # @description Clones the repository, and performs any linking, etc.
@@ -21,7 +25,11 @@ test_util.mock_add() {
 		local pkg="$1"
 		ensure.non_zero 'pkg' "$pkg"
 
-		git clone "$BPM_ORIGIN_DIR/github.com/$pkg" "$BPM_PACKAGES_PATH/github.com/$pkg"
+		if [[ "$pkg" != */* ]]; then
+			die "Improper package path. If you are passing in a single directory name, just make it nested within another subdirectory. This is to ensure BPM_PACKAGES_PATH has the correct layout"
+		fi
+
+		test_util.mock_clone "$pkg" "github.com/$pkg"
 		do-plumbing-add-deps "github.com/$pkg"
 		do-plumbing-link-bins "github.com/$pkg"
 		do-plumbing-link-completions "github.com/$pkg"
@@ -34,9 +42,7 @@ test_util.mock_link() {
 	ensure.non_zero 'dir' "$dir"
 
 	mkdir -p "$BPM_PACKAGES_PATH/local"
-
-	mkdir -p "$BPM_PACKAGES_PATH/local"
-	ln -s "$BPM_ORIGIN_DIR/github.com/$dir" "$BPM_PACKAGES_PATH/local"
+	ln -s "$BPM_ORIGIN_DIR/$dir" "$BPM_PACKAGES_PATH/local"
 
 	do-plumbing-add-deps "local/$dir"
 	do-plumbing-link-bins "local/$dir"
@@ -49,8 +55,11 @@ test_util.setup_pkg() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
 
-	mkdir -p "$BPM_ORIGIN_DIR/github.com/$pkg"
-	cd "$BPM_ORIGIN_DIR/github.com/$pkg"
+	# We create the "upstream" repository with the same relative
+	# filepath as 'pkg' so we can use the same variable to
+	# cd to it (rather than having to do ${pkg#*/})
+	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
 
 	git init .
 	touch 'README.md'
@@ -74,39 +83,4 @@ test_util.create_package() {
 	test_util.setup_pkg "$pkg"; {
 		:
 	}; test_util.finish_pkg
-}
-
-# @description Create a package (to be linked later)
-test_util.create_pkg_dir() {
-	local pkg="$1"
-	ensure.non_zero 'pkg' "$pkg"
-
-	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
-	cd "$BPM_ORIGIN_DIR/$pkg"
-
-	git init .
-	touch 'README.md'
-	git add .
-	git commit -m "Initial commit"
-
-	cd "$BPM_CWD"
-}
-
-# TODO: deprecate for test_util and mock_clone
-test_util.create_remote_and_local() {
-	local site='github.com'
-	local remote_dir="remote"
-	local local_dir="local"
-
-	mkdir -p "$BPM_ORIGIN_DIR/$remote_dir"
-	cd "$BPM_ORIGIN_DIR/$remote_dir"
-	git init .
-	touch 'README.md'
-	git add .
-	git commit -m "Initial commit"
-
-	cd "$BPM_ORIGIN_DIR"
-	git clone "file://$BPM_ORIGIN_DIR/$remote_dir" "$BPM_PACKAGES_PATH/$site/username/$local_dir"
-
-	cd "$BPM_CWD"
 }

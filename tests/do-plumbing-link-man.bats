@@ -28,7 +28,7 @@ load 'util/init.sh'
 		mkdir -p 'a_dir/5man'
 		touch 'a_dir/5man/exec_cfg.5'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-man "$site/$pkg"
 
@@ -49,7 +49,7 @@ load 'util/init.sh'
 		mkdir -p 'a_dir/5man'
 		touch 'a_dir/5man/exec_cfg.5'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-man "$site/$pkg"
 
@@ -121,7 +121,7 @@ load 'util/init.sh'
 		mkdir '2man'
 		touch '2man/exec.2'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-man "$site/$pkg"
 
@@ -137,7 +137,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'manDirs = ["dir"]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-man "$site/$pkg"
 
@@ -151,7 +151,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'manDirs = ["dir"]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-man "$site/$pkg"
 
@@ -166,12 +166,12 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg1"; {
 		touch 'exec.3'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg1"
+	test_util.mock_clone "$pkg1" "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch 'exec.3'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg2"
+	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
 	do-plumbing-link-man "$site/$pkg1"
 	run do-plumbing-link-man "$site/$pkg2"

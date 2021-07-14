@@ -523,7 +523,7 @@ load 'util/init.sh'
 		mkdir 'dir'
 		touch 'dir/.gitkeep'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -541,7 +541,7 @@ load 'util/init.sh'
 		mkdir 'dir'
 		touch 'dir/.gitkeep'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -557,7 +557,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'BASH_COMPLETIONS="some_file"' > 'package.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -573,7 +573,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'ZSH_COMPLETIONS="some_file"' > 'package.sh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -588,7 +588,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'completionDirs = ["dir"]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -603,7 +603,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'completionDirs = ["dir"]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -620,13 +620,13 @@ load 'util/init.sh'
 		touch 'file2-completion.bash'
 		chmod +x 'file2-completion.bash'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg1"
+	test_util.mock_clone "$pkg1" "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch 'file2-completion.bash'
 		chmod +x 'file2-completion.bash'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg2"
+	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"
@@ -644,13 +644,13 @@ load 'util/init.sh'
 		touch 'file2-completion.zsh'
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg1"
+	test_util.mock_clone "$pkg1" "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch 'file2-completion.zsh'
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg2"
+	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"
@@ -668,13 +668,13 @@ load 'util/init.sh'
 		echo '#compdef' > "file2-completion.zsh"
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg1"
+	test_util.mock_clone "$pkg1" "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		echo '#compdef' > "file2-completion.zsh"
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg2"
+	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"
@@ -692,13 +692,13 @@ load 'util/init.sh'
 		touch "file2-completion.fish"
 		chmod +x 'file2-completion.fish'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg1"
+	test_util.mock_clone "$pkg1" "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch "file2-completion.fish"
 		chmod +x 'file2-completion.fish'
 	}; test_util.finish_pkg
-	test_util.mock_clone "$site/$pkg2"
+	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"

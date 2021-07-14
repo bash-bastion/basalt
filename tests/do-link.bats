@@ -57,7 +57,7 @@ load 'util/init.sh'
 	mkdir -p touch "$BPM_PACKAGES_PATH/local"
 	touch "$BPM_PACKAGES_PATH/local/theta"
 
-	test_util.create_pkg_dir 'theta'
+	test_util.create_package 'theta'
 	mkdir 'theta'
 
 	run do-link "$BPM_ORIGIN_DIR/theta"
@@ -74,7 +74,7 @@ load 'util/init.sh'
 
 	local dir='package1'
 
-	test_util.create_pkg_dir "$dir"
+	test_util.create_package "$dir"
 
 	run do-link "$BPM_ORIGIN_DIR/$dir"
 
@@ -90,7 +90,7 @@ load 'util/init.sh'
 
 	local dir='package2'
 
-	test_util.create_pkg_dir "$dir"
+	test_util.create_package "$dir"
 
 	# On macOS, the temporary folder '/var' is symlinked to '/private/var'
 	# Since BATS appears to be using '/var' directly, we have to resolve the
@@ -117,8 +117,8 @@ load 'util/init.sh'
 	local dir1='package2'
 	local dir2='package3'
 
-	test_util.create_pkg_dir "$dir1"
-	test_util.create_pkg_dir "$dir2"
+	test_util.create_package "$dir1"
+	test_util.create_package "$dir2"
 
 	local srcDir1="$(util.readlink "$BPM_ORIGIN_DIR/$dir1")"
 	local srcDir2="$(util.readlink "$BPM_ORIGIN_DIR/$dir2")"
@@ -147,7 +147,7 @@ load 'util/init.sh'
 
 	local dir='package2'
 
-	test_util.create_pkg_dir "$dir"
+	test_util.create_package "$dir"
 
 
 	local srcDir="$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
@@ -170,7 +170,7 @@ load 'util/init.sh'
 
 	local dir='package2'
 
-	test_util.create_pkg_dir "$dir"
+	test_util.create_package "$dir"
 
 	run do-link --no-deps "$BPM_ORIGIN_DIR/$dir"
 
@@ -186,7 +186,7 @@ load 'util/init.sh'
 
 	local dir='package2'
 
-	test_util.create_pkg_dir "$dir"
+	test_util.create_package "$dir"
 
 	run do-link "$BPM_ORIGIN_DIR/$dir" --no-deps
 
@@ -202,7 +202,7 @@ load 'util/init.sh'
 
 	local dir='package2'
 
-	test_util.create_pkg_dir "$dir"
+	test_util.create_package "$dir"
 
 	cd "$BPM_ORIGIN_DIR/$dir"
 	run do-link .
@@ -219,7 +219,7 @@ load 'util/init.sh'
 
 	local dir='package2'
 
-	test_util.create_pkg_dir "$dir"
+	test_util.create_package "$dir"
 
 	cd "$BPM_ORIGIN_DIR/$dir"
 	mkdir -p 'tango'
@@ -239,7 +239,7 @@ load 'util/init.sh'
 
 	local dir='package2'
 
-	test_util.create_pkg_dir "parent/$dir"
+	test_util.create_package "parent/$dir"
 
 	cd "$BPM_ORIGIN_DIR/parent"
 	run do-link "./$dir/.././$dir"
