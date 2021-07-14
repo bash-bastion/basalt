@@ -16,10 +16,18 @@ See the full list of supported operating systems in [Support](./support.md)
 
 ## Install
 
+### Scripted
+
+```sh
+curl -Lo- https://raw.githubusercontent.com/eankeen/bpm/main/scripts/install.sh | bash
+```
+
+### Manual
+
 ##### 1. Clone `bpm`
 
 ```sh
-git clone https://github.com/bpmpm/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
+git clone https://github.com/eankeen/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
 ```
 
 By default, this installs bpm to `$HOME/.local/share/bpm/source`
@@ -40,7 +48,7 @@ For `fish`
 
 ```fish
 set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin" $PATH
-status --is-interactive; and . (bpm init fish | psub)
+source (bpm init fish | psub)
 ```
 
 And now you're done! Move on to [Getting Started](./getting-started.md) to learn the basics
