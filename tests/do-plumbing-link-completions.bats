@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		:
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -28,7 +28,7 @@ load 'util/init.sh'
 		mkdir 'ff'
 		touch 'ff/comp.bash'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -46,7 +46,7 @@ load 'util/init.sh'
 		mkdir 'completions'
 		touch 'completions/prof.bash'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -63,7 +63,7 @@ load 'util/init.sh'
 		mkdir 'weird_completions'
 		touch 'weird_completions/comp.bash'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -80,7 +80,7 @@ load 'util/init.sh'
 		mkdir 'completions'
 		touch 'completions/prof.bash'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -99,7 +99,7 @@ load 'util/init.sh'
 		touch "contrib/completion/c3.bash"
 		touch "contrib/completions/c4.bash"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -120,7 +120,7 @@ load 'util/init.sh'
 		touch 'git-flow-completion.bash'
 		touch 'etc/some-completion.bash'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/git-flow-completion.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.bash" ]
@@ -142,7 +142,7 @@ load 'util/init.sh'
 		touch 'etc/bash_completion.d/c5.sh'
 		touch 'etc/bash_completion.d/c6.bash'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -164,7 +164,7 @@ load 'util/init.sh'
 		mkdir 'completion'
 		touch "completion/prog.bash"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -181,7 +181,7 @@ load 'util/init.sh'
 		mkdir 'completion'
 		touch "completion/prog.bash"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -198,7 +198,7 @@ load 'util/init.sh'
 		mkdir 'completion'
 		touch "completion/prog.bash"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -216,7 +216,7 @@ load 'util/init.sh'
 
 		touch 'share/bash-completion/completions/seven'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -239,7 +239,7 @@ load 'util/init.sh'
 		mkdir 'dirr'
 		echo '#compdef' > "dirr/_exec"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -256,7 +256,7 @@ load 'util/init.sh'
 		mkdir 'dirr'
 		touch "dirr/exec"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -273,7 +273,7 @@ load 'util/init.sh'
 		mkdir 'dirr'
 		echo '#compdef' > "dirr/_exec.zsh"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -290,7 +290,7 @@ load 'util/init.sh'
 		mkdir 'dirr'
 		touch "dirr/exec.zsh"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -309,7 +309,7 @@ load 'util/init.sh'
 		touch "contrib/completion/c3.zsh"
 		echo '#compdef' > "contrib/completions/c4.zsh"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.zsh" ]
@@ -328,7 +328,7 @@ load 'util/init.sh'
 		touch 'git-flow-completion.zsh'
 		touch 'etc/some-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/git-flow-completion.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.zsh" ]
@@ -345,7 +345,7 @@ load 'util/init.sh'
 		touch "completion/c1.zsh"
 		echo '#compdef' > "completions/c2.zsh"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -363,7 +363,7 @@ load 'util/init.sh'
 		mkdir 'completion'
 		touch "completion/prog.zsh"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -381,7 +381,7 @@ load 'util/init.sh'
 		mkdir 'completion'
 		touch "completion/prog.zsh"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -406,7 +406,7 @@ load 'util/init.sh'
 		mkdir 'weird_completions'
 		touch 'weird_completions/comp.fish'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -423,7 +423,7 @@ load 'util/init.sh'
 		mkdir 'completions'
 		touch 'completions/prof.fish'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -442,7 +442,7 @@ load 'util/init.sh'
 		touch "contrib/completion/c3.fish"
 		touch "contrib/completions/c4.fish"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -463,7 +463,7 @@ load 'util/init.sh'
 		touch 'git-flow-completion.fish'
 		touch 'etc/some-completion.fish'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/git-flow-completion.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.fish" ]
@@ -479,7 +479,7 @@ load 'util/init.sh'
 		mkdir 'completion'
 		touch "completion/prog.fish"
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -502,7 +502,7 @@ load 'util/init.sh'
 		touch 'completions/prog2.bash'
 		touch 'completions/prog.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -523,7 +523,7 @@ load 'util/init.sh'
 		mkdir 'dir'
 		touch 'dir/.gitkeep'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg"
+	test_util.mock_clone "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -541,7 +541,7 @@ load 'util/init.sh'
 		mkdir 'dir'
 		touch 'dir/.gitkeep'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg"
+	test_util.mock_clone "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -557,7 +557,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'BASH_COMPLETIONS="some_file"' > 'package.sh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg"
+	test_util.mock_clone "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -573,7 +573,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'ZSH_COMPLETIONS="some_file"' > 'package.sh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg"
+	test_util.mock_clone "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -588,7 +588,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'completionDirs = ["dir"]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg"
+	test_util.mock_clone "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -603,7 +603,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'completionDirs = ["dir"]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg"
+	test_util.mock_clone "$site/$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
@@ -620,13 +620,13 @@ load 'util/init.sh'
 		touch 'file2-completion.bash'
 		chmod +x 'file2-completion.bash'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg1"
+	test_util.mock_clone "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch 'file2-completion.bash'
 		chmod +x 'file2-completion.bash'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg2"
+	test_util.mock_clone "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"
@@ -644,13 +644,13 @@ load 'util/init.sh'
 		touch 'file2-completion.zsh'
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg1"
+	test_util.mock_clone "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch 'file2-completion.zsh'
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg2"
+	test_util.mock_clone "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"
@@ -668,13 +668,13 @@ load 'util/init.sh'
 		echo '#compdef' > "file2-completion.zsh"
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg1"
+	test_util.mock_clone "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		echo '#compdef' > "file2-completion.zsh"
 		chmod +x 'file2-completion.zsh'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg2"
+	test_util.mock_clone "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"
@@ -692,13 +692,13 @@ load 'util/init.sh'
 		touch "file2-completion.fish"
 		chmod +x 'file2-completion.fish'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg1"
+	test_util.mock_clone "$site/$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		touch "file2-completion.fish"
 		chmod +x 'file2-completion.fish'
 	}; test_util.finish_pkg
-	test_util.fake_clone "$site/$pkg2"
+	test_util.mock_clone "$site/$pkg2"
 
 	do-plumbing-link-completions "$site/$pkg1"
 	run do-plumbing-link-completions "$site/$pkg2"

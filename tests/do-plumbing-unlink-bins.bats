@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		:
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-unlink-bins "$site/$pkg"
 
@@ -26,7 +26,7 @@ load 'util/init.sh'
 		touch 'somebin/exec1'
 		touch 'somebin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
@@ -48,7 +48,7 @@ load 'util/init.sh'
 		touch 'somebin/exec1'
 		touch 'somebin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
@@ -69,7 +69,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
@@ -90,7 +90,7 @@ load 'util/init.sh'
 		touch 'exec2.sh'
 		chmod +x 'exec1' 'exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
@@ -112,7 +112,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2" ]
@@ -136,7 +136,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
@@ -158,7 +158,7 @@ load 'util/init.sh'
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
@@ -185,7 +185,7 @@ load 'util/init.sh'
 		touch 'somebin/exec1'
 		touch 'somebin/exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ ! -L "$BPM_INSTALL_BIN/e1" ]
 	assert [ ! -L "$BPM_INSTALL_BIN/e2.sh" ]

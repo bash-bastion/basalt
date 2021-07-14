@@ -1,17 +1,15 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2164
 
-# @description This mocks a command by creating a function for it, which
-# prints all the arguments to the command, in addition to the command name
-test_util.mock_command() {
-	# This creates a function with a name of the first argument. When called, it prints the command name, along with the arguments
-	# it was called with
+# @description This stubs a command by creating a function for it, which
+# prints the command name and its arguments
+test_util.stub_command() {
 	eval "$1() { echo \"$1 \$*\"; }"
 }
 
 # @description Fakes a clone. This is meant to be used for
 # the download step
-test_util.fake_clone() {
+test_util.mock_clone() {
 	local id="$1"
 	ensure.non_zero 'id' "$id"
 
@@ -19,7 +17,7 @@ test_util.fake_clone() {
 }
 
 # @description Clones the repository, and performs any linking, etc.
-test_util.fake_add() {
+test_util.mock_add() {
 		local pkg="$1"
 		ensure.non_zero 'pkg' "$pkg"
 
@@ -31,7 +29,7 @@ test_util.fake_add() {
 }
 
 # @description Mocks a 'bpm link'
-test_util.fake_link() {
+test_util.mock_link() {
 	local dir="$1"
 	ensure.non_zero 'dir' "$dir"
 
@@ -46,7 +44,7 @@ test_util.fake_link() {
 	do-plumbing-link-man "local/$dir"
 }
 
-# @description Creates a 'bpm package', and cd's into it
+# @description Utility to begin creating a package
 test_util.setup_pkg() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
@@ -61,14 +59,14 @@ test_util.setup_pkg() {
 	git branch -M master
 }
 
-# @description Commits changes and cd's out of the package directory
-# into the regular testing directory
+# @description Utility to finish completing a package
 test_util.finish_pkg() {
 	git add .
 	git commit --allow-empty -m "Make changes"
 	cd "$BPM_CWD"
 }
 
+# @description Utility function to create an empty package
 test_util.create_package() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
@@ -78,6 +76,7 @@ test_util.create_package() {
 	}; test_util.finish_pkg
 }
 
+# @description Create a package (to be linked later)
 test_util.create_pkg_dir() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
@@ -93,6 +92,7 @@ test_util.create_pkg_dir() {
 	cd "$BPM_CWD"
 }
 
+# TODO: deprecate for test_util and mock_clone
 test_util.create_remote_and_local() {
 	local site='github.com'
 	local remote_dir="remote"

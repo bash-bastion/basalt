@@ -46,7 +46,7 @@ load 'util/init.sh'
 		touch 'bpm.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 
@@ -63,7 +63,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$dir"; {
 		touch 'file.sh'
 	}; test_util.finish_pkg
-	test_util.fake_link "$dir"
+	test_util.mock_link "$dir"
 
 	assert [ -d "$BPM_PACKAGES_PATH/local/$dir" ]
 
@@ -81,7 +81,7 @@ load 'util/init.sh'
 		touch 'bpm.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 
@@ -98,7 +98,7 @@ load 'util/init.sh'
 		touch 'bpm.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-remove "$pkg"
 
@@ -117,7 +117,7 @@ load 'util/init.sh'
 		touch 'exec2.sh'
 		chmod +x 'exec2.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-remove "$pkg"
 
@@ -135,13 +135,13 @@ load 'util/init.sh'
 		mkdir bin
 		touch 'bin/exec1'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg1"
+	test_util.mock_add "$pkg1"
 
 	test_util.setup_pkg "$pkg2"; {
 		mkdir bin
 		touch 'bin/exec2'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg2"
+	test_util.mock_add "$pkg2"
 
 	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg1" ]
 	assert [ -e "$BPM_INSTALL_BIN/exec1" ]

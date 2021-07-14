@@ -17,8 +17,8 @@ load 'util/init.sh'
 	test_util.create_package 'username/p1'
 	test_util.create_package 'username2/p2'
 	test_util.create_package 'username2/p3'
-	test_util.fake_add "username/p1"
-	test_util.fake_add "username2/p2"
+	test_util.mock_add "username/p1"
+	test_util.mock_add "username2/p2"
 
 	run do-list --simple
 
@@ -32,10 +32,10 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='somepath/project2'
 
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	test_util.create_package "$pkg"
 	do-link "$BPM_ORIGIN_DIR/$site/$pkg"
@@ -52,8 +52,8 @@ load 'util/init.sh'
 	test_util.create_package 'username/p1'
 	test_util.create_package 'username2/p2'
 	test_util.create_package 'username2/p3'
-	test_util.fake_add "username/p1"
-	test_util.fake_add "username2/p2"
+	test_util.mock_add "username/p1"
+	test_util.mock_add "username2/p2"
 
 	run do-list
 
@@ -71,15 +71,15 @@ $site/username2/p2
 
 @test "properly list for local packages in mode non-simple list" {
 	local site='github.com'
-	local pkg='somepath/project2'
+	local dir='somepath/project2'
 
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
-	test_util.create_package "$pkg"
-	do-link "$BPM_ORIGIN_DIR/$site/$pkg"
+	test_util.create_package "$dir"
+	test_util.mock_link "$dir"
 
 	run do-list
 

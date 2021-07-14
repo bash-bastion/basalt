@@ -33,7 +33,7 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		touch 'script.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	cd "$BPM_ORIGIN_DIR/$site/$pkg"
 	touch 'script2.sh'
@@ -60,7 +60,7 @@ load 'util/init.sh'
 		touch 'script.sh'
 		chmod +x 'script.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	cd "$BPM_ORIGIN_DIR/$site/$pkg"
 	touch 'script2.sh'
@@ -84,7 +84,7 @@ load 'util/init.sh'
 		mkdir 'binn'
 		touch 'binn/script3.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	[ -f "$BPM_INSTALL_BIN/script3.sh" ]
 
@@ -102,10 +102,10 @@ load 'util/init.sh'
 @test "prints warning if user tries to upgrade a 'link'ed package" {
 	skip
 
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	mkdir 'theta'
 
@@ -127,7 +127,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.mock_command 'git'
+	test_util.stub_command 'git'
 
 	run do-upgrade 'bpm'
 
@@ -139,7 +139,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.mock_command 'git'
+	test_util.stub_command 'git'
 
 	run do-upgrade 'bpm' 'pkg/name'
 

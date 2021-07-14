@@ -3,11 +3,11 @@
 load 'util/init.sh'
 
 @test "fails when no packages are specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add
 
@@ -16,11 +16,11 @@ load 'util/init.sh'
 }
 
 @test "fails when the remote repository is owned by a user with username 'local'" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add 'local/pkg'
 
@@ -32,11 +32,11 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/main'
 
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	test_util.create_package "$pkg"
 	run do-add "$BPM_ORIGIN_DIR/$site/$pkg"
@@ -46,11 +46,11 @@ load 'util/init.sh'
 }
 
 @test "executes install steps in right order" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add username/package
 
@@ -64,11 +64,11 @@ load 'util/init.sh'
 }
 
 @test "executes install steps in right order for multiple packages" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add username/package username2/package2
 
@@ -89,11 +89,11 @@ load 'util/init.sh'
 
 
 @test "uses longhand (https) site to clone from, if specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add https://gitlab.com/username/package
 
@@ -102,11 +102,11 @@ load 'util/init.sh'
 }
 
 @test "uses longhand (http) site to clone from, if specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add http://gitlab.com/username/package
 
@@ -115,11 +115,11 @@ load 'util/init.sh'
 }
 
 @test "uses shorthand site to clone from, if specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add site/username/package
 
@@ -128,11 +128,11 @@ load 'util/init.sh'
 }
 
 @test "uses GitHub as default site, if not specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add username/package
 
@@ -141,11 +141,11 @@ load 'util/init.sh'
 }
 
 @test "uses ssh protocol, when specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add --ssh username/package
 
@@ -154,11 +154,11 @@ load 'util/init.sh'
 }
 
 @test "uses ssh protocol, when specified (at end)" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add username/package --ssh
 
@@ -167,11 +167,11 @@ load 'util/init.sh'
 }
 
 @test "uses ssh protocol raw, when specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add git@github.com:username/package
 
@@ -180,11 +180,11 @@ load 'util/init.sh'
 }
 
 @test "uses custom version, when specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add username/package@v1.2.3
 
@@ -193,17 +193,14 @@ load 'util/init.sh'
 }
 
 @test "does not use custom version, when not specified" {
-	test_util.mock_command do-plumbing-clone
-	test_util.mock_command do-plumbing-add-deps
-	test_util.mock_command do-plumbing-link-bins
-	test_util.mock_command do-plumbing-link-completions
-	test_util.mock_command do-plumbing-link-man
+	test_util.stub_command do-plumbing-clone
+	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command do-plumbing-link-bins
+	test_util.stub_command do-plumbing-link-completions
+	test_util.stub_command do-plumbing-link-man
 
 	run do-add username/package@
 
 	assert_success
 	assert_line "do-plumbing-clone https://github.com/username/package.git github.com/username/package"
 }
-
-
-

@@ -9,9 +9,9 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		:
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
-	test_util.mock_command 'do-add'
+	test_util.stub_command 'do-add'
 	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
@@ -22,12 +22,12 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.mock_command 'do-add'
+	test_util.stub_command 'do-add'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'DEPS=user/dep1:user/dep2' > 'package.sh'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-add-deps "$site/$pkg"
 
@@ -40,12 +40,12 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.mock_command 'do-add'
+	test_util.stub_command 'do-add'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'dependencies = [ "user/dep1", "user/dep2" ]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-add-deps "$site/$pkg"
 
@@ -58,13 +58,13 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.mock_command do-add
+	test_util.stub_command do-add
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'DEPS=user/bad_dep' > 'package.sh'
 		echo 'dependencies = [ "user/good_dep" ]' > 'bpm.toml'
 	}; test_util.finish_pkg
-	test_util.fake_add "$pkg"
+	test_util.mock_add "$pkg"
 
 	run do-plumbing-add-deps "$site/$pkg"
 

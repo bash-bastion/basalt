@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "install a specific version" {
-	test_util.mock_command git
+	test_util.stub_command git
 
 	run do-plumbing-clone https://site/username/package.git username/package version
 
@@ -31,7 +31,7 @@ load 'util/init.sh'
 }
 
 @test "using a different site" {
-	test_util.mock_command git
+	test_util.stub_command git
 
 	run do-plumbing-clone https://site/username/package.git username/package
 
@@ -43,7 +43,7 @@ load 'util/init.sh'
 # the variable at all will result in a full clone
 @test "with setting BPM_FULL_CLONE, clones a package without depth option" {
 	export BPM_FULL_CLONE=
-	test_util.mock_command git
+	test_util.stub_command git
 
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
@@ -53,7 +53,7 @@ load 'util/init.sh'
 
 @test "setting BPM_FULL_CLONE to true, clones a package without depth option" {
 	export BPM_FULL_CLONE=true
-	test_util.mock_command git
+	test_util.stub_command git
 
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
@@ -65,7 +65,7 @@ load 'util/init.sh'
 # the variable at all will result in a full clone
 @test "setting BPM_FULL_CLONE to false, clones a package without depth option" {
 	export BPM_FULL_CLONE=false
-	test_util.mock_command git
+	test_util.stub_command git
 
 	run do-plumbing-clone https://github.com/username/package.git username/package
 
@@ -74,7 +74,7 @@ load 'util/init.sh'
 }
 
 @test "using ssh protocol" {
-	test_util.mock_command git
+	test_util.stub_command git
 
 	run do-plumbing-clone git@site:username/package.git username/package
 
