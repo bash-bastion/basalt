@@ -88,6 +88,28 @@ $site/username2/p2
   Branch: master"
 }
 
+@test "properly list out of date package" {
+	local site='github.com'
+	local pkg='somedir/package'
+
+	test_util.create_package "$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
+
+	cd "$BPM_ORIGIN_DIR/$pkg"
+	touch 'script2.sh'
+	git add .
+	git commit -m 'Add script'
+	cd "$BPM_CWD"
+
+	do-list --fetch
+	run do-list
+
+	assert_success
+	assert_output "github.com/$pkg
+  Branch: master
+  State: Out of date"
+}
+
 @test "error if tries to list a non-git repository with details" {
 	local site="github.com"
 	local pkg='username/outdated'

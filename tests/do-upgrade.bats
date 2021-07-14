@@ -3,15 +3,13 @@
 load 'util/init.sh'
 
 @test "simple upgrade" {
-	skip
-
 	local site='github.com'
-	local pkg='username/package'
+	local pkg='somedir/package'
 
-	test_util.create_package 'remote'
-	test_util.mock_clone add 'remote'
+	test_util.create_package "$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$site/username/local"
+	cd "$BPM_ORIGIN_DIR/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
@@ -22,13 +20,13 @@ load 'util/init.sh'
 	run do-list
 
 	assert_success
-	assert_output ""
+	assert_output "github.com/$pkg
+  Branch: master
+  State: Up to date"
 	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
 }
 
-@test "simple upgrade (specifying with directory)" {
-	skip
-
+@test "simple upgrade fails when specifying full directory" {
 	local site='github.com'
 	local pkg='username/package'
 
@@ -37,24 +35,20 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$site/$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
 	cd "$BPM_CWD"
 
-	do-upgrade "$BPM_ORIGIN_DIR/$site/$pkg"
+	run do-upgrade "$BPM_ORIGIN_DIR/$pkg"
 
-	run do-list
-	assert_output ""
-
-	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
+	assert_failure
+	assert_line -p "Identifier '$BPM_ORIGIN_DIR/$pkg' is a directory, not a package"
 }
 
 
 @test "symlinks stay valid after upgrade" {
-	skip
-
 	local site='github.com'
 	local pkg='username/package'
 
@@ -64,7 +58,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$site/$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
@@ -76,8 +70,6 @@ load 'util/init.sh'
 }
 
 @test "BPM_INSTALL_DIR reflected when package modifies binDirs key" {
-	skip
-
 	local site='github.com'
 	local pkg='username/package'
 
@@ -90,7 +82,7 @@ load 'util/init.sh'
 
 	[ -f "$BPM_INSTALL_BIN/script3.sh" ]
 
-	cd "$BPM_ORIGIN_DIR/$site/$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
 	rm 'bpm.toml'
 	git add .
 	git commit -m 'Remove bpm.toml'
@@ -101,20 +93,19 @@ load 'util/init.sh'
 	assert [ ! -f "$BPM_INSTALL_BIN/script3.sh" ]
 }
 
-@test "prints warning if user tries to upgrade a 'link'ed package" {
-	skip
+@test "fails if user tries to upgrade a 'link'ed package" {
+	local pkg='subdir/theta'
 
 	test_util.stub_command do-plumbing-add-deps
 	test_util.stub_command do-plumbing-link-bins
 	test_util.stub_command do-plumbing-link-completions
 	test_util.stub_command do-plumbing-link-man
 
-	mkdir 'theta'
-
-	do-link 'theta'
+	test_util.create_package "$pkg"
+	test_util.mock_link "$BPM_ORIGIN_DIR/$pkg"
 	run 'do-upgrade' 'local/theta'
 
-	assert_success
+	assert_failure
 	assert_line -p "Package at '$BPM_PACKAGES_PATH/local/theta' is not a Git repository"
 }
 

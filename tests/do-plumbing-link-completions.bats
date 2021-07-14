@@ -390,11 +390,6 @@ load 'util/init.sh'
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
 }
 
-@test "zsh completions without file extension have an extension appended" {
-	skip
-}
-
-
 ## FISH ##
 
 @test "adds fish completions determined from bpm.toml" {

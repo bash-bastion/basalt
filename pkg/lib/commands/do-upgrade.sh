@@ -36,25 +36,16 @@ do-upgrade() {
 	fi
 
 	for repoSpec; do
-		# If is local directory
-		if [ -d "$repoSpec" ]; then
-			local dir=
-			dir="$(util.readlink "$repoSpec")"
-			dir="${dir%/}"
-
-			util.extract_data_from_package_dir "$dir"
-			local site="$REPLY1"
-			local package="$REPLY2/$REPLY3"
-
-			do_actual_upgrade "$site/$package"
-		else
-			util.extract_data_from_input "$repoSpec"
-			local site="$REPLY2"
-			local package="$REPLY3"
-			local ref="$REPLY4"
-
-			do_actual_upgrade "$site/$package"
+		if [[ -d "$repoSpec" && "${repoSpec::1}" == / ]]; then
+			die "Identifier '$repoSpec' is a directory, not a package"
 		fi
+
+		util.extract_data_from_input "$repoSpec"
+		local site="$REPLY2"
+		local package="$REPLY3"
+		local ref="$REPLY4"
+
+		do_actual_upgrade "$site/$package"
 	done
 }
 

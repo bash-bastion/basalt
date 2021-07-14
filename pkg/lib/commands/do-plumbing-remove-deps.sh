@@ -20,7 +20,7 @@ do-plumbing-remove-deps() {
 		fi
 	fi
 
-	if (( #${deps[@]} > 0 )); then
+	if (( ${#deps[@]} > 0 )); then
 		log.info "Removing dependencies for '$package'"
 	fi
 
