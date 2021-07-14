@@ -170,6 +170,22 @@ load 'util/init.sh'
 	assert [ ! -e "$BPM_INSTALL_BIN/exec4.sh" ]
 }
 
+@test "does not add directories in root directory" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'directory1'
+		touch 'directory1/.gitkeep'
+	}; test_util.finish_pkg
+	test_util.mock_clone "$pkg" "$site/$pkg"
+
+	run do-plumbing-link-bins "$site/$pkg"
+
+	assert_success
+	assert [ ! -e "$BPM_INSTALL_BIN/directory1" ]
+}
+
 @test "doesn't link root bins if there is a bin folder" {
 	local site='github.com'
 	local pkg="username/package"

@@ -84,7 +84,7 @@ abstract.bins_search_heuristics() {
 		done
 	else
 		for file in "$BPM_PACKAGES_PATH/$id"/*; do
-			if [ -x "$file" ]; then
+			if [[ -f "$file" && -x "$file" ]]; then
 				abstract.bins_do_action "$action" "$file" "$remove_extensions"
 			fi
 		done
