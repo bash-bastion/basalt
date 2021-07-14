@@ -268,7 +268,7 @@ Subcommands:
     Installs a local directory as a bpm package. These show up with
     a namespace of 'local'
 
-  list [--outdated]
+  list [--simple] [--fetch]
     List installed packages
 
   package-path <package>

@@ -3,12 +3,15 @@
 do-list() {
 	local flag_outdated='no'
 	local flag_simple='no'
+	local flag_fetch='no'
 
 	for arg; do
 		case "$arg" in
 		--simple)
 			flag_simple='yes'
 			;;
+		--fetch)
+			flag_fetch='yes'
 		esac
 	done
 
@@ -64,6 +67,13 @@ do-list() {
 				printf -v pkg_output "%s  %s\n" "$pkg_output" "$repo_branch_str"
 
 				if git -C "$pkg_path" config remote.origin.url &>/dev/null; then
+					if [ "$flag_fetch" = yes ]; then
+						local git_output=
+						if ! git_output="$(git -C "$pkg_path" fetch)"; then
+							printf "%s" "$git_output"
+						fi
+					fi
+
 					# shellcheck disable=SC1083
 					if [ "$(git -C "$pkg_path" rev-list --count HEAD...HEAD@{upstream})" -gt 0 ]; then
 						if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
