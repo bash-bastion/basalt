@@ -11,6 +11,9 @@ do-upgrade() {
 		bpm)
 			upgrade_bpm='yes'
 			;;
+		-*)
+			die "Flag '$arg' not recognized"
+			;;
 		*)
 			pkgs+=("$arg")
 			;;

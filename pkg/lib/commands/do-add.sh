@@ -23,6 +23,9 @@ do-add() {
 				die "Branch cannot be empty"
 			fi
 			;;
+		-*)
+			die "Flag '$arg' not recognized"
+			;;
 		*)
 			pkgs+=("$arg")
 			;;

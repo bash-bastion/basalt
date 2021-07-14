@@ -8,12 +8,15 @@ do-remove() {
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in
-			--all)
-				flag_all='yes'
-				;;
-			*)
-				pkgs+=("$arg")
-				;;
+		--all)
+			flag_all='yes'
+			;;
+		-*)
+			die "Flag '$arg' not recognized"
+			;;
+		*)
+			pkgs+=("$arg")
+			;;
 		esac
 	done
 

@@ -14,6 +14,10 @@ do-list() {
 			;;
 		--fetch)
 			flag_fetch='yes'
+			;;
+		-*)
+			die "Flag '$arg' not recognized"
+			;;
 		esac
 	done
 

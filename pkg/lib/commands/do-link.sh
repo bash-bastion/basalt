@@ -11,6 +11,9 @@ do-link() {
 		--no-deps)
 			install_deps='no'
 			;;
+		-*)
+			die "Flag '$arg' not recognized"
+			;;
 		*)
 			dirs+=("$arg")
 			;;
