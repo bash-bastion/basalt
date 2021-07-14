@@ -5,6 +5,8 @@ do-list() {
 	local flag_simple='no'
 	local flag_fetch='no'
 
+	util.setup_mode
+
 	for arg; do
 		case "$arg" in
 		--simple)

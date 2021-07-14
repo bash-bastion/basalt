@@ -4,7 +4,7 @@ load 'util/init.sh'
 
 # We only test two of all commands
 @test "error when not passing --global to add, list, and upgrade" {
-	local str="No 'bpm.toml' file found. Please create one to install local packages or pass the '--global' option"
+	local str="No 'bpm.toml' file found"
 
 	run bpm add foo
 	assert_failure

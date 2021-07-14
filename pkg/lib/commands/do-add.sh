@@ -1,14 +1,16 @@
 # shellcheck shell=bash
 
 do-add() {
-	local with_ssh='no' # TODO: refactor flag_
+	local flag_ssh='no'
 	local flag_all='no'
+
+	util.setup_mode
 
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in
 		--ssh)
-			with_ssh='yes'
+			flag_ssh='yes'
 			;;
 		--all)
 			flag_all='yes'
@@ -48,7 +50,7 @@ do-add() {
 			die "Identifier '$repoSpec' is a directory, not a package"
 		fi
 
-		util.extract_data_from_input "$repoSpec" "$with_ssh"
+		util.extract_data_from_input "$repoSpec" "$flag_ssh"
 		local uri="$REPLY1"
 		local site="$REPLY2"
 		local package="$REPLY3"

@@ -30,7 +30,7 @@ ensure.non_zero() {
 # the integrity of the testing suite. Most of the callsites of this
 # function are in 'do-plumbing-link' since we expect a package to exist
 # before performing operations on it. This contrasts 'do-plumbing-unlink' -
-# that is not an expectation
+# in which the behavior is not expected
 # @arg $1 package
 ensure.package_exists() {
 	local id="$1"

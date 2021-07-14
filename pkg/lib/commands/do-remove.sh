@@ -3,6 +3,8 @@
 do-remove() {
 	local flag_all='no'
 
+	util.setup_mode
+
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in

@@ -3,6 +3,8 @@
 do-link() {
 	local install_deps='yes'
 
+	util.setup_mode
+
 	local -a dirs=()
 	for arg; do
 		case "$arg" in

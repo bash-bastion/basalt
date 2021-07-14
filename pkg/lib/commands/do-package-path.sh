@@ -4,6 +4,8 @@ bpm-package-path() {
 	local id="$1"
 	ensure.non_zero 'id' "$id"
 
+	util.setup_mode
+
 	util.extract_data_from_input "$id"
 	local site="$REPLY2"
 	local package="$REPLY3"

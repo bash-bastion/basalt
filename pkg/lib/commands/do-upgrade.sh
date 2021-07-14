@@ -3,6 +3,8 @@
 do-upgrade() {
 	local upgrade_bpm='no'
 
+	util.setup_mode
+
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in
