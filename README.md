@@ -4,8 +4,6 @@
 
 ---
 
-STATUS: ALPHA
-
 `bpm` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
 
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
@@ -34,6 +32,13 @@ eval "$(bpm init bash)" # zsh and fish are also supported
 ```
 
 See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-started.md) for more details
+
+## Features
+
+- Local and user-wide package installation
+- Configure (optionally) exactly which directories are used for completions, binaries, or man pages
+- Works with essentially all popular Bash projects out of the box (if a project with over a thousand stars does not work, open an issue)
+- 220+ Tests
 
 ## Alternatives Comparison
 

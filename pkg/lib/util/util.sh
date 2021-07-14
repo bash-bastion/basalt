@@ -286,7 +286,7 @@ Subcommands:
   init <shell>
     Configure shell environment for Basher
 
-  add [--ssh] [--all] [[site/]<package>[@ref]...]
+  add [--ssh] [--branch=<name>] [--all] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
 
   remove [--all] <package...>
@@ -313,5 +313,7 @@ Examples:
   bpm add github.com/tj/git-extras
   bpm add https://github.com/tj/git-extras
   bpm add git@github.com:tj/git-extras
+  bpm add eankeen/bash-args --branch=main
+  bpm add eankeen/bash-args@v0.6.1 # out of date
 EOF
 }
