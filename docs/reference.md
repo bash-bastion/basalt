@@ -8,7 +8,7 @@ The location of the root `bpm` folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.loc
 
 ### `BPM_FULL_CLONE`
 
-Set to a non-null string to clone the full repository history instead of only the last commit. By default, only the latest commit is cloned (`--depth=1`)
+Set to a non-null string to clone the full repository history instead of only the last commit. By default, only the latest commit is cloned (`--depth=1`). The only exception to this is when a specific version is specified with `@v0.1.0` notation. When that is specified, the whole history is downloaded
 
 ### `BPM_PREFIX`
 

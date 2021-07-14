@@ -3,6 +3,7 @@
 do-add() {
 	local flag_ssh='no'
 	local flag_all='no'
+	local flag_branch=
 
 	util.setup_mode
 
@@ -14,6 +15,13 @@ do-add() {
 			;;
 		--all)
 			flag_all='yes'
+			;;
+		--branch=*)
+			IFS='=' read -r discard flag_branch <<< "$arg"
+
+			if [ -z "$flag_branch" ]; then
+				die "Branch cannot be empty"
+			fi
 			;;
 		*)
 			pkgs+=("$arg")
@@ -61,7 +69,7 @@ do-add() {
 		fi
 
 		log.info "Adding '$repoSpec'"
-		do-plumbing-clone "$uri" "$site/$package" "$ref"
+		do-plumbing-clone "$uri" "$site/$package" "$ref" "$flag_branch"
 		do-plumbing-add-deps "$site/$package"
 		do-plumbing-link-bins "$site/$package"
 		do-plumbing-link-completions "$site/$package"

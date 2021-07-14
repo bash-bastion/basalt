@@ -3,6 +3,8 @@
 load 'util/init.sh'
 
 @test "install a specific version" {
+	skip
+
 	test_util.stub_command git
 
 	run do-plumbing-clone https://site/username/package.git username/package version
@@ -80,4 +82,13 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 1 "git clone --recursive --depth=1 git@site:username/package.git $BPM_PACKAGES_PATH/username/package"
+}
+
+@test "setting branch works" {
+	test_util.stub_command git
+
+	run do-plumbing-clone https://github.com/username/package.git github.com/username/package '' a_branch
+
+	assert_success
+	assert_line -n 1 "git clone --recursive --depth=1 --single-branch --branch a_branch https://github.com/username/package.git $BPM_PACKAGES_PATH/github.com/username/package"
 }
