@@ -223,6 +223,30 @@ load 'util/init.sh'
 	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
 }
 
+@test "--all works with transitive dependencies" {
+	local site='github.com'
+	local pkg="user/project"
+	local pkg2="user/project2"
+	local pkg3="user/project3"
+
+	test_util.create_package "$pkg"
+	test_util.create_package "$pkg2"
+	test_util.create_package "$pkg3"
+	cd "$BPM_ORIGIN_DIR/$pkg2"
+	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg3' ]" > 'bpm.toml'
+	git add .
+	git commit -m 'Add bpm.toml'
+	cd "$BPM_CWD"
+
+	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
+	BPM_IS_LOCAL='yes' run do-add --all
+
+	assert_success
+	assert [ -d "./bpm_packages/packages/$site/$pkg/.git" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg2/bpm_packages/packages/$site/$pkg3/.git" ]
+}
+
 @test "--all works with annotated ref" {
 	local site='github.com'
 	local pkg1="user/project"

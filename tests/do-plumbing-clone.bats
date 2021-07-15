@@ -17,6 +17,32 @@ load 'util/init.sh'
 	assert_line "git -C $BPM_PACKAGES_PATH/$site/$pkg reset --hard v1.2.3"
 }
 
+@test "does not fail if no ref is given" {
+	local site='github.com'
+	local pkg='user/project'
+
+	test_util.create_package "$pkg"
+
+	run do-plumbing-clone "file://$BPM_ORIGIN_DIR/$pkg" "$site/$pkg"
+
+	assert_success
+	refute_line -p "fatal"
+	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg/.git" ]
+}
+
+@test "does not fail if no branch is given" {
+	local site='github.com'
+	local pkg='user/project'
+
+	test_util.create_package "$pkg"
+
+	run do-plumbing-clone "file://$BPM_ORIGIN_DIR/$pkg" "$site/$pkg" "v0.1.0"
+
+	assert_success
+	refute_line -p "fatal"
+	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg/.git" ]
+}
+
 @test "does nothing if package is already present" {
 	mkdir -p "$BPM_PACKAGES_PATH/username/package"
 
