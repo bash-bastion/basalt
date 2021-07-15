@@ -79,21 +79,23 @@ do-add() {
 		do-plumbing-link-man "$site/$package"
 
 		# Install transitive dependencies
-		(
-			local subDep="$BPM_PACKAGES_PATH/$site/$package"
+		local subDep="$BPM_PACKAGES_PATH/$site/$package"
 
-			if [[ ! -d "$subDep" && -n "${BPM_MODE_TEST+x}" ]]; then
-				# During some tests, plumbing-* or Git commands may be stubbed,
-				# so the package may not actually be cloned
-				return
-			fi
+		if [[ ! -d "$subDep" && -n "${BPM_MODE_TEST+x}" ]]; then
+			# During some tests, plumbing-* or Git commands may be stubbed,
+			# so the package may not actually be cloned
+			return
+		fi
 
-			ensure.cd "$subDep"
-
-			local bpm_toml_file="$subDep/bpm.toml"
+		local oldWd="$PWD"
+		ensure.cd "$subDep"
+		local bpm_toml_file="$subDep/bpm.toml"
+		if [ -f "$bpm_toml_file" ]; then
 			if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 				do-add --all
 			fi
-		)
+		fi
+		ensure.cd "$oldWd"
+
 	done
 }

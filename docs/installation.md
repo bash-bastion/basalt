@@ -30,7 +30,7 @@ curl -Lo- https://raw.githubusercontent.com/eankeen/bpm/main/scripts/install.sh 
 git clone https://github.com/eankeen/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
 ```
 
-By default, this installs bpm to `$HOME/.local/share/bpm/source`
+By default, this installs bpm to `$HOME/.local/share/bpm/source`. Note: do _NOT_ try to install the repository to a different location (like `~/.bpm`), or the program won't work
 
 ##### 2. Add initialization script to shell profile
 
