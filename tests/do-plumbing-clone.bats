@@ -2,6 +2,8 @@
 
 load 'util/init.sh'
 
+# TODO: replace output checking with actual cloning using file://
+
 @test "installs a specific version" {
 	local site='github.com'
 	local pkg='username/package'
@@ -11,7 +13,7 @@ load 'util/init.sh'
 	run do-plumbing-clone https://github.com/username/package.git github.com/username/package v1.2.3
 
 	assert_success
-		assert_line "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/$site/$pkg"
+	assert_line "git clone --recursive https://github.com/username/package.git $BPM_PACKAGES_PATH/$site/$pkg"
 	assert_line "git -C $BPM_PACKAGES_PATH/$site/$pkg reset --hard v1.2.3"
 }
 

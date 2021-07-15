@@ -26,6 +26,7 @@ util.extract_data_from_input() {
 	local regex="^https?://"
 	local regex2="^git@"
 	local regex3="^local/"
+	local regex4="^file://"
 	if [[ "$repoSpec" =~ $regex ]]; then
 		local http="${repoSpec%%://*}"
 		repoSpec="${repoSpec#http?(s)://}"
@@ -55,6 +56,20 @@ util.extract_data_from_input() {
 		REPLY2='local'
 		REPLY3="$package"
 		REPLY4="$ref"
+	elif [[ "$repoSpec" =~ $regex4 ]]; then
+		local dir=
+
+		repoSpec="${repoSpec#file:\/\/}"
+		IFS='@' read -r dir ref <<< "$repoSpec"
+
+		REPLY1="file://$dir"
+		REPLY2="github.com"
+		REPLY3="${dir%/*}"; REPLY3="${REPLY3##*/}/${dir##*/}"
+		REPLY4="$ref"
+
+		if [ -z "${REPLY3%/*}" ]; then
+			die "Directory specified with file protocol must have at least one parent directory (for the package name)"
+		fi
 	else
 		repoSpec="${repoSpec%.git}"
 

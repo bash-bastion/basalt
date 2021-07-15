@@ -205,6 +205,62 @@ load 'util/init.sh'
 	assert_line "do-plumbing-clone https://github.com/username/package.git github.com/username/package  "
 }
 
+
+@test "--all works" {
+	local site='github.com'
+	local pkg="user/project"
+	local pkg2="user/project2"
+
+	test_util.create_package "$pkg"
+	test_util.create_package "$pkg2"
+
+	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
+	BPM_IS_LOCAL='yes' run do-add --all
+
+	assert_success
+
+	assert [ -d "./bpm_packages/packages/$site/$pkg/.git" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
+}
+
+@test "--all works with annotated ref" {
+	local site='github.com'
+	local pkg1="user/project"
+
+	test_util.create_package "$pkg1"
+	cd "$BPM_ORIGIN_DIR/$pkg1"
+	git commit --allow-empty -m 'v0.1.0'
+	git tag -a 'v0.1.0' -m 'Version: v0.1.0'
+	cd "$BPM_CWD"
+
+	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
+	BPM_IS_LOCAL='yes' run do-add --all
+
+	assert_success
+	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg1/.git" ]
+	assert [ "$(git -C "./bpm_packages/packages/$site/$pkg1" describe --exact-match --tags)" = "v0.1.0" ]
+}
+
+@test "--all works with non-annotated ref" {
+	local site='github.com'
+	local pkg1="user/project"
+
+	test_util.create_package "$pkg1"
+	cd "$BPM_ORIGIN_DIR/$pkg1"
+	git commit --allow-empty -m 'v0.1.0'
+	git tag 'v0.1.0' -m 'Version: v0.1.0'
+	cd "$BPM_CWD"
+
+	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
+	BPM_IS_LOCAL='yes' run do-add --all
+
+	assert_success
+	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg1/.git" ]
+	assert [ "$(git -C "./bpm_packages/packages/$site/$pkg1" describe --exact-match --tags)" = "v0.1.0" ]
+}
+
 @test "--all prints warning when no dependencies are specified in bpm.toml" {
 	touch 'bpm.toml'
 
