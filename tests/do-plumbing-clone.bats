@@ -35,6 +35,10 @@ load 'util/init.sh'
 	local pkg='user/project'
 
 	test_util.create_package "$pkg"
+	cd "$BPM_ORIGIN_DIR/$pkg"
+	git commit --allow-empty -m "v0.1.0"
+	git tag 'v0.1.0' -m ''
+	cd "$BPM_CWD"
 
 	run do-plumbing-clone "file://$BPM_ORIGIN_DIR/$pkg" "$site/$pkg" "v0.1.0"
 
