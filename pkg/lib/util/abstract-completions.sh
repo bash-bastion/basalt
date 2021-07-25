@@ -155,20 +155,25 @@ abstract.completions_do_action_zsh() {
 	local file="$2"
 
 	abstract.completions_do_echo
-
+	
 	if grep -qs "^#compdef" "$file"; then
+		local fileName="${file##*/}"
+		if [  "${fileName::1}" != _ ]; then
+			fileName="${fileName/#/_}"
+		fi
+
 		case "$action" in
-		link)
-			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}" ]; then
+				link)
+			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName" ]; then
 				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 			else
 				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
-				ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
+				ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName"
 			fi
 			;;
 		unlink)
-			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}" ]; then
-				unlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/${file##*/}"
+			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName" ]; then
+				unlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName"
 			fi
 			;;
 		esac

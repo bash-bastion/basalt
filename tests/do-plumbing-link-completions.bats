@@ -304,18 +304,18 @@ load 'util/init.sh'
 
 	test_util.setup_pkg "$pkg"; {
 		mkdir -p ./{contrib/,}completion{,s}
-		touch "completion/c1.zsh"
-		echo '#compdef' > "completions/c2.zsh"
-		touch "contrib/completion/c3.zsh"
-		echo '#compdef' > "contrib/completions/c4.zsh"
+		touch "completion/_c1.zsh"
+		echo '#compdef' > "completions/_c2.zsh"
+		touch "contrib/completion/_c3.zsh"
+		echo '#compdef' > "contrib/completions/_c4.zsh"
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys//c2.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/c2.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c3.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completion/c3.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys//c4.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/_c1.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_c2.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/_c2.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_c3.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completion/_c3.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_c4.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/_c4.zsh" ]
 }
 
 @test "adds zsh completions determined with heuristics (root directory)" {
@@ -342,16 +342,16 @@ load 'util/init.sh'
 	test_util.setup_pkg "$pkg"; {
 		echo 'BASH_COMPLETIONS=""' > 'package.sh'
 		mkdir completion{,s}
-		touch "completion/c1.zsh"
-		echo '#compdef' > "completions/c2.zsh"
+		touch "completion/_c1.zsh"
+		echo '#compdef' > "completions/_c2.zsh"
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
 	run do-plumbing-link-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys//c2.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/c2.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/_c1.zsh" ]
+	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_c2.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/_c2.zsh" ]
 }
 
 @test "do not add zsh completions from heuristics when ZSH_COMPLETIONS is specified in package.sh" {
@@ -388,6 +388,22 @@ load 'util/init.sh'
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
+}
+
+@test "prepend underscore to zsh completions if one is not present" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		mkdir 'completion'
+		echo '#compdef _prog' > "completion/prog.zsh"
+	}; test_util.finish_pkg
+	test_util.mock_add "$pkg"
+
+	run do-plumbing-link-completions "$site/$pkg"
+
+	assert_success
+	assert [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_prog.zsh" ]
 }
 
 ## FISH ##
@@ -675,7 +691,7 @@ load 'util/init.sh'
 	run do-plumbing-link-completions "$site/$pkg2"
 
 	assert_success
-	assert_line -p "Skipping 'file2-completion.zsh' since an existing symlink with the same name already exists"
+	assert_line -p "Skipping '_file2-completion.zsh' since an existing symlink with the same name already exists"
 }
 
 @test "warns link fish completions if completion already exists" {
