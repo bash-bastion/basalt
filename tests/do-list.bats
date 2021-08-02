@@ -81,13 +81,15 @@ $site/username2/p2
 	test_util.stub_command do-plumbing-link-man
 
 	test_util.create_package "$dir"
-	test_util.mock_link "$dir"
+	test_util.mock_clone "$dir" "$site/$dir"
 
 	run do-list
 
 	assert_success
-	assert_output "local/project2
-  Branch: master"
+	assert_output -e "local/project2
+  Branch: master
+  Revision: ([a-z0-9]*)
+  State: Up to date"
 }
 
 @test "properly list out of date package" {

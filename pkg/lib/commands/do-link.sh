@@ -21,7 +21,7 @@ do-link() {
 	done
 
 	if (( ${#dirs[@]} == 0 )); then
-		die "You must supply at least one directory"
+		die 'At least one package must be supplied'
 	fi
 
 	for dir in "${dirs[@]}"; do

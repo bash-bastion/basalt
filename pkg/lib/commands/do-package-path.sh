@@ -2,7 +2,10 @@
 
 bpm-package-path() {
 	local id="$1"
-	ensure.non_zero 'id' "$id"
+
+	if [ -z "$id" ]; then
+		die "No package specified"
+	fi
 
 	util.setup_mode
 
@@ -15,6 +18,6 @@ bpm-package-path() {
 	if [ -d "$dir" ]; then
 		printf "%s\n" "$dir"
 	else
-		die "Package '$site/$package' not found"
+		die "Package '$site/$package' is not installed"
 	fi
 }

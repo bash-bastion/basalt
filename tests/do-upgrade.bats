@@ -45,7 +45,7 @@ load 'util/init.sh'
 	run do-upgrade "$BPM_ORIGIN_DIR/$pkg"
 
 	assert_failure
-	assert_line -p "Identifier '$BPM_ORIGIN_DIR/$pkg' is a directory, not a package"
+	assert_line -p "Package '$BPM_ORIGIN_DIR/$pkg' is not installed"
 }
 
 
@@ -95,7 +95,7 @@ load 'util/init.sh'
 }
 
 @test "fails if user tries to upgrade a 'link'ed package" {
-	local pkg='subdir/theta'
+	local pkg='theta'
 
 	test_util.stub_command do-plumbing-add-deps
 	test_util.stub_command do-plumbing-link-bins
@@ -103,18 +103,19 @@ load 'util/init.sh'
 	test_util.stub_command do-plumbing-link-man
 
 	test_util.create_package "$pkg"
-	test_util.mock_link "$BPM_ORIGIN_DIR/$pkg"
-	run 'do-upgrade' 'local/theta'
+	test_util.mock_link "$pkg"
+
+	run 'do-upgrade' "local/$pkg"
 
 	assert_failure
-	assert_line -p "Package at '$BPM_PACKAGES_PATH/local/theta' is not a Git repository"
+	assert_line -p "Package 'local/$pkg' is locally symlinked and cannot be upgraded through Git"
 }
 
 @test "errors when no packages are given" {
 	run do-upgrade
 
 	assert_failure
-	assert_line -p 'You must supply at least one package'
+	assert_line -p 'At least one package must be supplied'
 }
 
 @test "upgrade bpm works" {
@@ -138,5 +139,5 @@ load 'util/init.sh'
 	run do-upgrade 'bpm' 'pkg/name'
 
 	assert_failure
-	assert_line -p 'You cannot upgarde bpm and its packages at the same time'
+	assert_line -p 'Packages cannot be upgraded at the same time as bpm'
 }

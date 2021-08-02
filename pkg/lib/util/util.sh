@@ -264,27 +264,20 @@ util.get_project_root_dir() {
 	printf "%s" "$PWD"
 }
 
-util.set_bpm_variables() {
-	local project_root_dir="$1"
-	ensure.non_zero 'project_root_dir' "$project_root_dir"
-
-	BPM_ROOT="$project_root_dir"
-	BPM_PREFIX="$project_root_dir/bpm_packages"
-	BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
-	BPM_INSTALL_BIN="$BPM_PREFIX/bin"
-	BPM_INSTALL_MAN="$BPM_PREFIX/man"
-	BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
-}
-
 # @description Sets up the variables for the current mode
 util.setup_mode() {
 	if [ "$BPM_IS_LOCAL" = yes ]; then
 		local project_root_dir=
-		if ! project_root_dir="$(util.get_project_root_dir)"; then
+		if project_root_dir="$(util.get_project_root_dir)"; then
+			BPM_ROOT="$project_root_dir"
+			BPM_PREFIX="$project_root_dir/bpm_packages"
+			BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
+			BPM_INSTALL_BIN="$BPM_PREFIX/bin"
+			BPM_INSTALL_MAN="$BPM_PREFIX/man"
+			BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
+		else
 			die "No 'bpm.toml' file found"
 		fi
-
-		util.set_bpm_variables "$project_root_dir"
 	else
 		# If we do not set local mode, the default varaible
 		# values are already correct
@@ -299,7 +292,7 @@ Usage:
 
 Subcommands:
   init <shell>
-    Configure shell environment for Basher
+    Configure shell environment for bpm
 
   add [--ssh] [--branch=<name>] [--all] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
@@ -311,17 +304,14 @@ Subcommands:
     Uninstalls a package
 
   link [--no-deps] <directory...>
-    Installs a local directory as a bpm package. These show up with
-    a namespace of 'local'
+    Installs a package from a local directory. These have a
+    namespace of 'local'
 
   list [--simple] [--fetch]
     List installed packages
 
   package-path <package>
     Outputs the path for a package
-
-  complete <command...>
-    Perform the completion for a particular subcommand. Used by the completion scripts
 
 Examples:
   bpm add tj/git-extras

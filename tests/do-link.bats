@@ -247,3 +247,10 @@ load 'util/init.sh'
 	assert_success
 	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/$dir")" = "$(readlink -f "$BPM_ORIGIN_DIR/parent/$dir")" ]
 }
+
+@test "errors when no packages are given" {
+	run do-link
+
+	assert_failure
+	assert_line -p 'At least one package must be supplied'
+}

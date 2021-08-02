@@ -22,7 +22,7 @@ do-upgrade() {
 
 	if [ "$upgrade_bpm" = 'yes' ]; then
 		if (( ${#pkgs[@]} > 0 )); then
-			die 'You cannot upgarde bpm and its packages at the same time'
+			die 'Packages cannot be upgraded at the same time as bpm'
 		fi
 
 		if [ -d "$PROGRAM_LIB_DIR/../../.git" ]; then
@@ -35,29 +35,26 @@ do-upgrade() {
 	fi
 
 	if (( ${#pkgs[@]} == 0 )); then
-		die "You must supply at least one package"
+		die "At least one package must be supplied"
 	fi
 
 	for repoSpec; do
-		if [[ -d "$repoSpec" && "${repoSpec::1}" == / ]]; then
-			die "Identifier '$repoSpec' is a directory, not a package"
-		fi
-
 		util.extract_data_from_input "$repoSpec"
 		local site="$REPLY2"
 		local package="$REPLY3"
-		local ref="$REPLY4"
 
-		do_actual_upgrade "$site/$package"
+		if [ -L "$BPM_PACKAGES_PATH/$site/$package" ]; then
+			die "Package '$site/$package' is locally symlinked and cannot be upgraded through Git"
+		elif [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
+			do_actual_upgrade "$site/$package"
+		else
+			die "Package '$site/$package' is not installed"
+		fi
 	done
 }
 
 do_actual_upgrade() {
 	local id="$1"
-
-	if [ ! -d "$BPM_PACKAGES_PATH/$id/.git" ]; then
-		die "Package at '$BPM_PACKAGES_PATH/$id' is not a Git repository"
-	fi
 
 	log.info "Upgrading '$id'"
 	do-plumbing-remove-deps "$id"

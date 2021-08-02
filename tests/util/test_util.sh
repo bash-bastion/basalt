@@ -41,6 +41,8 @@ test_util.mock_clone() {
 
 	ensure.non_zero 'srcDir' "$srcDir"
 	ensure.non_zero 'destDir' "$destDir"
+	ensure.not_absolute_path "$srcDir"
+	ensure.not_absolute_path "$destDir"
 
 	# Be explicit with the 'file' protocol. The upstream "repository"
 	# is just another (non-bare) Git repository
@@ -51,6 +53,7 @@ test_util.mock_clone() {
 test_util.mock_add() {
 		local pkg="$1"
 		ensure.non_zero 'pkg' "$pkg"
+		ensure.not_absolute_path "$dir"
 
 		if [[ "$pkg" != */* ]]; then
 			die "Improper package path. If you are passing in a single directory name, just make it nested within another subdirectory. This is to ensure BPM_PACKAGES_PATH has the correct layout"
@@ -63,10 +66,12 @@ test_util.mock_add() {
 		do-plumbing-link-man "github.com/$pkg"
 }
 
-# @description Mocks a 'bpm link'
+# @description Mocks a 'bpm link'. This function is still useful in cases
+# where a symlink is _expected_ (rather than just cloning to 'local/subdir')
 test_util.mock_link() {
 	local dir="$1"
 	ensure.non_zero 'dir' "$dir"
+	ensure.not_absolute_path "$dir"
 
 	mkdir -p "$BPM_PACKAGES_PATH/local"
 	ln -s "$BPM_ORIGIN_DIR/$dir" "$BPM_PACKAGES_PATH/local"
@@ -81,6 +86,7 @@ test_util.mock_link() {
 test_util.setup_pkg() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
+	ensure.not_absolute_path "$pkg"
 
 	# We create the "upstream" repository with the same relative
 	# filepath as 'pkg' so we can use the same variable to

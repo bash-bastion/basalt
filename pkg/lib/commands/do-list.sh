@@ -104,6 +104,6 @@ do-list() {
 	done
 
 	if [ "$has_invalid_packages" = 'yes' ]; then
-		log.error "You have invalid packages. To fix this optimally, remove the '${BPM_PACKAGES_PATH%/*}' directory and reinstall all that packages that were deleted in the process. This procedure is required in response to a one-time breaking change in how packages are stored"
+		log.error "Some packages are installed in an outdated format. To fix this optimally, remove the '${BPM_PACKAGES_PATH%/*}' directory and reinstall all the packages that were deleted in the process. This procedure is required in response to a one-time breaking change in how packages are stored"
 	fi
 }

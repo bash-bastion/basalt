@@ -157,6 +157,13 @@ load 'util/init.sh'
 	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
 }
 
+@test "errors when no packages are given" {
+	run do-remove
+
+	assert_failure
+	assert_line -p 'At least one package must be supplied'
+}
+
 @test "--all prints warning when no dependencies are specified in bpm.toml" {
 	touch 'bpm.toml'
 
@@ -173,5 +180,5 @@ load 'util/init.sh'
 	run do-remove --all pkg
 
 	assert_failure
-	assert_line -p "You must not supply any packages when using '--all'"
+	assert_line -p "No packages may be supplied when using '--all'"
 }

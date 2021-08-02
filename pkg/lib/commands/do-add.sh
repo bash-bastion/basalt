@@ -36,7 +36,7 @@ do-add() {
 		local bpm_toml_file="$BPM_ROOT/bpm.toml"
 
 		if (( ${#pkgs[@]} > 0 )); then
-			die "You must not supply any packages when using '--all'"
+			die "No packages may be supplied when using '--all'"
 		fi
 
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then

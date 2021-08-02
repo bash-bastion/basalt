@@ -39,3 +39,11 @@ ensure.package_exists() {
 		die "Package '$id' does not exist"
 	fi
 }
+
+ensure.not_absolute_path() {
+	local path="$1"
+
+	if [ "${path::1}" = / ]; then
+		die "Path '$path' is not absolute"
+	fi
+}

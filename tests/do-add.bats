@@ -301,5 +301,5 @@ load 'util/init.sh'
 	run do-add --all pkg
 
 	assert_failure
-	assert_line -p "You must not supply any packages when using '--all'"
+	assert_line -p "No packages may be supplied when using '--all'"
 }

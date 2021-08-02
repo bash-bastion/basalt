@@ -51,5 +51,5 @@ load 'util/init.sh'
 	run bpm-package-path "other/package"
 
 	assert_failure
-	assert_output -p "Package 'github.com/other/package' not found"
+	assert_output -p "Package 'github.com/other/package' is not installed"
 }
