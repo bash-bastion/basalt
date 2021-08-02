@@ -76,7 +76,7 @@ do_actual_removal() {
 		printf '%s\n' "  -> Unsymlinking directory"
 		unlink "$BPM_PACKAGES_PATH/$id"
 	else
-		printf '%s\n' "  -> Deleting Git repository"
+		printf '%s\n' "  -> Removing Git repository"
 		rm -rf "${BPM_PACKAGES_PATH:?}/$id"
 		if ! rmdir -p "${BPM_PACKAGES_PATH:?}/${id%/*}" &>/dev/null; then
 			# Do not exit on "failure"

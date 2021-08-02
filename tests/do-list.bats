@@ -79,7 +79,7 @@ $site/username2/p2
 	assert_line -p "Package '$site/$pkg' is not installed"
 }
 
-@test "error if ref is specified in arguments" {
+@test "fail if ref is given durin list in arguments" {
 	local site='github.com'
 
 	test_util.create_package 'username/p1'
