@@ -295,7 +295,7 @@ util.setup_mode() {
 util.show_help() {
 	cat <<"EOF"
 Usage:
-  bpm [--help|--version|--global|-g] <command> [args...]
+  bpm [--help|--version|--global] <command> [args...]
 
 Subcommands:
   init <shell>
@@ -303,6 +303,9 @@ Subcommands:
 
   add [--ssh] [--branch=<name>] [--all] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
+
+  upgrade <package...>
+    Upgrades a package
 
   remove [--all] <package...>
     Uninstalls a package
@@ -316,9 +319,6 @@ Subcommands:
 
   package-path <package>
     Outputs the path for a package
-
-  upgrade <package...>
-    Upgrades a package
 
   complete <command...>
     Perform the completion for a particular subcommand. Used by the completion scripts

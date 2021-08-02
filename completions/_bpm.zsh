@@ -12,6 +12,8 @@ _1st_arguments=(
 	'upgrade:[TASK] Upgrade a package'
 	'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
 	'--version:Prints the Vagrant version information'
+	'--global:Switch to global dependency management'
+	'--help:Show help'
 )
 
 local expl
