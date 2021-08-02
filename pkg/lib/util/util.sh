@@ -310,7 +310,7 @@ Subcommands:
     Installs a package from a local directory. These have a
     namespace of 'local'
 
-  list [--simple] [--fetch]
+  list [--simple] [--fetch] [package...]
     List installed packages
 
   package-path <package>

@@ -17,8 +17,8 @@ load 'util/init.sh'
 	test_util.create_package 'username/p1'
 	test_util.create_package 'username2/p2'
 	test_util.create_package 'username2/p3'
-	test_util.mock_add "username/p1"
-	test_util.mock_add "username2/p2"
+	test_util.mock_add 'username/p1'
+	test_util.mock_add 'username2/p2'
 
 	run do-list --simple
 
@@ -26,6 +26,69 @@ load 'util/init.sh'
 	assert_line -n 0 "$site/username/p1"
 	assert_line -n 1 "$site/username2/p2"
 	refute_line "$site/username2/p3"
+}
+
+@test "properly simple list for packages specified as arguments" {
+	local site='github.com'
+
+	test_util.create_package 'username/p1'
+	test_util.create_package 'username2/p2'
+	test_util.create_package 'username2/p3'
+	test_util.mock_add 'username/p1'
+	test_util.mock_add 'username2/p2'
+	test_util.mock_add 'username2/p3'
+
+	run do-list --simple 'username/p1' 'username2/p2'
+
+	assert_success
+	assert_line -n 0 "$site/username/p1"
+	assert_line -n 1 "$site/username2/p2"
+	refute_line "$site/username2/p3"
+}
+
+@test "properly non-simple list for packages specified as arguments" {
+	local site='github.com'
+
+	test_util.create_package 'username/p1'
+	test_util.create_package 'username2/p2'
+	test_util.create_package 'username2/p3'
+	test_util.mock_add 'username/p1'
+	test_util.mock_add 'username2/p2'
+	test_util.mock_add 'username2/p3'
+
+	run do-list 'username/p1' 'username2/p2'
+
+	assert_success
+	assert_output -e "$site/username/p1
+  Branch: master
+  Revision: ([a-z0-9]*)
+  State: Up to date
+$site/username2/p2
+  Branch: master
+  Revision: ([a-z0-9]*)
+  State: Up to date"
+}
+
+@test "error if non-existant packages are specified as arguments" {
+	local site='github.com'
+	local pkg='username/p1'
+
+	run do-list --simple "$pkg"
+
+	assert_failure
+	assert_line -p "Package '$site/$pkg' is not installed"
+}
+
+@test "error if ref is specified in arguments" {
+	local site='github.com'
+
+	test_util.create_package 'username/p1'
+	test_util.mock_add 'username/p1'
+
+	run do-list --simple 'username/p1@v0.1.0'
+
+	assert_failure
+	assert_line -p "Refs must be omitted when listing packages. Remove ref '@v0.1.0'"
 }
 
 @test "properly list for local packages in simple list" {
