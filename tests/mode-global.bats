@@ -2,6 +2,14 @@
 
 load 'util/init.sh'
 
+@test "print operating in local dir if not in global mode" {
+	touch 'bpm.toml'
+
+	run bpm echo "PWD"
+	assert_success
+	assert_output -p "Operating in local directory"
+}
+
 # We only test two of all commands
 @test "error when not passing --global to add, list, and upgrade" {
 	local str="No 'bpm.toml' file found"
@@ -24,7 +32,6 @@ load 'util/init.sh'
 
 	run bpm list
 	assert_success
-	assert_output ""
 }
 
 @test "do not error when not passing --global to echo, complete, and init" {
@@ -32,11 +39,10 @@ load 'util/init.sh'
 
 	run bpm echo "PWD"
 	assert_success
-	assert_output "$PWD"
+	assert_line -n 1 "$PWD"
 
 	run bpm complete package-path
 	assert_success
-	assert_output ""
 
 	run bpm init bash
 	assert_success
