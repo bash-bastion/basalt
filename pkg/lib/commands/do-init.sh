@@ -37,7 +37,7 @@ echo_bpm_package_path_posix() {
 # - Setting bpm package PATH
 # - Sourcing bpm package completion
 do-init() {
-	if [ "$1" == '-' ]; then
+	if [ "$1" = '-' ]; then
 		shift
 	fi
 
