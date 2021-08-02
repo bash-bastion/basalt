@@ -48,6 +48,11 @@ do-remove() {
 		util.extract_data_from_input "$repoSpec"
 		local site="$REPLY2"
 		local package="$REPLY3"
+		local ref="$REPLY4"
+
+		if [ -n "$ref" ]; then
+			die "Refs must be omitted when upgrading packages. Remove ref '@$ref'"
+		fi
 
 		if [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
 			do_actual_removal "$site/$package"

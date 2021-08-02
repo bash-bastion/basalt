@@ -168,3 +168,16 @@ load 'util/init.sh'
 	assert_failure
 	assert_line -p 'Packages cannot be upgraded at the same time as bpm'
 }
+
+@test "fail if ref is given during upgrade" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.create_package "$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
+
+	run do-upgrade "$pkg@v0.1.0"
+
+	assert_failure
+	assert_line -p "Refs must be omitted when upgrading packages. Remove ref '@v0.1.0'"
+}

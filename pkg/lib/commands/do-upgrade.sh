@@ -42,6 +42,11 @@ do-upgrade() {
 		util.extract_data_from_input "$repoSpec"
 		local site="$REPLY2"
 		local package="$REPLY3"
+		local ref="$REPLY4"
+
+		if [ -n "$ref" ]; then
+			die "Refs must be omitted when upgrading packages. Remove ref '@$ref'"
+		fi
 
 		if [ -L "$BPM_PACKAGES_PATH/$site/$package" ]; then
 			die "Package '$site/$package' is locally symlinked and cannot be upgraded through Git"
