@@ -79,7 +79,7 @@ util.extract_data_from_input() {
 			site="github.com"
 			package="$repoSpec"
 		else
-			die "Invalid repository '$repoSpec'"
+			die "Package '$repoSpec' does not appear to be formatted correctly"
 		fi
 
 		if [[ "$package" == *@* ]]; then

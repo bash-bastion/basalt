@@ -28,6 +28,7 @@ load 'util/init.sh'
 	assert_line -n 0 -p  "Cannot install packages owned by username 'local' because that conflicts with linked packages"
 }
 
+# TODO: do for link
 @test "fails when input is an absolute path to a directory" {
 	local site='github.com'
 	local pkg='username/main'

@@ -166,3 +166,10 @@ load 'util/init.sh'
 	assert_failure
 	assert_line -p "Directory specified with file protocol must have at least one parent directory"
 }
+
+@test "errors with friendly message if format is not proper" {
+	run util.extract_data_from_input 'UwU'
+
+	assert_failure
+	assert_line -p "Package 'UwU' does not appear to be formatted correctly"
+}

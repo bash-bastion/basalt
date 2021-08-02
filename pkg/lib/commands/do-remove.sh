@@ -51,7 +51,7 @@ do-remove() {
 		local ref="$REPLY4"
 
 		if [ -n "$ref" ]; then
-			die "Refs must be omitted when upgrading packages. Remove ref '@$ref'"
+			die "Refs must be omitted when removing packages. Remove ref '@$ref'"
 		fi
 
 		if [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then

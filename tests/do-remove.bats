@@ -194,5 +194,5 @@ load 'util/init.sh'
 	run do-upgrade "$pkg@v0.1.0"
 
 	assert_failure
-	assert_line -p "Refs must be omitted when upgrading packages. Remove ref '@v0.1.0'"
+	assert_line -p "Refs must be omitted when removing packages. Remove ref '@v0.1.0'"
 }
