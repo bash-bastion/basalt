@@ -16,7 +16,7 @@ export LANG="C"
 export LANGUAGE="C"
 export LC_ALL="C"
 export XDG_DATA_HOME=
-export PATH="$BPM_ROOT/pkg/bin:$PATH"
+export PATH="$BPM_ROOT/pkg/bin:$PATH" # TODO
 
 export PROGRAM_LIB_DIR="$BATS_TEST_DIRNAME/../pkg/lib"
 export BPM_ROOT="$BATS_TEST_DIRNAME/.."
