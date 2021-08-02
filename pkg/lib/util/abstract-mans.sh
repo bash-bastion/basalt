@@ -1,6 +1,5 @@
 # shellcheck shell=bash
 
-abstract_mans_did=no
 
 abstract.mans() {
 	local action="$1"
@@ -8,6 +7,8 @@ abstract.mans() {
 	ensure.non_zero 'action' "$action"
 	ensure.non_zero 'id' "$id"
 	ensure.package_exists "$id"
+
+	abstract_mans_did=no
 
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
 

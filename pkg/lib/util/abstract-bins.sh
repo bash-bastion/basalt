@@ -1,12 +1,12 @@
 # shellcheck shell=bash
 
-abstract_bins_did=no
-
 abstract.bins() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
 	ensure.non_zero 'id' "$id"
+
+	abstract_bins_did=no
 
 	local -a bins=()
 	local remove_extensions=

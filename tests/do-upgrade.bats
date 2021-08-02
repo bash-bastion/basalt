@@ -48,6 +48,33 @@ load 'util/init.sh'
 	assert_line -p "Package '$BPM_ORIGIN_DIR/$pkg' is not installed"
 }
 
+@test "simple upgrade properly prints linking and unlinking messages" {
+	local site='github.com'
+	local pkg='somedir/package'
+
+	test_util.create_package "$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
+
+	cd "$BPM_ORIGIN_DIR/$pkg"
+	mkdir 'completions' 'bin' 'man' 'man/man1'
+	touch 'completions/file.sh' 'bin/file' 'man/man1/file.1'
+	git add .
+	git commit -m 'Add script'
+	cd "$BPM_CWD"
+
+	do-upgrade "$site/$pkg"
+
+	unset BPM_MODE_TEST
+	run do-upgrade "$pkg"
+
+	assert_success
+	assert_line -p -n 1 "Unlinking bin files"
+	assert_line -p -n 2 "Unlinking completion files"
+	assert_line -p -n 3 "Unlinking man files"
+	assert_line -p -n 4 "Linking bin files"
+	assert_line -p -n 5 "Linking completion files"
+	assert_line -p -n 6 "Linking man files"
+}
 
 @test "symlinks stay valid after upgrade" {
 	local site='github.com'

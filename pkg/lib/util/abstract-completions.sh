@@ -1,13 +1,13 @@
 # shellcheck shell=bash
 
-abstract_completions_did=no
-
 abstract.completions() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
 	ensure.non_zero 'id' "$id"
 	ensure.package_exists "$id"
+
+	abstract_completions_did=no
 
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
 	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
@@ -155,7 +155,7 @@ abstract.completions_do_action_zsh() {
 	local file="$2"
 
 	abstract.completions_do_echo
-	
+
 	if grep -qs "^#compdef" "$file"; then
 		local fileName="${file##*/}"
 		if [  "${fileName::1}" != _ ]; then
