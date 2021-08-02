@@ -104,11 +104,8 @@ abstract.mans_do_action() {
 				fi
 				;;
 			unlink)
-				# Because 'abstract.mans_search_heuristics' sometimes repeats
-				# directories, and sometimes the stat's are out of dates, we add this
-				# check in case a file was deleted in the meantime
-				if [ -f "$BPM_INSTALL_MAN/man$n/$manFile" ]; then
-					unlink "$BPM_INSTALL_MAN/man$n/$manFile"
+				if ! unlink "$BPM_INSTALL_MAN/man$n/$manFile"; then
+					die "Unlink failed, but was expected to succeed"
 				fi
 				;;
 		esac

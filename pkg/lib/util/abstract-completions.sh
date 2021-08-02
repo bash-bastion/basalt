@@ -142,8 +142,8 @@ abstract.completions_do_action_bash() {
 		fi
 		;;
 	unlink)
-		if [ -f "$BPM_INSTALL_COMPLETIONS/bash/$fileName" ]; then
-			unlink "$BPM_INSTALL_COMPLETIONS/bash/$fileName"
+		if ! unlink "$BPM_INSTALL_COMPLETIONS/bash/$fileName"; then
+			die "Unlink failed, but was expected to succeed"
 		fi
 		;;
 	esac
@@ -165,6 +165,7 @@ abstract.completions_do_action_zsh() {
 		case "$action" in
 				link)
 			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName" ]; then
+				# TODO: ?
 				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 			else
 				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
@@ -172,8 +173,8 @@ abstract.completions_do_action_zsh() {
 			fi
 			;;
 		unlink)
-			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName" ]; then
-				unlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName"
+			if ! unlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName"; then
+				die "Unlink failed, but was expected to succeed"
 			fi
 			;;
 		esac
@@ -188,8 +189,8 @@ abstract.completions_do_action_zsh() {
 			fi
 			;;
 		unlink)
-			if [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}" ]; then
-				unlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
+			if ! unlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"; then
+				die "Unlink failed, but was expected to succeed"
 			fi
 			;;
 		esac
@@ -212,8 +213,8 @@ abstract.completions_do_action_fish() {
 		fi
 		;;
 	unlink)
-		if [ -f "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}" ]; then
-			unlink "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"
+		if ! unlink "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"; then
+			die "Unlink failed, but was expected to succeed"
 		fi
 		;;
 	esac

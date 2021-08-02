@@ -127,8 +127,8 @@ abstract.bins_do_action() {
 			fi
 			;;
 		unlink)
-			if [ -f "$BPM_INSTALL_BIN/$binName" ]; then
-				unlink "$BPM_INSTALL_BIN/$binName"
+			if ! unlink "$BPM_INSTALL_BIN/$binName"; then
+				die "Unlink failed, but was expected to succeed"
 			fi
 			;;
 	esac
