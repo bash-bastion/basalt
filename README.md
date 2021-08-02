@@ -9,17 +9,17 @@
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
 
 ```sh
-$ bpm add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
+$ bpm --global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 ```
 
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
 
 ```sh
-$ ls -l ~/.local/share/bpm/cellar/bin/
-... bash2048.sh -> /home/edwin/.local/share/bpm/cellar/packages/github.com/JosefZIla/bash2048/bash2048.sh
-... bashtop -> /home/edwin/.local/share/bpm/cellar/packages/github.com/aristocratos/bashtop/bashtop
-... git-alias -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-alias
-... git-archive-file -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-archive-file
+$ exa -l --no-permissions --no-filesize --no-user ~/.local/share/bpm/cellar/bin/
+bash2048.sh -> /home/edwin/.local/share/bpm/cellar/packages/github.com/JosefZIla/bash2048/bash2048.sh
+bashtop -> /home/edwin/.local/share/bpm/cellar/packages/github.com/aristocratos/bashtop/bashtop
+git-alias -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-alias
+git-archive-file -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-archive-file
 ...
 ```
 
@@ -37,7 +37,7 @@ See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-
 
 - Local and user-wide package installation
 - Configure (optionally) exactly which directories are used for completions, binaries, or man pages
-- Works with essentially all popular Bash projects out of the box (if a project with over a thousand stars does not work, open an issue)
+- Works with essentially all popular Bash projects out of the box
 - 220+ Tests
 
 ## Alternatives Comparison
