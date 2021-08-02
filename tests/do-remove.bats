@@ -191,7 +191,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-upgrade "$pkg@v0.1.0"
+	run do-remove "$pkg@v0.1.0"
 
 	assert_failure
 	assert_line -p "Refs must be omitted when removing packages. Remove ref '@v0.1.0'"
