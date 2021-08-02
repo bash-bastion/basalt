@@ -1,6 +1,33 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2164
 
+test_util.get_bpm_root() {
+	REPLY=
+	if ! REPLY="$(
+		while [[ ! -d ".git" && "$PWD" != / ]]; do
+			if ! cd ..; then
+				printf "%s\n" "Error: Could not cd to BPM directory"
+				exit 1
+			fi
+		done
+
+		if [[ $PWD == / ]]; then
+			printf "%s\n" "Error: Could not find root BPM directory"
+			exit 1
+		fi
+
+		# BPM root is the parent directory of 'source', which holds
+		# the Git repository
+		if ! cd ..; then
+			printf "%s\n" "Error: Could not cd to BPM directory"
+			exit 1
+		fi
+		printf "%s" "$PWD"
+	)"; then
+		exit 1
+	fi
+}
+
 # @description This stubs a command by creating a function for it, which
 # prints the command name and its arguments
 test_util.stub_command() {
@@ -16,7 +43,7 @@ test_util.mock_clone() {
 	ensure.non_zero 'destDir' "$destDir"
 
 	# Be explicit with the 'file' protocol. The upstream "repository"
-	# is just another (non-bare) Git repository. By default, packages are usually
+	# is just another (non-bare) Git repository
 	git clone "file://$BPM_ORIGIN_DIR/$srcDir" "$BPM_PACKAGES_PATH/$destDir"
 }
 
