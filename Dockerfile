@@ -1,11 +1,12 @@
-ARG bashver=latest
+ARG bash_version
 
-FROM bash:${bashver}
+FROM bash:${bash_version}
 
-RUN apk add --no-cache git; \
-	git config --global user.email "user@example.com"; \
-	git config --global user.name "User Name";
+RUN apk add --no-cache git \
+	&& git config --global user.email "user@example.com" \
+	&& git config --global user.name "User Name"
 
-COPY . /opt/bpm/
+COPY . /opt/bpm/source
 
-ENTRYPOINT ["bash", "/opt/bpm/bats/bin/bats"]
+WORKDIR /opt/bpm/source
+ENTRYPOINT ["/opt/bpm/source/.workflow-data/bats-core/bin/bats"]

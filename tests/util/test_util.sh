@@ -6,20 +6,20 @@ test_util.get_bpm_root() {
 	if ! REPLY="$(
 		while [[ ! -d ".git" && "$PWD" != / ]]; do
 			if ! cd ..; then
-				printf "%s\n" "Error: Could not cd to BPM directory"
+				printf "%s\n" "Error: Could not cd to BPM directory" >&2
 				exit 1
 			fi
 		done
 
 		if [[ $PWD == / ]]; then
-			printf "%s\n" "Error: Could not find root BPM directory"
+			printf "%s\n" "Error: Could not find root BPM directory" >&2
 			exit 1
 		fi
 
 		# BPM root is the parent directory of 'source', which holds
 		# the Git repository
 		if ! cd ..; then
-			printf "%s\n" "Error: Could not cd to BPM directory"
+			printf "%s\n" "Error: Could not cd to BPM directory" >&2
 			exit 1
 		fi
 		printf "%s" "$PWD"

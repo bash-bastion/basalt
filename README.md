@@ -15,7 +15,7 @@ $ bpm add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
 
 ```sh
-$ ls -l --color=always ~/.local/share/bpm/cellar/bin/
+$ ls -l ~/.local/share/bpm/cellar/bin/
 ... bash2048.sh -> /home/edwin/.local/share/bpm/cellar/packages/github.com/JosefZIla/bash2048/bash2048.sh
 ... bashtop -> /home/edwin/.local/share/bpm/cellar/packages/github.com/aristocratos/bashtop/bashtop
 ... git-alias -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-alias
@@ -58,4 +58,4 @@ Why not use `bpkg` or `Basher`? Because `bpm`...
 - More flexibly parses command line arguments (basher)
 - Install local directories as packages (bpkg)
 
-I I forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me, compared to `bpkg`
+I forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me, compared to `bpkg`
