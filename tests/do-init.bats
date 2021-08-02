@@ -35,7 +35,7 @@ load './util/init.sh'
 
 	eval "$(do-init bash)"
 
-	assert command -v _bpm
+	command -v _bpm
 }
 
 @test "is fish compatible" {
@@ -43,9 +43,7 @@ load './util/init.sh'
 		skip "Command 'fish' not in PATH"
 	fi
 
-	HOME= XDG_DATA_HOME= XDG_STATE_HOME= XDG_CONFIG_HOME= run fish -Pc '. (bpm init fish | psub)'
-
-	assert_success
+	HOME= XDG_DATA_HOME= XDG_CONFIG_HOME= run fish -Pc '. (bpm init fish | psub)'
 }
 
 @test "is sh-compatible" {

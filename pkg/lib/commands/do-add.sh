@@ -84,7 +84,7 @@ do-add() {
 		if [[ ! -d "$subDep" && -n "${BPM_MODE_TEST+x}" ]]; then
 			# During some tests, plumbing-* or Git commands may be stubbed,
 			# so the package may not actually be cloned
-			continue
+			return
 		fi
 
 		local oldWd="$PWD"
