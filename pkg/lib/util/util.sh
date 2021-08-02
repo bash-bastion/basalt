@@ -270,7 +270,7 @@ util.setup_mode() {
 		local project_root_dir=
 		if project_root_dir="$(util.get_project_root_dir)"; then
 			# Output to standard error because some subcommands may be scriptable (ex. list)
-			log.info "Operating in local directory" >&2
+			log.info "Operating in context of local bpm.toml" >&2
 
 			BPM_ROOT="$project_root_dir"
 			BPM_PREFIX="$project_root_dir/bpm_packages"

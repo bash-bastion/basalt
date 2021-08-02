@@ -7,7 +7,7 @@ load 'util/init.sh'
 
 	run bpm echo "PWD"
 	assert_success
-	assert_output -p "Operating in local directory"
+	assert_output -p "Operating in context of local bpm.toml"
 }
 
 # We only test two of all commands
