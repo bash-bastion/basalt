@@ -70,5 +70,5 @@ I forked Basher because it had an excellent test suite and its behavior for inst
 
 [basher]: https://github.com/basherpm/basher
 [bpkg]: https://github.com/bpkg/bpkg
-[bpm]: https://github.com/bpm-rocks/bpm/
+[bpm-rocks/bpm]: https://github.com/bpm-rocks/bpm/
 [Themis]: https://github.com/ByCh4n-Group/themis
