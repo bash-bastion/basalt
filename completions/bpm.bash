@@ -80,7 +80,7 @@ _bpm() {
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			remove)
-				subcommandOptions=(--all)
+				subcommandOptions=(--all --force)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			upgrade)

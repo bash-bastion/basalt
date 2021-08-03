@@ -196,3 +196,50 @@ load 'util/init.sh'
 	assert_failure
 	assert_line -p "Refs must be omitted when removing packages. Remove ref '@v0.1.0'"
 }
+
+@test "--force works" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.setup_pkg "$pkg"; {
+		# Invalid because 'binDirs' must be an array
+		echo 'binDirs = "somebin"' > 'bpm.toml'
+	}; test_util.finish_pkg
+	test_util.mock_clone "$pkg" "$site/$pkg"
+
+	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg" ]
+
+	run do-remove --force "$pkg"
+
+	assert_success
+	assert_line -p -n 0 "Force removing '$site/$pkg'"
+	assert_line -p -n 1 "Info: Pruning packages"
+
+	assert [ ! -d "$BPM_PACKAGES_PATH/$site/$pkg" ]
+}
+
+@test "fail if give --all and --force flags" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.create_package "$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
+
+	run do-remove --all --force
+
+	assert_failure
+	assert_line -p "Flags '--all' and '--force' are mutually exclusive"
+}
+
+@test "fail if give --force and more than one package" {
+	local site='github.com'
+	local pkg='username/package'
+
+	test_util.create_package "$pkg"
+	test_util.mock_clone "$pkg" "$site/$pkg"
+
+	run do-remove --force "$pkg" "$pkg"
+
+	assert_failure
+	assert_line -p "Only one package may be specified when --force is passed"
+}

@@ -59,7 +59,7 @@ case $state in
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(remove)
-			local -a subcommandOptions=(--all)
+			local -a subcommandOptions=(--all --force)
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(upgrade)

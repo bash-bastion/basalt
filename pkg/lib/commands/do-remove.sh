@@ -2,6 +2,7 @@
 
 do-remove() {
 	local flag_all='no'
+	local flag_force='no'
 
 	util.setup_mode
 
@@ -11,6 +12,9 @@ do-remove() {
 		--all)
 			flag_all='yes'
 			;;
+		--force)
+			flag_force='yes'
+			;;
 		-*)
 			die "Flag '$arg' not recognized"
 			;;
@@ -19,6 +23,10 @@ do-remove() {
 			;;
 		esac
 	done
+
+	if [[ $flag_all == yes && $flag_force == yes ]]; then
+		die "Flags '--all' and '--force' are mutually exclusive"
+	fi
 
 	if [ "$flag_all" = yes ]; then
 		local bpm_toml_file="$BPM_ROOT/bpm.toml"
@@ -34,7 +42,16 @@ do-remove() {
 				do-remove "$pkg"
 			done
 		else
-			log.warn "No dependencies specified in 'dependencies' key"
+			case "$?" in
+			1)
+				log.warn "No dependencies specified in 'dependencies' key"
+				;;
+			2)
+				if [ "$flag_force" = 'no' ]; then
+					exit 1
+				fi
+				;;
+			esac
 		fi
 
 		return
@@ -42,6 +59,10 @@ do-remove() {
 
 	if (( ${#pkgs[@]} == 0 )); then
 		die "At least one package must be supplied"
+	fi
+
+	if [ "$flag_force" = yes ] && (( ${#pkgs[@]} > 1 )); then
+		die "Only one package may be specified when --force is passed"
 	fi
 
 	for repoSpec in "${pkgs[@]}"; do
@@ -55,7 +76,13 @@ do-remove() {
 		fi
 
 		if [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
-			do_actual_removal "$site/$package"
+			if [ "$flag_force" = yes ]; then
+				log.info "Force removing '$site/$package'"
+				rm -rf "${BPM_PACKAGES_PATH:?}/$site/$package"
+				do-prune
+			else
+				do_actual_removal "$site/$package"
+			fi
 		elif [ -e "$BPM_PACKAGES_PATH/$site/$package" ]; then
 			rm -f "$BPM_PACKAGES_PATH/$site/$package"
 		else
@@ -83,5 +110,4 @@ do_actual_removal() {
 			:
 		fi
 	fi
-
 }

@@ -206,11 +206,13 @@ util.get_toml_array() {
 			if [[ ${REPLIES[$i]} =~ $regex ]]; then
 				REPLIES[$i]="${BASH_REMATCH[1]}"
 			else
-				die "Array for key '$keyName' not valid"
+				log.error "Array for key '$keyName' not valid"
+				return 2
 			fi
 		done
 	else
-		die "Key '$keyName' in file '$tomlFile' must be set to an array that spans one line"
+		log.error "Key '$keyName' in file '$tomlFile' must be set to an array that spans one line"
+		return 2
 	fi
 }
 
