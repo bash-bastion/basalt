@@ -27,6 +27,12 @@ do-upgrade() {
 
 		if [ -d "$PROGRAM_LIB_DIR/../../.git" ]; then
 			git -C "$PROGRAM_LIB_DIR/../.." pull
+
+			# '--init' wasn't included in the original installation instructions
+			# and submodules might be added in the future
+			git -C "$PROGRAM_LIB_DIR/../.." submodule init
+			git -C "$PROGRAM_LIB_DIR/../.." submodule sync --recursive
+			git -C "$PROGRAM_LIB_DIR/../.." submodule update --recursive --merge
 		else
 			log.error "bpm is not a Git repository"
 		fi
