@@ -1,5 +1,5 @@
 set cmd bpm
-set -l listSubcommands add echo init link list package-path remove upgrade
+set -l listSubcommands add echo init link list package-path prune remove upgrade
 
 # Not only does this prevent appending completion properties to $cmd (we
 # want to start from a completely new definition), it also removes incorrect

@@ -68,6 +68,10 @@ main() {
 		shift
 		bpm-package-path "$@"
 		;;
+	prune)
+		shift
+		do-prune "$@"
+		;;
 	remove)
 		shift
 		do-remove "$@"

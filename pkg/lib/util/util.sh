@@ -310,6 +310,11 @@ Subcommands:
     Installs a package from a local directory. These have a
     namespace of 'local'
 
+  prune
+    Removes broken symlinks in the bins, completions, and man
+    directories. This is usually only required if a package is
+    force-removed
+
   list [--simple] [--fetch] [package...]
     List installed packages
 
