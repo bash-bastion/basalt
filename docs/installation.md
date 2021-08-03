@@ -47,8 +47,13 @@ eval "$(bpm init bash)" # replace 'bash' with your shell
 For `fish`
 
 ```fish
-set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin" $PATH
-source (bpm init fish | psub)
+if test -n "$XDG_DATA_HOME"
+  set -gx PATH $XDG_DATA_HOME/bpm/source/pkg/bin $PATH
+else
+  set -gx PATH $HOME/.local/share/bpm/source/pkg/bin $PATH
+end
+
+bpm init fish | source
 ```
 
 And now you're done! Move on to [Getting Started](./getting-started.md) to learn the basics

@@ -57,7 +57,7 @@ do-init() {
 		set -gx BPM_PACKAGES_PATH $BPM_PACKAGES_PATH
 
 		# bpm completion
-		set -g fish_complete_path \$BPM_ROOT/source/completions \$fish_complete_path
+		source \$BPM_ROOT/source/completions/bpm.fish
 
 		# bpm include function
 		if [ -f "$BPM_ROOT/source/pkg/share/include.fish" ]
@@ -70,7 +70,12 @@ do-init() {
 		end
 
 		# bpm packages completions
-		set -g fish_complete_path \$BPM_PREFIX/completions/fish \$fish_complete_path
+		# set -gx fish_complete_path \$fish_complete_path
+		if [ -d \$BPM_PREFIX/completions/fish ]
+		  for f in \$BPM_PREFIX/completions/fish/?*.fish
+		    source \$f
+		  end
+		end
 		EOF
 		;;
 	bash)
