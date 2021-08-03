@@ -2,13 +2,23 @@
 
 Succinctly, bpm is a fancy combination of `git clone` and `ln -s`. It clones a repositories, and puts all of its man pages, completion scripts, and binaries in common folders. Let's see it in action
 
-## Installing a simple package
+This page assumes you have completed the [Installation](./installation.md) properly
+
+## Installing an executable
 
 For this demonstration, we're going to install and use [bash2048](JosefZIla/bash2048). Note that this will still work, even if Zsh or Fish is your default shell
 
 ```sh
-bpm --global add github.com/JosefZIla/bash2048
+$ bpm --global add github.com/JosefZIla/bash2048
+Info: Adding 'github.com/JosefZIla/bash2048'
+  -> Cloning Git repository
+  -> Linking bin files
 ```
+
+This does the following
+
+- Clones `JosefZIla/bash2048` to `$HOME/.local/share/bpm/cellar/packages/github.com/JosefZIla/bash2048`
+- Adds a symlink from the repository's `bash2048.sh` script to `$HOME/.local/share/bpm/cellar/bin/bash2048.sh`
 
 That's it - now you can use it!
 
@@ -32,17 +42,18 @@ Bash 2048 v1.1 (https://github.com/mydzor/bash2048) pieces=6 target=2048 score=6
 For the second demonstration, we're going to install [z](https://github.com/rupa/z). If you already have it installed, don't worry - it will be installed to a different location and you can remove it separately
 
 ```sh
-# Globally install z
-bpm --global add rupa/z
+$ bpm --global add rupa/z
+Info: Adding 'rupa/z'
+  -> Cloning Git repository
+  -> Linking man files
 ```
 
-As you can see, if you do not include the domain, it automatically uses github.com
+This does the following
 
-This clones `z` to `$HOME/.local/share/bpm/cellar/packages/github.com/rupa/z`
+- Clones `z` to `$HOME/.local/share/bpm/cellar/packages/github.com/rupa/z`
+- Adds a symlink from the repository's `z.1` man page to `$HOME/.local/share/bpm/cellar/man/man1/z.1`
 
-It adds a symlink from the repository's `z.1` man page to `$HOME/.local/share/bpm/cellar/man/man1/z.1`
-
-Now, (assuming you completed [Installation](./installation.md) properly), you can display the manual right away
+Now, you can display the manual right away
 
 ```sh
 man z
@@ -57,12 +68,12 @@ $ z.sh
 bash: z.sh: command not found
 ```
 
-But it doesn't work - this is standard behavior. When looking for binaries, bpm _does_ look at the root directory, but only symlinks shell scripts that are marked as _executable_ (`chmod +x z.sh`)
+But it doesn't work - this is standard behavior. When looking for binaries, bpm _does_ look at the root directory, but only for shell scripts that are marked as _executable_ (`chmod +x z.sh`)
 
 The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `package-path` command exists:
 
 ```sh
-$ bpm --global package-path z.sh
+$ bpm --global package-path rupa/z
 /home/username/bpm/cellar/packages/rupa/z
 ```
 
@@ -81,11 +92,17 @@ If you want to do this persistantly, just add this to your `~/.bashrc` (or `~/.z
 
 ## Remove packages
 
-If you completed boht previous steps, two packages should be installed
+If you completed both previous steps, two packages should be installed
 ```sh
 $ bpm --global list
 github.com/JosefZIla/bash2048
+  Branch: master
+  Revision: 37da521
+  State: Up to date
 github.com/rupa/z
+  Branch: master
+  Revision: b82ac78
+  State: Up to date
 ```
 
 Remove them with `remove`

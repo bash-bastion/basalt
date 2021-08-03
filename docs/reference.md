@@ -16,7 +16,7 @@ Set the installation and package checkout prefix (default is `$BPM_ROOT/cellar`)
 
 ## `bpm.toml`
 
-Place a `bpm.toml` at the root of a repository to directly control where `bpm` searches for binaries, completions, and man pages for that repository. **Note** that arrays _must only_ span a single line (the line it was defined on) due to limitations with the TOML parser. This restriction should be lifted in the future
+Place a `bpm.toml` at the root of a repository to directly control where `bpm` searches for binaries, completions, and man pages for that repository. **Note** that arrays _must only_ span a single line (the line it was defined on) due to limitations with the TOML parser. This restriction should be lifted in the future. All relative paths are relative to their respective `bpm.toml` file
 
 If any particular toml key is defined, it means automatic directory search with heuristics will not be performed. For example, if you define `binDirs`, `bpm` will only look for binaries that you specify in that array and will _not_ search `./bin`, `./bins`, etc.
 
@@ -36,7 +36,7 @@ binDirs = [ './pkg/bin' ]
 
 ### `binRemoveExtensions`
 
-Set to `yes` to to remove the extension when symlinking. For example if a file in a repository was at `./bin/git-list-all-aliases.sh`, it would be sylinked with a filename of `git-list-all-aliases`
+Set to `yes` to to remove the extension when symlinking. For example, if a file in a repository was at `./bin/git-list-all-aliases.sh`, it would be sylinked with a filename of `git-list-all-aliases`
 
 ##### Example
 
@@ -67,6 +67,8 @@ manDirs = [ './manuals' ]
 This file is an alternative configuration mechanism kept to preserve backwards compatibility with [Basher](https://github.com/basherpm/basher). If you create a `bpm.toml` file, then `package.sh` will NOT be read
 
 Similar to `bpm.toml`, specifying a particular key will cause bpm not to automatically search for files specific to that key. For example, if `BASH_COMPLETIONS` is specified, bpm will no longer search for _Bash_ completions in `./completion`, `./completions`, etc.
+
+Note that unlike Basher, bpm does not source this file. It performs single-line regular expression matching and splits the capturing group into an array with `IFS=: read -ra`. This was changed to prevent arbitrary code execution by child packages during the installation process
 
 Example
 
