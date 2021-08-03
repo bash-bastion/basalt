@@ -42,7 +42,7 @@ See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-
 
 ## Alternatives Comparison
 
-Why not use `bpkg` or `Basher`? Because `bpm`...
+Why not use `bpkg` or `Basher`? Because `hyperupcall/bpm`...
 
 - Can install multiple packages at once
 - Install local dependencies for a particular project (bpkg and basher)
@@ -59,3 +59,16 @@ Why not use `bpkg` or `Basher`? Because `bpm`...
 - Install local directories as packages (bpkg)
 
 I forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me, compared to `bpkg`
+
+| Software        | Deps | Versions | Locations          | Completions |
+|---------------- |------|----------|--------------------| ----------- |
+| hyperupcall/bpm | Yes  | Yes      | Global, User, Repo | Yes         |
+| [basher]        | Yes  | No       | Global, User       | Yes         |
+| [bpkg]          | Yes  | Yes      | Global, User, Repo | Yes         |
+| [bpm-rocks/bpm] | Yes  | No       | Global, User, Repo | No          |
+| [Themis]        | Yes  | Yes      | Global, User, Repo | No          |
+
+[basher]: https://github.com/basherpm/basher
+[bpkg]: https://github.com/bpkg/bpkg
+[bpm]: https://github.com/bpm-rocks/bpm/
+[Themis]: https://github.com/ByCh4n-Group/themis
