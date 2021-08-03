@@ -225,8 +225,8 @@ abstract.completions_do_echo() {
 		abstract_completions_did=yes
 
 		case "$action" in
-			link) printf '%s\n' "  -> Linking completion files" ;;
-			unlink) printf '%s\n' "  -> Unlinking completion files" ;;
+			link) printf '  -> %s\n' "Linking completion files" ;;
+			unlink) printf '  -> %s\n' "Unlinking completion files" ;;
 		esac
 	fi
 }

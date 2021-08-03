@@ -104,8 +104,8 @@ abstract.bins_do_action() {
 		abstract_bins_did='yes'
 
 		case "$action" in
-			link) printf '%s\n' "  -> Linking bin files" ;;
-			unlink) printf '%s\n' "  -> Unlinking bin files" ;;
+			link) printf '  -> %s\n' "Linking bin files" ;;
+			unlink) printf '  -> %s\n' "Unlinking bin files" ;;
 		esac
 	fi
 

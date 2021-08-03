@@ -89,8 +89,8 @@ abstract.mans_do_action() {
 			abstract_mans_did=yes
 
 			case "$action" in
-				link) printf '%s\n' "  -> Linking man files" ;;
-				unlink) printf '%s\n' "  -> Unlinking man files" ;;
+				link) printf '  -> %s\n' "Linking man files" ;;
+				unlink) printf '  -> %s\n' "Unlinking man files" ;;
 			esac
 		fi
 

@@ -32,6 +32,10 @@ set subcmd package-path
 set -l subcommandOptions
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (bpm complete package-path)"
 
+set subcmd remove
+set -l subcommandOptions --all
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (bpm complete upgrade)"
+
 set subcmd upgrade
 set -l subcommandOptions
 # TODO: only complete if (bpm complete upgrade) was successfull

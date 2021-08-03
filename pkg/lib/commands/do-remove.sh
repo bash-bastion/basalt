@@ -73,10 +73,10 @@ do_actual_removal() {
 	do-plumbing-unlink-completions "$id"
 
 	if [ "${id%%/*}" = 'local' ]; then
-		printf '%s\n' "  -> Unsymlinking directory"
+		printf '  -> %s\n' "Unsymlinking directory"
 		unlink "$BPM_PACKAGES_PATH/$id"
 	else
-		printf '%s\n' "  -> Removing Git repository"
+		printf '  -> %s\n' "Removing Git repository"
 		rm -rf "${BPM_PACKAGES_PATH:?}/$id"
 		if ! rmdir -p "${BPM_PACKAGES_PATH:?}/${id%/*}" &>/dev/null; then
 			# Do not exit on "failure"

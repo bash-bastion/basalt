@@ -8,10 +8,10 @@ _1st_arguments=(
 	'link:Link a local package'
 	'list:List packages'
 	'package-path:Print the full path of a package'
+	'prune:Prune all packages'
 	'remove:Uninstall a package'
 	'upgrade:[TASK] Upgrade a package'
-	'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
-	'--version:Prints the Vagrant version information'
+	'--version:Print version'
 	'--global:Switch to global dependency management'
 	'--help:Show help'
 )
@@ -59,6 +59,8 @@ case $state in
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(remove)
+			local -a subcommandOptions=(--all)
+			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(upgrade)
 			local subcommandOptions=()
