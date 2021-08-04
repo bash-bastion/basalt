@@ -181,3 +181,19 @@ load 'util/init.sh'
 	assert_failure
 	assert_line -p "Refs must be omitted when upgrading packages. Remove ref '@v0.1.0'"
 }
+
+@test "fail if bpm and '--all' are specified" {
+	run do-upgrade bpm --all
+
+	assert_failure
+	assert_line -p "Upgrading bpm and using '--all' are mutually exclusive behaviors"
+}
+
+@test "--all errors when a package is specified as argument" {
+	touch 'bpm.toml'
+
+	run do-remove --all pkg
+
+	assert_failure
+	assert_line -p "No packages may be supplied when using '--all'"
+}

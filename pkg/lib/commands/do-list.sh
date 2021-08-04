@@ -30,6 +30,7 @@ do-list() {
 		esac
 	done
 
+	# If packages are specified
 	if (( ${#pkgs[@]} > 0 )); then
 		for repoSpec in "${pkgs[@]}"; do
 			util.extract_data_from_input "$repoSpec"
@@ -42,12 +43,13 @@ do-list() {
 			fi
 
 			if [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
-				echo_package_info "$BPM_PACKAGES_PATH/$site/$package" "$site" "${package%/*}" "${package#*/}"
+				echo_package_info "$BPM_PACKAGES_PATH/$site/$package" "$site" "${package%/*}" "${package#*/}" "$flag_fetch" "$flag_format"
 			else
 				die "Package '$site/$package' is not installed"
 			fi
 		done
 	else
+		# If no packages are specified, list all of them
 		for namespace_path in "$BPM_PACKAGES_PATH"/*; do
 			local glob_suffix=
 			if [ "${namespace_path##*/}" = 'local' ]; then
@@ -62,7 +64,7 @@ do-list() {
 				local user="$REPLY2"
 				local repository="$REPLY3"
 
-				echo_package_info "$pkg_path" "$site" "$user" "$repository"
+				echo_package_info "$pkg_path" "$site" "$user" "$repository" "$flag_fetch" "$flag_format"
 			done
 		done
 	fi
@@ -77,6 +79,8 @@ echo_package_info() {
 	local site="$2"
 	local user="$3"
 	local repository="$4"
+	local flag_fetch="$5"
+	local flag_format="$6"
 
 	# Users that have installed packages before the switch to namespacing by
 	# site domain name will print incorrectly. So, we check to make sure the site

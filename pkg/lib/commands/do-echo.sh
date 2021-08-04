@@ -3,5 +3,5 @@
 do-echo() {
 	util.setup_mode
 
-	eval "printf \"%s\" \$$1"
+	eval "printf '%s' \$$1"
 }

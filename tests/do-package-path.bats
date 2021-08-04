@@ -53,3 +53,17 @@ load 'util/init.sh'
 	assert_failure
 	assert_output -p "Package 'github.com/other/package' is not installed"
 }
+
+@test "fail if ref is given" {
+	run do-package-path 'username/p1@v0.1.0'
+
+	assert_failure
+	assert_line -p "Refs must be omitted when listing packages. Remove ref '@v0.1.0'"
+}
+
+@test "fail if given more than one package" {
+	run do-package-path 'username/p1' 'username/p2'
+
+	assert_failure
+	assert_line -p "Only one package may be passed at a time"
+}

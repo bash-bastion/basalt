@@ -39,10 +39,12 @@ do-add() {
 			die "No packages may be supplied when using '--all'"
 		fi
 
+		# TODO: this may be ran under 'global' mode?
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			log.info "Adding all dependencies"
 
 			for pkg in "${REPLIES[@]}"; do
+				# TODO: cleanup
 				do-add "$pkg"
 			done
 		else

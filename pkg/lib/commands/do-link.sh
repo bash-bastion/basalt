@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 do-link() {
-	local install_deps='yes'
+	local flag_no_deps='yes'
 
 	util.setup_mode
 
@@ -9,7 +9,7 @@ do-link() {
 	for arg; do
 		case "$arg" in
 		--no-deps)
-			install_deps='no'
+			flag_no_deps='no'
 			;;
 		-*)
 			die "Flag '$arg' not recognized"
@@ -48,7 +48,7 @@ do-link() {
 		ln -s "$dir" "$BPM_PACKAGES_PATH/$package"
 
 		log.info "Linking '$dir'"
-		if [ "$install_deps" = 'yes' ]; then
+		if [ "$flag_no_deps" = 'yes' ]; then
 			do-plumbing-add-deps "$package"
 		fi
 		do-plumbing-link-bins "$package"

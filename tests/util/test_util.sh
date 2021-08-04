@@ -51,19 +51,19 @@ test_util.mock_clone() {
 
 # @description Clones the repository, and performs any linking, etc.
 test_util.mock_add() {
-		local pkg="$1"
-		ensure.non_zero 'pkg' "$pkg"
-		ensure.not_absolute_path "$dir"
+	local pkg="$1"
+	ensure.non_zero 'pkg' "$pkg"
+	ensure.not_absolute_path "$dir"
 
-		if [[ "$pkg" != */* ]]; then
-			die "Improper package path. If you are passing in a single directory name, just make it nested within another subdirectory. This is to ensure BPM_PACKAGES_PATH has the correct layout"
-		fi
+	if [[ "$pkg" != */* ]]; then
+		die "Improper package path. If you are passing in a single directory name, just make it nested within another subdirectory. This is to ensure BPM_PACKAGES_PATH has the correct layout"
+	fi
 
-		test_util.mock_clone "$pkg" "github.com/$pkg"
-		do-plumbing-add-deps "github.com/$pkg"
-		do-plumbing-link-bins "github.com/$pkg"
-		do-plumbing-link-completions "github.com/$pkg"
-		do-plumbing-link-man "github.com/$pkg"
+	test_util.mock_clone "$pkg" "github.com/$pkg"
+	do-plumbing-add-deps "github.com/$pkg"
+	do-plumbing-link-bins "github.com/$pkg"
+	do-plumbing-link-completions "github.com/$pkg"
+	do-plumbing-link-man "github.com/$pkg"
 }
 
 # @description Mocks a 'bpm link'. This function is still useful in cases

@@ -2,6 +2,7 @@
 
 do-upgrade() {
 	local upgrade_bpm='no'
+	local flag_all='no'
 
 	util.setup_mode
 
@@ -11,6 +12,9 @@ do-upgrade() {
 		bpm)
 			upgrade_bpm='yes'
 			;;
+		--all)
+			flag_all='yes'
+			;;
 		-*)
 			die "Flag '$arg' not recognized"
 			;;
@@ -19,6 +23,10 @@ do-upgrade() {
 			;;
 		esac
 	done
+
+	if [[ $upgrade_bpm = yes && $flag_all = yes ]]; then
+		die "Upgrading bpm and using '--all' are mutually exclusive behaviors"
+	fi
 
 	if [ "$upgrade_bpm" = 'yes' ]; then
 		if (( ${#pkgs[@]} > 0 )); then
@@ -38,6 +46,29 @@ do-upgrade() {
 		fi
 
 		return
+	fi
+
+	# TODO: test this
+	if [ "$flag_all" = yes ]; then
+		if (( ${#pkgs[@]} > 0 )); then
+			die "No packages may be supplied when using '--all'"
+		fi
+
+		local bpm_toml_file="$BPM_ROOT/bpm.toml"
+
+		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
+			log.info "Adding all dependencies"
+
+			for pkg in "${REPLIES[@]}"; do
+				# TODO: only upgrade to latest as specified in bpm.toml
+				do-upgrade "$pkg"
+			done
+
+			else
+				log.warn "No dependencies specified in 'dependencies' key"
+			fi
+
+			return
 	fi
 
 	if (( ${#pkgs[@]} == 0 )); then

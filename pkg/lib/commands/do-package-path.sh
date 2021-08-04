@@ -14,6 +14,14 @@ do-package-path() {
 	local package="$REPLY3"
 	local ref="$REPLY4"
 
+	if [ -n "$ref" ]; then
+		die "Refs must be omitted when listing packages. Remove ref '@$ref'"
+	fi
+
+	if (( $# > 1 )); then
+		die "Only one package may be passed at a time"
+	fi
+
 	local dir="$BPM_PACKAGES_PATH/$site/$package"
 	if [ -d "$dir" ]; then
 		printf "%s\n" "$dir"

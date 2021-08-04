@@ -26,10 +26,10 @@ do-plumbing-remove-deps() {
 
 	for dep in "${deps[@]}"; do
 		util.extract_data_from_input "$dep"
-		local site="$REPY2"
-		local package="$REPLY3"
-		local ref="$REPLY4"
+		local site="$REPLY2"
+		local pkg="$REPLY3"
 
-		rm -rf "${BPM_PACKAGES_PATH:?}/$site/$package"
+		log.info "Removing '$site/$pkg'"
+		rm -rf "${BPM_PACKAGES_PATH:?}/$site/$pkg"
 	done
 }

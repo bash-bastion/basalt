@@ -6,12 +6,13 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
+	test_util.stub_command 'do-add'
+
 	test_util.setup_pkg "$pkg"; {
 		:
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	test_util.stub_command 'do-add'
 	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
