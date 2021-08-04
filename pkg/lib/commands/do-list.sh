@@ -3,19 +3,23 @@
 has_invalid_packages='no'
 
 do-list() {
-	local flag_simple='no'
 	local flag_fetch='no'
+	local flag_format=
 
 	util.setup_mode
 
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in
-		--simple)
-			flag_simple='yes'
-			;;
 		--fetch)
 			flag_fetch='yes'
+			;;
+		--format=*)
+			IFS='=' read -r discard flag_format <<< "$arg"
+
+			if [ -z "$flag_format" ]; then
+				die "Format cannot be empty"
+			fi
 			;;
 		-*)
 			die "Flag '$arg' not recognized"
@@ -99,7 +103,7 @@ echo_package_info() {
 
 	printf -v pkg_output "%s\n" "$id"
 
-	if [ "$flag_simple" = 'no' ]; then
+	if [ "$flag_format" != 'simple' ]; then
 		if [ ! -d "$pkg_path/.git" ]; then
 			die "Package '$id' is not a Git repository. Unlink or otherwise remove it at '$pkg_path'"
 		fi

@@ -11,6 +11,6 @@ bpm --global link ~/Documents/projects/cool-project
 When you link a project, it shows up under the `local` namespace, as seen by `list`
 
 ```sh
-$ bpm --global --simple list
+$ bpm --global --format=simple list
 local/cool-project
 ```

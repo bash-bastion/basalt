@@ -299,13 +299,13 @@ Subcommands:
   init <shell>
     Configure shell environment for bpm
 
-  add [--ssh] [--branch=<name>] [--all] [[site/]<package>[@ref]...]
+  add [--all] [--ssh] [--branch=<name>] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
 
-  upgrade <package...>
+  upgrade [--all] <package...>
     Upgrades a package
 
-  remove [--all] <package...>
+  remove [--all] [--force] <package...>
     Uninstalls a package
 
   link [--no-deps] <directory...>
@@ -317,7 +317,7 @@ Subcommands:
     directories. This is usually only required if a package is
     force-removed
 
-  list [--simple] [--fetch] [package...]
+  list [--fetch] [--format=<simple>] [package...]
     List installed packages
 
   package-path <package>

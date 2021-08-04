@@ -20,7 +20,7 @@ load 'util/init.sh'
 	test_util.mock_add 'username/p1'
 	test_util.mock_add 'username2/p2'
 
-	run do-list --simple
+	run do-list --format=simple
 
 	assert_success
 	assert_line -n 0 "$site/username/p1"
@@ -38,7 +38,7 @@ load 'util/init.sh'
 	test_util.mock_add 'username2/p2'
 	test_util.mock_add 'username2/p3'
 
-	run do-list --simple 'username/p1' 'username2/p2'
+	run do-list --format=simple 'username/p1' 'username2/p2'
 
 	assert_success
 	assert_line -n 0 "$site/username/p1"
@@ -73,19 +73,19 @@ $site/username2/p2
 	local site='github.com'
 	local pkg='username/p1'
 
-	run do-list --simple "$pkg"
+	run do-list --format=simple "$pkg"
 
 	assert_failure
 	assert_line -p "Package '$site/$pkg' is not installed"
 }
 
-@test "fail if ref is given durin list in arguments" {
+@test "fail if ref is given during list in arguments" {
 	local site='github.com'
 
 	test_util.create_package 'username/p1'
 	test_util.mock_add 'username/p1'
 
-	run do-list --simple 'username/p1@v0.1.0'
+	run do-list --format=simple 'username/p1@v0.1.0'
 
 	assert_failure
 	assert_line -p "Refs must be omitted when listing packages. Remove ref '@v0.1.0'"
@@ -103,7 +103,7 @@ $site/username2/p2
 	test_util.create_package "$pkg"
 	do-link "$BPM_ORIGIN_DIR/$pkg"
 
-	run do-list --simple
+	run do-list --format=simple
 
 	assert_success
 	assert_output "local/project2"
