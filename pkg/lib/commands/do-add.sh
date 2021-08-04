@@ -32,6 +32,10 @@ do-add() {
 		esac
 	done
 
+	if [[ "$BPM_IS_LOCAL" == no && "$flag_all" == yes ]]; then
+		die "Cannot pass '--all' without a 'bpm.toml' file"
+	fi
+
 	if [ "$flag_all" = yes ]; then
 		local bpm_toml_file="$BPM_ROOT/bpm.toml"
 
@@ -39,7 +43,6 @@ do-add() {
 			die "No packages may be supplied when using '--all'"
 		fi
 
-		# TODO: this may be ran under 'global' mode?
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			log.info "Adding all dependencies"
 
@@ -88,7 +91,6 @@ do-actual-add() {
 	do-plumbing-link-completions "$site/$package"
 	do-plumbing-link-man "$site/$package"
 
-	# TODO: install for packages.sh
 	# Install transitive dependencies
 	local subDep="$BPM_PACKAGES_PATH/$site/$package"
 

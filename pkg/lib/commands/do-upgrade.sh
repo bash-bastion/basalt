@@ -24,8 +24,12 @@ do-upgrade() {
 		esac
 	done
 
-	if [[ $upgrade_bpm = yes && $flag_all = yes ]]; then
+	if [[ $upgrade_bpm == yes && "$flag_all" = yes ]]; then
 		die "Upgrading bpm and using '--all' are mutually exclusive behaviors"
+	fi
+
+	if [[ $upgrade_bpm == yes && "$BPM_IS_LOCAL" == yes ]]; then
+		die "Cannot upgrade bpm with a local 'bpm.toml' file"
 	fi
 
 	if [ "$upgrade_bpm" = 'yes' ]; then

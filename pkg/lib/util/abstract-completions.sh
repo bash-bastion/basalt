@@ -163,9 +163,8 @@ abstract.completions_do_action_zsh() {
 		fi
 
 		case "$action" in
-				link)
+		link)
 			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName" ]; then
-				# TODO: ?
 				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 			else
 				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"

@@ -28,7 +28,6 @@ load 'util/init.sh'
 	assert_line -n 0 -p  "Cannot install packages owned by username 'local' because that conflicts with linked packages"
 }
 
-# TODO: do for link
 @test "fails when input is an absolute path to a directory" {
 	local site='github.com'
 	local pkg='username/main'
@@ -289,7 +288,7 @@ load 'util/init.sh'
 @test "--all prints warning when no dependencies are specified in bpm.toml" {
 	touch 'bpm.toml'
 
-	run do-add --all
+	BPM_IS_LOCAL='yes' run do-add --all
 
 	assert_success
 	assert_line -p "No dependencies specified in 'dependencies' key"
@@ -299,8 +298,15 @@ load 'util/init.sh'
 @test "--all errors when a package is specified as argument" {
 	touch 'bpm.toml'
 
-	run do-add --all pkg
+	BPM_IS_LOCAL='yes' run do-add --all pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
+}
+
+@test "--all errors in global mode" {
+	run do-add --all
+
+	assert_failure
+	assert_line -p "Cannot pass '--all' without a 'bpm.toml' file"
 }

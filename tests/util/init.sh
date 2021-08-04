@@ -17,6 +17,7 @@ export BPM_TEST_DIR="$BATS_TMPDIR/bpm"
 export BPM_CWD="$BPM_TEST_DIR/cwd"
 export BPM_ORIGIN_DIR="$BPM_TEST_DIR/origin"
 export BPM_MODE_TEST=
+export BPM_IS_LOCAL='no' # normal default is 'yes'
 
 # Stub common variables
 test_util.get_bpm_root

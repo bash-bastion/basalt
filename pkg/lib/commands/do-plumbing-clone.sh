@@ -9,7 +9,6 @@ do-plumbing-clone() {
 	ensure.non_zero 'uri' "$uri"
 	ensure.non_zero 'id' "$id"
 
-	# TODO this is invalid in the test suite
 	if [ -e "$BPM_PACKAGES_PATH/$id" ]; then
 		die "Package '$id' is already present"
 	fi

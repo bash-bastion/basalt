@@ -189,10 +189,19 @@ load 'util/init.sh'
 	assert_line -p "Upgrading bpm and using '--all' are mutually exclusive behaviors"
 }
 
+@test "fail if bpm is specified in local mode" {
+	touch 'bpm.toml'
+
+	BPM_IS_LOCAL='yes' run do-upgrade bpm
+
+	assert_failure
+	assert_line -p "Cannot upgrade bpm with a local 'bpm.toml' file"
+}
+
 @test "--all errors when a package is specified as argument" {
 	touch 'bpm.toml'
 
-	run do-remove --all pkg
+	run do-upgrade --all some/pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"

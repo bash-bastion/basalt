@@ -2,8 +2,6 @@
 
 load 'util/init.sh'
 
-# TODO: replace output checking with actual cloning using file://
-
 @test "installs a specific version" {
 	local site='github.com'
 	local pkg='username/package'
@@ -128,4 +126,11 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 1 "git clone --recursive --depth=1 --single-branch --branch a_branch https://github.com/username/package.git $BPM_PACKAGES_PATH/$site/username/package"
+}
+
+@test "--all errors in global mode" {
+	run do-add --all
+
+	assert_failure
+	assert_line -p "Cannot pass '--all' without a 'bpm.toml' file"
 }
