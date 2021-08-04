@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_add "$pkg"
 
-	run bpm-package-path "$pkg"
+	run do-package-path "$pkg"
 
 	assert_success
 	assert_output "$BPM_PACKAGES_PATH/$site/$pkg"
@@ -22,7 +22,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_add "$pkg"
 
-	run bpm-package-path "$site/$pkg"
+	run do-package-path "$site/$pkg"
 
 	assert_success
 	assert_output "$BPM_PACKAGES_PATH/$site/$pkg"
@@ -35,7 +35,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_add "$pkg"
 
-	run bpm-package-path "https://$site/$pkg"
+	run do-package-path "https://$site/$pkg"
 
 	assert_success
 	assert_output "$BPM_PACKAGES_PATH/$site/$pkg"
@@ -48,7 +48,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_add "$pkg"
 
-	run bpm-package-path "other/package"
+	run do-package-path "other/package"
 
 	assert_failure
 	assert_output -p "Package 'github.com/other/package' is not installed"

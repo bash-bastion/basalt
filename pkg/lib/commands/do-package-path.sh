@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-bpm-package-path() {
+do-package-path() {
 	local id="$1"
 
 	if [ -z "$id" ]; then

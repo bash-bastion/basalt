@@ -66,7 +66,7 @@ main() {
 		;;
 	package-path)
 		shift
-		bpm-package-path "$@"
+		do-package-path "$@"
 		;;
 	prune)
 		shift
