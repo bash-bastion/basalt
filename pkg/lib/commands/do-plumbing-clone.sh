@@ -30,7 +30,8 @@ do-plumbing-clone() {
 	local git_output=
 	if ! git_output="$(git clone "${git_args[@]}" 2>&1)"; then
 		log.error "Could not clone repository"
-		printf "%s\n" "$git_output"
+		printf "  --> %s\n" "Git output:"
+		printf "    --> %s\n" "${git_output%.}"
 		exit 1
 	fi
 

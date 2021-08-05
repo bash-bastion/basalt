@@ -8,7 +8,9 @@ do-prune() {
 
 	for file in "$BPM_INSTALL_BIN"/* "$BPM_INSTALL_MAN"/*/* "$BPM_INSTALL_COMPLETIONS"/{bash,zsh/{compsys,compctl},fish}/*; do
 		local real_file=
-		real_file="$(readlink "$file")"
+		if ! real_file="$(readlink "$file")"; then
+			die "Readlink '$file' unexpectedly failed"
+		fi
 
 		if [[ "${real_file:0:1}" == / && -e "$real_file" ]]; then
 			# The only valid symlinks 'bpm' creates are absolute paths
@@ -17,6 +19,8 @@ do-prune() {
 		fi
 
 		printf '  -> %s\n' "Unsymlinking broken symlink '$file'"
-		unlink "$file"
+		if ! unlink "$file"; then
+			die "Unlink '$file' unexpectedly failed"
+		fi
 	done
 }

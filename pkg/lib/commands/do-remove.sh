@@ -101,7 +101,9 @@ do_actual_removal() {
 
 	if [ "${id%%/*}" = 'local' ]; then
 		printf '  -> %s\n' "Unsymlinking directory"
-		unlink "$BPM_PACKAGES_PATH/$id"
+		if ! unlink "$BPM_PACKAGES_PATH/$id"; then
+			die "Unlink '$BPM_PACKAGES_PATH/$id' unexpectedly failed"
+		fi
 	else
 		printf '  -> %s\n' "Removing Git repository"
 		rm -rf "${BPM_PACKAGES_PATH:?}/$id"
