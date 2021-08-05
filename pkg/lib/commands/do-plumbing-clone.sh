@@ -41,10 +41,14 @@ do-plumbing-clone() {
 	# If we are going to a specific revision, do it now
 	if [ -n "$ref" ]; then
 		local git_output=
-		if git_output="$(git -C "$BPM_PACKAGES_PATH/$id" reset --hard "$ref")"; then
+		if git_output="$(git -C "$BPM_PACKAGES_PATH/$id" reset --hard "$ref" 2>&1)"; then
 			printf "%s\n" "  -> Reseting to revision '$ref'"
 		else
-			printf "%s\n" "$git_output"
+			log.error "Could not reset to particular revision '$ref'"
+			printf "  --> %s\n" "Is '$ref' actually in '$id'?"
+			printf "  --> %s\n" "Git output:"
+			printf "    --> %s\n" "${git_output%.}"
+			exit 1
 		fi
 
 		if [ -n "${BPM_MODE_TEST+x}" ]; then
