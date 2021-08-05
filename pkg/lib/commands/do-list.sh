@@ -121,8 +121,8 @@ echo_package_info() {
 			if [ "$flag_fetch" = yes ]; then
 				local git_output=
 				if ! git_output="$(git -C "$pkg_path" fetch 2>&1)"; then
-					printf "  --> %s\n" "Git output:"
-					printf "    --> %s\n" "${git_output%.}"
+					printf "  -> %s\n" "Git output:"
+					printf "    -> %s\n" "${git_output%.}"
 				fi
 			fi
 

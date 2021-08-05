@@ -115,8 +115,8 @@ do_actual_upgrade() {
 	local git_output=
 	if ! git_output="$(git -C "$BPM_PACKAGES_PATH/$id" pull 2>&1)"; then
 		log.error "Could not update Git repository"
-		printf "  --> %s\n" "Git output:"
-		printf "    --> %s\n" "${git_output%.}"
+		printf "  -> %s\n" "Git output:"
+		printf "    -> %s\n" "${git_output%.}"
 		exit 1
 	fi
 
