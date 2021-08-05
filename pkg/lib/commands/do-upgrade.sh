@@ -112,6 +112,7 @@ do_actual_upgrade() {
 	do-plumbing-unlink-completions "$id"
 	do-plumbing-unlink-man "$id"
 
+	printf '  -> %s\n' "Fetching repository updates and merging"
 	local git_output=
 	if ! git_output="$(git -C "$BPM_PACKAGES_PATH/$id" pull 2>&1)"; then
 		log.error "Could not update Git repository"
