@@ -39,7 +39,7 @@ load 'util/init.sh'
 
 	run bpm echo "PWD"
 	assert_success
-	assert_line -n 1 "$PWD"
+	assert_line -n 2 "$PWD"
 
 	run bpm complete package-path
 	assert_success

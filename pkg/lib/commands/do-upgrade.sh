@@ -24,6 +24,14 @@ do-upgrade() {
 		esac
 	done
 
+	if [ "$flag_all" = yes ] && (( ${#pkgs[@]} > 0 )); then
+		die "No packages may be supplied when using '--all'"
+	fi
+
+	if [ "$BPM_IS_LOCAL" = yes ] && (( ${#pkgs[@]} > 0 )); then
+		die "Cannot specify individual packages for subcommand 'upgrade' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
+	fi
+
 	if [[ $upgrade_bpm == yes && "$flag_all" = yes ]]; then
 		die "Upgrading bpm and using '--all' are mutually exclusive behaviors"
 	fi
@@ -54,10 +62,6 @@ do-upgrade() {
 
 	# TODO: test this
 	if [ "$flag_all" = yes ]; then
-		if (( ${#pkgs[@]} > 0 )); then
-			die "No packages may be supplied when using '--all'"
-		fi
-
 		local bpm_toml_file="$BPM_ROOT/bpm.toml"
 
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then

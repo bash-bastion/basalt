@@ -273,6 +273,9 @@ util.setup_mode() {
 		if project_root_dir="$(util.get_project_root_dir)"; then
 			# Output to standard error because some subcommands may be scriptable (ex. list)
 			log.info "Operating in context of local bpm.toml" >&2
+			if [ "${BPM_MODE_TEST+x}" ]; then
+				printf "  -> %s\n" "'$project_root_dir'"
+			fi
 
 			BPM_ROOT="$project_root_dir"
 			BPM_PREFIX="$project_root_dir/bpm_packages"

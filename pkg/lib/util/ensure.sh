@@ -36,7 +36,9 @@ ensure.package_exists() {
 	local id="$1"
 
 	if [ ! -d "$BPM_PACKAGES_PATH/$id" ]; then
-		die "Package '$id' does not exist"
+		log.error "Package '$id' does not exist"
+		printf "  --> %s" "'$BPM_PACKAGES_PATH/$id'"
+		exit 1
 	fi
 }
 

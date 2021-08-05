@@ -16,6 +16,14 @@ do-plumbing-add-deps() {
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
 	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
 
+	# Install transitive dependencies
+	local subDep="$BPM_PACKAGES_PATH/$id"
+	if [[ ! -d "$subDep" && -n "${BPM_MODE_TEST+x}" ]]; then
+		# During some tests, plumbing-* or Git commands may be stubbed,
+		# so the package may not actually be cloned
+		return
+	fi
+
 	if [ -f "$bpm_toml_file" ]; then
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			deps=("${REPLIES[@]}")
@@ -31,6 +39,13 @@ do-plumbing-add-deps() {
 	fi
 
 	for dep in "${deps[@]}"; do
-		do-add "$dep"
+		local oldWd="$PWD"
+		ensure.cd "$subDep"
+		util.setup_mode
+
+		do-actual-add "$dep"
+
+		ensure.cd "$oldWd"
+		util.setup_mode
 	done
 }

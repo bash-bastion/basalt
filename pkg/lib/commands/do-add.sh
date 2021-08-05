@@ -32,16 +32,20 @@ do-add() {
 		esac
 	done
 
+	if [ "$flag_all" = yes ] && (( ${#pkgs[@]} > 0 )); then
+		die "No packages may be supplied when using '--all'"
+	fi
+
+	if [ "$BPM_IS_LOCAL" = yes ] && (( ${#pkgs[@]} > 0 )); then
+		die "Cannot specify individual packages for subcommand 'add' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
+	fi
+
 	if [[ "$BPM_IS_LOCAL" == no && "$flag_all" == yes ]]; then
 		die "Cannot pass '--all' without a 'bpm.toml' file"
 	fi
 
 	if [ "$flag_all" = yes ]; then
 		local bpm_toml_file="$BPM_ROOT/bpm.toml"
-
-		if (( ${#pkgs[@]} > 0 )); then
-			die "No packages may be supplied when using '--all'"
-		fi
 
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			log.info "Adding all dependencies"
@@ -58,11 +62,11 @@ do-add() {
 
 	if (( ${#pkgs[@]} == 0 )); then
 		die "At least one package must be supplied"
+	else
+		for repoSpec in "${pkgs[@]}"; do
+			do-actual-add "$repoSpec" "$flag_ssh" "$flag_branch"
+		done
 	fi
-
-	for repoSpec in "${pkgs[@]}"; do
-		do-actual-add "$repoSpec" "$flag_ssh" "$flag_branch"
-	done
 }
 
 do-actual-add() {
@@ -100,23 +104,4 @@ do-actual-add() {
 	do-plumbing-link-bins "$site/$package"
 	do-plumbing-link-completions "$site/$package"
 	do-plumbing-link-man "$site/$package"
-
-	# Install transitive dependencies
-	local subDep="$BPM_PACKAGES_PATH/$site/$package"
-
-	if [[ ! -d "$subDep" && -n "${BPM_MODE_TEST+x}" ]]; then
-		# During some tests, plumbing-* or Git commands may be stubbed,
-		# so the package may not actually be cloned
-		return
-	fi
-
-	local oldWd="$PWD"
-	ensure.cd "$subDep"
-	local bpm_toml_file="$subDep/bpm.toml"
-	if [ -f "$bpm_toml_file" ]; then
-		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
-			do-add --all
-		fi
-	fi
-	ensure.cd "$oldWd"
 }

@@ -333,3 +333,17 @@ load 'util/init.sh'
 	assert [ -d "./bpm_packages/packages/$site/$pkg2" ]
 	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
 }
+
+@test "fails if in local mode" {
+	local site='github.com'
+	local pkg1='user/project'
+
+	touch 'bpm.toml'
+
+	test_util.create_package "$pkg1"
+
+	BPM_IS_LOCAL='yes' run do-add "$pkg1"
+
+	assert_failure
+	assert_line -p "Cannot specify individual packages for subcommand 'add' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
+}

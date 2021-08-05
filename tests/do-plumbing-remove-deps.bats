@@ -6,7 +6,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.stub_command 'do-add'
+	test_util.stub_command 'do-actual-add'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'DEPS=user/dep1:user/dep2' > 'package.sh'
@@ -24,7 +24,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.stub_command 'do-add'
+	test_util.stub_command 'do-actual-add'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'dependencies = [ "user/dep1", "user/dep2" ]' > 'bpm.toml'

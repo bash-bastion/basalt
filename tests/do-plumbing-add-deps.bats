@@ -23,7 +23,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.stub_command 'do-add'
+	test_util.stub_command 'do-actual-add'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'DEPS=user/dep1:user/dep2' > 'package.sh'
@@ -33,15 +33,15 @@ load 'util/init.sh'
 	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
-	assert_line "do-add user/dep1"
-	assert_line "do-add user/dep2"
+	assert_line "do-actual-add user/dep1"
+	assert_line "do-actual-add user/dep2"
 }
 
 @test "on bpm.toml dependencies, installs properly" {
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.stub_command 'do-add'
+	test_util.stub_command 'do-actual-add'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'dependencies = [ "user/dep1", "user/dep2" ]' > 'bpm.toml'
@@ -51,15 +51,17 @@ load 'util/init.sh'
 	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
-	assert_line "do-add user/dep1"
-	assert_line "do-add user/dep2"
+	assert_line "do-actual-add user/dep1"
+	assert_line "do-actual-add user/dep2"
 }
 
 @test "bpm.toml has presidence over package.sh add deps" {
 	local site='github.com'
 	local pkg='username/package'
 
-	test_util.stub_command do-add
+	touch 'bpm.toml'
+
+	test_util.stub_command 'do-actual-add'
 
 	test_util.setup_pkg "$pkg"; {
 		echo 'DEPS=user/bad_dep' > 'package.sh'
@@ -70,6 +72,6 @@ load 'util/init.sh'
 	run do-plumbing-add-deps "$site/$pkg"
 
 	assert_success
-	refute_line "do-add user/bad_dep"
-	assert_line "do-add user/good_dep"
+	refute_line "do-actual-add user/bad_dep"
+	assert_line "do-actual-add user/good_dep"
 }

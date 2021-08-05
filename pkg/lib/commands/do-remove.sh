@@ -24,16 +24,20 @@ do-remove() {
 		esac
 	done
 
+	if [ "$flag_all" = yes ] && (( ${#pkgs[@]} > 0 )); then
+		die "No packages may be supplied when using '--all'"
+	fi
+
+	if [ "$BPM_IS_LOCAL" = yes ] && (( ${#pkgs[@]} > 0 )); then
+		die "Cannot specify individual packages for subcommand 'remove' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
+	fi
+
 	if [[ $flag_all == yes && $flag_force == yes ]]; then
 		die "Flags '--all' and '--force' are mutually exclusive"
 	fi
 
 	if [ "$flag_all" = yes ]; then
 		local bpm_toml_file="$BPM_ROOT/bpm.toml"
-
-		if (( ${#pkgs[@]} > 0 )); then
-			die "No packages may be supplied when using '--all'"
-		fi
 
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			log.info "Removing all dependencies"
