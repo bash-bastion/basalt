@@ -71,9 +71,10 @@ load 'util/init.sh'
 	assert_line -p -n 1 "Unlinking bin files"
 	assert_line -p -n 2 "Unlinking completion files"
 	assert_line -p -n 3 "Unlinking man files"
-	assert_line -p -n 4 "Linking bin files"
-	assert_line -p -n 5 "Linking completion files"
-	assert_line -p -n 6 "Linking man files"
+	assert_line -p -n 4 "Fetching repository updates and merging"
+	assert_line -p -n 5 "Linking bin files"
+	assert_line -p -n 6 "Linking completion files"
+	assert_line -p -n 7 "Linking man files"
 }
 
 @test "symlinks stay valid after upgrade" {
