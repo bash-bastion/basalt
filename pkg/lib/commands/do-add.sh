@@ -84,7 +84,17 @@ do-actual-add() {
 		die "Cannot install packages owned by username 'local' because that conflicts with linked packages"
 	fi
 
-	log.info "Adding '$repoSpec'"
+	if [ -e "$BPM_PACKAGES_PATH/$site/$package" ]; then
+		if [ "$BPM_IS_LOCAL" = yes ]; then
+			log.info "Skipping '$site/$package' as it's already present"
+			return
+		else
+			die "Package '$site/$package' is already present"
+		fi
+	else
+		log.info "Adding '$repoSpec'"
+	fi
+
 	do-plumbing-clone "$uri" "$site/$package" "$ref" "$flag_branch"
 	do-plumbing-add-deps "$site/$package"
 	do-plumbing-link-bins "$site/$package"

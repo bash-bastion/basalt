@@ -310,3 +310,26 @@ load 'util/init.sh'
 	assert_failure
 	assert_line -p "Cannot pass '--all' without a 'bpm.toml' file"
 }
+
+@test "--all works if some are already installed" {
+	local site='github.com'
+	local pkg1='user/project'
+	local pkg2='user/project2'
+
+	test_util.create_package "$pkg1"
+	test_util.create_package "$pkg2"
+
+	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1' ]" > 'bpm.toml'
+	BPM_IS_LOCAL='yes' run do-add --all
+
+	assert_success
+
+	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
+	BPM_IS_LOCAL='yes' run do-add --all
+
+	assert_success
+	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg1/.git" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg2" ]
+	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
+}
