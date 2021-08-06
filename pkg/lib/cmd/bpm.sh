@@ -15,7 +15,7 @@ main() {
 		source "$f"
 	done
 
-	BPM_IS_LOCAL='yes'
+	BPM_MODE='local'
 
 	for arg; do
 		case "$arg" in
@@ -30,7 +30,7 @@ main() {
 			exit
 			;;
 		--global|-g)
-			BPM_IS_LOCAL='no'
+			BPM_MODE='global'
 			shift
 			;;
 		*)

@@ -268,7 +268,7 @@ util.get_project_root_dir() {
 
 # @description Sets up the variables for the current mode
 util.setup_mode() {
-	if [ "$BPM_IS_LOCAL" = yes ]; then
+	if [ "$BPM_MODE" = local ]; then
 		local project_root_dir=
 		if project_root_dir="$(util.get_project_root_dir)"; then
 			# Output to standard error because some subcommands may be scriptable (ex. list)

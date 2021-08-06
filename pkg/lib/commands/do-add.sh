@@ -36,11 +36,11 @@ do-add() {
 		die "No packages may be supplied when using '--all'"
 	fi
 
-	if [ "$BPM_IS_LOCAL" = yes ] && (( ${#pkgs[@]} > 0 )); then
+	if [ "$BPM_MODE" = local ] && (( ${#pkgs[@]} > 0 )); then
 		die "Cannot specify individual packages for subcommand 'add' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
 	fi
 
-	if [[ "$BPM_IS_LOCAL" == no && "$flag_all" == yes ]]; then
+	if [[ "$BPM_MODE" == global && "$flag_all" == yes ]]; then
 		die "Cannot pass '--all' without a 'bpm.toml' file"
 	fi
 
@@ -89,7 +89,7 @@ do-actual-add() {
 	fi
 
 	if [ -e "$BPM_PACKAGES_PATH/$site/$package" ]; then
-		if [ "$BPM_IS_LOCAL" = yes ]; then
+		if [ "$BPM_MODE" = local ]; then
 			log.info "Skipping '$site/$package' as it's already present"
 			return
 		else

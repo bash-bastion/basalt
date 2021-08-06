@@ -252,7 +252,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$pkg1"
 
-	BPM_IS_LOCAL='yes' run do-remove "$pkg1"
+	BPM_MODE='local' run do-remove "$pkg1"
 
 	assert_failure
 	assert_line -p "Cannot specify individual packages for subcommand 'remove' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"

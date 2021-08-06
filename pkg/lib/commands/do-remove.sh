@@ -28,7 +28,7 @@ do-remove() {
 		die "No packages may be supplied when using '--all'"
 	fi
 
-	if [ "$BPM_IS_LOCAL" = yes ] && (( ${#pkgs[@]} > 0 )); then
+	if [ "$BPM_MODE" = local ] && (( ${#pkgs[@]} > 0 )); then
 		die "Cannot specify individual packages for subcommand 'remove' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
 	fi
 

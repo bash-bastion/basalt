@@ -215,7 +215,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg2"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	BPM_IS_LOCAL='yes' run do-add --all
+	BPM_MODE='local' run do-add --all
 
 	assert_success
 
@@ -239,7 +239,7 @@ load 'util/init.sh'
 	cd "$BPM_CWD"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	BPM_IS_LOCAL='yes' run do-add --all
+	BPM_MODE='local' run do-add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg/.git" ]
@@ -258,7 +258,7 @@ load 'util/init.sh'
 	cd "$BPM_CWD"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
-	BPM_IS_LOCAL='yes' run do-add --all
+	BPM_MODE='local' run do-add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
@@ -277,7 +277,7 @@ load 'util/init.sh'
 	cd "$BPM_CWD"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
-	BPM_IS_LOCAL='yes' run do-add --all
+	BPM_MODE='local' run do-add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
@@ -288,7 +288,7 @@ load 'util/init.sh'
 @test "--all prints warning when no dependencies are specified in bpm.toml" {
 	touch 'bpm.toml'
 
-	BPM_IS_LOCAL='yes' run do-add --all
+	BPM_MODE='local' run do-add --all
 
 	assert_success
 	assert_line -p "No dependencies specified in 'dependencies' key"
@@ -298,7 +298,7 @@ load 'util/init.sh'
 @test "--all errors when a package is specified as argument" {
 	touch 'bpm.toml'
 
-	BPM_IS_LOCAL='yes' run do-add --all pkg
+	BPM_MODE='local' run do-add --all pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
@@ -320,12 +320,12 @@ load 'util/init.sh'
 	test_util.create_package "$pkg2"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1' ]" > 'bpm.toml'
-	BPM_IS_LOCAL='yes' run do-add --all
+	BPM_MODE='local' run do-add --all
 
 	assert_success
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	BPM_IS_LOCAL='yes' run do-add --all
+	BPM_MODE='local' run do-add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
@@ -342,7 +342,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$pkg1"
 
-	BPM_IS_LOCAL='yes' run do-add "$pkg1"
+	BPM_MODE='local' run do-add "$pkg1"
 
 	assert_failure
 	assert_line -p "Cannot specify individual packages for subcommand 'add' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"

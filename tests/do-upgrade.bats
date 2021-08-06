@@ -193,7 +193,7 @@ load 'util/init.sh'
 @test "fail if bpm is specified in local mode" {
 	touch 'bpm.toml'
 
-	BPM_IS_LOCAL='yes' run do-upgrade bpm
+	BPM_MODE='local' run do-upgrade bpm
 
 	assert_failure
 	assert_line -p "Cannot upgrade bpm with a local 'bpm.toml' file"
@@ -216,7 +216,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$pkg1"
 
-	BPM_IS_LOCAL='yes' run do-upgrade "$pkg1"
+	BPM_MODE='local' run do-upgrade "$pkg1"
 
 	assert_failure
 	assert_line -p "Cannot specify individual packages for subcommand 'upgrade' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"

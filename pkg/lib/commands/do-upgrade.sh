@@ -28,7 +28,7 @@ do-upgrade() {
 		die "No packages may be supplied when using '--all'"
 	fi
 
-	if [ "$BPM_IS_LOCAL" = yes ] && (( ${#pkgs[@]} > 0 )); then
+	if [ "$BPM_MODE" = local ] && (( ${#pkgs[@]} > 0 )); then
 		die "Cannot specify individual packages for subcommand 'upgrade' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
 	fi
 
@@ -36,7 +36,7 @@ do-upgrade() {
 		die "Upgrading bpm and using '--all' are mutually exclusive behaviors"
 	fi
 
-	if [[ $upgrade_bpm == yes && "$BPM_IS_LOCAL" == yes ]]; then
+	if [[ $upgrade_bpm == yes && "$BPM_MODE" == local ]]; then
 		die "Cannot upgrade bpm with a local 'bpm.toml' file"
 	fi
 
