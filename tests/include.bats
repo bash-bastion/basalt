@@ -3,6 +3,9 @@
 load 'util/init.sh'
 
 @test "with no arguments, prints an error" {
+	BPM_REPO_ROOT="$BPM_TEST_REPO_ROOT/.."
+	BPM_CELLAR="$BPM_TEST_REPO_ROOT/../cellar"
+
 	eval "$(do-init sh)"
 
 	run include

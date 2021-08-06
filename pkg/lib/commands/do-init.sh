@@ -3,8 +3,7 @@
 echo_bpm_variables_posix() {
 	cat <<-EOF
 	# bpm variables
-	export BPM_ROOT="$BPM_ROOT"
-	export BPM_REPO_ROOT="$BPM_ROOT/source"
+	export BPM_REPO_ROOT="$BPM_REPO_ROOT"
 	export BPM_CELLAR="$BPM_CELLAR"
 
 	EOF
@@ -52,8 +51,7 @@ do-init() {
 	fish)
 		cat <<-EOF
 		# bpm variables
-		set -gx BPM_ROOT $BPM_ROOT
-		set -gx BPM_REPO_ROOT $BPM_ROOT/source
+		set -gx BPM_REPO_ROOT $BPM_REPO_ROOT
 		set -gx BPM_CELLAR $BPM_CELLAR
 
 		# bpm completion
