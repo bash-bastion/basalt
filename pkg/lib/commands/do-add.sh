@@ -37,7 +37,7 @@ do-add() {
 	fi
 
 	if [ "$BPM_MODE" = 'local' ] && (( ${#pkgs[@]} > 0 )); then
-		die "Cannot specify individual packages for subcommand 'add' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
+		die "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
 	fi
 
 	if [[ "$BPM_MODE" == global && "$flag_all" == yes ]]; then

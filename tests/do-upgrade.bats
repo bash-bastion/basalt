@@ -219,5 +219,5 @@ load 'util/init.sh'
 	BPM_MODE='local' run do-upgrade "$pkg1"
 
 	assert_failure
-	assert_line -p "Cannot specify individual packages for subcommand 'upgrade' in local projects. Please edit your 'bpm.toml' and use either 'add --all' or 'remove --all'"
+	assert_line -p "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
 }
