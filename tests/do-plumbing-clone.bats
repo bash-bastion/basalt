@@ -36,7 +36,7 @@ load 'util/init.sh'
 	cd "$BPM_ORIGIN_DIR/$pkg"
 	git commit --allow-empty -m "v0.1.0"
 	git tag 'v0.1.0' -m ''
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	run do-plumbing-clone "file://$BPM_ORIGIN_DIR/$pkg" "$site/$pkg" "v0.1.0"
 

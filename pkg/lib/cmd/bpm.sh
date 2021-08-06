@@ -30,6 +30,7 @@ main() {
 			exit
 			;;
 		--global|-g)
+			# shellcheck disable=SC2034
 			BPM_MODE='global'
 			shift
 			;;

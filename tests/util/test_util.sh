@@ -105,7 +105,7 @@ test_util.setup_pkg() {
 test_util.finish_pkg() {
 	git add .
 	git commit --allow-empty -m "Make changes"
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 }
 
 # @description Utility function to create an empty package

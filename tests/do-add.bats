@@ -236,7 +236,7 @@ load 'util/init.sh'
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg3' ]" > 'bpm.toml'
 	git add .
 	git commit -m 'Add bpm.toml'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
 	BPM_MODE='local' run do-add --all
@@ -255,7 +255,7 @@ load 'util/init.sh'
 	cd "$BPM_ORIGIN_DIR/$pkg1"
 	git commit --allow-empty -m 'v0.1.0'
 	git tag -a 'v0.1.0' -m 'Version: v0.1.0'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
 	BPM_MODE='local' run do-add --all
@@ -274,7 +274,7 @@ load 'util/init.sh'
 	cd "$BPM_ORIGIN_DIR/$pkg1"
 	git commit --allow-empty -m 'v0.1.0'
 	git tag 'v0.1.0' -m 'Version: v0.1.0'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
 	BPM_MODE='local' run do-add --all

@@ -13,7 +13,7 @@ load 'util/init.sh'
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	do-upgrade "$site/$pkg"
 
@@ -40,7 +40,7 @@ load 'util/init.sh'
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	run do-upgrade "$BPM_ORIGIN_DIR/$pkg"
 
@@ -60,7 +60,7 @@ load 'util/init.sh'
 	touch 'completions/file.sh' 'bin/file' 'man/man1/file.1'
 	git add .
 	git commit -m 'Add script'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	do-upgrade "$site/$pkg"
 
@@ -91,7 +91,7 @@ load 'util/init.sh'
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	do-upgrade "$site/$pkg"
 
@@ -115,7 +115,7 @@ load 'util/init.sh'
 	rm 'bpm.toml'
 	git add .
 	git commit -m 'Remove bpm.toml'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	do-upgrade "$site/$pkg"
 

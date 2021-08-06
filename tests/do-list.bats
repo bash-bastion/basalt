@@ -164,7 +164,7 @@ $site/username2/p2
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
-	cd "$BPM_CWD"
+	cd "$BATS_TEST_TMPDIR"
 
 	do-list --fetch
 	run do-list
