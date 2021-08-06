@@ -4,11 +4,27 @@
 test_util.is_exported() {
 	local variable_name="$1"
 
-	local -n variable="$variable_name"
-	if [[ "${variable@a}" == *x* ]]; then
-		return 0
+	if (( BASH_VERSINFO[0] > 4 )) || (( BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] >= 4 )); then
+		local -n variable="$variable_name"
+		if [[ "${variable@a}" == *x* ]]; then
+			return 0
+		else
+			return 1
+		fi
 	else
-		return 1
+		if declare -x | while read -r line; do
+			case "$line" in
+				"declare -x $variable_name"=*) return 10 ;;
+			esac
+		done; then
+			return 1
+		else
+			if (($? == 10)); then
+				return 0
+			else
+				return 1
+			fi
+		fi
 	fi
 }
 
