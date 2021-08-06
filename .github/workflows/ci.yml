@@ -35,7 +35,7 @@ jobs:
       - name: Install Bats
         run: |
           subdir='.workflow-data'
-          bats_version='1.3.0'
+          bats_version='1.4.0'
 
           curl -LsSo "$subdir/bats-core.tar.gz" --create-dirs \
             https://github.com/bats-core/bats-core/archive/v$bats_version.tar.gz
@@ -75,7 +75,7 @@ jobs:
       - name: Install Bats
         run: |
           subdir='.workflow-data'
-          bats_version='1.3.0'
+          bats_version='1.4.0'
 
           cd source
 
