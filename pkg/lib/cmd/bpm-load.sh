@@ -110,7 +110,6 @@ bpm-load() {
 			fi
 		done
 
-		# sleep 2000
 		if [ "$__bpm_file_was_sourced" = 'no' ]; then
 			printf '%s\n' "bpm-load: Error: Could not automatically find package file to source"
 			__bpm_bpm_load_restore_options
@@ -124,13 +123,13 @@ bpm-load() {
 # @description Restore the previous options
 # @noargs
 __bpm_bpm_load_restore_options() {
-	if [ "$__bpm_setNullglob" ]; then
+	if [ "$__bpm_setNullglob" = 'yes' ]; then
 		shopt -s nullglob
 	else
 		shopt -u nullglob
 	fi
 
-	if [ "$__bpm_setExtglob" ]; then
+	if [ "$__bpm_setExtglob" = 'yes' ]; then
 		shopt -s extglob
 	else
 		shopt -u extglob

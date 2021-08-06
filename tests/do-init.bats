@@ -11,14 +11,14 @@ load './util/init.sh'
 	assert test_util.is_exported 'BPM_ROOT'
 }
 
-
 @test "exports BPM_CELLAR" {
-	BPM_CELLAR=/lol run do-init bash
+	unset BPM_ROOT
+	eval "$(BPM_CELLAR=/lol do-init bash)"
 
 	assert_success
-	assert_line -p 'export BPM_CELLAR="/lol"'
+	assert [ "$BPM_CELLAR" = '/lol' ]
+	assert test_util.is_exported 'BPM_CELLAR'
 }
-
 
 @test "errors if shell is not available" {
 	run do-init fakesh
