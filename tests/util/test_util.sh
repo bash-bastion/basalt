@@ -1,6 +1,17 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2164
 
+test_util.is_exported() {
+	local variable_name="$1"
+
+	local -n variable="$variable_name"
+	if [[ "${variable@a}" == *x* ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 test_util.get_repo_root() {
 	REPLY=
 	if ! REPLY="$(

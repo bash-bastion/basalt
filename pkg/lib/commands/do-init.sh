@@ -6,7 +6,6 @@ echo_bpm_variables_posix() {
 	export BPM_ROOT="$BPM_ROOT"
 	export BPM_REPO_ROOT="$BPM_ROOT/source"
 	export BPM_PREFIX="$BPM_PREFIX"
-	export BPM_PACKAGES_PATH="$BPM_PACKAGES_PATH"
 
 	EOF
 }
@@ -56,7 +55,6 @@ do-init() {
 		set -gx BPM_ROOT $BPM_ROOT
 		set -gx BPM_REPO_ROOT $BPM_ROOT/source
 		set -gx BPM_PREFIX $BPM_PREFIX
-		set -gx BPM_PACKAGES_PATH $BPM_PACKAGES_PATH
 
 		# bpm completion
 		source \$BPM_REPO_ROOT/completions/bpm.fish

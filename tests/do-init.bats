@@ -3,11 +3,14 @@
 load './util/init.sh'
 
 @test "exports BPM_ROOT" {
-	BPM_ROOT=/lol run do-init bash
+	unset BPM_ROOT
+	eval "$(BPM_ROOT=/lol do-init bash)"
 
 	assert_success
-	assert_line -p 'export BPM_ROOT="/lol"'
+	assert [ "$BPM_ROOT" = '/lol' ]
+	assert test_util.is_exported 'BPM_ROOT'
 }
+
 
 @test "exports BPM_PREFIX" {
 	BPM_PREFIX=/lol run do-init bash
@@ -16,12 +19,6 @@ load './util/init.sh'
 	assert_line -p 'export BPM_PREFIX="/lol"'
 }
 
-@test "exports BPM_PACKAGES_PATH" {
-	BPM_PACKAGES_PATH=/lol run do-init bash
-
-	assert_success
-	assert_line -p 'export BPM_PACKAGES_PATH="/lol"'
-}
 
 @test "errors if shell is not available" {
 	run do-init fakesh
