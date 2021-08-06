@@ -5,11 +5,11 @@ shopt -s nullglob extglob
 
 main() {
 	: "${BPM_ROOT:="${XDG_DATA_HOME:-$HOME/.local/share}/bpm"}"
-	: "${BPM_PREFIX:="$BPM_ROOT/cellar"}"
-	: "${BPM_PACKAGES_PATH:="$BPM_PREFIX/packages"}"
-	: "${BPM_INSTALL_BIN:="$BPM_PREFIX/bin"}"
-	: "${BPM_INSTALL_MAN:="$BPM_PREFIX/man"}"
-	: "${BPM_INSTALL_COMPLETIONS:="$BPM_PREFIX/completions"}"
+	: "${BPM_CELLAR:="$BPM_ROOT/cellar"}"
+	: "${BPM_PACKAGES_PATH:="$BPM_CELLAR/packages"}"
+	: "${BPM_INSTALL_BIN:="$BPM_CELLAR/bin"}"
+	: "${BPM_INSTALL_MAN:="$BPM_CELLAR/man"}"
+	: "${BPM_INSTALL_COMPLETIONS:="$BPM_CELLAR/completions"}"
 
 	for f in "$PROGRAM_LIB_DIR"/{commands,util}/?*.sh; do
 		source "$f"

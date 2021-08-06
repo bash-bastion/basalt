@@ -278,11 +278,11 @@ util.setup_mode() {
 			fi
 
 			BPM_ROOT="$project_root_dir"
-			BPM_PREFIX="$project_root_dir/bpm_packages"
-			BPM_PACKAGES_PATH="$BPM_PREFIX/packages"
-			BPM_INSTALL_BIN="$BPM_PREFIX/bin"
-			BPM_INSTALL_MAN="$BPM_PREFIX/man"
-			BPM_INSTALL_COMPLETIONS="$BPM_PREFIX/completions"
+			BPM_CELLAR="$project_root_dir/bpm_packages"
+			BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
+			BPM_INSTALL_BIN="$BPM_CELLAR/bin"
+			BPM_INSTALL_MAN="$BPM_CELLAR/man"
+			BPM_INSTALL_COMPLETIONS="$BPM_CELLAR/completions"
 		else
 			die "No 'bpm.toml' file found"
 		fi

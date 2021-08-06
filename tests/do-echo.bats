@@ -12,18 +12,18 @@ load 'util/init.sh'
 	assert_output "/tmp/bpm"
 }
 
-@test "default BPM_PREFIX" {
-	BPM_ROOT= BPM_PREFIX= run bpm --global echo BPM_PREFIX
+@test "default BPM_CELLAR" {
+	BPM_ROOT= BPM_CELLAR= run bpm --global echo BPM_CELLAR
 	assert_output "$HOME/.local/share/bpm/cellar"
 }
 
-@test "inherited BPM_PREFIX" {
-	BPM_PREFIX=/usr/local run bpm --global echo BPM_PREFIX
+@test "inherited BPM_CELLAR" {
+	BPM_CELLAR=/usr/local run bpm --global echo BPM_CELLAR
 	assert_output "/usr/local"
 }
 
-@test "BPM_PREFIX based on BPM_ROOT" {
-	BPM_ROOT=/tmp/bpm BPM_PREFIX= run bpm --global echo BPM_PREFIX
+@test "BPM_CELLAR based on BPM_ROOT" {
+	BPM_ROOT=/tmp/bpm BPM_CELLAR= run bpm --global echo BPM_CELLAR
 	assert_output "/tmp/bpm/cellar"
 }
 
@@ -32,13 +32,13 @@ load 'util/init.sh'
 	assert_output "/usr/local/packages"
 }
 
-@test "BPM_PACKAGES_PATH based on BPM_PREFIX" {
-	BPM_PREFIX=/tmp/bpm BPM_PACKAGES_PATH= run bpm --global echo BPM_PACKAGES_PATH
+@test "BPM_PACKAGES_PATH based on BPM_CELLAR" {
+	BPM_CELLAR=/tmp/bpm BPM_PACKAGES_PATH= run bpm --global echo BPM_PACKAGES_PATH
 	assert_output "/tmp/bpm/packages"
 }
 
 @test "default BPM_INSTALL_BIN" {
-	BPM_ROOT= BPM_PREFIX= BPM_INSTALL_BIN= run bpm --global echo BPM_INSTALL_BIN
+	BPM_ROOT= BPM_CELLAR= BPM_INSTALL_BIN= run bpm --global echo BPM_INSTALL_BIN
 	assert_output "$HOME/.local/share/bpm/cellar/bin"
 }
 
@@ -47,13 +47,13 @@ load 'util/init.sh'
 	assert_output "/opt/bin"
 }
 
-@test "BPM_INSTALL_BIN based on BPM_PREFIX" {
-	BPM_INSTALL_BIN= BPM_ROOT=/tmp/bpm BPM_PREFIX=/usr/local run bpm --global echo BPM_INSTALL_BIN
+@test "BPM_INSTALL_BIN based on BPM_CELLAR" {
+	BPM_INSTALL_BIN= BPM_ROOT=/tmp/bpm BPM_CELLAR=/usr/local run bpm --global echo BPM_INSTALL_BIN
 	assert_output "/usr/local/bin"
 }
 
 @test "default BPM_INSTALL_MAN" {
-	BPM_ROOT= BPM_PREFIX= BPM_INSTALL_MAN= run bpm --global echo BPM_INSTALL_MAN
+	BPM_ROOT= BPM_CELLAR= BPM_INSTALL_MAN= run bpm --global echo BPM_INSTALL_MAN
 	assert_output "$HOME/.local/share/bpm/cellar/man"
 }
 
@@ -62,13 +62,13 @@ load 'util/init.sh'
 	assert_output "/opt/man"
 }
 
-@test "BPM_INSTALL_MAN based on BPM_PREFIX" {
-	BPM_INSTALL_MAN= BPM_PREFIX=/usr/local run bpm --global echo BPM_INSTALL_MAN
+@test "BPM_INSTALL_MAN based on BPM_CELLAR" {
+	BPM_INSTALL_MAN= BPM_CELLAR=/usr/local run bpm --global echo BPM_INSTALL_MAN
 	assert_output "/usr/local/man"
 }
 
 @test "default BPM_INSTALL_COMPLETIONS" {
-	BPM_ROOT= BPM_PREFIX= BPM_INSTALL_COMPLETIONS= run bpm --global echo BPM_INSTALL_COMPLETIONS
+	BPM_ROOT= BPM_CELLAR= BPM_INSTALL_COMPLETIONS= run bpm --global echo BPM_INSTALL_COMPLETIONS
 	assert_output "$HOME/.local/share/bpm/cellar/completions"
 }
 
@@ -77,8 +77,8 @@ load 'util/init.sh'
 	assert_output "/opt/completions"
 }
 
-@test "BPM_INSTALL_COMPLETIONS based on BPM_PREFIX" {
-	BPM_INSTALL_COMPLETIONS= BPM_PREFIX=/usr/local run bpm --global echo BPM_INSTALL_COMPLETIONS
+@test "BPM_INSTALL_COMPLETIONS based on BPM_CELLAR" {
+	BPM_INSTALL_COMPLETIONS= BPM_CELLAR=/usr/local run bpm --global echo BPM_INSTALL_COMPLETIONS
 	assert_output "/usr/local/completions"
 }
 
@@ -91,10 +91,10 @@ load 'util/init.sh'
 	assert_line -p "$PWD"
 }
 
-@test "non-global default BPM_PREFIX" {
+@test "non-global default BPM_CELLAR" {
 	touch 'bpm.toml'
 
-	BPM_ROOT= BPM_PREFIX= run bpm echo BPM_PREFIX
+	BPM_ROOT= BPM_CELLAR= run bpm echo BPM_CELLAR
 
 	assert_success
 	assert_line -p "$PWD/bpm_packages"

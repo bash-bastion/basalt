@@ -5,7 +5,7 @@ echo_bpm_variables_posix() {
 	# bpm variables
 	export BPM_ROOT="$BPM_ROOT"
 	export BPM_REPO_ROOT="$BPM_ROOT/source"
-	export BPM_PREFIX="$BPM_PREFIX"
+	export BPM_CELLAR="$BPM_CELLAR"
 
 	EOF
 }
@@ -23,8 +23,8 @@ echo_bpm_include_posix() {
 echo_bpm_package_path_posix() {
 	cat <<-"EOF"
 	# bpm packages PATH
-	if [ "${PATH#*$BPM_PREFIX/bin}" = "$PATH" ]; then
-	  export PATH="$BPM_PREFIX/bin:$PATH"
+	if [ "${PATH#*$BPM_CELLAR/bin}" = "$PATH" ]; then
+	  export PATH="$BPM_CELLAR/bin:$PATH"
 	fi
 
 	EOF
@@ -54,7 +54,7 @@ do-init() {
 		# bpm variables
 		set -gx BPM_ROOT $BPM_ROOT
 		set -gx BPM_REPO_ROOT $BPM_ROOT/source
-		set -gx BPM_PREFIX $BPM_PREFIX
+		set -gx BPM_CELLAR $BPM_CELLAR
 
 		# bpm completion
 		source \$BPM_REPO_ROOT/completions/bpm.fish
@@ -65,14 +65,14 @@ do-init() {
 		end
 
 		# bpm packages PATH
-		if not contains \$BPM_PREFIX/bin \$PATH
-		  set -gx PATH \$BPM_PREFIX/bin \$PATH
+		if not contains \$BPM_CELLAR/bin \$PATH
+		  set -gx PATH \$BPM_CELLAR/bin \$PATH
 		end
 
 		# bpm packages completions
 		# set -gx fish_complete_path \$fish_complete_path
-		if [ -d \$BPM_PREFIX/completions/fish ]
-		  for f in \$BPM_PREFIX/completions/fish/?*.fish
+		if [ -d \$BPM_CELLAR/completions/fish ]
+		  for f in \$BPM_CELLAR/completions/fish/?*.fish
 		    source \$f
 		  end
 		end
@@ -92,8 +92,8 @@ do-init() {
 		echo_bpm_package_path_posix
 		cat <<-"EOF"
 		# bpm packages completions
-		if [ -d "$BPM_PREFIX/completions/bash" ]; then
-		  for f in "$BPM_PREFIX"/completions/bash/*; do
+		if [ -d "$BPM_CELLAR/completions/bash" ]; then
+		  for f in "$BPM_CELLAR"/completions/bash/*; do
 		    source "$f"
 		  done
 		  unset f
@@ -113,9 +113,9 @@ do-init() {
 		echo_bpm_package_path_posix
 		cat <<-"EOF"
 		# bpm packages completions
-		fpath=("$BPM_PREFIX/completions/zsh/compsys" $fpath)
-		if [ -d "$BPM_PREFIX/completions/zsh/compctl" ]; then
-		  for f in "$BPM_PREFIX"/completions/zsh/compctl/*; do
+		fpath=("$BPM_CELLAR/completions/zsh/compsys" $fpath)
+		if [ -d "$BPM_CELLAR/completions/zsh/compctl" ]; then
+		  for f in "$BPM_CELLAR"/completions/zsh/compctl/*; do
 		    source "$f"
 		  done
 		  unset f

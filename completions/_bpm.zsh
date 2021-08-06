@@ -38,7 +38,7 @@ case $state in
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(echo)
-			local -a subcommandOptions=(BPM_ROOT BPM_PREFIX)
+			local -a subcommandOptions=(BPM_ROOT BPM_CELLAR)
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(init)

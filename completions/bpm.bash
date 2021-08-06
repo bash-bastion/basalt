@@ -60,7 +60,7 @@ _bpm() {
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			echo)
-				subcommandOptions=(BPM_ROOT BPM_PREFIX)
+				subcommandOptions=(BPM_ROOT BPM_CELLAR)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			init)

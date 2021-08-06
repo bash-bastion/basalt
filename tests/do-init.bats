@@ -12,11 +12,11 @@ load './util/init.sh'
 }
 
 
-@test "exports BPM_PREFIX" {
-	BPM_PREFIX=/lol run do-init bash
+@test "exports BPM_CELLAR" {
+	BPM_CELLAR=/lol run do-init bash
 
 	assert_success
-	assert_line -p 'export BPM_PREFIX="/lol"'
+	assert_line -p 'export BPM_CELLAR="/lol"'
 }
 
 

@@ -47,7 +47,7 @@ load 'util/init.sh'
 	run include "$site/$pkg" non_existent
 
 	assert_failure
-	assert_output -p "File '$BPM_PREFIX/packages/$site/$pkg/non_existent' not found"
+	assert_output -p "File '$BPM_CELLAR/packages/$site/$pkg/non_existent' not found"
 }
 
 @test "when file does exist, properly source file" {

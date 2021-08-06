@@ -313,8 +313,8 @@ load 'util/init.sh'
 	run do-link "$BPM_ORIGIN_DIR/$dir" "$BPM_ORIGIN_DIR/$dir2"
 
 	assert_success
-	assert [ ! -e "$BPM_PREFIX/bin/package" ]
-	assert [ ! -e "$BPM_PREFIX/bin/package2" ]
+	assert [ ! -e "$BPM_CELLAR/bin/package" ]
+	assert [ ! -e "$BPM_CELLAR/bin/package2" ]
 }
 
 @test "fails link bins when specifying directory in package.sh" {

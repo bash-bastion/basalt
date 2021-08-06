@@ -13,7 +13,7 @@ set -l subcommandOptions --shh
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
 
 set subcmd echo
-set -l subcommandOptions BPM_ROOT BPM_PREFIX
+set -l subcommandOptions BPM_ROOT BPM_CELLAR
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
 
 set subcmd init
