@@ -18,7 +18,7 @@ do-plumbing-add-deps() {
 
 	# Install transitive dependencies
 	local subDep="$BPM_PACKAGES_PATH/$id"
-	if [[ ! -d "$subDep" && -n "${BPM_MODE_TEST+x}" ]]; then
+	if [[ ! -d "$subDep" && -n "${BPM_IS_TEST+x}" ]]; then
 		# During some tests, plumbing-* or Git commands may be stubbed,
 		# so the package may not actually be cloned
 		return

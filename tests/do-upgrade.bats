@@ -64,7 +64,7 @@ load 'util/init.sh'
 
 	do-upgrade "$site/$pkg"
 
-	unset BPM_MODE_TEST
+	unset BPM_IS_TEST
 	run do-upgrade "$pkg"
 
 	assert_success

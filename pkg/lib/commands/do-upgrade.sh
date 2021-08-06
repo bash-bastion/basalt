@@ -121,7 +121,7 @@ do_actual_upgrade() {
 		exit 1
 	fi
 
-	if [ -n "${BPM_MODE_TEST+x}" ]; then
+	if [ -n "${BPM_IS_TEST+x}" ]; then
 		printf "%s\n" "$git_output"
 	fi
 
