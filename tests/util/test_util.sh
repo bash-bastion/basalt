@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2164
 
-test_util.get_bpm_root() {
+test_util.get_repo_root() {
 	REPLY=
 	if ! REPLY="$(
 		while [[ ! -d ".git" && "$PWD" != / ]]; do
@@ -16,12 +16,6 @@ test_util.get_bpm_root() {
 			exit 1
 		fi
 
-		# BPM root is the parent directory of 'source', which holds
-		# the Git repository
-		if ! cd ..; then
-			printf "%s\n" "Error: Could not cd to BPM directory" >&2
-			exit 1
-		fi
 		printf "%s" "$PWD"
 	)"; then
 		exit 1
