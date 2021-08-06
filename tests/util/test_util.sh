@@ -12,19 +12,28 @@ test_util.is_exported() {
 			return 1
 		fi
 	else
-		if declare -x | while read -r line; do
-			case "$line" in
-				"declare -x $variable_name"=*) return 10 ;;
-			esac
-		done; then
-			return 1
-		else
-			if (($? == 10)); then
-				return 0
-			else
-				return 1
-			fi
-		fi
+		local output=
+		output="$(declare -p "$variable_name")"
+
+		case "$output" in
+			"declare -x $variable_name"=*) return 0 ;;
+		esac
+
+		return 1
+
+		# if declare -x | while read -r line; do
+		# 	case "$line" in
+		# 		"declare -x $variable_name"=*) return 10 ;;
+		# 	esac
+		# done; then
+		# 	return 1
+		# else
+		# 	if (($? == 10)); then
+		# 		return 0
+		# 	else
+		# 		return 1
+		# 	fi
+		# fi
 	fi
 }
 
