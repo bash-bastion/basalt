@@ -2,15 +2,13 @@
 
 load './util/init.sh'
 
-@test "exports BPM_ROOT" {
-	BPM_REPO_ROOT="$BPM_TEST_REPO_ROOT/../source"
-	BPM_CELLAR="$BPM_TEST_REPO_ROOT/../cellar"
-
-	eval "$(BPM_REPO_ROOT=/lol do-init bash)"
+@test "exports BPM_REPO_SOURCE" {
+	unset BPM_REPO_SOURCE
+	eval "$(BPM_REPO_SOURCE=/lol do-init bash)"
 
 	assert_success
-	assert [ "$BPM_REPO_ROOT" = '/lol' ]
-	assert test_util.is_exported 'BPM_REPO_ROOT'
+	assert [ "$BPM_REPO_SOURCE" = '/lol' ]
+	assert test_util.is_exported 'BPM_REPO_SOURCE'
 }
 
 @test "exports BPM_CELLAR" {
@@ -30,10 +28,9 @@ load './util/init.sh'
 }
 
 @test "bash completion works" {
-	BPM_REPO_ROOT="$BPM_TEST_REPO_ROOT/../source"
-	BPM_CELLAR="$BPM_TEST_REPO_ROOT/../cellar"
-
 	! command -v _bpm
+
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
 	eval "$(do-init bash)"
 

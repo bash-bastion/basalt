@@ -38,7 +38,7 @@ See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-
 - Local and user-wide package installation
 - Configure (optionally) exactly which directories are used for completions, binaries, or man pages
 - Works with essentially all popular Bash projects out of the box
-- 260+ Tests
+- 240+ Tests
 
 ## Alternatives Comparison
 

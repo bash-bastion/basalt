@@ -3,8 +3,8 @@
 echo_bpm_variables_posix() {
 	cat <<-EOF
 	# bpm variables
-	export BPM_REPO_ROOT="$BPM_REPO_ROOT"
-	export BPM_CELLAR="$BPM_CELLAR"
+	export BPM_REPO_SOURCE="${BPM_REPO_SOURCE:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"}"
+	export BPM_CELLAR="${BPM_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm/cellar"}"
 
 	EOF
 }
@@ -12,8 +12,8 @@ echo_bpm_variables_posix() {
 echo_bpm_include_posix() {
 	cat <<-"EOF"
 	# bpm include function
-	if [ -f "$BPM_REPO_ROOT/pkg/share/include.sh" ]; then
-	  . "$BPM_REPO_ROOT/pkg/share/include.sh"
+	if [ -f "$BPM_REPO_SOURCE/pkg/share/include.sh" ]; then
+	  . "$BPM_REPO_SOURCE/pkg/share/include.sh"
 	fi
 
 	EOF
@@ -51,15 +51,15 @@ do-init() {
 	fish)
 		cat <<-EOF
 		# bpm variables
-		set -gx BPM_REPO_ROOT $BPM_REPO_ROOT
-		set -gx BPM_CELLAR $BPM_CELLAR
+		set -gx BPM_REPO_SOURCE "${BPM_REPO_SOURCE:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"}"
+		set -gx "${BPM_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm/cellar"}"
 
 		# bpm completion
-		source \$BPM_REPO_ROOT/completions/bpm.fish
+		source \$BPM_REPO_SOURCE/completions/bpm.fish
 
 		# bpm include function
-		if [ -f "$BPM_REPO_ROOT/pkg/share/include.fish" ]
-		  source "$BPM_REPO_ROOT/pkg/share/include.fish"
+		if [ -f "$BPM_REPO_SOURCE/pkg/share/include.fish" ]
+		  source "$BPM_REPO_SOURCE/pkg/share/include.fish"
 		end
 
 		# bpm packages PATH
@@ -80,8 +80,8 @@ do-init() {
 		echo_bpm_variables_posix
 		cat <<-EOF
 		# bpm completions
-		if [ -f "\$BPM_REPO_ROOT/completions/bpm.bash" ]; then
-		  . "\$BPM_REPO_ROOT/completions/bpm.bash"
+		if [ -f "\$BPM_REPO_SOURCE/completions/bpm.bash" ]; then
+		  . "\$BPM_REPO_SOURCE/completions/bpm.bash"
 		fi
 
 		EOF
@@ -103,7 +103,7 @@ do-init() {
 		echo_bpm_variables_posix
 		cat <<-EOF
 		# bpm completions
-		fpath=("\$BPM_REPO_ROOT/completions" \$fpath)
+		fpath=("\$BPM_REPO_SOURCE/completions" \$fpath)
 		EOF
 
 		echo_bpm_include_posix

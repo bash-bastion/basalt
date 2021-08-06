@@ -6,6 +6,9 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+	BPM_CELLAR="$BPM_TEST_DIR/cellar"
+
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
 	}; test_util.finish_pkg

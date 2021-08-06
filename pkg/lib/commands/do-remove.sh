@@ -37,7 +37,7 @@ do-remove() {
 	fi
 
 	if [ "$flag_all" = yes ]; then
-		local bpm_toml_file="$BPM_ROOT/bpm.toml"
+		local bpm_toml_file="$BPM_LOCAL_PROJECT_DIR/bpm.toml"
 
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			log.info "Removing all dependencies"

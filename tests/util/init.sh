@@ -21,11 +21,12 @@ export BPM_IS_TEST=
 # Stub common variables
 test_util.get_repo_root
 # The root of the real source. This is a separate variable because we want to
-# set 'BPM_ROOT' to some other value
+# set 'BPM_LOCAL_PROJECT_DIR' to some other value
 export BPM_TEST_REPO_ROOT="$REPLY"
 export PROGRAM_LIB_DIR="$BPM_TEST_REPO_ROOT/pkg/lib"
 
-export BPM_ROOT="$BPM_TEST_DIR"
+export BPM_LOCAL_PROJECT_DIR=
+export BPM_REPO_SOURCE="$BPM_TEST_DIR/source"
 export BPM_CELLAR="$BPM_TEST_DIR/cellar"
 export BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
 export BPM_INSTALL_BIN="$BPM_CELLAR/bin"

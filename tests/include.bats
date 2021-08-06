@@ -3,8 +3,7 @@
 load 'util/init.sh'
 
 @test "with no arguments, prints an error" {
-	BPM_REPO_ROOT="$BPM_TEST_REPO_ROOT/.."
-	BPM_CELLAR="$BPM_TEST_REPO_ROOT/../cellar"
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
 	eval "$(do-init sh)"
 
@@ -15,6 +14,8 @@ load 'util/init.sh'
 }
 
 @test "with one argument, prints an error" {
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+
 	eval "$(do-init sh)"
 
 	run include 'user/repo'
@@ -27,6 +28,8 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='user/repo'
 
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+
 	eval "$(do-init sh)"
 
 	run include "$site/$pkg" file
@@ -38,6 +41,8 @@ load 'util/init.sh'
 @test "when file doesn't exist, prints an error" {
 	local site='github.com'
 	local pkg='username/repo'
+
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
 	test_util.setup_pkg "$pkg"; {
 		:
@@ -56,6 +61,8 @@ load 'util/init.sh'
 @test "when file does exist, properly source file" {
 	local site='github.com'
 	local pkg='username/repo'
+
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "func_name() { echo 'done'; }" > 'function.sh'

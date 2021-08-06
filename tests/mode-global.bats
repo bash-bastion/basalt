@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "print operating in local dir if not in global mode" {
 	touch 'bpm.toml'
 
-	run bpm echo "PWD"
+	BPM_MODE='local' run do-list
 	assert_success
 	assert_output -p "Operating in context of local bpm.toml"
 }
@@ -34,12 +34,12 @@ load 'util/init.sh'
 	assert_success
 }
 
-@test "do not error when not passing --global to echo, complete, and init" {
+@test "do not error when not passing --global to list, complete, and init" {
 	touch 'bpm.toml'
 
-	run bpm echo "PWD"
+	run do-list
 	assert_success
-	assert_line -n 2 "$PWD"
+	assert_output ""
 
 	run bpm complete package-path
 	assert_success
@@ -47,5 +47,5 @@ load 'util/init.sh'
 	run bpm init bash
 	assert_success
 	assert_line -p "export PATH"
-	assert_line -p '. "$BPM_REPO_ROOT/'
+	assert_line -p '. "$BPM_REPO_SOURCE/'
 }

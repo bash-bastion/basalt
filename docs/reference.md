@@ -2,7 +2,7 @@
 
 ## Environment Variables
 
-### `BPM_ROOT`
+### `BPM_LOCAL_PROJECT_DIR`
 
 The location of the root `bpm` folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.local/share}/bpm"`
 
@@ -12,7 +12,7 @@ Set to a non-null string to clone the full repository history instead of only th
 
 ### `BPM_CELLAR`
 
-Set the installation and package checkout prefix (default is `$BPM_ROOT/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`
+Set the installation and package checkout prefix (default is `$BPM_LOCAL_PROJECT_DIR/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`
 
 ## `bpm.toml`
 

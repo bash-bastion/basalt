@@ -277,7 +277,9 @@ util.setup_mode() {
 				printf "  -> %s\n" "'$project_root_dir'"
 			fi
 
-			BPM_ROOT="$project_root_dir"
+			# Set the variables as to make them orrect for 'local' mode
+			BPM_LOCAL_PROJECT_DIR="$project_root_dir"
+			BPM_REPO_SOURCE="$BPM_REPO_SOURCE"
 			BPM_CELLAR="$project_root_dir/bpm_packages"
 			BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
 			BPM_INSTALL_BIN="$BPM_CELLAR/bin"

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# TODO: print error if sourcing and passing arguments
+# TODO: print error if not being sourced and no arguments are passed
+
 # @description Source Bash packages to initialize any functions
 # that they may want to provide in the global scope
 # @exitcode 4 Unexpected internal error
@@ -63,11 +66,11 @@ bpm-load() {
 	unset REPLY REPLY1 REPLY2 REPLY3 REPLY4 REPLY5 # Be extra certain of no clobbering
 
 	# Get the bpm root dir (relative to this function's callsite)
-	local __bpm_root_dir=
+	local __bpm_cellar=
 	if [ "$__bpm_flag_global" = yes ]; then
-		__bpm_root_dir="${BPM_ROOT:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm"}/cellar"
+		__bpm_cellar="${BPM_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm/cellar"}"
 	else
-		if ! __bpm_root_dir="$(util.get_project_root_dir)/bpm_packages"; then
+		if ! __bpm_cellar="$(util.get_project_root_dir)/bpm_packages"; then
 			printf '%s\n' "bpm-load: Error: Unexpected error calling function 'util.get_project_root_dir' with PWD '$PWD'"
 			__bpm_bpm_load_restore_options
 			return 4
@@ -76,7 +79,7 @@ bpm-load() {
 
 	# Source file, behavior depending on whether it was specifed
 	if [ -n "$__bpm_file" ]; then
-		local __bpm_full_path="$__bpm_root_dir/packages/$__bpm_site/$__bpm_package/$__bpm_file"
+		local __bpm_full_path="$__bpm_cellar/packages/$__bpm_site/$__bpm_package/$__bpm_file"
 
 		if [ -d "$__bpm_full_path" ]; then
 			printf '%s\n' "bpm-load: Error: '$__bpm_full_path' is a directory"
@@ -97,7 +100,7 @@ bpm-load() {
 		local __bpm_file= __bpm_file_was_sourced='no'
 		# shellcheck disable=SC2041
 		for __bpm_file in 'load.bash'; do
-			local __bpm_full_path="$__bpm_root_dir/packages/$__bpm_site/$__bpm_package/$__bpm_file"
+			local __bpm_full_path="$__bpm_cellar/packages/$__bpm_site/$__bpm_package/$__bpm_file"
 
 			if [ -f "$__bpm_full_path" ]; then
 				__bpm_file_was_sourced='yes'
