@@ -11,8 +11,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	BPM_ROOT="${BPM_PACKAGES_PATH%/*}"
-	BPM_ROOT="${BPM_ROOT%/*}"
+	BPM_ROOT="$BPM_TEST_DIR"
 
 	source bpm-load
 	run bpm-load --global "$pkg"
