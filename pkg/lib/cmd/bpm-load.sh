@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-# TODO: print error if sourcing and passing arguments
-# TODO: print error if not being sourced and no arguments are passed
+if [[ "${BASH_SOURCE[0]}" != "${0}" && $# -ne 0 ]]; then
+	printf '%s\n' "bpm-load: Error: Incorrect usage. See documentation"
+	return 1
+fi
 
 # @description Source Bash packages to initialize any functions
 # that they may want to provide in the global scope
