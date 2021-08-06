@@ -47,5 +47,5 @@ load 'util/init.sh'
 	run bpm init bash
 	assert_success
 	assert_line -p "export PATH"
-	assert_line -p '. "$BPM_ROOT/'
+	assert_line -p '. "$BPM_REPO_ROOT/'
 }

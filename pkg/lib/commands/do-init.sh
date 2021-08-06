@@ -4,6 +4,7 @@ echo_bpm_variables_posix() {
 	cat <<-EOF
 	# bpm variables
 	export BPM_ROOT="$BPM_ROOT"
+	export BPM_REPO_ROOT="$BPM_ROOT/source"
 	export BPM_PREFIX="$BPM_PREFIX"
 	export BPM_PACKAGES_PATH="$BPM_PACKAGES_PATH"
 
@@ -13,8 +14,8 @@ echo_bpm_variables_posix() {
 echo_bpm_include_posix() {
 	cat <<-"EOF"
 	# bpm include function
-	if [ -f "$BPM_ROOT/source/pkg/share/include.sh" ]; then
-	  . "$BPM_ROOT/source/pkg/share/include.sh"
+	if [ -f "$BPM_REPO_ROOT/pkg/share/include.sh" ]; then
+	  . "$BPM_REPO_ROOT/pkg/share/include.sh"
 	fi
 
 	EOF
@@ -53,15 +54,16 @@ do-init() {
 		cat <<-EOF
 		# bpm variables
 		set -gx BPM_ROOT $BPM_ROOT
+		set -gx BPM_REPO_ROOT $BPM_ROOT/source
 		set -gx BPM_PREFIX $BPM_PREFIX
 		set -gx BPM_PACKAGES_PATH $BPM_PACKAGES_PATH
 
 		# bpm completion
-		source \$BPM_ROOT/source/completions/bpm.fish
+		source \$BPM_REPO_ROOT/completions/bpm.fish
 
 		# bpm include function
-		if [ -f "$BPM_ROOT/source/pkg/share/include.fish" ]
-		  source "$BPM_ROOT/source/pkg/share/include.fish"
+		if [ -f "$BPM_REPO_ROOT/pkg/share/include.fish" ]
+		  source "$BPM_REPO_ROOT/pkg/share/include.fish"
 		end
 
 		# bpm packages PATH
@@ -82,8 +84,8 @@ do-init() {
 		echo_bpm_variables_posix
 		cat <<-EOF
 		# bpm completions
-		if [ -f "\$BPM_ROOT/source/completions/bpm.bash" ]; then
-		  . "\$BPM_ROOT/source/completions/bpm.bash"
+		if [ -f "\$BPM_REPO_ROOT/completions/bpm.bash" ]; then
+		  . "\$BPM_REPO_ROOT/completions/bpm.bash"
 		fi
 
 		EOF
@@ -105,7 +107,7 @@ do-init() {
 		echo_bpm_variables_posix
 		cat <<-EOF
 		# bpm completions
-		fpath=("\$BPM_ROOT/source/completions" \$fpath)
+		fpath=("\$BPM_REPO_ROOT/completions" \$fpath)
 		EOF
 
 		echo_bpm_include_posix
