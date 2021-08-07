@@ -70,18 +70,20 @@ bash: z.sh: command not found
 
 But it doesn't work - this is standard behavior. When looking for binaries, bpm _does_ look at the root directory, but only for shell scripts that are marked as _executable_ (`chmod +x z.sh`)
 
-The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `bpm-load` command exists:
+The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `bpm-load` command exists
 
 ```sh
+$ source 'bpm-load'
 $ bpm-load --global --dry rupa/z z.sh
 bpm-load: Would source file '/home/edwin/data/bpm/cellar/packages/github.com/rupa/z/z.sh'
 ```
 
-Now, use the `bpm-load` to source `z.sh`. Note that `z.sh` only supports either Bash or Zsh, so you need to currently be in one of those shells for this to work. We `source 'bpm-source` because the PATH contains a file called `bpm-source`, which contains the `bpm-source` function that we use
+Note that we `source 'bpm-load` beforehand because the PATH contains a file called `bpm-load`, which contains the `bpm-load` function that we use
+
+Now, use the `bpm-load` to source `z.sh`. Note that `z.sh` only supports either Bash or Zsh, so you need to currently be in one of those shells for this to work.
 
 ```sh
-$ source 'bpm-source'
-$ bpm-source --global 'rupa/z' 'z.sh'
+$ bpm-load --global 'rupa/z' 'z.sh'
 $ z
 common:    /tmp/tmp.MBF063fdlK/completions
 29988      /tmp/tmp.MBF063fdlK/completions
