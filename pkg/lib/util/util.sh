@@ -333,7 +333,7 @@ Examples:
   bpm add github.com/tj/git-extras
   bpm add https://github.com/tj/git-extras
   bpm add git@github.com:tj/git-extras
-  bpm add eankeen/bash-args --branch=main
-  bpm add eankeen/bash-args@v0.6.1 # out of date
+  bpm add hyperupcall/bash-args --branch=main
+  bpm add hyperupcall/bash-args@v0.6.1 # out of date
 EOF
 }

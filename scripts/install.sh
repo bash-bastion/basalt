@@ -7,7 +7,7 @@ if [ -d "$cloneDir" ]; then
 	exit 1
 fi
 
-git clone https://github.com/eankeen/bpm "$cloneDir"
+git clone https://github.com/hyperupcall/bpm "$cloneDir"
 
 bashrc="$HOME/.bashrc"
 if [ -f "$bashrc" ]; then

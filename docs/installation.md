@@ -19,7 +19,7 @@ See the full list of supported operating systems in [Support](./support.md)
 ### Scripted
 
 ```sh
-curl -Lo- https://raw.githubusercontent.com/eankeen/bpm/main/scripts/install.sh | bash
+curl -Lo- https://raw.githubusercontent.com/hyperupcall/bpm/main/scripts/install.sh | bash
 ```
 
 ### Manual
@@ -27,7 +27,7 @@ curl -Lo- https://raw.githubusercontent.com/eankeen/bpm/main/scripts/install.sh 
 ##### 1. Clone `bpm`
 
 ```sh
-git clone https://github.com/eankeen/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
+git clone https://github.com/hyperupcall/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
 ```
 
 By default, this installs bpm to `$HOME/.local/share/bpm/source`. Note: do _NOT_ try to install the repository to a different location (like `~/.bpm`), or the program won't work

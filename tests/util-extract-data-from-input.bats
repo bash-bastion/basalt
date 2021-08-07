@@ -11,119 +11,119 @@ load 'util/init.sh'
 }
 
 @test "parses with full https url" {
-	util.extract_data_from_input 'https://gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'https://gitlab.com/hyperupcall/proj'
 
-	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'https://gitlab.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with full http url" {
-	util.extract_data_from_input 'http://gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'http://gitlab.com/hyperupcall/proj'
 
-	assert [ "$REPLY1" = 'http://gitlab.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'http://gitlab.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with full https url with .git ending" {
-	util.extract_data_from_input 'https://gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'https://gitlab.com/hyperupcall/proj'
 
-	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'https://gitlab.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with full http url with .git ending" {
-	util.extract_data_from_input 'http://gitlab.com/eankeen/proj.git'
+	util.extract_data_from_input 'http://gitlab.com/hyperupcall/proj.git'
 
-	assert [ "$REPLY1" = 'http://gitlab.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'http://gitlab.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with full ssh url" {
-	util.extract_data_from_input 'git@gitlab.com:eankeen/proj.git'
+	util.extract_data_from_input 'git@gitlab.com:hyperupcall/proj.git'
 
-	assert [ "$REPLY1" = 'git@gitlab.com:eankeen/proj' ]
+	assert [ "$REPLY1" = 'git@gitlab.com:hyperupcall/proj' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with package and domain" {
-	util.extract_data_from_input 'gitlab.com/eankeen/proj'
+	util.extract_data_from_input 'gitlab.com/hyperupcall/proj'
 
-	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'https://gitlab.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with package and domain and ref" {
-	util.extract_data_from_input 'gitlab.com/eankeen/proj@v0.1.0'
+	util.extract_data_from_input 'gitlab.com/hyperupcall/proj@v0.1.0'
 
-	assert [ "$REPLY1" = 'https://gitlab.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'https://gitlab.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = 'v0.1.0' ]
 }
 
 @test "parses with package and domain with ssh" {
-	util.extract_data_from_input 'gitlab.com/eankeen/proj' 'yes'
+	util.extract_data_from_input 'gitlab.com/hyperupcall/proj' 'yes'
 
-	assert [ "$REPLY1" = 'git@gitlab.com:eankeen/proj' ]
+	assert [ "$REPLY1" = 'git@gitlab.com:hyperupcall/proj' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with package and domain and ref with ssh" {
-	util.extract_data_from_input 'gitlab.com/eankeen/proj@v0.1.0' 'yes'
+	util.extract_data_from_input 'gitlab.com/hyperupcall/proj@v0.1.0' 'yes'
 
-	assert [ "$REPLY1" = 'git@gitlab.com:eankeen/proj' ]
+	assert [ "$REPLY1" = 'git@gitlab.com:hyperupcall/proj' ]
 	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = 'v0.1.0' ]
 }
 
 @test "parses with package" {
-	util.extract_data_from_input 'eankeen/proj'
+	util.extract_data_from_input 'hyperupcall/proj'
 
-	assert [ "$REPLY1" = 'https://github.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'https://github.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'github.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with package and ref" {
-	util.extract_data_from_input 'eankeen/proj@v0.2.0'
+	util.extract_data_from_input 'hyperupcall/proj@v0.2.0'
 
-	assert [ "$REPLY1" = 'https://github.com/eankeen/proj.git' ]
+	assert [ "$REPLY1" = 'https://github.com/hyperupcall/proj.git' ]
 	assert [ "$REPLY2" = 'github.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = 'v0.2.0' ]
 }
 
 @test "parses with package with ssh" {
-	util.extract_data_from_input 'eankeen/proj' 'yes'
+	util.extract_data_from_input 'hyperupcall/proj' 'yes'
 
-	assert [ "$REPLY1" = 'git@github.com:eankeen/proj' ]
+	assert [ "$REPLY1" = 'git@github.com:hyperupcall/proj' ]
 	assert [ "$REPLY2" = 'github.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = '' ]
 }
 
 @test "parses with package with ssh and ref" {
-	util.extract_data_from_input 'eankeen/proj@v0.2.0' 'yes'
+	util.extract_data_from_input 'hyperupcall/proj@v0.2.0' 'yes'
 
-	assert [ "$REPLY1" = 'git@github.com:eankeen/proj' ]
+	assert [ "$REPLY1" = 'git@github.com:hyperupcall/proj' ]
 	assert [ "$REPLY2" = 'github.com' ]
-	assert [ "$REPLY3" = 'eankeen/proj' ]
+	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = 'v0.2.0' ]
 }
 

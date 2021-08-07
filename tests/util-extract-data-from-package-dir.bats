@@ -3,18 +3,18 @@
 load 'util/init.sh'
 
 @test "directory with GitHub site" {
-	util.extract_data_from_package_dir "cellar/packages/github.com/eankeen/bash-args"
+	util.extract_data_from_package_dir "cellar/packages/github.com/hyperupcall/bash-args"
 
 	assert [ "$REPLY1" = 'github.com' ]
-	assert [ "$REPLY2" = 'eankeen' ]
+	assert [ "$REPLY2" = 'hyperupcall' ]
 	assert [ "$REPLY3" = 'bash-args' ]
 }
 
 @test "directory with GitLab site" {
-	util.extract_data_from_package_dir "cellar/packages/gitlab.com/eankeen/bash-args"
+	util.extract_data_from_package_dir "cellar/packages/gitlab.com/hyperupcall/bash-args"
 
 	assert [ "$REPLY1" = 'gitlab.com' ]
-	assert [ "$REPLY2" = 'eankeen' ]
+	assert [ "$REPLY2" = 'hyperupcall' ]
 	assert [ "$REPLY3" = 'bash-args' ]
 }
 
