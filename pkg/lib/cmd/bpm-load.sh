@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ "${BASH_SOURCE[0]}" != "${0}" && $# -ne 0 ]]; then
-	printf '%s\n' "bpm-load: Error: Incorrect usage. See documentation"
-	return 1
-fi
-
 # @description Source Bash packages to initialize any functions
 # that they may want to provide in the global scope
 # @exitcode 4 Unexpected internal error
