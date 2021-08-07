@@ -29,6 +29,14 @@ echo_bpm_package_path_posix() {
 	EOF
 }
 
+echo_bpm_source_bpm_load() {
+	cat <<-"EOF"
+	# bpm-load
+	source 'bpm-load'
+
+	EOF
+}
+
 # For each shell, items are printed in order
 # - Setting bpm variables
 # - Sourcing bpm completion
@@ -86,6 +94,7 @@ do-init() {
 
 		EOF
 		echo_bpm_include_posix
+		echo_bpm_source_bpm_load
 
 		echo_bpm_package_path_posix
 		cat <<-"EOF"
@@ -107,6 +116,7 @@ do-init() {
 		EOF
 
 		echo_bpm_include_posix
+		echo_bpm_source_bpm_load
 
 		echo_bpm_package_path_posix
 		cat <<-"EOF"

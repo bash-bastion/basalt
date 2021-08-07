@@ -20,7 +20,26 @@ load './util/init.sh'
 	assert test_util.is_exported 'BPM_CELLAR'
 }
 
-@test "errors if shell is not available" {
+@test "sources bpm-load for Bash" {
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+
+	eval "$(do-init bash)"
+
+	assert_success
+	assert [ "$(type -t bpm-load)" = 'function' ]
+}
+
+
+@test "sources bpm-load for Zsh" {
+	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+
+	eval "$(do-init zsh)"
+
+	assert_success
+	assert [ "$(type -t bpm-load)" = 'function' ]
+}
+
+@test "fails if shell is not available" {
 	run do-init fakesh
 
 	assert_failure
