@@ -13,10 +13,16 @@ fi
 # @exitcode 1 Miscellaneous errors
 bpm-load() {
 	local __bpm_flag_global='no'
+	local __bpm_flag_dry='no'
+
 	for arg; do
 		case "$arg" in
 			--global|-g)
 				__bpm_flag_global='yes'
+				shift
+				;;
+			--dry)
+				__bpm_flag_dry='yes'
 				shift
 				;;
 		esac
@@ -88,13 +94,20 @@ bpm-load() {
 			__bpm_bpm_load_restore_options
 			return 3
 		elif [ -e "$__bpm_full_path" ]; then
-			# Ensure the error can be properly handled at the callsite, and not
-			# bail here if errexit is set
-			if ! source "$__bpm_full_path"; then
-				return 2
+			if [ "$__bpm_flag_dry" = yes ]; then
+				printf '%s\n' "bpm-load: Would source file '$__bpm_full_path'"
+				__bpm_bpm_load_restore_options
+				return
+			else
+				# Ensure the error can be properly handled at the callsite, and not
+				# bail here if errexit is set
+				if ! source "$__bpm_full_path"; then
+					__bpm_bpm_load_restore_options
+					return 2
+				fi
 			fi
 		else
-			printf '%s\n' "bpm-load: Error: '$__bpm_full_path' does not exist"
+			printf '%s\n' "bpm-load: Error: File '$__bpm_full_path' does not exist"
 			__bpm_bpm_load_restore_options
 			return 3
 		fi
@@ -107,10 +120,17 @@ bpm-load() {
 			if [ -f "$__bpm_full_path" ]; then
 				__bpm_file_was_sourced='yes'
 
-				# Ensure the error can be properly handled at the callsite, and not
-				# bail here if errexit is set
-				if ! source "$__bpm_full_path"; then
-					return 2
+				if [ "$__bpm_flag_dry" = yes ]; then
+					printf '%s\n' "bpm-load: Would source file '$__bpm_full_path'"
+					__bpm_bpm_load_restore_options
+					return
+				else
+					# Ensure the error can be properly handled at the callsite, and not
+					# bail here if errexit is set
+					if ! source "$__bpm_full_path"; then
+						__bpm_bpm_load_restore_options
+						return 2
+					fi
 				fi
 			fi
 		done

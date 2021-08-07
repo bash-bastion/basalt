@@ -70,7 +70,7 @@ bash: z.sh: command not found
 
 But it doesn't work - this is standard behavior. When looking for binaries, bpm _does_ look at the root directory, but only for shell scripts that are marked as _executable_ (`chmod +x z.sh`)
 
-The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `package-path` command exists:
+The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `bpm-load` command exists:
 
 ```sh
 $ bpm --global package-path rupa/z
