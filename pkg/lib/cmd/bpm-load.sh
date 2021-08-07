@@ -150,7 +150,6 @@ bpm-load() {
 		for __bpm_file in 'load.bash'; do
 			local __bpm_full_path="$__bpm_cellar/packages/$__bpm_site/$__bpm_package/$__bpm_file"
 
-			echo "$__bpm_full_path"
 			if [ -f "$__bpm_full_path" ]; then
 				__bpm_file_was_sourced='yes'
 
