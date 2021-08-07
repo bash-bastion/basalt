@@ -25,6 +25,32 @@ bpm-load() {
 				__bpm_flag_dry='yes'
 				shift
 				;;
+			--help|-h)
+				cat <<-"EOF"
+				bpm-load
+
+				Usage:
+				  bpm-load <flags> <package> [file]
+
+				Flags:
+				  --global
+				    Use packages installed globally, rather than local packages
+
+				  --dry
+				    Only print what would have been sourced
+
+				  --help
+				    Print help menu
+
+				Example:
+				  bpm-load --global 'github.com/rupa/z' 'z.sh'
+				EOF
+				return
+				;;
+			-*)
+				printf '%s\n' "bpm-load: Error: Flag '$arg' not recognized"
+				return 1
+				;;
 		esac
 	done
 
@@ -79,10 +105,17 @@ bpm-load() {
 		__bpm_cellar="${BPM_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm/cellar"}"
 	else
 		if ! __bpm_cellar="$(util.get_project_root_dir)/bpm_packages"; then
-			printf '%s\n' "bpm-load: Error: Unexpected error calling function 'util.get_project_root_dir' with PWD '$PWD'"
+			printf '%s\n' "bpm-load: Error: Unexpected error calling function 'util.get_project_root_dir' with \$PWD '$PWD'"
 			__bpm_bpm_load_restore_options
 			return 4
 		fi
+	fi
+
+	# Ensure package is actually installed
+	if [ ! -d "$__bpm_cellar/packages/$__bpm_site/$__bpm_package" ]; then
+		printf '%s\n' "bpm-load: Error: Package '$__bpm_site/$__bpm_package' is not installed. Does the '--global' flag apply?"
+		__bpm_bpm_load_restore_options
+		return 3
 	fi
 
 	# Source file, behavior depending on whether it was specifed
@@ -117,6 +150,7 @@ bpm-load() {
 		for __bpm_file in 'load.bash'; do
 			local __bpm_full_path="$__bpm_cellar/packages/$__bpm_site/$__bpm_package/$__bpm_file"
 
+			echo "$__bpm_full_path"
 			if [ -f "$__bpm_full_path" ]; then
 				__bpm_file_was_sourced='yes'
 
@@ -136,7 +170,7 @@ bpm-load() {
 		done
 
 		if [ "$__bpm_file_was_sourced" = 'no' ]; then
-			printf '%s\n' "bpm-load: Error: Could not automatically find package file to source"
+			printf '%s\n' "bpm-load: Error: Could not automatically find package file to source. Did you mean to pass the file to source as the second argument?"
 			__bpm_bpm_load_restore_options
 			return 3
 		fi
@@ -159,4 +193,10 @@ __bpm_bpm_load_restore_options() {
 	else
 		shopt -u extglob
 	fi
+}
+
+# @description Internal functions might call 'die', so this prevents 'bash: die: command not found' errors,
+# but still allows the error be exposed at the callsite
+die() {
+	return 1
 }

@@ -60,6 +60,8 @@ Why not use `bpkg` or `Basher`? Because `hyperupcall/bpm`...
 
 I forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me, compared to `bpkg`
 
+Prior art
+
 | Software        | Deps | Versions | Locations          | Completions |
 |---------------- |------|----------|--------------------| ----------- |
 | hyperupcall/bpm | Yes  | Yes      | Global, User, Repo | Yes         |
@@ -67,8 +69,17 @@ I forked Basher because it had an excellent test suite and its behavior for inst
 | [bpkg]          | Yes  | Yes      | Global, User, Repo | Yes         |
 | [bpm-rocks/bpm] | Yes  | No       | Global, User, Repo | No          |
 | [Themis]        | Yes  | Yes      | Global, User, Repo | No          |
-
+| [xsh-lib/core]  | ?    | ?        |                    |             |
+| [shpkg]         |      |          |                    |             |
+| [jean]          |      |          |                    |             |
+| [sparrow]       |      |          |                    |             |
+| [tarp]          |      |          |                    |             |
 [basher]: https://github.com/basherpm/basher
 [bpkg]: https://github.com/bpkg/bpkg
 [bpm-rocks/bpm]: https://github.com/bpm-rocks/bpm/
 [Themis]: https://github.com/ByCh4n-Group/themis
+[xsh]: https://github.com/alexzhangs/xsh
+[shpkg]: https://github.com/shpkg/shpkg
+[jean]: https://github.com/ziyaddin/jean
+[sparrow]: https://github.com/melezhik/sparrow
+[tarp]: https://code.google.com/archive/p/tarp-package-manager/

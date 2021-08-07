@@ -73,14 +73,15 @@ But it doesn't work - this is standard behavior. When looking for binaries, bpm 
 The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `bpm-load` command exists:
 
 ```sh
-$ bpm --global package-path rupa/z
-/home/username/bpm/cellar/packages/rupa/z
+$ bpm-load --global --dry rupa/z z.sh
+bpm-load: Would source file '/home/edwin/data/bpm/cellar/packages/github.com/rupa/z/z.sh'
 ```
 
-Now, use the `package-path` to source `z.sh`. Note that `z.sh` only supports either Bash or Zsh, so you need to currently be in one of those shells for this to work
+Now, use the `bpm-load` to source `z.sh`. Note that `z.sh` only supports either Bash or Zsh, so you need to currently be in one of those shells for this to work. We `source 'bpm-source` because the PATH contains a file called `bpm-source`, which contains the `bpm-source` function that we use
 
 ```sh
-$ source "$(bpm --global package-path rupa/z)/z.sh"
+$ source 'bpm-source'
+$ bpm-source --global 'rupa/z' 'z.sh'
 $ z
 common:    /tmp/tmp.MBF063fdlK/completions
 29988      /tmp/tmp.MBF063fdlK/completions
@@ -114,6 +115,6 @@ $ bpm --global remove \
 $ bpm --global list
 ```
 
-Note that we specified the SSH URL and the HTTPS URL when removing. You can specify the package this way with all commands, including the `add`, `package-path`, and `upgrade` commands
+Note that we specified the SSH URL and the HTTPS URL when removing. You can specify the package this way with all commands, including the `add`, `remove`, and `upgrade` commands
 
 And you are done! To learn more, see [Recepies](./.recepies.md), [Reference](./reference.md), or [Tips](./tips.md)
