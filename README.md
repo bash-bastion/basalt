@@ -69,11 +69,12 @@ Prior art
 | [bpkg]          | Yes  | Yes      | Global, User, Repo | Yes         |
 | [bpm-rocks/bpm] | Yes  | No       | Global, User, Repo | No          |
 | [Themis]        | Yes  | Yes      | Global, User, Repo | No          |
-| [xsh-lib/core]  | ?    | ?        |                    |             |
+| [xsh]  | ?    | ?        |                    |             |
 | [shpkg]         |      |          |                    |             |
 | [jean]          |      |          |                    |             |
 | [sparrow]       |      |          |                    |             |
 | [tarp]          |      |          |                    |             |
+
 [basher]: https://github.com/basherpm/basher
 [bpkg]: https://github.com/bpkg/bpkg
 [bpm-rocks/bpm]: https://github.com/bpm-rocks/bpm/
