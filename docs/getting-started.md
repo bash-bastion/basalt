@@ -73,12 +73,9 @@ But it doesn't work - this is standard behavior. When looking for binaries, bpm 
 The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `bpm-load` command exists
 
 ```sh
-$ source 'bpm-load'
 $ bpm-load --global --dry rupa/z z.sh
 bpm-load: Would source file '/home/edwin/data/bpm/cellar/packages/github.com/rupa/z/z.sh'
 ```
-
-Note that we `source 'bpm-load` beforehand because the PATH contains a file called `bpm-load`, which contains the `bpm-load` function that we use
 
 Now, use the `bpm-load` to source `z.sh`. Note that `z.sh` only supports either Bash or Zsh, so you need to currently be in one of those shells for this to work.
 

@@ -14,7 +14,6 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	source bpm-load
 	run bpm-load --global "$pkg"
 
 	assert_success
@@ -35,7 +34,6 @@ load 'util/init.sh'
 	echo "dependencies = ['file://$BPM_ORIGIN_DIR/$pkg']" > 'bpm.toml'
 	BPM_MODE='local' do-add --all
 
-	source bpm-load
 	BPM_MODE='local' run bpm-load "$pkg"
 
 	assert_success
@@ -54,7 +52,6 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	source bpm-load
 	run bpm-load --global --dry "$pkg"
 
 	assert_success
@@ -73,7 +70,6 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	source bpm-load
 	run bpm-load --global "$pkg" 'file.bash'
 
 	assert_success
@@ -111,7 +107,6 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	source bpm-load
 	run bpm-load
 
 	assert_failure
