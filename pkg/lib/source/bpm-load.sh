@@ -190,7 +190,7 @@ __bpm_bpm_load_restore_options() {
 }
 
 # @description Internal functions might call 'die', so this prevents 'bash: die: command not found' errors,
-# but still allows the error be exposed at the callsite
+# but still allows the error to be exposed at the callsite
 die() {
 	return 1
 }
