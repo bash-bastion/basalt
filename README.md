@@ -69,11 +69,12 @@ Prior art
 | [bpkg]          | Yes  | Yes      | Global, User, Repo | Yes         |
 | [bpm-rocks/bpm] | Yes  | No       | Global, User, Repo | No          |
 | [Themis]        | Yes  | Yes      | Global, User, Repo | No          |
-| [xsh]  | ?    | ?        |                    |             |
+| [xsh]           | ?    | ?        |                    |             |
 | [shpkg]         |      |          |                    |             |
 | [jean]          |      |          |                    |             |
 | [sparrow]       |      |          |                    |             |
 | [tarp]          |      |          |                    |             |
+| [shundle]       |      |          |                    |             |
 
 [basher]: https://github.com/basherpm/basher
 [bpkg]: https://github.com/bpkg/bpkg
@@ -84,3 +85,4 @@ Prior art
 [jean]: https://github.com/ziyaddin/jean
 [sparrow]: https://github.com/melezhik/sparrow
 [tarp]: https://code.google.com/archive/p/tarp-package-manager/
+[shundle]: https://github.com/javier-lopez/shundle

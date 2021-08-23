@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 
-cloneDir="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
+clone_dir="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"
 
-if [ -d "$cloneDir" ]; then
-	printf "%s" "Error: bpm already installed to '$cloneDir'"
+if [ -d "$clone_dir" ]; then
+	printf '%s\n' "Error: bpm already installed to '$clone_dir'"
 	exit 1
 fi
 
-git clone https://github.com/hyperupcall/bpm "$cloneDir"
+git clone 'https://github.com/hyperupcall/bpm' "$clone_dir"
 
 bashrc="$HOME/.bashrc"
 if [ -f "$bashrc" ]; then
@@ -18,7 +18,7 @@ if [ -f "$bashrc" ]; then
 	EOF
 fi
 
-zshrc="${ZDOTDIR:-$HOME/.zshrc}"
+zshrc="${ZDOTDIR:-$HOME}/.zshrc"
 if [ -f "$zshrc" ]; then
 	cat >> "$zshrc" <<-"EOF"
 	# bpm
