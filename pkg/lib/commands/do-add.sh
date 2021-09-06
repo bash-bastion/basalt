@@ -93,7 +93,8 @@ do-actual-add() {
 			log.info "Skipping '$site/$package' as it's already present"
 			return
 		else
-			die "Package '$site/$package' is already present"
+			log.info "Skipping '$site/$package' as it's already present"
+			return
 		fi
 	else
 		log.info "Adding '$repoSpec'"
