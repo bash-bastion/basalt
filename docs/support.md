@@ -1,5 +1,7 @@
 # Support
 
+This is currently a proposed set of supported platforms. CI currently tests different bash versions on the same Ubuntu 20.10 platform
+
 Ubuntu
 ✔️ Standard Support
 ❌ ESM
