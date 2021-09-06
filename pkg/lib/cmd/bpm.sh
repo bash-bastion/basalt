@@ -4,7 +4,7 @@ set -ETeo pipefail
 shopt -s nullglob extglob
 
 main() {
-	for f in "$PROGRAM_LIB_DIR"/{commands,util}/?*.sh; do
+	for f in "$PROGRAM_LIB_DIR"/{commands,commands-global,plumbing,util}/?*.sh; do
 		source "$f"
 	done
 

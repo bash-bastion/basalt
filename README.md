@@ -2,6 +2,8 @@
 
 `bpm` is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
 
+STATUS: BETA
+
 ---
 
 `bpm` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
