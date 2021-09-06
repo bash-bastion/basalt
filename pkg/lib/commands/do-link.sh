@@ -47,7 +47,7 @@ do-link() {
 		mkdir -p "$BPM_PACKAGES_PATH/$user"
 		ln -s "$dir" "$BPM_PACKAGES_PATH/$package"
 
-		log.info "Linking '$dir'"
+		log.info "Symlinking '$dir'"
 		if [ "$flag_no_deps" = 'yes' ]; then
 			do-plumbing-add-deps "$package"
 		fi

@@ -1,5 +1,7 @@
 # Installation
 
+Note: `bpm` is currently BETA quality
+
 ## Prerequisites
 
 - `bash >= 4.3`

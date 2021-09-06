@@ -32,7 +32,7 @@ Info: Operating in context of local bpm.toml
 Info: Adding all dependencies
 Info: Adding 'hyperupcall/bash-args'
   -> Cloning Git repository
-  -> Linking bin files
+  -> Symlinking bin files
 ```
 
 It now shows up in the `list` subcommand

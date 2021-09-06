@@ -100,7 +100,7 @@ load 'util/init.sh'
 	run do-link "$srcDir"
 
 	assert_success
-	assert_line -n 0 -p "Linking '$srcDir'"
+	assert_line -n 0 -p "Symlinking '$srcDir'"
 	assert_line -n 1 "do-plumbing-add-deps local/$dir"
 	assert_line -n 2 "do-plumbing-link-bins local/$dir"
 	assert_line -n 3 "do-plumbing-link-completions local/$dir"
@@ -126,12 +126,12 @@ load 'util/init.sh'
 	run do-link "$srcDir1" "$srcDir2"
 
 	assert_success
-	assert_line -n 0 -p "Linking '$srcDir1'"
+	assert_line -n 0 -p "Symlinking '$srcDir1'"
 	assert_line -n 1 "do-plumbing-add-deps local/$dir1"
 	assert_line -n 2 "do-plumbing-link-bins local/$dir1"
 	assert_line -n 3 "do-plumbing-link-completions local/$dir1"
 	assert_line -n 4 "do-plumbing-link-man local/$dir1"
-	assert_line -n 5 -p "Linking '$srcDir2'"
+	assert_line -n 5 -p "Symlinking '$srcDir2'"
 	assert_line -n 6 "do-plumbing-add-deps local/$dir2"
 	assert_line -n 7 "do-plumbing-link-bins local/$dir2"
 	assert_line -n 8 "do-plumbing-link-completions local/$dir2"
@@ -155,7 +155,7 @@ load 'util/init.sh'
 	run do-link --no-deps "$srcDir"
 
 	assert_success
-	assert_line -n 0 -p "Linking '$srcDir'"
+	assert_line -n 0 -p "Symlinking '$srcDir'"
 	assert_line -n 1 "do-plumbing-link-bins local/$dir"
 	assert_line -n 2 "do-plumbing-link-completions local/$dir"
 	assert_line -n 3 "do-plumbing-link-man local/$dir"

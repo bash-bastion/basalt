@@ -12,7 +12,7 @@ For this demonstration, we're going to install and use [bash2048](JosefZIla/bash
 $ bpm --global add github.com/JosefZIla/bash2048
 Info: Adding 'github.com/JosefZIla/bash2048'
   -> Cloning Git repository
-  -> Linking bin files
+  -> Symlinking bin files
 ```
 
 This does the following
@@ -45,7 +45,7 @@ For the second demonstration, we're going to install [z](https://github.com/rupa
 $ bpm --global add rupa/z
 Info: Adding 'rupa/z'
   -> Cloning Git repository
-  -> Linking man files
+  -> Symlinking man files
 ```
 
 This does the following
