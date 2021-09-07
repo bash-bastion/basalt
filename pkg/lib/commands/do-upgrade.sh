@@ -107,7 +107,7 @@ do_actual_upgrade() {
 	local id="$1"
 
 	log.info "Upgrading '$id'"
-	do-plumbing-remove-deps "$id"
+	plumbing.remove-dependencies "$id"
 	plumbing.unsymlink-bins "$id"
 	plumbing.unsymlink-completions "$id"
 	plumbing.unsymlink-mans "$id"
@@ -125,7 +125,7 @@ do_actual_upgrade() {
 		printf "%s\n" "$git_output"
 	fi
 
-	do-plumbing-add-deps "$id"
+	plumbing.add-dependencies "$id"
 	plumbing.symlink-bins "$id"
 	plumbing.symlink-completions "$id"
 	plumbing.symlink-mans "$id"

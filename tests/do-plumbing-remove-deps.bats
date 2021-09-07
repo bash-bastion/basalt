@@ -13,7 +13,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-remove-deps "$site/$pkg"
+	run plumbing.remove-dependencies "$site/$pkg"
 
 	assert_success
 	assert_line -p "Removing '$site/user/dep1'"
@@ -31,7 +31,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-remove-deps "$site/$pkg"
+	run plumbing.remove-dependencies "$site/$pkg"
 
 	assert_success
 	assert_line -p "Removing '$site/user/dep1'"

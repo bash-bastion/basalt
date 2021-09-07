@@ -13,7 +13,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-add-deps "$site/$pkg"
+	run plumbing.add-dependencies "$site/$pkg"
 
 	assert_success
 	assert_output ''
@@ -30,7 +30,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-add-deps "$site/$pkg"
+	run plumbing.add-dependencies "$site/$pkg"
 
 	assert_success
 	assert_line "do-actual-add user/dep1"
@@ -48,7 +48,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-add-deps "$site/$pkg"
+	run plumbing.add-dependencies "$site/$pkg"
 
 	assert_success
 	assert_line "do-actual-add user/dep1"
@@ -69,7 +69,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-add-deps "$site/$pkg"
+	run plumbing.add-dependencies "$site/$pkg"
 
 	assert_success
 	refute_line "do-actual-add user/bad_dep"

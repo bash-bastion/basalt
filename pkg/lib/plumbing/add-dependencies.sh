@@ -6,7 +6,7 @@
 # Usage: bpm _deps <package>
 # Example: DEPS=username/repo1:otheruser/repo2
 
-do-plumbing-add-deps() {
+plumbing.add-dependencies() {
 	local id="$1"
 	ensure.non_zero 'id' "$id"
 	ensure.package_exists "$id"

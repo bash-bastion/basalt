@@ -49,7 +49,7 @@ do-link() {
 
 		log.info "Symlinking '$dir'"
 		if [ "$flag_no_deps" = 'yes' ]; then
-			do-plumbing-add-deps "$package"
+			plumbing.add-dependencies "$package"
 		fi
 		plumbing.symlink-bins "$package"
 		plumbing.symlink-completions "$package"

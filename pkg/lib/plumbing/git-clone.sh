@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-plumbing-clone() {
+plumbing.git-clone() {
 	local uri="$1"
 	local id="$2"
 	local ref="$3"

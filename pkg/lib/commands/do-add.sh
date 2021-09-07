@@ -100,8 +100,8 @@ do-actual-add() {
 		log.info "Adding '$repoSpec'"
 	fi
 
-	do-plumbing-clone "$uri" "$site/$package" "$ref" "$flag_branch"
-	do-plumbing-add-deps "$site/$package"
+	plumbing.git-clone "$uri" "$site/$package" "$ref" "$flag_branch"
+	plumbing.add-dependencies "$site/$package"
 	plumbing.symlink-bins "$site/$package"
 	plumbing.symlink-completions "$site/$package"
 	plumbing.symlink-mans "$site/$package"

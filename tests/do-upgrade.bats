@@ -125,7 +125,7 @@ load 'util/init.sh'
 @test "fails if user tries to upgrade a 'link'ed package" {
 	local pkg='theta'
 
-	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command plumbing.add-dependencies
 	test_util.stub_command plumbing.symlink-bins
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans

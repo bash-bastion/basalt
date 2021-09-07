@@ -95,7 +95,7 @@ $site/username2/p2
 	local site='github.com'
 	local pkg='somepath/project2'
 
-	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command plumbing.add-dependencies
 	test_util.stub_command plumbing.symlink-bins
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
@@ -138,7 +138,7 @@ $site/username2/p2
 	local site='github.com'
 	local dir='somepath/project2'
 
-	test_util.stub_command do-plumbing-add-deps
+	test_util.stub_command plumbing.add-dependencies
 	test_util.stub_command plumbing.symlink-bins
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans

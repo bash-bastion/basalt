@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-plumbing-remove-deps() {
+plumbing.remove-dependencies() {
 	local package="$1"
 	ensure.non_zero 'package' "$package"
 	ensure.package_exists "$package"
@@ -10,7 +10,7 @@ do-plumbing-remove-deps() {
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
 	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
 
-	if [ -f "$bpm_toml_file" ]; then
+	if [ -f "$bpm_toml_file" ]; theng
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			deps=("${REPLIES[@]}")
 		fi
