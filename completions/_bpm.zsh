@@ -7,7 +7,6 @@ _1st_arguments=(
 	'init:Print shell initialization code'
 	'link:Link a local package'
 	'list:List packages'
-	'package-path:Print the full path of a package'
 	'prune:Prune all packages'
 	'remove:Uninstall a package'
 	'upgrade:[TASK] Upgrade a package'
@@ -53,19 +52,14 @@ case $state in
 			local -a subcommandOptions=(--outdated)
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
-		(package-path)
-			local subcommandOptions=()
-			subcommandOptions=("${(@f)$(bpm complete package-path)}")
-			_describe -t commands "gem subcommand" subcommandOptions
-			;;
 		(remove)
 			local -a subcommandOptions=(--all --force)
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(upgrade)
 			local subcommandOptions=()
-			subcommandOptions=("${(@f)$(bpm complete package-path)}")
-			# TODO: Check if bpm complete package-path was successfull?
+			subcommandOptions=("${(@f)$(bpm complete upgrade)}")
+			# TODO: Check if bpm complete upgrade was successfull?
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 	esac

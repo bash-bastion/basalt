@@ -75,16 +75,12 @@ _bpm() {
 				subcommandOptions=(--outdated)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
-			package-path)
-				readarray -t subcommandOptions < <(bpm complete package-path)
-				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
-				;;
 			remove)
 				subcommandOptions=(--all --force)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			upgrade)
-				readarray -t subcommandOptions < <(bpm complete package-path)
+				readarray -t subcommandOptions < <(bpm complete upgrade)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 		esac

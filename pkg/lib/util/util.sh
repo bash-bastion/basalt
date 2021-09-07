@@ -325,9 +325,6 @@ Subcommands:
   list [--fetch] [--format=<simple>] [package...]
     List installed packages
 
-  package-path <package>
-    Outputs the path for a package
-
 Examples:
   bpm add tj/git-extras
   bpm add github.com/tj/git-extras

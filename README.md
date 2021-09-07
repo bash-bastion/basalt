@@ -2,7 +2,7 @@
 
 `bpm` is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
 
-STATUS: BETA
+STATUS: BETA (expect breaking changes until a post-beta release)
 
 ---
 

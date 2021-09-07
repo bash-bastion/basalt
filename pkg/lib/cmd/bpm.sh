@@ -74,10 +74,6 @@ main() {
 		shift
 		do-list "$@"
 		;;
-	package-path)
-		shift
-		do-package-path "$@"
-		;;
 	prune)
 		shift
 		do-prune "$@"
