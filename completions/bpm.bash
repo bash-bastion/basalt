@@ -1,5 +1,5 @@
 _bpm() {
-	local -ra listPreSubcommandOptions=(--help --version --global)
+	local -ra listPreSubcommandOptions=(--help --version)
 	local -ra listSubcommands=(add echo init link list package-path prune remove upgrade)
 
 	local -r currentWord="${COMP_WORDS[COMP_CWORD]}"

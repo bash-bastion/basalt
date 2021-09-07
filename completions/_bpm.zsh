@@ -11,7 +11,6 @@ _1st_arguments=(
 	'remove:Uninstall a package'
 	'upgrade:[TASK] Upgrade a package'
 	'--version:Print version'
-	'--global:Switch to global dependency management'
 	'--help:Show help'
 )
 

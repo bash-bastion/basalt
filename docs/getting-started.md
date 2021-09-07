@@ -9,7 +9,7 @@ This page assumes you have completed the [Installation](./installation.md) prope
 For this demonstration, we're going to install and use [bash2048](JosefZIla/bash2048). Note that this will still work, even if Zsh or Fish is your default shell
 
 ```sh
-$ bpm --global add github.com/JosefZIla/bash2048
+$ bpm global add github.com/JosefZIla/bash2048
 Info: Adding 'github.com/JosefZIla/bash2048'
   -> Cloning Git repository
   -> Symlinking bin files
@@ -42,7 +42,7 @@ Bash 2048 v1.1 (https://github.com/mydzor/bash2048) pieces=6 target=2048 score=6
 For the second demonstration, we're going to install [z](https://github.com/rupa/z). If you already have it installed, don't worry - it will be installed to a different location and you can remove it separately
 
 ```sh
-$ bpm --global add rupa/z
+$ bpm global add rupa/z
 Info: Adding 'rupa/z'
   -> Cloning Git repository
   -> Symlinking man files
@@ -73,14 +73,14 @@ But it doesn't work - this is standard behavior. When looking for binaries, bpm 
 The authors of `z` did not mark the file as executable because they did not intend for you to execute the file - you are supposed to `source` it. This is why the `bpm-load` command exists
 
 ```sh
-$ bpm-load --global --dry rupa/z z.sh
+$ bpm-load global --dry rupa/z z.sh
 bpm-load: Would source file '/home/edwin/data/bpm/cellar/packages/github.com/rupa/z/z.sh'
 ```
 
 Now, use the `bpm-load` to source `z.sh`. Note that `z.sh` only supports either Bash or Zsh, so you need to currently be in one of those shells for this to work.
 
 ```sh
-$ bpm-load --global 'rupa/z' 'z.sh'
+$ bpm-load global 'rupa/z' 'z.sh'
 $ z
 common:    /tmp/tmp.MBF063fdlK/completions
 29988      /tmp/tmp.MBF063fdlK/completions
@@ -94,7 +94,7 @@ If you want to do this persistantly, just add this to your `~/.bashrc` (or `~/.z
 
 If you completed both previous steps, two packages should be installed
 ```sh
-$ bpm --global list
+$ bpm global list
 github.com/JosefZIla/bash2048
   Branch: master
   Revision: 37da521
@@ -108,10 +108,10 @@ github.com/rupa/z
 Remove them with `remove`
 
 ```sh
-$ bpm --global remove \
+$ bpm global remove \
   git@github.com:JosefZIla/bash2048 \
   https://github.com/rupa/z
-$ bpm --global list
+$ bpm global list
 ```
 
 Note that we specified the SSH URL and the HTTPS URL when removing. You can specify the package this way with all commands, including the `add`, `remove`, and `upgrade` commands

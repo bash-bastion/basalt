@@ -305,10 +305,12 @@ util.init_command() {
 util.show_help() {
 	cat <<"EOF"
 Usage:
-  bpm [--help|--version|--global] <command> [args...]
+  bpm [--help|--version]
+  bpm <subcommand> [args...]
+  bpm global <subcommand> [args...]
 
-Subcommands:
-  init <shell>
+Subcommands (local):
+  init
     Configure shell environment for bpm
 
   add [--all] [--ssh] [--branch=<name>] [[site/]<package>[@ref]...]
@@ -330,7 +332,29 @@ Subcommands:
     force-removed
 
   list [--fetch] [--format=<simple>] [package...]
-    List installed packages
+    List installed packages or just the specified ones
+
+Subcommands (global):
+  init <shell>
+    Print shell variables and functions to be eval'd during shell initialization
+
+  add [--branch=<name>] [[site/]<package>[@ref]...]
+    Installs a package from GitHub (or a custom site)
+
+  upgrade <package>
+    Upgrades a package
+
+  remove [--force] <package>
+    Uninstalls a package
+
+  link <directory>
+    Installs a package from a local directory
+
+  prune
+    Removes broken symlinks
+
+  list [--fetch] [--format=<simple>] [package...]
+    List all installed packages or just the specified ones
 
 Examples:
   bpm add tj/git-extras

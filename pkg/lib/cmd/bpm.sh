@@ -8,7 +8,6 @@ main() {
 		source "$f"
 	done
 
-	BPM_MODE='local'
 	for arg; do
 		case "$arg" in
 		--help|-h)
@@ -21,11 +20,6 @@ main() {
 			EOF
 			exit
 			;;
-		--global|-g)
-			# shellcheck disable=SC2034
-			BPM_MODE='global'
-			shift
-			;;
 		-*)
 			die "Global flag '$arg' not recognized"
 			;;
@@ -35,45 +29,36 @@ main() {
 		esac
 	done
 
+	BPM_MODE='local'
 	case "$1" in
-	add)
-		shift
-		do-add "$@"
-		;;
-	complete)
-		shift
-		do-complete "$@"
-		;;
-	init)
-		shift
-		do-init "$@"
-		;;
-	link)
-		shift
-		do-link "$@"
-		;;
-	list)
-		shift
-		do-list "$@"
-		;;
-	prune)
-		shift
-		do-prune "$@"
-		;;
-	remove)
-		shift
-		do-remove "$@"
-		;;
-	upgrade)
-		shift
-		do-upgrade "$@"
-		;;
-	*)
-		if [ -n "$1" ]; then
-			log.error "Command '$1' not valid"
-		fi
-		util.show_help
-		;;
+		init) shift; do-init "$@" ;;
+		add) shift; do-add "$@" ;;
+		upgrade) shift; do-upgrade "$@" ;;
+		remove) shift; do-remove "$@" ;;
+		link) shift; do-link "$@" ;;
+		prune) shift; do-prune "$@" ;;
+		list) shift; do-list "$@" ;;
+		complete) shift; do-complete "$@" ;;
+		global)
+			shift
+
+			BPM_MODE='global'
+			case "$1" in
+				init) shift; do-init "$@" ;;
+				add) shift; do-add "$@" ;;
+				upgrade) shift; do-upgrade "$@" ;;
+				remove) shift; do-remove "$@" ;;
+				link) shift; do-link "$@" ;;
+				prune) shift; do-prune "$@" ;;
+				list) shift; do-list "$@" ;;
+			esac
+			;;
+		*)
+			if [ -n "$1" ]; then
+				log.error "Command '$1' not valid"
+			fi
+			util.show_help
+			;;
 	esac
 }
 

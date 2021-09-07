@@ -11,7 +11,7 @@ STATUS: BETA (expect breaking changes until a post-beta release)
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
 
 ```sh
-$ bpm --global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
+$ bpm global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 ```
 
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
