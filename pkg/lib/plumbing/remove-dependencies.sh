@@ -10,7 +10,7 @@ plumbing.remove-dependencies() {
 	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
 	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
 
-	if [ -f "$bpm_toml_file" ]; theng
+	if [ -f "$bpm_toml_file" ]; then
 		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
 			deps=("${REPLIES[@]}")
 		fi
