@@ -108,9 +108,9 @@ do_actual_upgrade() {
 
 	log.info "Upgrading '$id'"
 	do-plumbing-remove-deps "$id"
-	do-plumbing-unlink-bins "$id"
-	do-plumbing-unlink-completions "$id"
-	do-plumbing-unlink-man "$id"
+	plumbing.unsymlink-bins "$id"
+	plumbing.unsymlink-completions "$id"
+	plumbing.unsymlink-mans "$id"
 
 	printf '  -> %s\n' "Fetching repository updates and merging"
 	local git_output=
@@ -126,7 +126,7 @@ do_actual_upgrade() {
 	fi
 
 	do-plumbing-add-deps "$id"
-	do-plumbing-link-bins "$id"
-	do-plumbing-link-completions "$id"
-	do-plumbing-link-man "$id"
+	plumbing.symlink-bins "$id"
+	plumbing.symlink-completions "$id"
+	plumbing.symlink-mans "$id"
 }

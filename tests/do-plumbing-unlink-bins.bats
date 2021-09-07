@@ -11,7 +11,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 }
@@ -31,7 +31,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -53,7 +53,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -74,7 +74,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -95,7 +95,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -117,7 +117,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2" ]
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -141,7 +141,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -163,7 +163,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -193,7 +193,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
 
 
-	run do-plumbing-unlink-bins "$site/$pkg"
+	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]

@@ -14,7 +14,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-unlink-man "$site/$pkg"
+	run plumbing.unsymlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]
@@ -36,7 +36,7 @@ load 'util/init.sh'
 
 	assert [ -f "$BPM_INSTALL_MAN/man1/exec.1" ]
 
-	run do-plumbing-unlink-man "$site/$pkg"
+	run plumbing.unsymlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]

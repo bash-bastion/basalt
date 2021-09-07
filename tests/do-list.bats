@@ -96,9 +96,9 @@ $site/username2/p2
 	local pkg='somepath/project2'
 
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	test_util.create_package "$pkg"
 	do-link "$BPM_ORIGIN_DIR/$pkg"
@@ -139,9 +139,9 @@ $site/username2/p2
 	local dir='somepath/project2'
 
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	test_util.create_package "$dir"
 	test_util.mock_link "$dir" "$site/$dir"

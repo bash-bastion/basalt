@@ -15,7 +15,7 @@ load 'util/init.sh'
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
@@ -34,7 +34,7 @@ load 'util/init.sh'
 
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
@@ -54,7 +54,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp2.bash" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
@@ -75,7 +75,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp2.bash" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
@@ -97,7 +97,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp1.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_comp3.zsh" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp1.zsh" ]
@@ -119,7 +119,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp1.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_comp3.zsh" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp1.zsh" ]
@@ -140,7 +140,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_comp2.zsh" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp.zsh" ]
@@ -161,7 +161,7 @@ load 'util/init.sh'
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp.zsh" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_comp2.zsh" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_comp.zsh" ]
@@ -186,7 +186,7 @@ load 'util/init.sh'
 	assert [ ! -L "$BPM_INSTALL_COMPLETIONS/bash/c.bash" ]
 	assert [ -L "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]
 
-	run do-plumbing-unlink-completions "$site/$pkg"
+	run plumbing.unsymlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_COMPLETIONS/bash/comp.bash" ]

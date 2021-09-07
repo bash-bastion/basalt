@@ -11,7 +11,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_success
 }
@@ -30,7 +30,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$site/$pkg/a_dir/1man/exec.1" ]
@@ -51,7 +51,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$site/$pkg/a_dir/1man/exec.1" ]
@@ -69,7 +69,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$site/$pkg/man/exec.1" ]
@@ -87,7 +87,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$site/$pkg/man/1man/exec.1" ]
@@ -104,7 +104,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_MAN/man1/exec.1")" = "$BPM_PACKAGES_PATH/$site/$pkg/exec.1" ]
@@ -123,7 +123,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_MAN/man1/exec.1" ]
@@ -139,7 +139,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }
@@ -153,7 +153,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-man "$site/$pkg"
+	run plumbing.symlink-mans "$site/$pkg"
 
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }
@@ -173,8 +173,8 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
-	do-plumbing-link-man "$site/$pkg1"
-	run do-plumbing-link-man "$site/$pkg2"
+	plumbing.symlink-mans "$site/$pkg1"
+	run plumbing.symlink-mans "$site/$pkg2"
 
 	assert_line -p "Skipping 'exec.3' since an existing symlink with the same name already exists"
 }

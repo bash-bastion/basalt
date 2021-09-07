@@ -102,7 +102,7 @@ do-actual-add() {
 
 	do-plumbing-clone "$uri" "$site/$package" "$ref" "$flag_branch"
 	do-plumbing-add-deps "$site/$package"
-	do-plumbing-link-bins "$site/$package"
-	do-plumbing-link-completions "$site/$package"
-	do-plumbing-link-man "$site/$package"
+	plumbing.symlink-bins "$site/$package"
+	plumbing.symlink-completions "$site/$package"
+	plumbing.symlink-mans "$site/$package"
 }

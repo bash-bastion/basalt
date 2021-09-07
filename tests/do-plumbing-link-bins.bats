@@ -11,7 +11,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 }
@@ -28,7 +28,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/binn/exec1" ]
@@ -50,7 +50,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
@@ -70,7 +70,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_dir/exec1" ]
@@ -91,7 +91,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -110,7 +110,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
@@ -128,7 +128,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bins/exec1" ]
@@ -146,7 +146,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/exec1" ]
@@ -163,7 +163,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/exec3" ]
@@ -180,7 +180,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ ! -e "$BPM_INSTALL_BIN/directory1" ]
@@ -198,7 +198,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
@@ -217,7 +217,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
@@ -237,7 +237,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
@@ -257,7 +257,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
@@ -276,7 +276,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
@@ -295,7 +295,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
@@ -309,7 +309,7 @@ load 'util/init.sh'
 	test_util.create_package "$dir"
 	test_util.create_package "$dir2"
 
-	# implicit call to do-plumbing-link-bins
+	# implicit call to plumbing.symlink-bins
 	run do-link "$BPM_ORIGIN_DIR/$dir" "$BPM_ORIGIN_DIR/$dir2"
 
 	assert_success
@@ -329,7 +329,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_failure
 	assert_line -p "Specified directory 'dir' in package.sh; only files are valid"
@@ -344,7 +344,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_line -p "Executable file 'some_file' not found. Skipping"
 }
@@ -359,7 +359,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_failure
 	assert_line -p "Specified file 'file' in bpm.toml; only directories are valid"
@@ -374,7 +374,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-bins "$site/$pkg"
+	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }
@@ -396,8 +396,8 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
-	do-plumbing-link-bins "$site/$pkg1"
-	run do-plumbing-link-bins "$site/$pkg2"
+	plumbing.symlink-bins "$site/$pkg1"
+	run plumbing.symlink-bins "$site/$pkg2"
 
 	assert_line -p "Skipping 'file2.bash' since an existing symlink with the same name already exists"
 }

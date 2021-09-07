@@ -11,7 +11,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 }
@@ -30,7 +30,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/ff/comp.bash" ]
@@ -48,7 +48,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
@@ -65,7 +65,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_completions/comp.bash" ]
@@ -82,7 +82,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
@@ -101,7 +101,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.bash" ]
@@ -144,7 +144,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c1" ]
@@ -166,7 +166,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
@@ -183,7 +183,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
@@ -200,7 +200,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
@@ -218,7 +218,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/seven.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/seven" ]
@@ -241,7 +241,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/_exec" ]
@@ -258,7 +258,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/exec")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/exec" ]
@@ -275,7 +275,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/_exec.zsh" ]
@@ -292,7 +292,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/exec.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/exec.zsh" ]
@@ -347,7 +347,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/_c1.zsh" ]
@@ -365,7 +365,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
@@ -383,7 +383,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
@@ -400,7 +400,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_prog.zsh" ]
@@ -419,7 +419,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/comp.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_completions/comp.fish" ]
@@ -436,7 +436,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert_success [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prof.fish" ]
@@ -455,7 +455,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c1.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.fish" ]
@@ -492,7 +492,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prog.fish" ]
@@ -515,7 +515,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/prog.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/prog.fish" ]
@@ -536,7 +536,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_failure
 	assert_line -p "Specified directory 'dir' in package.sh; only files are valid"
@@ -554,7 +554,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_failure
 	assert_line -p "Specified directory 'dir' in package.sh; only files are valid"
@@ -570,7 +570,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert_line -p "Completion file 'some_file' not found. Skipping"
@@ -586,7 +586,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert_line -p "Completion file 'some_file' not found. Skipping"
@@ -601,7 +601,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
@@ -616,7 +616,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-plumbing-link-completions "$site/$pkg"
+	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
@@ -639,8 +639,8 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
-	do-plumbing-link-completions "$site/$pkg1"
-	run do-plumbing-link-completions "$site/$pkg2"
+	plumbing.symlink-completions "$site/$pkg1"
+	run plumbing.symlink-completions "$site/$pkg2"
 
 	assert_success
 	assert_line -p "Skipping 'file2-completion.bash' since an existing symlink with the same name already exists"
@@ -663,8 +663,8 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
-	do-plumbing-link-completions "$site/$pkg1"
-	run do-plumbing-link-completions "$site/$pkg2"
+	plumbing.symlink-completions "$site/$pkg1"
+	run plumbing.symlink-completions "$site/$pkg2"
 
 	assert_success
 	assert_line -p "Skipping 'file2-completion.zsh' since an existing symlink with the same name already exists"
@@ -687,8 +687,8 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
-	do-plumbing-link-completions "$site/$pkg1"
-	run do-plumbing-link-completions "$site/$pkg2"
+	plumbing.symlink-completions "$site/$pkg1"
+	run plumbing.symlink-completions "$site/$pkg2"
 
 	assert_success
 	assert_line -p "Skipping '_file2-completion.zsh' since an existing symlink with the same name already exists"
@@ -711,8 +711,8 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg2" "$site/$pkg2"
 
-	do-plumbing-link-completions "$site/$pkg1"
-	run do-plumbing-link-completions "$site/$pkg2"
+	plumbing.symlink-completions "$site/$pkg1"
+	run plumbing.symlink-completions "$site/$pkg2"
 
 	assert_success
 	assert_line -p "Skipping 'file2-completion.fish' since an existing symlink with the same name already exists"

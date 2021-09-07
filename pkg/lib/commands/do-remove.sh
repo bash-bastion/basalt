@@ -99,9 +99,9 @@ do_actual_removal() {
 	local id="$1"
 
 	log.info "Removing '$id'"
-	do-plumbing-unlink-man "$id"
-	do-plumbing-unlink-bins "$id"
-	do-plumbing-unlink-completions "$id"
+	plumbing.unsymlink-mans "$id"
+	plumbing.unsymlink-bins "$id"
+	plumbing.unsymlink-completions "$id"
 
 	if [ "${id%%/*}" = 'local' ]; then
 		printf '  -> %s\n' "Unsymlinking directory"

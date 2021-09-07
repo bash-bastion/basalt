@@ -51,8 +51,8 @@ do-link() {
 		if [ "$flag_no_deps" = 'yes' ]; then
 			do-plumbing-add-deps "$package"
 		fi
-		do-plumbing-link-bins "$package"
-		do-plumbing-link-completions "$package"
-		do-plumbing-link-man "$package"
+		plumbing.symlink-bins "$package"
+		plumbing.symlink-completions "$package"
+		plumbing.symlink-mans "$package"
 	done
 }

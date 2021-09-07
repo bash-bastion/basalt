@@ -1,20 +1,20 @@
 # shellcheck shell=bash
 
-do-plumbing-link-completions() {
+plumbing.symlink-completions() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
 
-	abstract.completions 'link' "$pkg"
+	plumbing.completions_action 'link' "$pkg"
 }
 
-do-plumbing-unlink-completions() {
+plumbing.unsymlink-completions() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
 
-	abstract.completions 'unlink' "$pkg"
+	plumbing.completions_action 'unlink' "$pkg"
 }
 
-abstract.completions() {
+plumbing.completions_action() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
@@ -42,16 +42,16 @@ abstract.completions() {
 					local fileName="${file##*/}"
 
 					if [[ $fileName == *.@(sh|bash) ]]; then
-						abstract.completions_do_action_bash "$action" "$file"
+						plumbing.completions_action_do_action_bash "$action" "$file"
 					elif [[ $fileName == *.zsh ]]; then
-						abstract.completions_do_action_zsh "$action" "$file"
+						plumbing.completions_action_do_action_zsh "$action" "$file"
 					elif [[ $fileName == *.fish ]]; then
-						abstract.completions_do_action_fish "$action" "$file"
+						plumbing.completions_action_do_action_fish "$action" "$file"
 					fi
 				done
 			done
 		else
-			abstract.completions_search_heuristics "$action" "$id" 'all'
+			plumbing.completions_action_search_heuristics "$action" "$id" 'all'
 		fi
 	elif [ -f "$package_sh_file" ]; then
 		local -a bash_completion_files=() zsh_completion_files=()
@@ -66,11 +66,11 @@ abstract.completions() {
 				elif [ ! -f "$full_path" ]; then
 					log.warn "Completion file '$file' not found. Skipping"
 				else
-					abstract.completions_do_action_bash "$action" "$full_path"
+					plumbing.completions_action_do_action_bash "$action" "$full_path"
 				fi
 			done
 		else
-			abstract.completions_search_heuristics "$action" "$id" 'bash'
+			plumbing.completions_action_search_heuristics "$action" "$id" 'bash'
 		fi
 
 		if util.extract_shell_variable "$package_sh_file" 'ZSH_COMPLETIONS'; then
@@ -83,18 +83,18 @@ abstract.completions() {
 				elif [ ! -f "$full_path" ]; then
 					log.warn "Completion file '$file' not found. Skipping"
 				else
-					abstract.completions_do_action_zsh "$action" "$full_path"
+					plumbing.completions_action_do_action_zsh "$action" "$full_path"
 				fi
 			done
 		else
-			abstract.completions_search_heuristics "$action" "$id" 'zsh'
+			plumbing.completions_action_search_heuristics "$action" "$id" 'zsh'
 		fi
 	else
-		abstract.completions_search_heuristics "$action" "$id" 'all'
+		plumbing.completions_action_search_heuristics "$action" "$id" 'all'
 	fi
 }
 
-abstract.completions_search_heuristics() {
+plumbing.completions_action_search_heuristics() {
 	local action="$1"
 	local id="$2"
 	local type="$3"
@@ -104,11 +104,11 @@ abstract.completions_search_heuristics() {
 			local fileName="${file##*/}"
 
 			if [[ $fileName == *.@(sh|bash) ]] && [[ $type == all || $type == bash ]]; then
-				abstract.completions_do_action_bash "$action" "$file"
+				plumbing.completions_action_do_action_bash "$action" "$file"
 			elif [[ $fileName == *.zsh ]] && [[ $type == all || $type == zsh ]]; then
-				abstract.completions_do_action_zsh "$action" "$file"
+				plumbing.completions_action_do_action_zsh "$action" "$file"
 			elif [[ $fileName == *.fish ]] && [[ $type == all || $type == fish ]]; then
-				abstract.completions_do_action_fish "$action" "$file"
+				plumbing.completions_action_do_action_fish "$action" "$file"
 			fi
 		done
 	done
@@ -118,7 +118,7 @@ abstract.completions_search_heuristics() {
 			for file in "$BPM_PACKAGES_PATH/$id/$completion_dir"/*; do
 				local fileName="${file##*/}"
 
-				abstract.completions_do_action_bash "$action" "$file"
+				plumbing.completions_action_do_action_bash "$action" "$file"
 			done
 		done
 	fi
@@ -127,19 +127,19 @@ abstract.completions_search_heuristics() {
 		local fileName="${file##*/}"
 		if [[ $fileName == *-completion.* ]]; then
 			case "$fileName" in
-				*.@(sh|bash)) abstract.completions_do_action_bash "$action" "$file" ;;
-				*.zsh) abstract.completions_do_action_zsh "$action" "$file" ;;
-				*.fish) abstract.completions_do_action_fish "$action" "$file" ;;
+				*.@(sh|bash)) plumbing.completions_action_do_action_bash "$action" "$file" ;;
+				*.zsh) plumbing.completions_action_do_action_zsh "$action" "$file" ;;
+				*.fish) plumbing.completions_action_do_action_fish "$action" "$file" ;;
 			esac
 		fi
 done
 }
 
-abstract.completions_do_action_bash() {
+plumbing.completions_action_do_action_bash() {
 	local action="$1"
 	local file="$2"
 
-	abstract.completions_do_echo
+	plumbing.completions_action_do_echo
 
 	local fileName="${file##*/}"
 	if [[ $fileName != *.* ]]; then
@@ -164,11 +164,11 @@ abstract.completions_do_action_bash() {
 
 }
 
-abstract.completions_do_action_zsh() {
+plumbing.completions_action_do_action_zsh() {
 	local action="$1"
 	local file="$2"
 
-	abstract.completions_do_echo
+	plumbing.completions_action_do_echo
 
 	if grep -qs "^#compdef" "$file"; then
 		local fileName="${file##*/}"
@@ -210,11 +210,11 @@ abstract.completions_do_action_zsh() {
 	fi
 }
 
-abstract.completions_do_action_fish() {
+plumbing.completions_action_do_action_fish() {
 	local action="$1"
 	local file="$2"
 
-	abstract.completions_do_echo
+	plumbing.completions_action_do_echo
 
 	case "$action" in
 	link)
@@ -233,7 +233,7 @@ abstract.completions_do_action_fish() {
 	esac
 }
 
-abstract.completions_do_echo() {
+plumbing.completions_action_do_echo() {
 	if [ "$abstract_completions_did" = no ]; then
 		abstract_completions_did=yes
 

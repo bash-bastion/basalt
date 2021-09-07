@@ -1,20 +1,20 @@
 # shellcheck shell=bash
 
-do-plumbing-link-bins() {
+plumbing.symlink-bins() {
 	local id="$1"
 	ensure.non_zero 'id' "$id"
 
-	abstract.bins 'link' "$id"
+	plumbing.bins_action 'link' "$id"
 }
 
-do-plumbing-unlink-bins() {
+plumbing.unsymlink-bins() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
 
-	abstract.bins 'unlink' "$pkg"
+	plumbing.bins_action 'unlink' "$pkg"
 }
 
-abstract.bins() {
+plumbing.bins_action() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
@@ -44,7 +44,7 @@ abstract.bins() {
 					log.warn "Directory '$dir' with executable files not found. Skipping"
 				else
 					for file in "$full_path"/*; do
-						abstract.bins_do_action "$action" "$file" "$remove_extensions"
+						plumbing.bins_action_do_action "$action" "$file" "$remove_extensions"
 					done
 				fi
 			done
@@ -52,7 +52,7 @@ abstract.bins() {
 			return
 		fi
 
-		abstract.bins_search_heuristics "$action" "$id" "$remove_extensions"
+		plumbing.bins_action_search_heuristics "$action" "$id" "$remove_extensions"
 	elif [ -f "$package_sh_file" ]; then
 		if util.extract_shell_variable "$package_sh_file" 'REMOVE_EXTENSION'; then
 			remove_extensions="$REPLY"
@@ -68,14 +68,14 @@ abstract.bins() {
 				elif [ ! -f "$full_path" ]; then
 					log.warn "Executable file '$file' not found. Skipping"
 				else
-					abstract.bins_do_action "$action" "$full_path" "$remove_extensions"
+					plumbing.bins_action_do_action "$action" "$full_path" "$remove_extensions"
 				fi
 			done
 		else
-			abstract.bins_search_heuristics "$action" "$id" "$remove_extensions"
+			plumbing.bins_action_search_heuristics "$action" "$id" "$remove_extensions"
 		fi
 	else
-		abstract.bins_search_heuristics "$action" "$id" "$remove_extensions"
+		plumbing.bins_action_search_heuristics "$action" "$id" "$remove_extensions"
 	fi
 }
 
@@ -83,23 +83,23 @@ abstract.bins() {
 # the user does not supply any bin files/dirs with any config
 # @arg $1 package
 # @arg $2 Whether to remove extensions
-abstract.bins_search_heuristics() {
+plumbing.bins_action_search_heuristics() {
 	local action="$1"
 	local id="$2"
 	local remove_extensions="$3"
 
 	if [ -d "$BPM_PACKAGES_PATH/$id/bin" ]; then
 		for file in "$BPM_PACKAGES_PATH/$id"/bin/*; do
-			abstract.bins_do_action "$action" "$file" "$remove_extensions"
+			plumbing.bins_action_do_action "$action" "$file" "$remove_extensions"
 		done
 	elif [ -d "$BPM_PACKAGES_PATH/$id/bins" ]; then
 		for file in "$BPM_PACKAGES_PATH/$id"/bins/*; do
-			abstract.bins_do_action "$action" "$file" "$remove_extensions"
+			plumbing.bins_action_do_action "$action" "$file" "$remove_extensions"
 		done
 	else
 		for file in "$BPM_PACKAGES_PATH/$id"/*; do
 			if [[ -f "$file" && -x "$file" ]]; then
-				abstract.bins_do_action "$action" "$file" "$remove_extensions"
+				plumbing.bins_action_do_action "$action" "$file" "$remove_extensions"
 			fi
 		done
 	fi
@@ -109,7 +109,7 @@ abstract.bins_search_heuristics() {
 # remove the symlink
 # @arg $1 The full path of the executable
 # @arg $2 Whether to remove extensions
-abstract.bins_do_action() {
+plumbing.bins_action_do_action() {
 	local action="$1"
 	local fullBinFile="$2"
 	local remove_extensions="$3"

@@ -20,9 +20,9 @@ load 'util/init.sh'
 
 @test "fails if package already present" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local pkg1='subdir/theta'
 	local pkg2='theta'
@@ -50,9 +50,9 @@ load 'util/init.sh'
 
 @test "fails if package already present (as erroneous file)" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	mkdir -p touch "$BPM_PACKAGES_PATH/local"
 	touch "$BPM_PACKAGES_PATH/local/theta"
@@ -68,9 +68,9 @@ load 'util/init.sh'
 
 @test "links the package to packages under the correct namespace (local)" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package1'
 
@@ -84,9 +84,9 @@ load 'util/init.sh'
 
 @test "calls link-bins, link-completions, link-man and deps in order" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package2'
 
@@ -102,17 +102,17 @@ load 'util/init.sh'
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir'"
 	assert_line -n 1 "do-plumbing-add-deps local/$dir"
-	assert_line -n 2 "do-plumbing-link-bins local/$dir"
-	assert_line -n 3 "do-plumbing-link-completions local/$dir"
-	assert_line -n 4 "do-plumbing-link-man local/$dir"
+	assert_line -n 2 "plumbing.symlink-bins local/$dir"
+	assert_line -n 3 "plumbing.symlink-completions local/$dir"
+	assert_line -n 4 "plumbing.symlink-mans local/$dir"
 
 }
 
 @test "calls link-bins, link-completions, link-man and deps in order for multiple directories" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir1='package2'
 	local dir2='package3'
@@ -128,22 +128,22 @@ load 'util/init.sh'
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir1'"
 	assert_line -n 1 "do-plumbing-add-deps local/$dir1"
-	assert_line -n 2 "do-plumbing-link-bins local/$dir1"
-	assert_line -n 3 "do-plumbing-link-completions local/$dir1"
-	assert_line -n 4 "do-plumbing-link-man local/$dir1"
+	assert_line -n 2 "plumbing.symlink-bins local/$dir1"
+	assert_line -n 3 "plumbing.symlink-completions local/$dir1"
+	assert_line -n 4 "plumbing.symlink-mans local/$dir1"
 	assert_line -n 5 -p "Symlinking '$srcDir2'"
 	assert_line -n 6 "do-plumbing-add-deps local/$dir2"
-	assert_line -n 7 "do-plumbing-link-bins local/$dir2"
-	assert_line -n 8 "do-plumbing-link-completions local/$dir2"
-	assert_line -n 9 "do-plumbing-link-man local/$dir2"
+	assert_line -n 7 "plumbing.symlink-bins local/$dir2"
+	assert_line -n 8 "plumbing.symlink-completions local/$dir2"
+	assert_line -n 9 "plumbing.symlink-mans local/$dir2"
 
 }
 
 @test "respects the --no-deps option in the correct order" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package2'
 
@@ -156,17 +156,17 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir'"
-	assert_line -n 1 "do-plumbing-link-bins local/$dir"
-	assert_line -n 2 "do-plumbing-link-completions local/$dir"
-	assert_line -n 3 "do-plumbing-link-man local/$dir"
+	assert_line -n 1 "plumbing.symlink-bins local/$dir"
+	assert_line -n 2 "plumbing.symlink-completions local/$dir"
+	assert_line -n 3 "plumbing.symlink-mans local/$dir"
 }
 
 
 @test "respects the --no-deps option" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package2'
 
@@ -180,9 +180,9 @@ load 'util/init.sh'
 
 @test "respects the --no-deps option (at end)" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package2'
 
@@ -196,9 +196,9 @@ load 'util/init.sh'
 
 @test "links the current directory" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package2'
 
@@ -213,9 +213,9 @@ load 'util/init.sh'
 
 @test "links the parent directory" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package2'
 
@@ -233,9 +233,9 @@ load 'util/init.sh'
 
 @test "links an arbitrary complex relative path" {
 	test_util.stub_command do-plumbing-add-deps
-	test_util.stub_command do-plumbing-link-bins
-	test_util.stub_command do-plumbing-link-completions
-	test_util.stub_command do-plumbing-link-man
+	test_util.stub_command plumbing.symlink-bins
+	test_util.stub_command plumbing.symlink-completions
+	test_util.stub_command plumbing.symlink-mans
 
 	local dir='package2'
 

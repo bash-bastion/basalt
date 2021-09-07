@@ -1,20 +1,20 @@
 # shellcheck shell=bash
 
-do-plumbing-link-man() {
+plumbing.symlink-mans() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
 
-	abstract.mans 'link' "$pkg"
+	plumbing.mans_action 'link' "$pkg"
 }
 
-do-plumbing-unlink-man() {
+plumbing.unsymlink-mans() {
 	local pkg="$1"
 	ensure.non_zero 'pkg' "$pkg"
 
-	abstract.mans 'unlink' "$pkg"
+	plumbing.mans_action 'unlink' "$pkg"
 }
 
-abstract.mans() {
+plumbing.mans_action() {
 	local action="$1"
 	local id="$2"
 	ensure.non_zero 'action' "$action"
@@ -42,37 +42,37 @@ abstract.mans() {
 				# 2. A directory (man1, man2), that contains man files
 				for file in "$full_dir"/*; do
 					if [ -f "$file" ]; then
-						abstract.mans_do_action "$action" "$file"
+						plumbing.mans_action_do_action "$action" "$file"
 					elif [ -d "$file" ]; then
 						for actualFile in "$file"/*; do
 							if [ -f "$actualFile" ]; then
-								abstract.mans_do_action "$action" "$actualFile"
+								plumbing.mans_action_do_action "$action" "$actualFile"
 							fi
 						done
 					fi
 				done
 			done
 		else
-			abstract.mans_search_heuristics "$action" "$id"
+			plumbing.mans_action_search_heuristics "$action" "$id"
 		fi
 	else
-		abstract.mans_search_heuristics "$action" "$id"
+		plumbing.mans_action_search_heuristics "$action" "$id"
 	fi
 }
 
 # @description Use heuristics to locate and symlink man files. This is ran when
 # the user does not supply any man files/dirs with any config
-abstract.mans_search_heuristics() {
+plumbing.mans_action_search_heuristics() {
 	local action="$1"
 	local id="$2"
 
 	for file in "$BPM_PACKAGES_PATH/$id"/man/*; do
 		if [ -f "$file" ]; then
-			abstract.mans_do_action "$action" "$file"
+			plumbing.mans_action_do_action "$action" "$file"
 		elif [ -d "$file" ]; then
 			for actualFile in "$file"/*; do
 				if [ -f "$actualFile" ]; then
-					abstract.mans_do_action "$action" "$actualFile"
+					plumbing.mans_action_do_action "$action" "$actualFile"
 				fi
 			done
 		fi
@@ -80,7 +80,7 @@ abstract.mans_search_heuristics() {
 
 	for file in "$BPM_PACKAGES_PATH/$id"/*; do
 		if [ -f "$file" ]; then
-			abstract.mans_do_action "$action" "$file"
+			plumbing.mans_action_do_action "$action" "$file"
 		fi
 	done
 }
@@ -88,7 +88,7 @@ abstract.mans_search_heuristics() {
 # @arg $1 The man file to symlink or remove. Not all the files passed
 # in here are man pages, which is why the regex check exists, to extract
 # the file ending (and the man category)
-abstract.mans_do_action() {
+plumbing.mans_action_do_action() {
 	local action="$1"
 	local full_man_file="$2"
 

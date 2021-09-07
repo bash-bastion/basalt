@@ -77,9 +77,9 @@ test_util.mock_add() {
 
 	test_util.mock_clone "$pkg" "github.com/$pkg"
 	do-plumbing-add-deps "github.com/$pkg"
-	do-plumbing-link-bins "github.com/$pkg"
-	do-plumbing-link-completions "github.com/$pkg"
-	do-plumbing-link-man "github.com/$pkg"
+	plumbing.symlink-bins "github.com/$pkg"
+	plumbing.symlink-completions "github.com/$pkg"
+	plumbing.symlink-mans "github.com/$pkg"
 }
 
 # @description Mocks a 'bpm link'. This function is still useful in cases
@@ -93,9 +93,9 @@ test_util.mock_link() {
 	ln -s "$BPM_ORIGIN_DIR/$dir" "$BPM_PACKAGES_PATH/local"
 
 	do-plumbing-add-deps "local/$dir"
-	do-plumbing-link-bins "local/$dir"
-	do-plumbing-link-completions "local/$dir"
-	do-plumbing-link-man "local/$dir"
+	plumbing.symlink-bins "local/$dir"
+	plumbing.symlink-completions "local/$dir"
+	plumbing.symlink-mans "local/$dir"
 }
 
 # @description Utility to begin creating a package
