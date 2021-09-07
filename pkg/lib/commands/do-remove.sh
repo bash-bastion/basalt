@@ -1,11 +1,10 @@
 # shellcheck shell=bash
 
 do-remove() {
+	util.init_command
+
 	local flag_all='no'
 	local flag_force='no'
-
-	util.setup_mode
-
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in

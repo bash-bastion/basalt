@@ -1,10 +1,9 @@
 # shellcheck shell=bash
 
 do-link() {
+	util.init_command
+
 	local flag_no_deps='yes'
-
-	util.setup_mode
-
 	local -a dirs=()
 	for arg; do
 		case "$arg" in

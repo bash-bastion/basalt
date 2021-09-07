@@ -3,11 +3,10 @@
 has_invalid_packages='no'
 
 do-list() {
+	util.init_command
+
 	local flag_fetch='no'
 	local flag_format=
-
-	util.setup_mode
-
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in

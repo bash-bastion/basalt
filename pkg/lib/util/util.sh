@@ -266,8 +266,14 @@ util.get_project_root_dir() {
 	printf "%s" "$PWD"
 }
 
-# @description Sets up the variables for the current mode
-util.setup_mode() {
+# @description Ensures particular variables exist and sets the current mode of
+# operation
+util.init_command() {
+	if [[ -z "$BPM_REPO_SOURCE" || -z "$BPM_CELLAR" ]]; then
+		die "Either 'BPM_REPO_SOURCE' or 'BPM_CELLAR' is empty. Did you forget to run add \`bpm init <shell>\` in your shell configuration?"
+	fi
+
+
 	if [ "$BPM_MODE" = local ]; then
 		local project_root_dir=
 		if project_root_dir="$(util.get_project_root_dir)"; then
@@ -289,9 +295,10 @@ util.setup_mode() {
 			die "No 'bpm.toml' file found"
 		fi
 	else
-		# If we do not set local mode, the default varaible
-		# values are already correct
-		:
+		BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
+		BPM_INSTALL_BIN="$BPM_CELLAR/bin"
+		BPM_INSTALL_MAN="$BPM_CELLAR/man"
+		BPM_INSTALL_COMPLETIONS="$BPM_CELLAR/completions"
 	fi
 }
 

@@ -1,12 +1,11 @@
 # shellcheck shell=bash
 
 do-add() {
+	util.init_command
+
 	local flag_ssh='no'
 	local flag_all='no'
 	local flag_branch=
-
-	util.setup_mode
-
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in

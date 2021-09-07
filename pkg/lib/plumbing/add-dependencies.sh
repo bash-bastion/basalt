@@ -41,11 +41,11 @@ plumbing.add-dependencies() {
 	for dep in "${deps[@]}"; do
 		local oldWd="$PWD"
 		ensure.cd "$subDep"
-		util.setup_mode
+		util.init_command
 
 		do-actual-add "$dep"
 
 		ensure.cd "$oldWd"
-		util.setup_mode
+		util.init_command
 	done
 }

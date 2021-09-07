@@ -1,11 +1,10 @@
 # shellcheck shell=bash
 
 do-upgrade() {
+	util.init_command
+
 	local upgrade_bpm='no'
 	local flag_all='no'
-
-	util.setup_mode
-
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in

@@ -2,7 +2,7 @@
 
 # TODO: prune local packages that are no longer in dependencies
 do-prune() {
-	util.setup_mode
+	util.init_command
 
 	log.info "Pruning packages"
 
