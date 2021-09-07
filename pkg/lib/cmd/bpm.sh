@@ -28,6 +28,7 @@ main() {
 			;;
 		-*)
 			die "Global flag '$arg' not recognized"
+			;;
 		*)
 			break
 			;;
