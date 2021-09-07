@@ -36,10 +36,6 @@ case $state in
 			local -a subcommandOptions=(--shh)
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
-		(echo)
-			local -a subcommandOptions=(BPM_LOCAL_PROJECT_DIR BPM_CELLAR)
-			_describe -t commands "gem subcommand" subcommandOptions
-			;;
 		(init)
 			local -a subcommandOptions=(sh bash zsh fish)
 			_describe -t commands "gem subcommand" subcommandOptions

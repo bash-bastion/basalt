@@ -44,10 +44,6 @@ main() {
 		shift
 		do-complete "$@"
 		;;
-	echo)
-		shift
-		do-echo "$@"
-		;;
 	init)
 		shift
 		do-init "$@"

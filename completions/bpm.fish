@@ -12,10 +12,6 @@ set subcmd add
 set -l subcommandOptions --shh
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
 
-set subcmd echo
-set -l subcommandOptions BPM_LOCAL_PROJECT_DIR BPM_CELLAR
-complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
-
 set subcmd init
 set -l subcommandOptions sh bash zsh fish
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
