@@ -47,7 +47,7 @@ See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-
 
 ## Alternatives Comparison
 
-Why not use `bpkg` or `Basher`? Because `hyperupcall/bpm`...
+Why not use `bpkg` or `Basher`? Because `hyperupcall/basalt`...
 
 - Can install multiple packages at once
 - Install local dependencies for a particular project (bpkg and basher)
@@ -69,7 +69,7 @@ Prior art
 
 | Software        | Deps | Versions | Locations          | Completions |
 |---------------- |------|----------|--------------------| ----------- |
-| hyperupcall/bpm | Yes  | Yes      | Global, User, Repo | Yes         |
+| hyperupcall/basalt | Yes  | Yes      | Global, User, Repo | Yes         |
 | [basher]        | Yes  | No       | Global, User       | Yes         |
 | [bpkg]          | Yes  | Yes      | Global, User, Repo | Yes         |
 | [bpm-rocks/bpm] | Yes  | No       | Global, User, Repo | No          |

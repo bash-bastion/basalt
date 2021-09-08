@@ -155,7 +155,7 @@ load 'util/init.sh'
 	run bpm global upgrade 'bpm'
 
 	assert_success
-	assert_line -e 'git -C /(.*)/bpm/source/pkg/lib/../.. pull'
+	assert_line -e 'git -C /(.*)/basalt/source/pkg/lib/../.. pull'
 }
 
 @test "upgrade bpm fails when mixing package names" {
