@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "if package is not installed, fails" {
 	local site='github.com'
 	local pkg='user/repo'
-	run do-remove "$pkg"
+	run bpm global remove "$pkg"
 
 	assert_failure
 	assert_output -e "Package 'github.com/$pkg' is not installed"
@@ -19,7 +19,7 @@ load 'util/init.sh'
 
 	[ -f "$BPM_PACKAGES_PATH/$id" ]
 
-	run do-remove "$id"
+	run bpm global remove "$id"
 
 	assert_success
 	assert [ ! -e "$BPM_ORIGIN_DIR/$id" ]
@@ -32,7 +32,7 @@ load 'util/init.sh'
 
 	assert [ -d "$BPM_PACKAGES_PATH/$id" ]
 
-	run do-remove "$id"
+	run bpm global remove "$id"
 
 	assert_success
 	assert [ ! -e "$BPM_ORIGIN_DIR/$id" ]
@@ -50,7 +50,7 @@ load 'util/init.sh'
 
 	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 
-	run do-remove "$pkg"
+	run bpm global remove "$pkg"
 
 	assert_success
 	assert [ ! -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
@@ -67,7 +67,7 @@ load 'util/init.sh'
 
 	assert [ -d "$BPM_PACKAGES_PATH/local/$dir" ]
 
-	run do-remove "local/$dir"
+	run bpm global remove "local/$dir"
 
 	assert_success
 	assert [ ! -d "$BPM_PACKAGES_PATH/local/$dir" ]
@@ -85,7 +85,7 @@ load 'util/init.sh'
 
 	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
 
-	run do-remove "gitlab.com/$pkg"
+	run bpm global remove "gitlab.com/$pkg"
 
 	assert_failure
 }
@@ -100,7 +100,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-remove "$pkg"
+	run bpm global remove "$pkg"
 
 	assert_success
 	assert [ ! -d "$BPM_PACKAGES_PATH/$site/$pkg" ]
@@ -119,7 +119,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run do-remove "$pkg"
+	run bpm global remove "$pkg"
 
 	assert_success
 	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
@@ -148,7 +148,7 @@ load 'util/init.sh'
 	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg2" ]
 	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
 
-	run do-remove "$pkg1"
+	run bpm global remove "$pkg1"
 
 	assert_success
 	assert [ ! -d "$BPM_PACKAGES_PATH/$site/$pkg1" ]
@@ -158,7 +158,7 @@ load 'util/init.sh'
 }
 
 @test "errors when no packages are given" {
-	run do-remove
+	run bpm global remove
 
 	assert_failure
 	assert_line -p 'At least one package must be supplied'
@@ -167,7 +167,7 @@ load 'util/init.sh'
 @test "--all prints warning when no dependencies are specified in bpm.toml" {
 	touch 'bpm.toml'
 
-	run do-remove --all
+	run bpm global remove --all
 
 	assert_success
 	assert_line -p "No dependencies specified in 'dependencies' key"
@@ -177,7 +177,7 @@ load 'util/init.sh'
 @test "--all errors when a package is specified as argument" {
 	touch 'bpm.toml'
 
-	run do-remove --all pkg
+	run bpm global remove --all pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
@@ -191,7 +191,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-remove "$pkg@v0.1.0"
+	run bpm global remove "$pkg@v0.1.0"
 
 	assert_failure
 	assert_line -p "Refs must be omitted when removing packages. Remove ref '@v0.1.0'"
@@ -209,7 +209,7 @@ load 'util/init.sh'
 
 	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg" ]
 
-	run do-remove --force "$pkg"
+	run bpm global remove --force "$pkg"
 
 	assert_success
 	assert_line -p -n 0 "Force removing '$site/$pkg'"
@@ -225,7 +225,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-remove --all --force
+	run bpm global remove --all --force
 
 	assert_failure
 	assert_line -p "Flags '--all' and '--force' are mutually exclusive"
@@ -238,7 +238,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-remove --force "$pkg" "$pkg"
+	run bpm global remove --force "$pkg" "$pkg"
 
 	assert_failure
 	assert_line -p "Only one package may be specified when --force is passed"
@@ -252,7 +252,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$pkg1"
 
-	BPM_MODE='local' run do-remove "$pkg1"
+	run bpm remove "$pkg1"
 
 	assert_failure
 	assert_line -p "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"

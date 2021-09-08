@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "print operating in local dir if not in global mode" {
 	touch 'bpm.toml'
 
-	BPM_MODE='local' run do-list
+	run bpm list
 	assert_success
 	assert_output -p "Operating in context of local bpm.toml"
 }
@@ -37,7 +37,7 @@ load 'util/init.sh'
 @test "do not error when not passing --global to list, complete, and init" {
 	touch 'bpm.toml'
 
-	run do-list
+	run bpm global list
 	assert_success
 	assert_output ""
 

@@ -129,7 +129,7 @@ load 'util/init.sh'
 }
 
 @test "--all errors in global mode" {
-	run do-add --all
+	run bpm global add --all
 
 	assert_failure
 	assert_line -p "Cannot pass '--all' without a 'bpm.toml' file"

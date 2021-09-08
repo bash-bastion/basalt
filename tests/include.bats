@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "with no arguments, prints an error" {
 	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
-	eval "$(do-init sh)"
+	eval "$(bpm global init sh)"
 
 	run include
 
@@ -16,7 +16,7 @@ load 'util/init.sh'
 @test "with one argument, prints an error" {
 	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
-	eval "$(do-init sh)"
+	eval "$(bpm global init sh)"
 
 	run include 'user/repo'
 
@@ -30,7 +30,7 @@ load 'util/init.sh'
 
 	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
-	eval "$(do-init sh)"
+	eval "$(bpm global init sh)"
 
 	run include "$site/$pkg" file
 
@@ -50,7 +50,7 @@ load 'util/init.sh'
 
 	test_util.mock_add "$pkg"
 
-	eval "$(do-init sh)"
+	eval "$(bpm global init sh)"
 
 	run include "$site/$pkg" non_existent
 
@@ -69,7 +69,7 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	eval "$(do-init sh)"
+	eval "$(bpm global init sh)"
 	include "$site/$pkg" 'function.sh'
 
 	run func_name

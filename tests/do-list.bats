@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "properly list for no installed packages" {
 	test_util.create_package 'username/p1'
 
-	run do-list
+	run bpm global list
 
 	assert_success
 	assert_output ""
@@ -20,7 +20,7 @@ load 'util/init.sh'
 	test_util.mock_add 'username/p1'
 	test_util.mock_add 'username2/p2'
 
-	run do-list --format=simple
+	run bpm global list --format=simple
 
 	assert_success
 	assert_line -n 0 "$site/username/p1"
@@ -38,7 +38,7 @@ load 'util/init.sh'
 	test_util.mock_add 'username2/p2'
 	test_util.mock_add 'username2/p3'
 
-	run do-list --format=simple 'username/p1' 'username2/p2'
+	run bpm global list --format=simple 'username/p1' 'username2/p2'
 
 	assert_success
 	assert_line -n 0 "$site/username/p1"
@@ -56,7 +56,7 @@ load 'util/init.sh'
 	test_util.mock_add 'username2/p2'
 	test_util.mock_add 'username2/p3'
 
-	run do-list 'username/p1' 'username2/p2'
+	run bpm global list 'username/p1' 'username2/p2'
 
 	assert_success
 	assert_output -e "$site/username/p1
@@ -73,7 +73,7 @@ $site/username2/p2
 	local site='github.com'
 	local pkg='username/p1'
 
-	run do-list --format=simple "$pkg"
+	run bpm global list --format=simple "$pkg"
 
 	assert_failure
 	assert_line -p "Package '$site/$pkg' is not installed"
@@ -85,7 +85,7 @@ $site/username2/p2
 	test_util.create_package 'username/p1'
 	test_util.mock_add 'username/p1'
 
-	run do-list --format=simple 'username/p1@v0.1.0'
+	run bpm global list --format=simple 'username/p1@v0.1.0'
 
 	assert_failure
 	assert_line -p "Refs must be omitted when listing packages. Remove ref '@v0.1.0'"
@@ -101,9 +101,9 @@ $site/username2/p2
 	test_util.stub_command plumbing.symlink-mans
 
 	test_util.create_package "$pkg"
-	do-link "$BPM_ORIGIN_DIR/$pkg"
+	bpm global link "$BPM_ORIGIN_DIR/$pkg"
 
-	run do-list --format=simple
+	run bpm global list --format=simple
 
 	assert_success
 	assert_output "local/project2"
@@ -118,7 +118,7 @@ $site/username2/p2
 	test_util.mock_add "username/p1"
 	test_util.mock_add "username2/p2"
 
-	run do-list
+	run bpm global list
 
 	# Note that all the tests for non-simple list do not include 'state' up to date since that is not emulated
 	# in the test
@@ -146,7 +146,7 @@ $site/username2/p2
 	test_util.create_package "$dir"
 	test_util.mock_link "$dir" "$site/$dir"
 
-	run do-list
+	run bpm global list
 
 	assert_success
 	assert_output -e "local/project2
@@ -167,7 +167,7 @@ $site/username2/p2
 	cd "$BATS_TEST_TMPDIR"
 
 	do-list --fetch
-	run do-list
+	run bpm global list
 
 	assert_success
 	assert_output -e "github.com/$pkg
@@ -181,7 +181,7 @@ $site/username2/p2
 	local pkg='username/outdated'
 
 	mkdir -p "$BPM_PACKAGES_PATH/$site/$pkg"
-	run do-list
+	run bpm global list
 
 	assert_failure
 	assert_line -n 0 -p "Package '$site/$pkg' is not a Git repository. Unlink or"

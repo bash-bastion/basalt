@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add
+	run bpm global add
 
 	assert_failure
 	assert_line -n 0 -p "At least one package must be supplied"
@@ -22,7 +22,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add 'local/pkg'
+	run bpm global add 'local/pkg'
 
 	assert_failure
 	assert_line -n 0 -p  "Cannot install packages owned by username 'local' because that conflicts with linked packages"
@@ -39,7 +39,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-mans
 
 	test_util.create_package "$pkg"
-	run do-add "$BPM_ORIGIN_DIR/$pkg"
+	run bpm global add "$BPM_ORIGIN_DIR/$pkg"
 
 	assert_failure
 	assert_line -p "Identifier '$BPM_ORIGIN_DIR/$pkg' is a directory, not a package"
@@ -52,7 +52,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add username/package
+	run bpm global add username/package
 
 	assert_success
 	assert_line -n 0 -p "Adding 'username/package'"
@@ -70,7 +70,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add username/package username2/package2
+	run bpm global add username/package username2/package2
 
 	assert_success
 	assert_line -n 0 -p "Adding 'username/package'"
@@ -95,7 +95,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add https://gitlab.com/username/package
+	run bpm global add https://gitlab.com/username/package
 
 	assert_success
 	assert_line "plumbing.git-clone https://gitlab.com/username/package.git gitlab.com/username/package  "
@@ -108,7 +108,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add http://gitlab.com/username/package
+	run bpm global add http://gitlab.com/username/package
 
 	assert_success
 	assert_line "plumbing.git-clone http://gitlab.com/username/package.git gitlab.com/username/package  "
@@ -121,7 +121,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add site/username/package
+	run bpm global add site/username/package
 
 	assert_success
 	assert_line "plumbing.git-clone https://site/username/package.git site/username/package  "
@@ -134,7 +134,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add username/package
+	run bpm global add username/package
 
 	assert_success
 	assert_line "plumbing.git-clone https://github.com/username/package.git github.com/username/package  "
@@ -147,7 +147,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add --ssh username/package
+	run bpm global add --ssh username/package
 
 	assert_success
 	assert_line "plumbing.git-clone git@github.com:username/package github.com/username/package  "
@@ -160,7 +160,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add username/package --ssh
+	run bpm global add username/package --ssh
 
 	assert_success
 	assert_line "plumbing.git-clone git@github.com:username/package github.com/username/package  "
@@ -173,7 +173,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add git@github.com:username/package
+	run bpm global add git@github.com:username/package
 
 	assert_success
 	assert_line "plumbing.git-clone git@github.com:username/package github.com/username/package  "
@@ -186,7 +186,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add username/package@v1.2.3
+	run bpm global add username/package@v1.2.3
 
 	assert_success
 	assert_line "plumbing.git-clone https://github.com/username/package.git github.com/username/package v1.2.3 "
@@ -199,7 +199,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run do-add username/package@
+	run bpm global add username/package@
 
 	assert_success
 	assert_line "plumbing.git-clone https://github.com/username/package.git github.com/username/package  "
@@ -215,7 +215,8 @@ load 'util/init.sh'
 	test_util.create_package "$pkg2"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	BPM_MODE='local' run do-add --all
+
+	run bpm add --all
 
 	assert_success
 
@@ -239,7 +240,7 @@ load 'util/init.sh'
 	cd "$BATS_TEST_TMPDIR"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	BPM_MODE='local' run do-add --all
+	run bpm add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg/.git" ]
@@ -258,7 +259,7 @@ load 'util/init.sh'
 	cd "$BATS_TEST_TMPDIR"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
-	BPM_MODE='local' run do-add --all
+	run bpm add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
@@ -277,7 +278,7 @@ load 'util/init.sh'
 	cd "$BATS_TEST_TMPDIR"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
-	BPM_MODE='local' run do-add --all
+	run bpm add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
@@ -288,7 +289,7 @@ load 'util/init.sh'
 @test "--all prints warning when no dependencies are specified in bpm.toml" {
 	touch 'bpm.toml'
 
-	BPM_MODE='local' run do-add --all
+	run bpm add --all
 
 	assert_success
 	assert_line -p "No dependencies specified in 'dependencies' key"
@@ -298,14 +299,14 @@ load 'util/init.sh'
 @test "--all errors when a package is specified as argument" {
 	touch 'bpm.toml'
 
-	BPM_MODE='local' run do-add --all pkg
+	run bpm add --all pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
 }
 
 @test "--all errors in global mode" {
-	run do-add --all
+	run bpm global add --all
 
 	assert_failure
 	assert_line -p "Cannot pass '--all' without a 'bpm.toml' file"
@@ -320,12 +321,12 @@ load 'util/init.sh'
 	test_util.create_package "$pkg2"
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1' ]" > 'bpm.toml'
-	BPM_MODE='local' run do-add --all
+	run bpm add --all
 
 	assert_success
 
 	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	BPM_MODE='local' run do-add --all
+	run bpm add --all
 
 	assert_success
 	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
@@ -342,7 +343,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$pkg1"
 
-	BPM_MODE='local' run do-add "$pkg1"
+	run bpm add "$pkg1"
 
 	assert_failure
 	assert_line -p "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"

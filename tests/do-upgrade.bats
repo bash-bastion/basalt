@@ -15,9 +15,9 @@ load 'util/init.sh'
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	do-upgrade "$site/$pkg"
+	bpm global upgrade "$site/$pkg"
 
-	run do-list
+	run bpm global list
 
 	assert_success
 	assert_output -e "github.com/$pkg
@@ -42,7 +42,7 @@ load 'util/init.sh'
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	run do-upgrade "$BPM_ORIGIN_DIR/$pkg"
+	run bpm global upgrade "$BPM_ORIGIN_DIR/$pkg"
 
 	assert_failure
 	assert_line -p "Package '$BPM_ORIGIN_DIR/$pkg' is not installed"
@@ -62,10 +62,10 @@ load 'util/init.sh'
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	do-upgrade "$site/$pkg"
+	bpm global upgrade "$site/$pkg"
 
 	unset BPM_IS_TEST
-	run do-upgrade "$pkg"
+	run bpm global upgrade "$pkg"
 
 	assert_success
 	assert_line -p -n 1 "Unsymlinking bin files"
@@ -93,7 +93,7 @@ load 'util/init.sh'
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	do-upgrade "$site/$pkg"
+	bpm global upgrade "$site/$pkg"
 
 	assert [ "$(readlink "$BPM_INSTALL_BIN/script.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/script.sh" ]
 }
@@ -117,7 +117,7 @@ load 'util/init.sh'
 	git commit -m 'Remove bpm.toml'
 	cd "$BATS_TEST_TMPDIR"
 
-	do-upgrade "$site/$pkg"
+	bpm global upgrade "$site/$pkg"
 
 	assert [ ! -f "$BPM_INSTALL_BIN/script3.sh" ]
 }
@@ -133,14 +133,14 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_link "$pkg"
 
-	run 'do-upgrade' "local/$pkg"
+	run bpm global upgrade "local/$pkg"
 
 	assert_failure
 	assert_line -p "Package 'local/$pkg' is locally symlinked and cannot be upgraded through Git"
 }
 
 @test "errors when no packages are given" {
-	run do-upgrade
+	run bpm global upgrade
 
 	assert_failure
 	assert_line -p 'At least one package must be supplied'
@@ -152,7 +152,7 @@ load 'util/init.sh'
 
 	test_util.stub_command 'git'
 
-	run do-upgrade 'bpm'
+	run bpm global upgrade 'bpm'
 
 	assert_success
 	assert_line -e 'git -C /(.*)/bpm/source/pkg/lib/../.. pull'
@@ -164,7 +164,7 @@ load 'util/init.sh'
 
 	test_util.stub_command 'git'
 
-	run do-upgrade 'bpm' 'pkg/name'
+	run bpm global upgrade 'bpm' 'pkg/name'
 
 	assert_failure
 	assert_line -p 'Packages cannot be upgraded at the same time as bpm'
@@ -177,14 +177,14 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run do-upgrade "$pkg@v0.1.0"
+	run bpm global upgrade "$pkg@v0.1.0"
 
 	assert_failure
 	assert_line -p "Refs must be omitted when upgrading packages. Remove ref '@v0.1.0'"
 }
 
 @test "fail if bpm and '--all' are specified" {
-	run do-upgrade bpm --all
+	run bpm global upgrade bpm --all
 
 	assert_failure
 	assert_line -p "Upgrading bpm and using '--all' are mutually exclusive behaviors"
@@ -193,7 +193,7 @@ load 'util/init.sh'
 @test "fail if bpm is specified in local mode" {
 	touch 'bpm.toml'
 
-	BPM_MODE='local' run do-upgrade bpm
+	run bpm upgrade bpm
 
 	assert_failure
 	assert_line -p "Cannot upgrade bpm with a local 'bpm.toml' file"
@@ -202,7 +202,7 @@ load 'util/init.sh'
 @test "--all errors when a package is specified as argument" {
 	touch 'bpm.toml'
 
-	run do-upgrade --all some/pkg
+	run bpm global upgrade --all some/pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
@@ -216,7 +216,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$pkg1"
 
-	BPM_MODE='local' run do-upgrade "$pkg1"
+	run bpm upgrade "$pkg1"
 
 	assert_failure
 	assert_line -p "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"

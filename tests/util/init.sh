@@ -36,9 +36,15 @@ export BPM_MODE='global' # for non-tests, the default is 'local'
 
 export PATH="$BPM_TEST_REPO_ROOT/pkg/bin:$PATH"
 source "$BPM_TEST_REPO_ROOT/pkg/lib/source/bpm-load.sh"
+source "$BPM_TEST_REPO_ROOT/pkg/lib/cmd/bpm.sh"
+
 for f in "$BPM_TEST_REPO_ROOT"/pkg/lib/{commands,commands-global,plumbing,util}/?*.sh; do
 	source "$f"
 done
+
+bpm() {
+	_cmd_.bpm "$@"
+}
 
 setup() {
 	mkdir -p "$BPM_TEST_DIR" "$BPM_ORIGIN_DIR"

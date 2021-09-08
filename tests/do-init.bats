@@ -5,7 +5,7 @@ load './util/init.sh'
 # TODO
 # @test "exports BPM_REPO_SOURCE" {
 # 	unset BPM_REPO_SOURCE
-# 	eval "$(BPM_REPO_SOURCE=/lol do-init bash)"
+# 	eval "$(BPM_REPO_SOURCE=/lol bpm global init bash)"
 
 # 	assert_success
 # 	assert [ "$BPM_REPO_SOURCE" = '/lol' ]
@@ -14,7 +14,7 @@ load './util/init.sh'
 
 # @test "exports BPM_CELLAR" {
 # 	unset BPM_CELLAR
-# 	eval "$(BPM_CELLAR=/lol do-init bash)"
+# 	eval "$(BPM_CELLAR=/lol bpm global init bash)"
 
 # 	assert_success
 # 	assert [ "$BPM_CELLAR" = '/lol' ]
@@ -24,7 +24,7 @@ load './util/init.sh'
 @test "sources bpm-load for Bash" {
 	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
-	eval "$(do-init bash)"
+	eval "$(bpm global init bash)"
 
 	assert_success
 	assert [ "$(type -t bpm-load)" = 'function' ]
@@ -34,14 +34,14 @@ load './util/init.sh'
 @test "sources bpm-load for Zsh" {
 	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
-	eval "$(do-init zsh)"
+	eval "$(bpm global init zsh)"
 
 	assert_success
 	assert [ "$(type -t bpm-load)" = 'function' ]
 }
 
 @test "fails if shell is not available" {
-	run do-init fakesh
+	run bpm global init fakesh
 
 	assert_failure
 	assert_line -p "Shell 'fakesh' is not a valid shell"
@@ -52,7 +52,7 @@ load './util/init.sh'
 
 	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
 
-	eval "$(do-init bash)"
+	eval "$(bpm global init bash)"
 
 	assert command -v _bpm
 }
@@ -68,6 +68,6 @@ load './util/init.sh'
 }
 
 @test "is sh-compatible" {
-	run eval "$(do-init - sh)"
+	run eval "$(bpm global init - sh)"
 	assert_success
 }

@@ -59,3 +59,4 @@ fi
 
 # shellcheck disable=SC1091
 source "$PROGRAM_LIB_DIR/cmd/bpm.sh"
+_cmd_.bpm "$@"

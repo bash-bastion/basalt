@@ -39,7 +39,7 @@ do-add() {
 		die "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
 	fi
 
-	if [[ "$BPM_MODE" == global && "$flag_all" == yes ]]; then
+	if [[ "$BPM_MODE" == 'global' && "$flag_all" == yes ]]; then
 		die "Cannot pass '--all' without a 'bpm.toml' file"
 	fi
 

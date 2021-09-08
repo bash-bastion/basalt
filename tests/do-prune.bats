@@ -10,7 +10,7 @@ load 'util/init.sh'
 
 	assert [ -L "$file" ]
 
-	run do-prune
+	run bpm global prune
 
 	assert_success
 	assert [ ! -L "$file" ]
@@ -25,7 +25,7 @@ load 'util/init.sh'
 
 	assert [ -L "$file"  ]
 
-	run do-prune
+	run bpm global prune
 
 	assert_success
 	assert [ ! -L "$file"  ]
@@ -43,7 +43,7 @@ load 'util/init.sh'
 	assert [ -L "$file1"  ]
 	assert [ -L "$file2"  ]
 
-	run do-prune
+	run bpm global prune
 
 	assert_success
 	assert [ ! -L "$file1"  ]
@@ -60,7 +60,7 @@ load 'util/init.sh'
 
 	assert [ -L "$file" ]
 
-	run do-prune
+	run bpm global prune
 
 	assert_success
 	assert [ ! -L "$file" ]

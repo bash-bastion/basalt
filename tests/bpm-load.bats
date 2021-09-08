@@ -32,9 +32,9 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 
 	echo "dependencies = ['file://$BPM_ORIGIN_DIR/$pkg']" > 'bpm.toml'
-	BPM_MODE='local' do-add --all
+	bpm add --all
 
-	BPM_MODE='local' run bpm-load "$pkg"
+	run bpm-load "$pkg"
 
 	assert_success
 	assert_output "it works :)"

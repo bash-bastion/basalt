@@ -310,7 +310,7 @@ load 'util/init.sh'
 	test_util.create_package "$dir2"
 
 	# implicit call to plumbing.symlink-bins
-	run do-link "$BPM_ORIGIN_DIR/$dir" "$BPM_ORIGIN_DIR/$dir2"
+	run bpm global link "$BPM_ORIGIN_DIR/$dir" "$BPM_ORIGIN_DIR/$dir2"
 
 	assert_success
 	assert [ ! -e "$BPM_CELLAR/bin/package" ]

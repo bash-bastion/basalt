@@ -3,11 +3,11 @@
 set -ETeo pipefail
 shopt -s nullglob extglob
 
-main() {
-	for f in "$PROGRAM_LIB_DIR"/{commands,commands-global,plumbing,util}/?*.sh; do
-		source "$f"
-	done
+for f in "$PROGRAM_LIB_DIR"/{commands,commands-global,plumbing,util}/?*.sh; do
+	source "$f"
+done
 
+_cmd_.bpm() {
 	for arg; do
 		case "$arg" in
 		--help|-h)
@@ -15,6 +15,7 @@ main() {
 			exit
 			;;
 		--version|-v)
+			# TODO: version string out of date
 			cat <<-EOF
 			Version: v0.6.0
 			EOF
@@ -61,5 +62,3 @@ main() {
 			;;
 	esac
 }
-
-main "$@"

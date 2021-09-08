@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "fails with an invalid path" {
-	run do-link invalid
+	run bpm global link invalid
 
 	assert_failure
 	assert_output -p "Directory 'invalid' not found"
@@ -12,7 +12,7 @@ load 'util/init.sh'
 @test "fails with a file" {
 	touch 'file1'
 
-	run do-link 'file1'
+	run bpm global link 'file1'
 
 	assert_failure
 	assert_output -p "Directory 'file1' not found"
@@ -33,7 +33,7 @@ load 'util/init.sh'
 
 	mkdir "$pkg2"
 	git -C "$pkg2" init
-	run do-link "$pkg2"
+	run bpm global link "$pkg2"
 
 	assert_failure
 	assert_line -n 0 -p "Package 'local/theta' is already present"
@@ -42,7 +42,7 @@ load 'util/init.sh'
 @test "fails if not a Git repository" {
 	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
 
-	run do-link "$BPM_ORIGIN_DIR/$pkg"
+	run bpm global link "$BPM_ORIGIN_DIR/$pkg"
 
 	assert_failure
 	assert_line -n 0 -p "Package must be a Git repository"
@@ -60,7 +60,7 @@ load 'util/init.sh'
 	test_util.create_package 'theta'
 	mkdir 'theta'
 
-	run do-link "$BPM_ORIGIN_DIR/theta"
+	run bpm global link "$BPM_ORIGIN_DIR/theta"
 
 	assert_failure
 	assert_line -n 0 -p "Package 'local/theta' is already present"
@@ -76,7 +76,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$dir"
 
-	run do-link "$BPM_ORIGIN_DIR/$dir"
+	run bpm global link "$BPM_ORIGIN_DIR/$dir"
 
 	assert_success
 	assert [ "$(readlink -f $BPM_PACKAGES_PATH/local/package1)" = "$(readlink -f "$BPM_ORIGIN_DIR/$dir")" ]
@@ -97,7 +97,7 @@ load 'util/init.sh'
 	# symlink so the output matches properly
 	local srcDir="$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
 
-	run do-link "$srcDir"
+	run bpm global link "$srcDir"
 
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir'"
@@ -123,7 +123,7 @@ load 'util/init.sh'
 	local srcDir1="$(util.readlink "$BPM_ORIGIN_DIR/$dir1")"
 	local srcDir2="$(util.readlink "$BPM_ORIGIN_DIR/$dir2")"
 
-	run do-link "$srcDir1" "$srcDir2"
+	run bpm global link "$srcDir1" "$srcDir2"
 
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir1'"
@@ -152,7 +152,7 @@ load 'util/init.sh'
 
 	local srcDir="$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
 
-	run do-link --no-deps "$srcDir"
+	run bpm global link --no-deps "$srcDir"
 
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir'"
@@ -172,7 +172,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$dir"
 
-	run do-link --no-deps "$BPM_ORIGIN_DIR/$dir"
+	run bpm global link --no-deps "$BPM_ORIGIN_DIR/$dir"
 
 	assert_success
 	refute_line "plumbing.add-dependencies local/package2"
@@ -188,7 +188,7 @@ load 'util/init.sh'
 
 	test_util.create_package "$dir"
 
-	run do-link "$BPM_ORIGIN_DIR/$dir" --no-deps
+	run bpm global link "$BPM_ORIGIN_DIR/$dir" --no-deps
 
 	assert_success
 	refute_line "plumbing.add-dependencies local/package2"
@@ -205,7 +205,7 @@ load 'util/init.sh'
 	test_util.create_package "$dir"
 
 	cd "$BPM_ORIGIN_DIR/$dir"
-	run do-link .
+	run bpm global link .
 
 	assert_success
 	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/$dir")" = "$(readlink -f "$BPM_ORIGIN_DIR/$dir")" ]
@@ -225,7 +225,7 @@ load 'util/init.sh'
 	mkdir -p 'tango'
 	cd 'tango'
 
-	run do-link ..
+	run bpm global link ..
 
 	assert_success
 	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/$dir")" = "$(readlink -f "$BPM_ORIGIN_DIR/$dir")" ]
@@ -242,14 +242,14 @@ load 'util/init.sh'
 	test_util.create_package "parent/$dir"
 
 	cd "$BPM_ORIGIN_DIR/parent"
-	run do-link "./$dir/.././$dir"
+	run bpm global link "./$dir/.././$dir"
 
 	assert_success
 	assert [ "$(readlink -f "$BPM_PACKAGES_PATH/local/$dir")" = "$(readlink -f "$BPM_ORIGIN_DIR/parent/$dir")" ]
 }
 
 @test "errors when no packages are given" {
-	run do-link
+	run bpm global link
 
 	assert_failure
 	assert_line -p 'At least one package must be supplied'
