@@ -273,22 +273,21 @@ util.init_command() {
 	if [ "$BPM_MODE" = local ]; then
 		local project_root_dir=
 		if project_root_dir="$(util.get_project_root_dir)"; then
+			# TODO: improve this output
 			# Output to standard error because some subcommands may be scriptable (ex. list)
 			log.info "Operating in context of local bpm.toml" >&2
 			if [ "${BPM_IS_TEST+x}" ]; then
 				printf "  -> %s\n" "'$project_root_dir'"
 			fi
 
-			# Set the variables as to make them correct for 'local' mode
 			BPM_LOCAL_PROJECT_DIR="$project_root_dir"
-			BPM_REPO_SOURCE="$BPM_REPO_SOURCE"
 			BPM_CELLAR="$project_root_dir/bpm_packages"
 			BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
 			BPM_INSTALL_BIN="$BPM_CELLAR/bin"
 			BPM_INSTALL_MAN="$BPM_CELLAR/man"
 			BPM_INSTALL_COMPLETIONS="$BPM_CELLAR/completions"
 		else
-			die "No 'bpm.toml' file found"
+			die "Could not find a 'bpm.toml' file"
 		fi
 	else
 		BPM_CELLAR="$BPM_CELLAR"
@@ -308,9 +307,9 @@ Usage:
 
 Subcommands (local):
   init
-    Configure shell environment for bpm
+    Create a new bpm package in the current directory
 
-  add [--all] [--branch=<name>] [[site/]<package>[@ref]...]
+  add [--branch=<name>] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
 
   upgrade [--all] <package...>

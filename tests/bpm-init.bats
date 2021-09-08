@@ -2,6 +2,13 @@
 
 load './util/init.sh'
 
+@test "local creates bpm.toml" {
+	run bpm init
+
+	assert_success
+	assert [ -f 'bpm.toml' ]
+}
+
 # TODO
 # @test "exports BPM_REPO_SOURCE" {
 # 	unset BPM_REPO_SOURCE

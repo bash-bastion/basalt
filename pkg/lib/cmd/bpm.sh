@@ -3,7 +3,7 @@
 set -ETeo pipefail
 shopt -s nullglob extglob
 
-for f in "$PROGRAM_LIB_DIR"/{commands,commands-global,plumbing,util}/?*.sh; do
+for f in "$PROGRAM_LIB_DIR"/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done
 
@@ -43,13 +43,13 @@ _cmd_.bpm() {
 
 			BPM_MODE='global'
 			case "$1" in
-				init) shift; do-init "$@" ;;
-				add) shift; do-add "$@" ;;
-				upgrade) shift; do-upgrade "$@" ;;
-				remove) shift; do-remove "$@" ;;
-				link) shift; do-link "$@" ;;
-				prune) shift; do-prune "$@" ;;
-				list) shift; do-list "$@" ;;
+				init) shift; do-global-init "$@" ;;
+				add) shift; do-global-add "$@" ;;
+				upgrade) shift; do-global-upgrade "$@" ;;
+				remove) shift; do-global-remove "$@" ;;
+				link) shift; do-global-link "$@" ;;
+				prune) shift; do-global-prune "$@" ;;
+				list) shift; do-global-list "$@" ;;
 			esac
 			;;
 		*)

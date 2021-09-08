@@ -28,6 +28,7 @@ For a particular project folder, the `bpm_packages` directory is structured as s
 Packages are directly downloaded to `tarballs`, extracted `packages`, and are transmogrified as detailed below. Unfortunately, some modification needs to be done so different versions of the same transitive package located at different locations in the dependency hierarchy work properly
 
 For each `package`, a `bpm_packages` directory will still be created with the directories `bin`, `completions`, and `man`, containing symlinks resolved properly to their respective location in `transitive/{bin,completions,man}`. (Symlinks are not resolved directly to the package since an extra symlink indirection should make things easier and more maintainable)
+
 ## Package transmogrification
 
 Files of all transitive dependencies are transmogrified. They are modified in the following way
