@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 
+# TODO: make this automatic
 # TODO: prune local packages that are no longer in dependencies
 do-prune() {
 	util.init_command

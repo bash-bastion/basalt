@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-echo_bpm_variables_posix() {
+echo_variables_posix() {
 	cat <<-EOF
 	# bpm variables
 	export BPM_REPO_SOURCE="${BPM_REPO_SOURCE:-"${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"}"
@@ -9,7 +9,7 @@ echo_bpm_variables_posix() {
 	EOF
 }
 
-echo_bpm_include_posix() {
+echo_include_posix() {
 	cat <<-"EOF"
 	# bpm include function
 	if [ -f "$BPM_REPO_SOURCE/pkg/share/include.sh" ]; then
@@ -19,7 +19,7 @@ echo_bpm_include_posix() {
 	EOF
 }
 
-echo_bpm_package_path_posix() {
+echo_package_path_posix() {
 	cat <<-"EOF"
 	# bpm packages PATH
 	if [ "${PATH#*$BPM_CELLAR/bin}" = "$PATH" ]; then
@@ -77,7 +77,7 @@ do-global-init() {
 		EOF
 		;;
 	bash)
-		echo_bpm_variables_posix
+		echo_variables_posix
 		cat <<-EOF
 		# bpm completions
 		if [ -f "\$BPM_REPO_SOURCE/completions/bpm.bash" ]; then
@@ -85,13 +85,13 @@ do-global-init() {
 		fi
 
 		EOF
-		echo_bpm_include_posix
+		echo_include_posix
 		cat <<-"EOF"
 		source "$BPM_REPO_SOURCE/pkg/lib/source/bpm-load.sh"
 
 		EOF
 
-		echo_bpm_package_path_posix
+		echo_package_path_posix
 		cat <<-"EOF"
 		# bpm packages completions
 		if [ -d "$BPM_CELLAR/completions/bash" ]; then
@@ -104,19 +104,19 @@ do-global-init() {
 		EOF
 		;;
 	zsh)
-		echo_bpm_variables_posix
+		echo_variables_posix
 		cat <<-EOF
 		# bpm completions
 		fpath=("\$BPM_REPO_SOURCE/completions" \$fpath)
 		EOF
 
-		echo_bpm_include_posix
+		echo_include_posix
 		cat <<-"EOF"
 		source "$BPM_REPO_SOURCE/pkg/lib/source/bpm-load.sh"
 
 		EOF
 
-		echo_bpm_package_path_posix
+		echo_package_path_posix
 		cat <<-"EOF"
 		# bpm packages completions
 		fpath=("$BPM_CELLAR/completions/zsh/compsys" $fpath)
@@ -130,10 +130,10 @@ do-global-init() {
 		EOF
 		;;
 	sh)
-		echo_bpm_variables_posix
-		echo_bpm_include_posix
+		echo_variables_posix
+		echo_include_posix
 
-		echo_bpm_package_path_posix
+		echo_package_path_posix
 		;;
 	*)
 		cat <<-EOF

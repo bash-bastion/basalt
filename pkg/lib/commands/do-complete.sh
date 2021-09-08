@@ -1,14 +1,9 @@
 # shellcheck shell=bash
 
 do-complete() {
+	# TODO ensure works
 	case "$1" in
-	package-path)
-		do-list
-		;;
-	remove)
-		do-list
-		;;
-	upgrade)
+	list)
 		do-list
 		;;
 	esac

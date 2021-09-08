@@ -31,11 +31,8 @@ _cmd_.bpm() {
 	BPM_MODE='local'
 	case "$1" in
 		init) shift; do-init "$@" ;;
-		add) shift; do-add "$@" ;;
-		upgrade) shift; do-upgrade "$@" ;;
-		remove) shift; do-remove "$@" ;;
+		install) shift; do-install "$@" ;;
 		link) shift; do-link "$@" ;;
-		prune) shift; do-prune "$@" ;;
 		list) shift; do-list "$@" ;;
 		complete) shift; do-complete "$@" ;;
 		global)
@@ -48,8 +45,14 @@ _cmd_.bpm() {
 				upgrade) shift; do-global-upgrade "$@" ;;
 				remove) shift; do-global-remove "$@" ;;
 				link) shift; do-global-link "$@" ;;
-				prune) shift; do-global-prune "$@" ;;
 				list) shift; do-global-list "$@" ;;
+				*)
+					if [ -n "$1" ]; then
+						log.error "Global subcommand '$1' not valid"
+					fi
+					util.show_help
+					return 1
+					;;
 			esac
 			;;
 		*)

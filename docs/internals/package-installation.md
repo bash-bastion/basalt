@@ -15,14 +15,16 @@ For a particular project folder, the `bpm_packages` directory is structured as s
 ```txt
 - bpm_packages/
   - bin/
-  - completions/
+  - completion/
   - man/
-  - transitive/
-    - bin/
-    - completions/
-    - man/
   - tarballs/
   - packages/
+  - transitive/
+    - bin/
+    - completion/
+    - man/
+    - tarballs/
+    - packages/
 ```
 
 Packages are directly downloaded to `tarballs`, extracted `packages`, and are transmogrified as detailed below. Unfortunately, some modification needs to be done so different versions of the same transitive package located at different locations in the dependency hierarchy work properly
