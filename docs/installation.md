@@ -1,6 +1,8 @@
 # Installation
 
-Note: `bpm` is currently BETA quality
+Note: Basalt is currently BETA quality
+
+I would ***highly*** recommend waiting to try out bpm once the current `wip` branch has been merged (~1 week)
 
 ## Prerequisites
 
@@ -26,7 +28,7 @@ curl -Lo- https://raw.githubusercontent.com/hyperupcall/bpm/main/scripts/install
 
 ### Manual
 
-##### 1. Clone `bpm`
+##### 1. Clone Basalt
 
 ```sh
 git clone https://github.com/hyperupcall/bpm "${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source"

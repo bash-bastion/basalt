@@ -1,18 +1,20 @@
-# bpm
+# Basalt
 
-`bpm` is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
+Basalt is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
 
 STATUS: BETA (expect breaking changes until a post-beta release)
 
 ---
 
-`bpm` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
+Basalt is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
 
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
 
 ```sh
 $ bpm global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 ```
+
+**NOTE**: This project is called `Basalt`, but the binary is called `bpm` and not `basalt` because that was the previous name of this repository. The name change is only reflected in the `wip` branch, which is essentially a near-complete rewrite of the package manager with reasoning explained in [ADR-1](./docs/architecture/ADR-1.md). It will be merged soon
 
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
 
@@ -34,6 +36,7 @@ eval "$(bpm init bash)" # zsh and fish are also supported
 ```
 
 See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-started.md) for more details
+
 
 ## Features
 
