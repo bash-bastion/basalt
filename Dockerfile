@@ -6,7 +6,7 @@ RUN apk add --no-cache git \
 	&& git config --global user.email "user@example.com" \
 	&& git config --global user.name "User Name"
 
-COPY . /opt/bpm/source
+COPY . /opt/basalt/source
 
-WORKDIR /opt/bpm/source
-ENTRYPOINT ["/opt/bpm/source/.workflow-data/bats-core/bin/bats"]
+WORKDIR /opt/basalt/source
+ENTRYPOINT ["/opt/basalt/source/.workflow-data/bats-core/bin/bats"]
