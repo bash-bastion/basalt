@@ -6,15 +6,15 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
-	BPM_CELLAR="$BPM_TEST_DIR/cellar"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run bpm-load --global "$pkg"
+	run basalt-load --global "$pkg"
 
 	assert_success
 	assert_output "it works :)"
@@ -24,17 +24,17 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
-	BPM_CELLAR="$BPM_TEST_DIR/cellar"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
 	}; test_util.finish_pkg
 
-	echo "dependencies = ['file://$BPM_ORIGIN_DIR/$pkg']" > 'bpm.toml'
-	bpm add --all
+	echo "dependencies = ['file://$BASALT_ORIGIN_DIR/$pkg']" > 'basalt.toml'
+	basalt add --all
 
-	run bpm-load "$pkg"
+	run basalt-load "$pkg"
 
 	assert_success
 	assert_output "it works :)"
@@ -44,33 +44,33 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
-	BPM_CELLAR="$BPM_TEST_DIR/cellar"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run bpm-load --global --dry "$pkg"
+	run basalt-load --global --dry "$pkg"
 
 	assert_success
-	assert_output -p "bpm-load: Would source file"
+	assert_output -p "basalt-load: Would source file"
 }
 
 @test "works with file argument" {
 	local site='github.com'
 	local pkg="user/project2"
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
-	BPM_CELLAR="$BPM_TEST_DIR/cellar"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'file.bash'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run bpm-load --global "$pkg" 'file.bash'
+	run basalt-load --global "$pkg" 'file.bash'
 
 	assert_success
 	assert_output "it works :)"
@@ -81,15 +81,15 @@ load 'util/init.sh'
 # 	local site='github.com'
 # 	local pkg="user/project2"
 
-# 	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
-# 	BPM_CELLAR="$BPM_TEST_DIR/cellar"
+# 	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+# 	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
 
 # 	test_util.setup_pkg "$pkg"; {
 # 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
 # 	}; test_util.finish_pkg
 # 	test_util.mock_add "$pkg"
 
-# 	run source bpm-load --global "$pkg"
+# 	run source basalt-load --global "$pkg"
 
 # 	assert_failure
 # 	assert_line -p "Incorrect usage. See documentation"
@@ -99,15 +99,15 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
-	BPM_CELLAR="$BPM_TEST_DIR/cellar"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run bpm-load
+	run basalt-load
 
 	assert_failure
 	assert_line -p "Error: Must pass in package name as first parameter"

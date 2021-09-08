@@ -7,11 +7,11 @@ plumbing.remove-dependencies() {
 
 	local -a deps=()
 
-	local bpm_toml_file="$BPM_PACKAGES_PATH/$package/bpm.toml"
-	local package_sh_file="$BPM_PACKAGES_PATH/$package/package.sh"
+	local basalt_toml_file="$BASALT_PACKAGES_PATH/$package/basalt.toml"
+	local package_sh_file="$BASALT_PACKAGES_PATH/$package/package.sh"
 
-	if [ -f "$bpm_toml_file" ]; then
-		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
+	if [ -f "$basalt_toml_file" ]; then
+		if util.get_toml_array "$basalt_toml_file" 'dependencies'; then
 			deps=("${REPLIES[@]}")
 		fi
 	elif [ -f "$package_sh_file" ]; then
@@ -30,6 +30,6 @@ plumbing.remove-dependencies() {
 		local pkg="$REPLY3"
 
 		log.info "Removing '$site/$pkg'"
-		rm -rf "${BPM_PACKAGES_PATH:?}/$site/$pkg"
+		rm -rf "${BASALT_PACKAGES_PATH:?}/$site/$pkg"
 	done
 }

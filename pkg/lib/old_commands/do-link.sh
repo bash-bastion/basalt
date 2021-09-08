@@ -18,7 +18,7 @@ do-link() {
 	fi
 
 	for dir in "${dirs[@]}"; do
-		if [ ! -d "$dir" ]; then 
+		if [ ! -d "$dir" ]; then
 			die "Directory '$dir' not found"
 		fi
 
@@ -33,12 +33,12 @@ do-link() {
 		local repository="${dir##*/}"
 		local package="$user/$repository"
 
-		if [ -e "$BPM_PACKAGES_PATH/$package" ]; then
+		if [ -e "$BASALT_PACKAGES_PATH/$package" ]; then
 			die "Package '$package' is already present"
 		fi
 
-		mkdir -p "$BPM_PACKAGES_PATH/$user"
-		ln -s "$dir" "$BPM_PACKAGES_PATH/$package"
+		mkdir -p "$BASALT_PACKAGES_PATH/$user"
+		ln -s "$dir" "$BASALT_PACKAGES_PATH/$package"
 
 		log.info "Symlinking '$dir'"
 		plumbing.symlink-bins "$package"

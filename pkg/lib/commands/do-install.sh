@@ -13,8 +13,8 @@ do-install() {
 		;;
 	esac done
 
-	local bpm_toml_file="$BPM_LOCAL_PROJECT_DIR/bpm.toml"
-	if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
+	local basalt_toml_file="$BASALT_LOCAL_PROJECT_DIR/basalt.toml"
+	if util.get_toml_array "$basalt_toml_file" 'dependencies'; then
 		for pkg in "${REPLIES[@]}"; do
 			util.extract_data_from_input "$pkg"
 			local uri="$REPLY1"

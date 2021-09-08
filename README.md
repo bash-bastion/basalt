@@ -1,27 +1,27 @@
-# bpm
+# basalt
 
-`bpm` is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
+`basalt` is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
 
 STATUS: BETA (expect breaking changes until a post-beta release)
 
 ---
 
-`bpm` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
+`basalt` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third party apt repositories or the [AUR](https://aur.archlinux.org)
 
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
 
 ```sh
-$ bpm global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
+$ basalt global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 ```
 
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
 
 ```sh
-$ exa -l --no-permissions --no-filesize --no-user ~/.local/share/bpm/cellar/bin/
-bash2048.sh -> /home/edwin/.local/share/bpm/cellar/packages/github.com/JosefZIla/bash2048/bash2048.sh
-bashtop -> /home/edwin/.local/share/bpm/cellar/packages/github.com/aristocratos/bashtop/bashtop
-git-alias -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-alias
-git-archive-file -> /home/edwin/.local/share/bpm/cellar/packages/github.com/tj/git-extras/bin/git-archive-file
+$ exa -l --no-permissions --no-filesize --no-user ~/.local/share/basalt/cellar/bin/
+bash2048.sh -> /home/edwin/.local/share/basalt/cellar/packages/github.com/JosefZIla/bash2048/bash2048.sh
+bashtop -> /home/edwin/.local/share/basalt/cellar/packages/github.com/aristocratos/bashtop/bashtop
+git-alias -> /home/edwin/.local/share/basalt/cellar/packages/github.com/tj/git-extras/bin/git-alias
+git-archive-file -> /home/edwin/.local/share/basalt/cellar/packages/github.com/tj/git-extras/bin/git-archive-file
 ...
 ```
 
@@ -29,8 +29,8 @@ To be able to access the binaries, completion files, and man pages in your shell
 
 ```sh
 # ~/.bashrc
-export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/bpm/source/pkg/bin:$PATH"
-eval "$(bpm init bash)" # zsh and fish are also supported
+export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
+eval "$(basalt init bash)" # zsh and fish are also supported
 ```
 
 See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-started.md) for more details
@@ -44,7 +44,7 @@ See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-
 
 ## Alternatives Comparison
 
-Why not use `bpkg` or `Basher`? Because `hyperupcall/bpm`...
+Why not use `bpkg` or `Basher`? Because `hyperupcall/basalt`...
 
 - Can install multiple packages at once
 - Install local dependencies for a particular project (bpkg and basher)
@@ -53,10 +53,10 @@ Why not use `bpkg` or `Basher`? Because `hyperupcall/bpm`...
 - Does not automatically source a `package.sh` for package configuration (basher)
 - Is able to install more repositories out-of-the-box
 - Respects the XDG Base Directory specification (bpkg)
-- Is faster (bpm considers exec and subshell creation overhead)
+- Is faster (basalt considers exec and subshell creation overhead)
 - Has a _much_ improved help output (basher)
 - Prints why a command failed, rather than just printing the help menu (basher)
-- Better bpm completion scripts
+- Better basalt completion scripts
 - More flexibly parses command line arguments (basher)
 - Install local directories as packages (bpkg)
 
@@ -66,10 +66,10 @@ Prior art
 
 | Software        | Deps | Versions | Locations          | Completions |
 |---------------- |------|----------|--------------------| ----------- |
-| hyperupcall/bpm | Yes  | Yes      | Global, User, Repo | Yes         |
+| hyperupcall/basalt | Yes  | Yes      | Global, User, Repo | Yes         |
 | [basher]        | Yes  | No       | Global, User       | Yes         |
 | [bpkg]          | Yes  | Yes      | Global, User, Repo | Yes         |
-| [bpm-rocks/bpm] | Yes  | No       | Global, User, Repo | No          |
+| [basalt-rocks/basalt] | Yes  | No       | Global, User, Repo | No          |
 | [Themis]        | Yes  | Yes      | Global, User, Repo | No          |
 | [xsh]           | ?    | ?        |                    |             |
 | [shpkg]         |      |          |                    |             |
@@ -80,7 +80,7 @@ Prior art
 
 [basher]: https://github.com/basherpm/basher
 [bpkg]: https://github.com/bpkg/bpkg
-[bpm-rocks/bpm]: https://github.com/bpm-rocks/bpm/
+[basalt-rocks/basalt]: https://github.com/basalt-rocks/basalt/
 [Themis]: https://github.com/ByCh4n-Group/themis
 [xsh]: https://github.com/alexzhangs/xsh
 [shpkg]: https://github.com/shpkg/shpkg

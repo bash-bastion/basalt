@@ -5,7 +5,7 @@ load 'util/init.sh'
 @test "if package is not installed, fails" {
 	local site='github.com'
 	local pkg='user/repo'
-	run bpm global remove "$pkg"
+	run basalt global remove "$pkg"
 
 	assert_failure
 	assert_output -e "Package 'github.com/$pkg' is not installed"
@@ -14,28 +14,28 @@ load 'util/init.sh'
 @test "if package is a file, succeed, properly remove it" {
 	local id='github.com/user/repo'
 
-	mkdir -p "$BPM_PACKAGES_PATH/${id%/*}"
-	touch "$BPM_PACKAGES_PATH/$id"
+	mkdir -p "$BASALT_PACKAGES_PATH/${id%/*}"
+	touch "$BASALT_PACKAGES_PATH/$id"
 
-	[ -f "$BPM_PACKAGES_PATH/$id" ]
+	[ -f "$BASALT_PACKAGES_PATH/$id" ]
 
-	run bpm global remove "$id"
+	run basalt global remove "$id"
 
 	assert_success
-	assert [ ! -e "$BPM_ORIGIN_DIR/$id" ]
+	assert [ ! -e "$BASALT_ORIGIN_DIR/$id" ]
 }
 
 @test "if package is an empty directory, properly remove it" {
 	local id='github.com/user/repo'
 
-	mkdir -p "$BPM_PACKAGES_PATH/$id"
+	mkdir -p "$BASALT_PACKAGES_PATH/$id"
 
-	assert [ -d "$BPM_PACKAGES_PATH/$id" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/$id" ]
 
-	run bpm global remove "$id"
+	run basalt global remove "$id"
 
 	assert_success
-	assert [ ! -e "$BPM_ORIGIN_DIR/$id" ]
+	assert [ ! -e "$BASALT_ORIGIN_DIR/$id" ]
 }
 
 @test "properly removes package directory" {
@@ -43,17 +43,17 @@ load 'util/init.sh'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		touch 'bpm.toml'
+		touch 'basalt.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/github.com/$pkg" ]
 
-	run bpm global remove "$pkg"
+	run basalt global remove "$pkg"
 
 	assert_success
-	assert [ ! -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
+	assert [ ! -d "$BASALT_PACKAGES_PATH/github.com/$pkg" ]
 }
 
 @test "properly remove (unlink) locally installed packages" {
@@ -65,12 +65,12 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_link "$dir"
 
-	assert [ -d "$BPM_PACKAGES_PATH/local/$dir" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/local/$dir" ]
 
-	run bpm global remove "local/$dir"
+	run basalt global remove "local/$dir"
 
 	assert_success
-	assert [ ! -d "$BPM_PACKAGES_PATH/local/$dir" ]
+	assert [ ! -d "$BASALT_PACKAGES_PATH/local/$dir" ]
 }
 
 @test "fails to remove package directory with wrong site name" {
@@ -78,14 +78,14 @@ load 'util/init.sh'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		touch 'bpm.toml'
+		touch 'basalt.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -d "$BPM_PACKAGES_PATH/github.com/$pkg" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/github.com/$pkg" ]
 
-	run bpm global remove "gitlab.com/$pkg"
+	run basalt global remove "gitlab.com/$pkg"
 
 	assert_failure
 }
@@ -95,16 +95,16 @@ load 'util/init.sh'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		touch 'bpm.toml'
+		touch 'basalt.toml'
 		touch 'file.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run bpm global remove "$pkg"
+	run basalt global remove "$pkg"
 
 	assert_success
-	assert [ ! -d "$BPM_PACKAGES_PATH/$site/$pkg" ]
-	assert [ ! -d "$BPM_PACKAGES_PATH/${pkg%/*}" ]
+	assert [ ! -d "$BASALT_PACKAGES_PATH/$site/$pkg" ]
+	assert [ ! -d "$BASALT_PACKAGES_PATH/${pkg%/*}" ]
 }
 
 @test "properly removes binaries" {
@@ -119,11 +119,11 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	run bpm global remove "$pkg"
+	run basalt global remove "$pkg"
 
 	assert_success
-	[ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	[ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	[ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	[ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }
 
 @test "properly keeps non-uninstalled package directories and binaries" {
@@ -143,31 +143,31 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg2"
 
-	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg1" ]
-	assert [ -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg2" ]
-	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/$site/$pkg1" ]
+	assert [ -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/$site/$pkg2" ]
+	assert [ -e "$BASALT_INSTALL_BIN/exec2" ]
 
-	run bpm global remove "$pkg1"
+	run basalt global remove "$pkg1"
 
 	assert_success
-	assert [ ! -d "$BPM_PACKAGES_PATH/$site/$pkg1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg2" ]
-	assert [ -e "$BPM_INSTALL_BIN/exec2" ]
+	assert [ ! -d "$BASALT_PACKAGES_PATH/$site/$pkg1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/$site/$pkg2" ]
+	assert [ -e "$BASALT_INSTALL_BIN/exec2" ]
 }
 
 @test "errors when no packages are given" {
-	run bpm global remove
+	run basalt global remove
 
 	assert_failure
 	assert_line -p 'At least one package must be supplied'
 }
 
-@test "--all prints warning when no dependencies are specified in bpm.toml" {
-	touch 'bpm.toml'
+@test "--all prints warning when no dependencies are specified in basalt.toml" {
+	touch 'basalt.toml'
 
-	run bpm global remove --all
+	run basalt global remove --all
 
 	assert_success
 	assert_line -p "No dependencies specified in 'dependencies' key"
@@ -175,9 +175,9 @@ load 'util/init.sh'
 }
 
 @test "--all errors when a package is specified as argument" {
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
-	run bpm global remove --all pkg
+	run basalt global remove --all pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
@@ -191,7 +191,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run bpm global remove "$pkg@v0.1.0"
+	run basalt global remove "$pkg@v0.1.0"
 
 	assert_failure
 	assert_line -p "Refs must be omitted when removing packages. Remove ref '@v0.1.0'"
@@ -203,19 +203,19 @@ load 'util/init.sh'
 
 	test_util.setup_pkg "$pkg"; {
 		# Invalid because 'binDirs' must be an array
-		echo 'binDirs = "somebin"' > 'bpm.toml'
+		echo 'binDirs = "somebin"' > 'basalt.toml'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	assert [ -d "$BPM_PACKAGES_PATH/$site/$pkg" ]
+	assert [ -d "$BASALT_PACKAGES_PATH/$site/$pkg" ]
 
-	run bpm global remove --force "$pkg"
+	run basalt global remove --force "$pkg"
 
 	assert_success
 	assert_line -p -n 0 "Force removing '$site/$pkg'"
 	assert_line -p -n 1 "Info: Pruning packages"
 
-	assert [ ! -d "$BPM_PACKAGES_PATH/$site/$pkg" ]
+	assert [ ! -d "$BASALT_PACKAGES_PATH/$site/$pkg" ]
 }
 
 @test "fail if give --all and --force flags" {
@@ -225,7 +225,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run bpm global remove --all --force
+	run basalt global remove --all --force
 
 	assert_failure
 	assert_line -p "Flags '--all' and '--force' are mutually exclusive"
@@ -238,7 +238,7 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run bpm global remove --force "$pkg" "$pkg"
+	run basalt global remove --force "$pkg" "$pkg"
 
 	assert_failure
 	assert_line -p "Only one package may be specified when --force is passed"
@@ -248,12 +248,12 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg1='user/project'
 
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
 	test_util.create_package "$pkg1"
 
-	run bpm remove "$pkg1"
+	run basalt remove "$pkg1"
 
 	assert_failure
-	assert_line -p "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
+	assert_line -p "Subcommands must use the '--all' flag when a 'basalt.toml' file is present"
 }

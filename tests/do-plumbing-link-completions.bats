@@ -33,7 +33,7 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/ff/comp.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/ff/comp.bash" ]
 }
 
 
@@ -51,15 +51,15 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/bash/prof.bash" ]
 }
 
-@test "adds bash completions determined from bpm.toml" {
+@test "adds bash completions determined from basalt.toml" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "weird_completions" ]' > 'basalt.toml'
 		mkdir 'weird_completions'
 		touch 'weird_completions/comp.bash'
 	}; test_util.finish_pkg
@@ -68,15 +68,15 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_completions/comp.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/comp.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/weird_completions/comp.bash" ]
 }
 
-@test "adds bash completions determined from bpm.toml (and not from heuristics)" {
+@test "adds bash completions determined from basalt.toml (and not from heuristics)" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "weird_completions" ]' > 'basalt.toml'
 		mkdir 'completions'
 		touch 'completions/prof.bash'
 	}; test_util.finish_pkg
@@ -85,7 +85,7 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prof.bash" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/bash/prof.bash" ]
 }
 
 @test "adds bash completions determined with heuristics (./?(contrib/)completion?(s))" {
@@ -104,10 +104,10 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.bash" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/c2.bash" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c3.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completion/c3.bash" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completion/c1.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c2.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completions/c2.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c3.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/contrib/completion/c3.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.bash" ]
 }
 
 @test "adds bash completions determined with heuristics (root directory)" {
@@ -123,8 +123,8 @@ load 'util/init.sh'
 	test_util.mock_add "$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/git-flow-completion.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.bash" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/some-completion.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/some-completion.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/git-flow-completion.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/git-flow-completion.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/some-completion.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/etc/some-completion.bash" ]
 }
 
 @test "adds bash completions determined with heuristics (share/etc)" {
@@ -147,12 +147,12 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c1" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c2.sh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c3.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c3.bash" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c4" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c5.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c5.sh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/c6.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c6.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c1.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c1" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c2.sh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c2.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c3.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/c3.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c4.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c4" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c5.sh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c5.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/c6.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/etc/bash_completion.d/c6.bash" ]
 }
 
 @test "adds bash completions determined from heuristics when when ZSH_COMPLETIONS is specified in package.sh" {
@@ -169,7 +169,7 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ -f "$BASALT_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
 @test "do not add bash completions from heuristics when BASH_COMPLETIONS is specified in package.sh" {
@@ -186,15 +186,15 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
-@test "do not add bash completions from heuristics when completionDirs is specified in bpm.toml" {
+@test "do not add bash completions from heuristics when completionDirs is specified in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "dirr" ]' > 'basalt.toml'
 		mkdir 'completion'
 		touch "completion/prog.bash"
 	}; test_util.finish_pkg
@@ -203,8 +203,8 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
 @test "bash completions without file extension have an extension appended" {
@@ -221,10 +221,10 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/seven.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/seven" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/seven.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/share/bash-completion/completions/seven" ]
 
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/bash/prog.bash" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/bash/prog.bash" ]
 }
 
 
@@ -244,7 +244,7 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/_exec" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/_exec")" = "$BASALT_PACKAGES_PATH/$site/$pkg/dirr/_exec" ]
 }
 
 @test "adds zsh compctl completions determined from pacakge.sh" {
@@ -261,15 +261,15 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/exec")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/exec" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/exec")" = "$BASALT_PACKAGES_PATH/$site/$pkg/dirr/exec" ]
 }
 
-@test "adds zsh compsys completions determined from bpm.toml" {
+@test "adds zsh compsys completions determined from basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "dirr" ]' > 'basalt.toml'
 		mkdir 'dirr'
 		echo '#compdef' > "dirr/_exec.zsh"
 	}; test_util.finish_pkg
@@ -278,15 +278,15 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_exec.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/_exec.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/_exec.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/dirr/_exec.zsh" ]
 }
 
-@test "adds zsh compctl completions determined from bpm.toml" {
+@test "adds zsh compctl completions determined from basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "dirr" ]' > 'basalt.toml'
 		mkdir 'dirr'
 		touch "dirr/exec.zsh"
 	}; test_util.finish_pkg
@@ -295,7 +295,7 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/exec.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/dirr/exec.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/exec.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/dirr/exec.zsh" ]
 }
 
 @test "adds zsh completions determined with heuristics (./?(contrib/)completion?(s))" {
@@ -312,10 +312,10 @@ load 'util/init.sh'
 	test_util.mock_add "$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/_c1.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_c2.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/_c2.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_c3.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completion/_c3.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_c4.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/_c4.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/_c1.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completion/_c1.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/_c2.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completions/_c2.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/_c3.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/contrib/completion/_c3.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/_c4.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/contrib/completions/_c4.zsh" ]
 }
 
 @test "adds zsh completions determined with heuristics (root directory)" {
@@ -331,8 +331,8 @@ load 'util/init.sh'
 	test_util.mock_add "$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/git-flow-completion.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/some-completion.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/some-completion.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/git-flow-completion.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/git-flow-completion.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/some-completion.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/etc/some-completion.zsh" ]
 }
 
 @test "adds zsh completions determined from heuristics when when BASH_COMPLETIONS is specified in package.sh" {
@@ -350,8 +350,8 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/_c1.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/_c1.zsh" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_c2.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/_c2.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/_c1.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completion/_c1.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/_c2.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completions/_c2.zsh" ]
 }
 
 @test "do not add zsh completions from heuristics when ZSH_COMPLETIONS is specified in package.sh" {
@@ -368,16 +368,16 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
 }
 
-@test "do not add zsh completions from heuristics when completionDirs is specified in bpm.toml" {
+@test "do not add zsh completions from heuristics when completionDirs is specified in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "dirr" ]' > 'basalt.toml'
 		mkdir 'completion'
 		touch "completion/prog.zsh"
 	}; test_util.finish_pkg
@@ -386,8 +386,8 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/prog.zsh" ]
 }
 
 @test "prepend underscore to zsh completions if one is not present" {
@@ -403,17 +403,17 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ -f "$BPM_INSTALL_COMPLETIONS/zsh/compsys/_prog.zsh" ]
+	assert [ -f "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/_prog.zsh" ]
 }
 
 ## FISH ##
 
-@test "adds fish completions determined from bpm.toml" {
+@test "adds fish completions determined from basalt.toml" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "weird_completions" ]' > 'basalt.toml'
 		mkdir 'weird_completions'
 		touch 'weird_completions/comp.fish'
 	}; test_util.finish_pkg
@@ -422,15 +422,15 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/comp.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_completions/comp.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/comp.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/weird_completions/comp.fish" ]
 }
 
-@test "adds fish completions determined from bpm.toml (and not from heuristics)" {
+@test "adds fish completions determined from basalt.toml (and not from heuristics)" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "weird_completions" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "weird_completions" ]' > 'basalt.toml'
 		mkdir 'completions'
 		touch 'completions/prof.fish'
 	}; test_util.finish_pkg
@@ -439,7 +439,7 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert_success [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prof.fish" ]
+	assert_success [ ! -f "$BASALT_INSTALL_COMPLETIONS/fish/prof.fish" ]
 }
 
 @test "adds fish completions determined with heuristics (./?(contrib/)completion?(s))" {
@@ -458,10 +458,10 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c1.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/c1.fish" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c2.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/c2.fish" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c3.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completion/c3.fish" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/c4.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/c1.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completion/c1.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/c2.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completions/c2.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/c3.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/contrib/completion/c3.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/c4.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/contrib/completions/c4.fish" ]
 }
 
 @test "adds fish completions determined with heuristics (root directory)" {
@@ -477,16 +477,16 @@ load 'util/init.sh'
 	test_util.mock_add "$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/git-flow-completion.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/git-flow-completion.fish" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/some-completion.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/etc/some-completion.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/git-flow-completion.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/git-flow-completion.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/some-completion.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/etc/some-completion.fish" ]
 }
 
-@test "do not add fish completions from heuristics when completionDirs is specified in bpm.toml" {
+@test "do not add fish completions from heuristics when completionDirs is specified in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = [ "dirr" ]' > 'bpm.toml'
+		echo 'completionDirs = [ "dirr" ]' > 'basalt.toml'
 		mkdir 'completion'
 		touch "completion/prog.fish"
 	}; test_util.finish_pkg
@@ -495,8 +495,8 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prog.fish" ]
-	assert [ ! -f "$BPM_INSTALL_COMPLETIONS/fish/prog.fish" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/fish/prog.fish" ]
+	assert [ ! -f "$BASALT_INSTALL_COMPLETIONS/fish/prog.fish" ]
 }
 
 
@@ -518,10 +518,10 @@ load 'util/init.sh'
 	run plumbing.symlink-completions "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/fish/prog.fish")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/prog.fish" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/prog1.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completion/prog1.bash" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/bash/prog2.bash")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/prog2.bash" ]
-	assert [ "$(readlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh")" = "$BPM_PACKAGES_PATH/$site/$pkg/completions/prog.zsh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/fish/prog.fish")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completion/prog.fish" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/prog1.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completion/prog1.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/bash/prog2.bash")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completions/prog2.bash" ]
+	assert [ "$(readlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/prog.zsh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/completions/prog.zsh" ]
 }
 
 @test "fails bash link completions when specifying directory in package.sh" {
@@ -592,12 +592,12 @@ load 'util/init.sh'
 	assert_line -p "Completion file 'some_file' not found. Skipping"
 }
 
-@test "warns link completions when specifying file in bpm.toml" {
+@test "warns link completions when specifying file in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = ["dir"]' > 'bpm.toml'
+		echo 'completionDirs = ["dir"]' > 'basalt.toml'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
@@ -607,12 +607,12 @@ load 'util/init.sh'
 	assert_line -p "Directory 'dir' with executable files not found. Skipping"
 }
 
-@test "warns link completions when specifying non-existent directory in bpm.toml" {
+@test "warns link completions when specifying non-existent directory in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'completionDirs = ["dir"]' > 'bpm.toml'
+		echo 'completionDirs = ["dir"]' > 'basalt.toml'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 

@@ -7,7 +7,7 @@ for f in "$PROGRAM_LIB_DIR"/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done
 
-_cmd_.bpm() {
+_cmd_.basalt() {
 	for arg; do case "$arg" in
 	--help|-h)
 		util.show_help
@@ -28,7 +28,7 @@ _cmd_.bpm() {
 		;;
 	esac done
 
-	BPM_MODE='local'
+	BASALT_MODE='local'
 	case "$1" in
 		init) shift; do-init "$@" ;;
 		install) shift; do-install "$@" ;;
@@ -38,7 +38,7 @@ _cmd_.bpm() {
 		global)
 			shift
 
-			BPM_MODE='global'
+			BASALT_MODE='global'
 			case "$1" in
 				init) shift; do-global-init "$@" ;;
 				add) shift; do-global-add "$@" ;;

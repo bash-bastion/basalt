@@ -39,15 +39,15 @@ do-list() {
 				die "Refs must be omitted when listing packages. Remove ref '@$ref'"
 			fi
 
-			if [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
-				echo_package_info "$BPM_PACKAGES_PATH/$site/$package" "$site" "${package%/*}" "${package#*/}" "$flag_fetch" "$flag_format"
+			if [ -d "$BASALT_PACKAGES_PATH/$site/$package" ]; then
+				echo_package_info "$BASALT_PACKAGES_PATH/$site/$package" "$site" "${package%/*}" "${package#*/}" "$flag_fetch" "$flag_format"
 			else
 				die "Package '$site/$package' is not installed"
 			fi
 		done
 	else
 		# If no packages are specified, list all of them
-		for namespace_path in "$BPM_PACKAGES_PATH"/*; do
+		for namespace_path in "$BASALT_PACKAGES_PATH"/*; do
 			local glob_suffix=
 			if [ "${namespace_path##*/}" = 'local' ]; then
 				glob_suffix="/*"
@@ -67,7 +67,7 @@ do-list() {
 	fi
 
 	if [ "$has_invalid_packages" = 'yes' ]; then
-		log.error "Some packages are installed in an outdated format. To fix this optimally, remove the '${BPM_PACKAGES_PATH%/*}' directory and reinstall all the packages that were deleted in the process. This procedure is required in response to a one-time breaking change in how packages are stored"
+		log.error "Some packages are installed in an outdated format. To fix this optimally, remove the '${BASALT_PACKAGES_PATH%/*}' directory and reinstall all the packages that were deleted in the process. This procedure is required in response to a one-time breaking change in how packages are stored"
 	fi
 }
 

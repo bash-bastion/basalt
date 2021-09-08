@@ -9,22 +9,22 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BASALT_ORIGIN_DIR/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	bpm global upgrade "$site/$pkg"
+	basalt global upgrade "$site/$pkg"
 
-	run bpm global list
+	run basalt global list
 
 	assert_success
 	assert_output -e "github.com/$pkg
   Branch: master
   Revision: ([a-z0-9]*)
   State: Up to date"
-	assert [ -f "$BPM_PACKAGES_PATH/$site/$pkg/script2.sh" ]
+	assert [ -f "$BASALT_PACKAGES_PATH/$site/$pkg/script2.sh" ]
 }
 
 @test "simple upgrade fails when specifying full directory" {
@@ -36,16 +36,16 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BASALT_ORIGIN_DIR/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	run bpm global upgrade "$BPM_ORIGIN_DIR/$pkg"
+	run basalt global upgrade "$BASALT_ORIGIN_DIR/$pkg"
 
 	assert_failure
-	assert_line -p "Package '$BPM_ORIGIN_DIR/$pkg' is not installed"
+	assert_line -p "Package '$BASALT_ORIGIN_DIR/$pkg' is not installed"
 }
 
 @test "simple upgrade properly prints linking and unlinking messages" {
@@ -55,17 +55,17 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BASALT_ORIGIN_DIR/$pkg"
 	mkdir 'completions' 'bin' 'man' 'man/man1'
 	touch 'completions/file.sh' 'bin/file' 'man/man1/file.1'
 	git add .
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	bpm global upgrade "$site/$pkg"
+	basalt global upgrade "$site/$pkg"
 
-	unset BPM_IS_TEST
-	run bpm global upgrade "$pkg"
+	unset BASALT_IS_TEST
+	run basalt global upgrade "$pkg"
 
 	assert_success
 	assert_line -p -n 1 "Unsymlinking bin files"
@@ -87,39 +87,39 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	cd "$BASALT_ORIGIN_DIR/$pkg"
 	touch 'script2.sh'
 	git add .
 	git commit -m 'Add script'
 	cd "$BATS_TEST_TMPDIR"
 
-	bpm global upgrade "$site/$pkg"
+	basalt global upgrade "$site/$pkg"
 
-	assert [ "$(readlink "$BPM_INSTALL_BIN/script.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/script.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/script.sh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/script.sh" ]
 }
 
-@test "BPM_INSTALL_DIR reflected when package modifies binDirs key" {
+@test "BASALT_INSTALL_DIR reflected when package modifies binDirs key" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binDirs = [ "binn" ]' > 'bpm.toml'
+		echo 'binDirs = [ "binn" ]' > 'basalt.toml'
 		mkdir 'binn'
 		touch 'binn/script3.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	[ -f "$BPM_INSTALL_BIN/script3.sh" ]
+	[ -f "$BASALT_INSTALL_BIN/script3.sh" ]
 
-	cd "$BPM_ORIGIN_DIR/$pkg"
-	rm 'bpm.toml'
+	cd "$BASALT_ORIGIN_DIR/$pkg"
+	rm 'basalt.toml'
 	git add .
-	git commit -m 'Remove bpm.toml'
+	git commit -m 'Remove basalt.toml'
 	cd "$BATS_TEST_TMPDIR"
 
-	bpm global upgrade "$site/$pkg"
+	basalt global upgrade "$site/$pkg"
 
-	assert [ ! -f "$BPM_INSTALL_BIN/script3.sh" ]
+	assert [ ! -f "$BASALT_INSTALL_BIN/script3.sh" ]
 }
 
 @test "fails if user tries to upgrade a 'link'ed package" {
@@ -133,41 +133,41 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_link "$pkg"
 
-	run bpm global upgrade "local/$pkg"
+	run basalt global upgrade "local/$pkg"
 
 	assert_failure
 	assert_line -p "Package 'local/$pkg' is locally symlinked and cannot be upgraded through Git"
 }
 
 @test "errors when no packages are given" {
-	run bpm global upgrade
+	run basalt global upgrade
 
 	assert_failure
 	assert_line -p 'At least one package must be supplied'
 }
 
-@test "upgrade bpm works" {
+@test "upgrade basalt works" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.stub_command 'git'
 
-	run bpm global upgrade 'bpm'
+	run basalt global upgrade 'basalt'
 
 	assert_success
-	assert_line -e 'git -C /(.*)/bpm/source/pkg/lib/../.. pull'
+	assert_line -e 'git -C /(.*)/basalt/source/pkg/lib/../.. pull'
 }
 
-@test "upgrade bpm fails when mixing package names" {
+@test "upgrade basalt fails when mixing package names" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.stub_command 'git'
 
-	run bpm global upgrade 'bpm' 'pkg/name'
+	run basalt global upgrade 'basalt' 'pkg/name'
 
 	assert_failure
-	assert_line -p 'Packages cannot be upgraded at the same time as bpm'
+	assert_line -p 'Packages cannot be upgraded at the same time as basalt'
 }
 
 @test "fail if ref is given during upgrade" {
@@ -177,32 +177,32 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.mock_clone "$pkg" "$site/$pkg"
 
-	run bpm global upgrade "$pkg@v0.1.0"
+	run basalt global upgrade "$pkg@v0.1.0"
 
 	assert_failure
 	assert_line -p "Refs must be omitted when upgrading packages. Remove ref '@v0.1.0'"
 }
 
-@test "fail if bpm and '--all' are specified" {
-	run bpm global upgrade bpm --all
+@test "fail if basalt and '--all' are specified" {
+	run basalt global upgrade basalt --all
 
 	assert_failure
-	assert_line -p "Upgrading bpm and using '--all' are mutually exclusive behaviors"
+	assert_line -p "Upgrading basalt and using '--all' are mutually exclusive behaviors"
 }
 
-@test "fail if bpm is specified in local mode" {
-	touch 'bpm.toml'
+@test "fail if basalt is specified in local mode" {
+	touch 'basalt.toml'
 
-	run bpm upgrade bpm
+	run basalt upgrade basalt
 
 	assert_failure
-	assert_line -p "Cannot upgrade bpm with a local 'bpm.toml' file"
+	assert_line -p "Cannot upgrade basalt with a local 'basalt.toml' file"
 }
 
 @test "--all errors when a package is specified as argument" {
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
-	run bpm global upgrade --all some/pkg
+	run basalt global upgrade --all some/pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
@@ -212,12 +212,12 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg1='user/project'
 
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
 	test_util.create_package "$pkg1"
 
-	run bpm upgrade "$pkg1"
+	run basalt upgrade "$pkg1"
 
 	assert_failure
-	assert_line -p "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
+	assert_line -p "Subcommands must use the '--all' flag when a 'basalt.toml' file is present"
 }

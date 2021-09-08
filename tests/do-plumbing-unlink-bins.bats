@@ -28,36 +28,36 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2.sh" ]
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }
 
-@test "removes bins determined from bpm.toml" {
+@test "removes bins determined from basalt.toml" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binDirs = [ "somebin" ]' > 'bpm.toml'
+		echo 'binDirs = [ "somebin" ]' > 'basalt.toml'
 		mkdir 'somebin'
 		touch 'somebin/exec1'
 		touch 'somebin/exec2.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2.sh" ]
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }
 
 @test "removes bins determined from heuristics (bin directory)" {
@@ -71,14 +71,14 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2.sh" ]
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }
 
 @test "removes bins determined from heuristics (root directory)" {
@@ -92,14 +92,14 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2.sh" ]
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }
 
 @test "properly removes binary when REMOVE_EXTENSION is true" {
@@ -114,14 +114,14 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2" ]
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2" ]
 }
 
 # Even if 'REMOVE_EXTENSION' is set, it is still not true, so we
@@ -138,14 +138,14 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2.sh" ]
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }
 
 @test "properly removes binary when REMOVE_EXTENSION is false" {
@@ -160,17 +160,17 @@ load 'util/init.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2.sh" ]
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }
 
-@test "bpm.toml has presidence over package.sh unlink bins" {
+@test "basalt.toml has presidence over package.sh unlink bins" {
 	local site='github.com'
 	local pkg='username/package'
 
@@ -180,22 +180,22 @@ load 'util/init.sh'
 		touch 'otherbin/e1'
 		touch 'otherbin/e2.sh'
 
-		echo 'binDirs = [ "somebin" ]' > 'bpm.toml'
+		echo 'binDirs = [ "somebin" ]' > 'basalt.toml'
 		mkdir 'somebin'
 		touch 'somebin/exec1'
 		touch 'somebin/exec2.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	assert [ ! -L "$BPM_INSTALL_BIN/e1" ]
-	assert [ ! -L "$BPM_INSTALL_BIN/e2.sh" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec1" ]
-	assert [ -L "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -L "$BASALT_INSTALL_BIN/e1" ]
+	assert [ ! -L "$BASALT_INSTALL_BIN/e2.sh" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ -L "$BASALT_INSTALL_BIN/exec2.sh" ]
 
 
 	run plumbing.unsymlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2.sh" ]
 }

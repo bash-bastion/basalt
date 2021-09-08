@@ -6,7 +6,7 @@ pkg.download_package_tarball() {
 	local version="$3"
 
 	local download_url="https://$site/$package/archive/refs/tags/$version.tar.gz" # TODO: make gitlab, etc.
-	local download_dest="$BPM_CELLAR/tarballs/$site/$package@$version.tar.gz"
+	local download_dest="$BASALT_CELLAR/tarballs/$site/$package@$version.tar.gz"
 
 	if [ ${DEBUG+x} ]; then
 		print.debug "Downloading" "download_url  $download_url"
@@ -30,8 +30,8 @@ pkg.extract_package_tarball() {
 	local package="$2"
 	local version="$3"
 
-	local tarball_src="$BPM_CELLAR/tarballs/$site/$package@$version.tar.gz"
-	local tarball_dest="$BPM_CELLAR/packages/$site/$package@$version"
+	local tarball_src="$BASALT_CELLAR/tarballs/$site/$package@$version.tar.gz"
+	local tarball_dest="$BASALT_CELLAR/packages/$site/$package@$version"
 
 	if [ ${DEBUG+x} ]; then
 		print.debug "Extracting" "tarball_src  $tarball_src"
@@ -55,10 +55,10 @@ pkg.do_strict_symlink() {
 	local package="$2"
 	local version="$3"
 
-	local package_dir="$BPM_CELLAR/packages/$site/$package@$version"
-	local package_toml="$BPM_CELLAR/packages/$site/$package@$version/bpm.toml"
+	local package_dir="$BASALT_CELLAR/packages/$site/$package@$version"
+	local package_toml="$BASALT_CELLAR/packages/$site/$package@$version/basalt.toml"
 	if [ ! -f "$package_toml" ]; then
-		print.warn "Warning" "Package $site/$package@$version does not have a bpm.toml"
+		print.warn "Warning" "Package $site/$package@$version does not have a basalt.toml"
 		return
 	fi
 
@@ -77,7 +77,7 @@ pkg.do_strict_symlink() {
 				print.warn "Warning" "Package $site/$package@$version has a file ($dir) specified in 'binDirs'"
 			else
 				for target in "$package_dir/$dir"/*; do
-					local link_name="$BPM_CELLAR/bin/${target##*/}"
+					local link_name="$BASALT_CELLAR/bin/${target##*/}"
 
 					# TODO: this replaces existing symlinks. In verify mode, can check if there are no duplicate binary names
 

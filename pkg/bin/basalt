@@ -48,8 +48,8 @@ realpath.absolute() {
 realpath.location "${BASH_SOURCE[0]}"
 REPLY="${REPLY/%\/}"
 REPLY="${REPLY%/*}"
-if [ -d "$REPLY/lib/bpm" ]; then
-	PROGRAM_LIB_DIR="$REPLY/lib/bpm"
+if [ -d "$REPLY/lib/basalt" ]; then
+	PROGRAM_LIB_DIR="$REPLY/lib/basalt"
 elif [ -d "$REPLY/lib" ]; then
 	PROGRAM_LIB_DIR="$REPLY/lib"
 else
@@ -58,5 +58,5 @@ else
 fi
 
 # shellcheck disable=SC1091
-source "$PROGRAM_LIB_DIR/cmd/bpm.sh"
-_cmd_.bpm "$@"
+source "$PROGRAM_LIB_DIR/cmd/basalt.sh"
+_cmd_.basalt "$@"

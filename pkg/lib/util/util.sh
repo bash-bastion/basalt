@@ -251,7 +251,7 @@ util.extract_shell_variable() {
 # @description Get the working directory of the project. Note
 # that this should always be called within a subshell
 util.get_project_root_dir() {
-	while [[ ! -f "bpm.toml" && "$PWD" != / ]]; do
+	while [[ ! -f "basalt.toml" && "$PWD" != / ]]; do
 		cd ..
 	done
 
@@ -265,55 +265,55 @@ util.get_project_root_dir() {
 # @description Ensures particular variables exist and sets the current mode of
 # operation
 util.init_command() {
-	if [[ -z "$BPM_REPO_SOURCE" || -z "$BPM_CELLAR" ]]; then
-		die "Either 'BPM_REPO_SOURCE' or 'BPM_CELLAR' is empty. Did you forget to run add 'bpm init <shell>' in your shell configuration?"
+	if [[ -z "$BASALT_REPO_SOURCE" || -z "$BASALT_CELLAR" ]]; then
+		die "Either 'BASALT_REPO_SOURCE' or 'BASALT_CELLAR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
 
-	if [ "$BPM_MODE" = local ]; then
+	if [ "$BASALT_MODE" = local ]; then
 		local project_root_dir=
 		if project_root_dir="$(util.get_project_root_dir)"; then
 			# TODO: improve this output
 			# Output to standard error because some subcommands may be scriptable (ex. list)
-			if [ "${BPM_IS_TEST+x}" ]; then
+			if [ "${BASALT_IS_TEST+x}" ]; then
 				printf "  -> %s\n" "'$project_root_dir'"
 			fi
 
-			BPM_LOCAL_PROJECT_DIR="$project_root_dir"
-			BPM_CELLAR="$project_root_dir/bpm_packages"
-			BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
+			BASALT_LOCAL_PROJECT_DIR="$project_root_dir"
+			BASALT_CELLAR="$project_root_dir/basalt_packages"
+			BASALT_PACKAGES_PATH="$BASALT_CELLAR/packages"
 
-			mkdir -p "$BPM_CELLAR"/{bin,completion,man,tarballs,packages}
+			mkdir -p "$BASALT_CELLAR"/{bin,completion,man,tarballs,packages}
 
 			# TODO: remove these
-			BPM_INSTALL_BIN="$BPM_CELLAR/bin"
-			BPM_INSTALL_MAN="$BPM_CELLAR/man"
-			BPM_INSTALL_COMPLETIONS="$BPM_CELLAR/completions"
+			BASALT_INSTALL_BIN="$BASALT_CELLAR/bin"
+			BASALT_INSTALL_MAN="$BASALT_CELLAR/man"
+			BASALT_INSTALL_COMPLETIONS="$BASALT_CELLAR/completions"
 		else
-			die "Could not find a 'bpm.toml' file"
+			die "Could not find a 'basalt.toml' file"
 		fi
 	else
-		BPM_CELLAR="$BPM_CELLAR"
-		BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
-		BPM_INSTALL_BIN="$BPM_CELLAR/bin"
-		BPM_INSTALL_MAN="$BPM_CELLAR/man"
-		BPM_INSTALL_COMPLETIONS="$BPM_CELLAR/completions"
+		BASALT_CELLAR="$BASALT_CELLAR"
+		BASALT_PACKAGES_PATH="$BASALT_CELLAR/packages"
+		BASALT_INSTALL_BIN="$BASALT_CELLAR/bin"
+		BASALT_INSTALL_MAN="$BASALT_CELLAR/man"
+		BASALT_INSTALL_COMPLETIONS="$BASALT_CELLAR/completions"
 	fi
 }
 
 util.show_help() {
 	cat <<"EOF"
 Usage:
-  bpm [--help|--version]
-  bpm <subcommand> [args...]
-  bpm global <subcommand> [args...]
+  basalt [--help|--version]
+  basalt <subcommand> [args...]
+  basalt global <subcommand> [args...]
 
 Subcommands (local):
   init
-    Create a new bpm package in the current directory
+    Create a new basalt package in the current directory
 
   install
-    Resolve and install dependencies specified in bpm.toml
+    Resolve and install dependencies specified in basalt.toml
 
   link <directory...>
     Installs a package from a local directory. These have a
@@ -342,11 +342,11 @@ Subcommands (global):
     List all installed packages or just the specified ones
 
 Examples:
-  bpm add tj/git-extras
-  bpm add github.com/tj/git-extras
-  bpm add https://github.com/tj/git-extras
-  bpm add git@github.com:tj/git-extras
-  bpm add hyperupcall/bash-args --branch=main
-  bpm add hyperupcall/bash-args@v0.6.1 # out of date
+  basalt add tj/git-extras
+  basalt add github.com/tj/git-extras
+  basalt add https://github.com/tj/git-extras
+  basalt add git@github.com:tj/git-extras
+  basalt add hyperupcall/bash-args --branch=main
+  basalt add hyperupcall/bash-args@v0.6.1 # out of date
 EOF
 }

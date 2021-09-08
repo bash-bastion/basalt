@@ -10,39 +10,39 @@ export LC_ALL="C"
 export XDG_DATA_HOME=
 
 # Test-specific
-export BPM_TEST_DIR="$BATS_TMPDIR/bpm"
-export BPM_ORIGIN_DIR="$BPM_TEST_DIR/origin"
-export BPM_IS_TEST=
+export BASALT_TEST_DIR="$BATS_TMPDIR/basalt"
+export BASALT_ORIGIN_DIR="$BASALT_TEST_DIR/origin"
+export BASALT_IS_TEST=
 
 # Stub common variables
 test_util.get_repo_root
 # The root of the real source. This is a separate variable because we want to
-# set 'BPM_LOCAL_PROJECT_DIR' to some other value
-export BPM_TEST_REPO_ROOT="$REPLY"
-export PROGRAM_LIB_DIR="$BPM_TEST_REPO_ROOT/pkg/lib"
+# set 'BASALT_LOCAL_PROJECT_DIR' to some other value
+export BASALT_TEST_REPO_ROOT="$REPLY"
+export PROGRAM_LIB_DIR="$BASALT_TEST_REPO_ROOT/pkg/lib"
 
-export BPM_LOCAL_PROJECT_DIR=
-export BPM_REPO_SOURCE="$BPM_TEST_DIR/source"
-export BPM_CELLAR="$BPM_TEST_DIR/cellar"
+export BASALT_LOCAL_PROJECT_DIR=
+export BASALT_REPO_SOURCE="$BASALT_TEST_DIR/source"
+export BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
 # TODO: this should be removed
-export BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
-export BPM_INSTALL_BIN="$BPM_CELLAR/bin"
-export BPM_INSTALL_MAN="$BPM_CELLAR/man"
-export BPM_INSTALL_COMPLETIONS="$BPM_CELLAR/completions"
+export BASALT_PACKAGES_PATH="$BASALT_CELLAR/packages"
+export BASALT_INSTALL_BIN="$BASALT_CELLAR/bin"
+export BASALT_INSTALL_MAN="$BASALT_CELLAR/man"
+export BASALT_INSTALL_COMPLETIONS="$BASALT_CELLAR/completions"
 
-export PATH="$BPM_TEST_REPO_ROOT/pkg/bin:$PATH"
-source "$BPM_TEST_REPO_ROOT/pkg/lib/source/bpm-load.sh"
+export PATH="$BASALT_TEST_REPO_ROOT/pkg/bin:$PATH"
+source "$BASALT_TEST_REPO_ROOT/pkg/lib/source/basalt-load.sh"
 
-source "$BPM_TEST_REPO_ROOT/pkg/lib/cmd/bpm.sh"
-bpm() {
-	_cmd_.bpm "$@"
+source "$BASALT_TEST_REPO_ROOT/pkg/lib/cmd/basalt.sh"
+basalt() {
+	_cmd_.basalt "$@"
 }
 
 setup() {
-	mkdir -p "$BPM_TEST_DIR" "$BPM_ORIGIN_DIR"
+	mkdir -p "$BASALT_TEST_DIR" "$BASALT_ORIGIN_DIR"
 	cd "$BATS_TEST_TMPDIR"
 }
 
 teardown() {
-	rm -rf "$BPM_TEST_DIR"
+	rm -rf "$BASALT_TEST_DIR"
 }

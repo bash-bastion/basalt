@@ -1,4 +1,4 @@
-set cmd bpm
+set cmd basalt
 set -l listSubcommands add echo init link list package-path prune remove upgrade
 
 # Not only does this prevent appending completion properties to $cmd (we
@@ -26,9 +26,9 @@ complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOpti
 
 set subcmd remove
 set -l subcommandOptions --all --force
-complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (bpm complete upgrade)"
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (basalt complete upgrade)"
 
 set subcmd upgrade
 set -l subcommandOptions
-# TODO: only complete if (bpm complete upgrade) was successfull
-complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (bpm complete upgrade)"
+# TODO: only complete if (basalt complete upgrade) was successfull
+complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (basalt complete upgrade)"

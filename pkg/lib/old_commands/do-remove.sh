@@ -25,8 +25,8 @@ do-remove() {
 		die "No packages may be supplied when using '--all'"
 	fi
 
-	if [ "$BPM_MODE" = local ] && (( ${#pkgs[@]} > 0 )); then
-		die "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
+	if [ "$BASALT_MODE" = local ] && (( ${#pkgs[@]} > 0 )); then
+		die "Subcommands must use the '--all' flag when a 'basalt.toml' file is present"
 	fi
 
 	if [[ $flag_all == yes && $flag_force == yes ]]; then
@@ -34,9 +34,9 @@ do-remove() {
 	fi
 
 	if [ "$flag_all" = yes ]; then
-		local bpm_toml_file="$BPM_LOCAL_PROJECT_DIR/bpm.toml"
+		local basalt_toml_file="$BASALT_LOCAL_PROJECT_DIR/basalt.toml"
 
-		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
+		if util.get_toml_array "$basalt_toml_file" 'dependencies'; then
 			log.info "Removing all dependencies"
 
 			for pkg in "${REPLIES[@]}"; do
@@ -76,16 +76,16 @@ do-remove() {
 			die "Refs must be omitted when removing packages. Remove ref '@$ref'"
 		fi
 
-		if [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
+		if [ -d "$BASALT_PACKAGES_PATH/$site/$package" ]; then
 			if [ "$flag_force" = yes ]; then
 				log.info "Force removing '$site/$package'"
-				rm -rf "${BPM_PACKAGES_PATH:?}/$site/$package"
+				rm -rf "${BASALT_PACKAGES_PATH:?}/$site/$package"
 				do-prune
 			else
 				do_actual_removal "$site/$package"
 			fi
-		elif [ -e "$BPM_PACKAGES_PATH/$site/$package" ]; then
-			rm -f "$BPM_PACKAGES_PATH/$site/$package"
+		elif [ -e "$BASALT_PACKAGES_PATH/$site/$package" ]; then
+			rm -f "$BASALT_PACKAGES_PATH/$site/$package"
 		else
 			die "Package '$site/$package' is not installed"
 		fi
@@ -102,13 +102,13 @@ do_actual_removal() {
 
 	if [ "${id%%/*}" = 'local' ]; then
 		printf '  -> %s\n' "Unsymlinking directory"
-		if ! unlink "$BPM_PACKAGES_PATH/$id"; then
-			die "Unlink '$BPM_PACKAGES_PATH/$id' unexpectedly failed"
+		if ! unlink "$BASALT_PACKAGES_PATH/$id"; then
+			die "Unlink '$BASALT_PACKAGES_PATH/$id' unexpectedly failed"
 		fi
 	else
 		printf '  -> %s\n' "Removing Git repository"
-		rm -rf "${BPM_PACKAGES_PATH:?}/$id"
-		if ! rmdir -p "${BPM_PACKAGES_PATH:?}/${id%/*}" &>/dev/null; then
+		rm -rf "${BASALT_PACKAGES_PATH:?}/$id"
+		if ! rmdir -p "${BASALT_PACKAGES_PATH:?}/${id%/*}" &>/dev/null; then
 			# Do not exit on "failure"
 			:
 		fi

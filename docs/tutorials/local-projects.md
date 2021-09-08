@@ -1,34 +1,34 @@
 # Local Projects
 
-Similar to `npm`, `carto`, etc. `bpm` allows for the installation of packages on a per-project basis. Use `bpm.toml` for this
+Similar to `npm`, `carto`, etc. `basalt` allows for the installation of packages on a per-project basis. Use `basalt.toml` for this
 
 ```sh
 mkdir 'my-project' && cd 'my-project'
 
-# Creating a 'bpm.toml' is required so bpm knows where
+# Creating a 'basalt.toml' is required so basalt knows where
 # the root of the project is
-touch 'bpm.toml'
+touch 'basalt.toml'
 ```
 
 Let's take a look at the installed packages
 
 ```sh
-$ bpm list
-Info: Operating in context of local bpm.toml
+$ basalt list
+Info: Operating in context of local basalt.toml
 ```
 
-So far, none are installed. Let's install [bash-args](https://github.com/hyperupcall/bash-args). To do this, modify `dependencies` in your `bpm.toml`
+So far, none are installed. Let's install [bash-args](https://github.com/hyperupcall/bash-args). To do this, modify `dependencies` in your `basalt.toml`
 
 ```toml
-# bpm.toml
+# basalt.toml
 dependencies = [ "hyperupcall/bash-args" ]
 ```
 
 Now, install it
 
 ```sh
-$ bpm add --all
-Info: Operating in context of local bpm.toml
+$ basalt add --all
+Info: Operating in context of local basalt.toml
 Info: Adding all dependencies
 Info: Adding 'hyperupcall/bash-args'
   -> Cloning Git repository
@@ -38,15 +38,15 @@ Info: Adding 'hyperupcall/bash-args'
 It now shows up in the `list` subcommand
 
 ```sh
-$ bpm list
-Info: Operating in context of local bpm.toml
+$ basalt list
+Info: Operating in context of local basalt.toml
 github.com/hyperupcall/bash-args
   Branch: main
   Revision: 2087e87
   State: Up to date
 ```
 
-You'll notice a `bpm_packages` directory has been created. Since the project is now installed, let's use it
+You'll notice a `basalt_packages` directory has been created. Since the project is now installed, let's use it
 
 Create a `script.sh` file
 
@@ -57,7 +57,7 @@ Create a `script.sh` file
 # @brief Demonstration of the bash-args library
 
 # Append to the PATH so we have access to `bash-args` in the PATH
-PATH="$PWD/bpm_packages/bin:$PATH"
+PATH="$PWD/basalt_packages/bin:$PATH"
 
 # Declare an associative array for storing the argument flags
 declare -A args=()

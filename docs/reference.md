@@ -2,23 +2,23 @@
 
 ## Environment Variables
 
-### `BPM_LOCAL_PROJECT_DIR`
+### `BASALT_LOCAL_PROJECT_DIR`
 
-The location of the root `bpm` folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.local/share}/bpm"`
+The location of the root `basalt` folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"`
 
-### `BPM_FULL_CLONE`
+### `BASALT_FULL_CLONE`
 
 Set to a non-null string to clone the full repository history instead of only the last commit. By default, only the latest commit is cloned (`--depth=1`). The only exception to this is when a specific version is specified with `@v0.1.0` notation. When that is specified, the whole history is downloaded
 
-### `BPM_CELLAR`
+### `BASALT_CELLAR`
 
-Set the installation and package checkout prefix (default is `$BPM_LOCAL_PROJECT_DIR/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`
+Set the installation and package checkout prefix (default is `$BASALT_LOCAL_PROJECT_DIR/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`
 
-## `bpm.toml`
+## `basalt.toml`
 
-Place a `bpm.toml` at the root of a repository to directly control where `bpm` searches for binaries, completions, and man pages for that repository. **Note** that arrays _must only_ span a single line (the line it was defined on) due to limitations with the TOML parser. This restriction should be lifted in the future. All relative paths are relative to their respective `bpm.toml` file
+Place a `basalt.toml` at the root of a repository to directly control where `basalt` searches for binaries, completions, and man pages for that repository. **Note** that arrays _must only_ span a single line (the line it was defined on) due to limitations with the TOML parser. This restriction should be lifted in the future. All relative paths are relative to their respective `basalt.toml` file
 
-If any particular toml key is defined, it means automatic directory search with heuristics will not be performed. For example, if you define `binDirs`, `bpm` will only look for binaries that you specify in that array and will _not_ search `./bin`, `./bins`, etc.
+If any particular toml key is defined, it means automatic directory search with heuristics will not be performed. For example, if you define `binDirs`, `basalt` will only look for binaries that you specify in that array and will _not_ search `./bin`, `./bins`, etc.
 
 ### `dependencies`
 
@@ -64,11 +64,11 @@ manDirs = [ './manuals' ]
 
 ## `package.sh`
 
-This file is an alternative configuration mechanism kept to preserve backwards compatibility with [Basher](https://github.com/basherpm/basher). If you create a `bpm.toml` file, then `package.sh` will NOT be read
+This file is an alternative configuration mechanism kept to preserve backwards compatibility with [Basher](https://github.com/basherpm/basher). If you create a `basalt.toml` file, then `package.sh` will NOT be read
 
-Similar to `bpm.toml`, specifying a particular key will cause bpm not to automatically search for files specific to that key. For example, if `BASH_COMPLETIONS` is specified, bpm will no longer search for _Bash_ completions in `./completion`, `./completions`, etc.
+Similar to `basalt.toml`, specifying a particular key will cause basalt not to automatically search for files specific to that key. For example, if `BASH_COMPLETIONS` is specified, basalt will no longer search for _Bash_ completions in `./completion`, `./completions`, etc.
 
-Note that unlike Basher, bpm does not source this file. It performs single-line regular expression matching and splits the capturing group into an array with `IFS=: read -ra`. This was changed to prevent arbitrary code execution by child packages during the installation process
+Note that unlike Basher, basalt does not source this file. It performs single-line regular expression matching and splits the capturing group into an array with `IFS=: read -ra`. This was changed to prevent arbitrary code execution by child packages during the installation process
 
 Example
 

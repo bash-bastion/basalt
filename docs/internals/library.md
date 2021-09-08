@@ -29,7 +29,7 @@ main "$@"
 The execution context of the callsite can be within either a binary or a library
 
 ```sh
-bpm install hyperupcall/bash-args
+basalt install hyperupcall/bash-args
 ```
 
 ## Usage as a library
@@ -51,13 +51,13 @@ bash-toml() {
 The execution context of the callsite can be within either a binary or a library
 
 ```sh
-# Note that `bpm` provides a useful interface that skips this. Note that `bash-toml` HERE is the
+# Note that `basalt` provides a useful interface that skips this. Note that `bash-toml` HERE is the
 # _name of the package_, rather than the name of the binary
-bpm-load 'bash-toml'
+basalt-load 'bash-toml'
 
 declare -gA OBJ=([zulu]=yankee)
 
-bpm-toml get-string 'OBJ' 'zulu'
+basalt-toml get-string 'OBJ' 'zulu'
 
 assert [ "$REPLY" = yankee ]
 ```

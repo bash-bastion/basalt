@@ -20,14 +20,14 @@ load 'util/init.sh'
 	assert_line -p "Removing '$site/user/dep2'"
 }
 
-@test "on bpm.toml dependencies, installs properly" {
+@test "on basalt.toml dependencies, installs properly" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.stub_command 'do-actual-add'
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'dependencies = [ "user/dep1", "user/dep2" ]' > 'bpm.toml'
+		echo 'dependencies = [ "user/dep1", "user/dep2" ]' > 'basalt.toml'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 

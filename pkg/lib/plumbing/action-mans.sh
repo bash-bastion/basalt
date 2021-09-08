@@ -23,15 +23,15 @@ plumbing.mans_action() {
 
 	abstract_mans_did=no
 
-	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
+	local basalt_toml_file="$BASALT_PACKAGES_PATH/$id/basalt.toml"
 
-	if [ -f "$bpm_toml_file" ]; then
-		if util.get_toml_array "$bpm_toml_file" 'manDirs'; then
+	if [ -f "$basalt_toml_file" ]; then
+		if util.get_toml_array "$basalt_toml_file" 'manDirs'; then
 			for dir in "${REPLIES[@]}"; do
-				local full_dir="$BPM_PACKAGES_PATH/$id/$dir"
+				local full_dir="$BASALT_PACKAGES_PATH/$id/$dir"
 
 				if [ -f "$full_dir" ]; then
-					die "Specified file '$dir' in bpm.toml; only directories are valid"
+					die "Specified file '$dir' in basalt.toml; only directories are valid"
 				elif [ ! -d "$full_dir" ]; then
 					log.warn "Directory '$dir' with executable files not found. Skipping"
 					continue
@@ -66,7 +66,7 @@ plumbing.mans_action_search_heuristics() {
 	local action="$1"
 	local id="$2"
 
-	for file in "$BPM_PACKAGES_PATH/$id"/man/*; do
+	for file in "$BASALT_PACKAGES_PATH/$id"/man/*; do
 		if [ -f "$file" ]; then
 			plumbing.mans_action_do_action "$action" "$file"
 		elif [ -d "$file" ]; then
@@ -78,7 +78,7 @@ plumbing.mans_action_search_heuristics() {
 		fi
 	done
 
-	for file in "$BPM_PACKAGES_PATH/$id"/*; do
+	for file in "$BASALT_PACKAGES_PATH/$id"/*; do
 		if [ -f "$file" ]; then
 			plumbing.mans_action_do_action "$action" "$file"
 		fi
@@ -109,15 +109,15 @@ plumbing.mans_action_do_action() {
 
 		case "$action" in
 			link)
-				if [ -L "$BPM_INSTALL_MAN/man$n/$manFile" ]; then
+				if [ -L "$BASALT_INSTALL_MAN/man$n/$manFile" ]; then
 					log.error "Skipping '$manFile' since an existing symlink with the same name already exists"
 				else
-					mkdir -p "$BPM_INSTALL_MAN/man$n"
-					ln -sf "$full_man_file" "$BPM_INSTALL_MAN/man$n/$manFile"
+					mkdir -p "$BASALT_INSTALL_MAN/man$n"
+					ln -sf "$full_man_file" "$BASALT_INSTALL_MAN/man$n/$manFile"
 				fi
 				;;
 			unlink)
-				if ! unlink "$BPM_INSTALL_MAN/man$n/$manFile"; then
+				if ! unlink "$BASALT_INSTALL_MAN/man$n/$manFile"; then
 					die "Unlink failed, but was expected to succeed"
 				fi
 				;;

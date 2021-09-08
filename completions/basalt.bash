@@ -1,4 +1,4 @@
-_bpm() {
+_basalt() {
 	local -ra listPreSubcommandOptions=(--help --version)
 	local -ra listSubcommands=(add echo init link list package-path prune remove upgrade)
 
@@ -76,7 +76,7 @@ _bpm() {
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			upgrade)
-				readarray -t subcommandOptions < <(bpm complete upgrade)
+				readarray -t subcommandOptions < <(basalt complete upgrade)
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 		esac
@@ -85,4 +85,4 @@ _bpm() {
 	return 0
 }
 
-complete -F _bpm bpm
+complete -F _basalt basalt

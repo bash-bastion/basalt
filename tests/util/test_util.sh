@@ -28,13 +28,13 @@ test_util.get_repo_root() {
 	if ! REPLY="$(
 		while [[ ! -d ".git" && "$PWD" != / ]]; do
 			if ! cd ..; then
-				printf "%s\n" "Error: Could not cd to BPM directory" >&2
+				printf "%s\n" "Error: Could not cd to BASALT directory" >&2
 				exit 1
 			fi
 		done
 
 		if [[ $PWD == / ]]; then
-			printf "%s\n" "Error: Could not find root BPM directory" >&2
+			printf "%s\n" "Error: Could not find root BASALT directory" >&2
 			exit 1
 		fi
 
@@ -62,7 +62,7 @@ test_util.mock_clone() {
 
 	# Be explicit with the 'file' protocol. The upstream "repository"
 	# is just another (non-bare) Git repository
-	git clone "file://$BPM_ORIGIN_DIR/$srcDir" "$BPM_PACKAGES_PATH/$destDir"
+	git clone "file://$BASALT_ORIGIN_DIR/$srcDir" "$BASALT_PACKAGES_PATH/$destDir"
 }
 
 # @description Clones the repository, and performs any linking, etc.
@@ -72,7 +72,7 @@ test_util.mock_add() {
 	ensure.not_absolute_path "$dir"
 
 	if [[ "$pkg" != */* ]]; then
-		die "Improper package path. If you are passing in a single directory name, just make it nested within another subdirectory. This is to ensure BPM_PACKAGES_PATH has the correct layout"
+		die "Improper package path. If you are passing in a single directory name, just make it nested within another subdirectory. This is to ensure BASALT_PACKAGES_PATH has the correct layout"
 	fi
 
 	test_util.mock_clone "$pkg" "github.com/$pkg"
@@ -82,15 +82,15 @@ test_util.mock_add() {
 	plumbing.symlink-mans "github.com/$pkg"
 }
 
-# @description Mocks a 'bpm link'. This function is still useful in cases
+# @description Mocks a 'basalt link'. This function is still useful in cases
 # where a symlink is _expected_ (rather than just cloning to 'local/subdir')
 test_util.mock_link() {
 	local dir="$1"
 	ensure.non_zero 'dir' "$dir"
 	ensure.not_absolute_path "$dir"
 
-	mkdir -p "$BPM_PACKAGES_PATH/local"
-	ln -s "$BPM_ORIGIN_DIR/$dir" "$BPM_PACKAGES_PATH/local"
+	mkdir -p "$BASALT_PACKAGES_PATH/local"
+	ln -s "$BASALT_ORIGIN_DIR/$dir" "$BASALT_PACKAGES_PATH/local"
 
 	plumbing.add-dependencies "local/$dir"
 	plumbing.symlink-bins "local/$dir"
@@ -107,8 +107,8 @@ test_util.setup_pkg() {
 	# We create the "upstream" repository with the same relative
 	# filepath as 'pkg' so we can use the same variable to
 	# cd to it (rather than having to do ${pkg#*/})
-	mkdir -p "$BPM_ORIGIN_DIR/$pkg"
-	cd "$BPM_ORIGIN_DIR/$pkg"
+	mkdir -p "$BASALT_ORIGIN_DIR/$pkg"
+	cd "$BASALT_ORIGIN_DIR/$pkg"
 
 	git init .
 	touch 'README.md'

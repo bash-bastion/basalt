@@ -1,4 +1,4 @@
-#compdef _bpm bpm
+#compdef _basalt basalt
 
 local -a _1st_arguments
 _1st_arguments=(
@@ -53,8 +53,8 @@ case $state in
 			;;
 		(upgrade)
 			local subcommandOptions=()
-			subcommandOptions=("${(@f)$(bpm complete upgrade)}")
-			# TODO: Check if bpm complete upgrade was successfull?
+			subcommandOptions=("${(@f)$(basalt complete upgrade)}")
+			# TODO: Check if basalt complete upgrade was successfull?
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 	esac

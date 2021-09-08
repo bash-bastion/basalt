@@ -3,49 +3,49 @@
 load 'util/init.sh'
 
 @test "print operating in local dir if not in global mode" {
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
-	run bpm list
+	run basalt list
 	assert_success
-	assert_output -p "Operating in context of local bpm.toml"
+	assert_output -p "Operating in context of local basalt.toml"
 }
 
 # We only test two of all commands
 @test "error when not passing --global to add, list, and upgrade" {
-	local str="No 'bpm.toml' file found"
+	local str="No 'basalt.toml' file found"
 
-	run bpm add foo
+	run basalt add foo
 	assert_failure
 	assert_line -p "$str"
 
-	run bpm list
+	run basalt list
 	assert_failure
 	assert_line -p "$str"
 
-	run bpm upgrade
+	run basalt upgrade
 	assert_failure
 	assert_line -p "$str"
 }
 
-@test "do not error with bpm.toml when not passing --global to list" {
-	touch 'bpm.toml'
+@test "do not error with basalt.toml when not passing --global to list" {
+	touch 'basalt.toml'
 
-	run bpm list
+	run basalt list
 	assert_success
 }
 
 @test "do not error when not passing --global to list, complete, and init" {
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
-	run bpm global list
+	run basalt global list
 	assert_success
 	assert_output ""
 
-	run bpm complete package-path
+	run basalt complete package-path
 	assert_success
 
-	run bpm init bash
+	run basalt init bash
 	assert_success
 	assert_line -p "export PATH"
-	assert_line -p '. "$BPM_REPO_SOURCE/'
+	assert_line -p '. "$BASALT_REPO_SOURCE/'
 }

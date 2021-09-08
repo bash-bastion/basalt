@@ -23,16 +23,16 @@ plumbing.completions_action() {
 
 	abstract_completions_did=no
 
-	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
-	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
+	local basalt_toml_file="$BASALT_PACKAGES_PATH/$id/basalt.toml"
+	local package_sh_file="$BASALT_PACKAGES_PATH/$id/package.sh"
 
 	# Get completion directories
-	if [ -f "$bpm_toml_file" ]; then
-		if util.get_toml_array "$bpm_toml_file" 'completionDirs'; then
+	if [ -f "$basalt_toml_file" ]; then
+		if util.get_toml_array "$basalt_toml_file" 'completionDirs'; then
 			for dir in "${REPLIES[@]}"; do
-				local full_dir="$BPM_PACKAGES_PATH/$id/$dir"
+				local full_dir="$BASALT_PACKAGES_PATH/$id/$dir"
 				if [ -f "$full_dir" ]; then
-					die "Specified file '$dir' in bpm.toml; only directories are valid"
+					die "Specified file '$dir' in basalt.toml; only directories are valid"
 				elif [ ! -d "$full_dir" ]; then
 					log.warn "Directory '$dir' with executable files not found. Skipping"
 					continue
@@ -60,7 +60,7 @@ plumbing.completions_action() {
 			IFS=':' read -ra bash_completion_files <<< "$REPLY"
 
 			for file in "${bash_completion_files[@]}"; do
-				local full_path="$BPM_PACKAGES_PATH/$id/$file"
+				local full_path="$BASALT_PACKAGES_PATH/$id/$file"
 				if [ -d "$full_path" ]; then
 					die "Specified directory '$file' in package.sh; only files are valid"
 				elif [ ! -f "$full_path" ]; then
@@ -77,7 +77,7 @@ plumbing.completions_action() {
 			IFS=':' read -ra zsh_completion_files <<< "$REPLY"
 
 			for file in "${zsh_completion_files[@]}"; do
-				local full_path="$BPM_PACKAGES_PATH/$id/$file"
+				local full_path="$BASALT_PACKAGES_PATH/$id/$file"
 				if [ -d "$full_path" ]; then
 					die "Specified directory '$file' in package.sh; only files are valid"
 				elif [ ! -f "$full_path" ]; then
@@ -100,7 +100,7 @@ plumbing.completions_action_search_heuristics() {
 	local type="$3"
 
 	for completion_dir in completion completions contrib/completion contrib/completions; do
-		for file in "$BPM_PACKAGES_PATH/$id/$completion_dir"/*; do
+		for file in "$BASALT_PACKAGES_PATH/$id/$completion_dir"/*; do
 			local fileName="${file##*/}"
 
 			if [[ $fileName == *.@(sh|bash) ]] && [[ $type == all || $type == bash ]]; then
@@ -115,7 +115,7 @@ plumbing.completions_action_search_heuristics() {
 
 	if [[ $type == all || $type == bash ]]; then
 		for completion_dir in share/bash-completion/completions etc/bash_completion.d; do
-			for file in "$BPM_PACKAGES_PATH/$id/$completion_dir"/*; do
+			for file in "$BASALT_PACKAGES_PATH/$id/$completion_dir"/*; do
 				local fileName="${file##*/}"
 
 				plumbing.completions_action_do_action_bash "$action" "$file"
@@ -123,7 +123,7 @@ plumbing.completions_action_search_heuristics() {
 		done
 	fi
 
-	for file in "$BPM_PACKAGES_PATH/$id"/{,etc/}*; do
+	for file in "$BASALT_PACKAGES_PATH/$id"/{,etc/}*; do
 		local fileName="${file##*/}"
 		if [[ $fileName == *-completion.* ]]; then
 			case "$fileName" in
@@ -148,15 +148,15 @@ plumbing.completions_action_do_action_bash() {
 
 	case "$action" in
 	link)
-		if [ -L "$BPM_INSTALL_COMPLETIONS/bash/$fileName" ]; then
+		if [ -L "$BASALT_INSTALL_COMPLETIONS/bash/$fileName" ]; then
 			log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 		else
-			mkdir -p "$BPM_INSTALL_COMPLETIONS/bash"
-			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/bash/$fileName"
+			mkdir -p "$BASALT_INSTALL_COMPLETIONS/bash"
+			ln -sf "$file" "$BASALT_INSTALL_COMPLETIONS/bash/$fileName"
 		fi
 		;;
 	unlink)
-		if ! unlink "$BPM_INSTALL_COMPLETIONS/bash/$fileName"; then
+		if ! unlink "$BASALT_INSTALL_COMPLETIONS/bash/$fileName"; then
 			die "Unlink failed, but was expected to succeed"
 		fi
 		;;
@@ -178,15 +178,15 @@ plumbing.completions_action_do_action_zsh() {
 
 		case "$action" in
 		link)
-			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName" ]; then
+			if [ -L "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/$fileName" ]; then
 				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 			else
-				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compsys"
-				ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName"
+				mkdir -p "$BASALT_INSTALL_COMPLETIONS/zsh/compsys"
+				ln -sf "$file" "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/$fileName"
 			fi
 			;;
 		unlink)
-			if ! unlink "$BPM_INSTALL_COMPLETIONS/zsh/compsys/$fileName"; then
+			if ! unlink "$BASALT_INSTALL_COMPLETIONS/zsh/compsys/$fileName"; then
 				die "Unlink failed, but was expected to succeed"
 			fi
 			;;
@@ -194,15 +194,15 @@ plumbing.completions_action_do_action_zsh() {
 	else
 		case "$action" in
 		link)
-			if [ -L "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}" ]; then
+			if [ -L "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}" ]; then
 				log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 			else
-				mkdir -p "$BPM_INSTALL_COMPLETIONS/zsh/compctl"
-				ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
+				mkdir -p "$BASALT_INSTALL_COMPLETIONS/zsh/compctl"
+				ln -sf "$file" "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"
 			fi
 			;;
 		unlink)
-			if ! unlink "$BPM_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"; then
+			if ! unlink "$BASALT_INSTALL_COMPLETIONS/zsh/compctl/${file##*/}"; then
 				die "Unlink failed, but was expected to succeed"
 			fi
 			;;
@@ -218,15 +218,15 @@ plumbing.completions_action_do_action_fish() {
 
 	case "$action" in
 	link)
-		if [ -L "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}" ]; then
+		if [ -L "$BASALT_INSTALL_COMPLETIONS/fish/${file##*/}" ]; then
 			log.error "Skipping '$fileName' since an existing symlink with the same name already exists"
 		else
-			mkdir -p "$BPM_INSTALL_COMPLETIONS/fish"
-			ln -sf "$file" "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"
+			mkdir -p "$BASALT_INSTALL_COMPLETIONS/fish"
+			ln -sf "$file" "$BASALT_INSTALL_COMPLETIONS/fish/${file##*/}"
 		fi
 		;;
 	unlink)
-		if ! unlink "$BPM_INSTALL_COMPLETIONS/fish/${file##*/}"; then
+		if ! unlink "$BASALT_INSTALL_COMPLETIONS/fish/${file##*/}"; then
 			die "Unlink failed, but was expected to succeed"
 		fi
 		;;

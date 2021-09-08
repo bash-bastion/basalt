@@ -3,9 +3,9 @@
 load 'util/init.sh'
 
 @test "with no arguments, prints an error" {
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
 
-	eval "$(bpm global init sh)"
+	eval "$(basalt global init sh)"
 
 	run include
 
@@ -14,9 +14,9 @@ load 'util/init.sh'
 }
 
 @test "with one argument, prints an error" {
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
 
-	eval "$(bpm global init sh)"
+	eval "$(basalt global init sh)"
 
 	run include 'user/repo'
 
@@ -28,9 +28,9 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='user/repo'
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
 
-	eval "$(bpm global init sh)"
+	eval "$(basalt global init sh)"
 
 	run include "$site/$pkg" file
 
@@ -42,7 +42,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/repo'
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
 
 	test_util.setup_pkg "$pkg"; {
 		:
@@ -50,26 +50,26 @@ load 'util/init.sh'
 
 	test_util.mock_add "$pkg"
 
-	eval "$(bpm global init sh)"
+	eval "$(basalt global init sh)"
 
 	run include "$site/$pkg" non_existent
 
 	assert_failure
-	assert_output -p "File '$BPM_CELLAR/packages/$site/$pkg/non_existent' not found"
+	assert_output -p "File '$BASALT_CELLAR/packages/$site/$pkg/non_existent' not found"
 }
 
 @test "when file does exist, properly source file" {
 	local site='github.com'
 	local pkg='username/repo'
 
-	BPM_REPO_SOURCE="$BPM_TEST_REPO_ROOT/../source"
+	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "func_name() { echo 'done'; }" > 'function.sh'
 	}; test_util.finish_pkg
 	test_util.mock_add "$pkg"
 
-	eval "$(bpm global init sh)"
+	eval "$(basalt global init sh)"
 	include "$site/$pkg" 'function.sh'
 
 	run func_name

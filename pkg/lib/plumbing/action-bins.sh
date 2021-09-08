@@ -25,21 +25,21 @@ plumbing.bins_action() {
 	local -a bins=()
 	local remove_extensions=
 
-	local bpm_toml_file="$BPM_PACKAGES_PATH/$id/bpm.toml"
-	local package_sh_file="$BPM_PACKAGES_PATH/$id/package.sh"
+	local basalt_toml_file="$BASALT_PACKAGES_PATH/$id/basalt.toml"
+	local package_sh_file="$BASALT_PACKAGES_PATH/$id/package.sh"
 
-	if [ -f "$bpm_toml_file" ]; then
-		if util.get_toml_string "$bpm_toml_file" 'binRemoveExtensions'; then
+	if [ -f "$basalt_toml_file" ]; then
+		if util.get_toml_string "$basalt_toml_file" 'binRemoveExtensions'; then
 			if [ "$REPLY" = 'yes' ]; then
 				remove_extensions='yes'
 			fi
 		fi
 
-		if util.get_toml_array "$bpm_toml_file" 'binDirs'; then
+		if util.get_toml_array "$basalt_toml_file" 'binDirs'; then
 			for dir in "${REPLIES[@]}"; do
-				local full_path="$BPM_PACKAGES_PATH/$id/$dir"
+				local full_path="$BASALT_PACKAGES_PATH/$id/$dir"
 				if [ -f "$full_path" ]; then
-					die "Specified file '$dir' in bpm.toml; only directories are valid"
+					die "Specified file '$dir' in basalt.toml; only directories are valid"
 				elif [ ! -d "$full_path" ]; then
 					log.warn "Directory '$dir' with executable files not found. Skipping"
 				else
@@ -62,7 +62,7 @@ plumbing.bins_action() {
 			IFS=':' read -ra bins <<< "$REPLY"
 
 			for file in "${bins[@]}"; do
-				local full_path="$BPM_PACKAGES_PATH/$id/$file"
+				local full_path="$BASALT_PACKAGES_PATH/$id/$file"
 				if [ -d "$full_path" ]; then
 					die "Specified directory '$file' in package.sh; only files are valid"
 				elif [ ! -f "$full_path" ]; then
@@ -88,16 +88,16 @@ plumbing.bins_action_search_heuristics() {
 	local id="$2"
 	local remove_extensions="$3"
 
-	if [ -d "$BPM_PACKAGES_PATH/$id/bin" ]; then
-		for file in "$BPM_PACKAGES_PATH/$id"/bin/*; do
+	if [ -d "$BASALT_PACKAGES_PATH/$id/bin" ]; then
+		for file in "$BASALT_PACKAGES_PATH/$id"/bin/*; do
 			plumbing.bins_action_do_action "$action" "$file" "$remove_extensions"
 		done
-	elif [ -d "$BPM_PACKAGES_PATH/$id/bins" ]; then
-		for file in "$BPM_PACKAGES_PATH/$id"/bins/*; do
+	elif [ -d "$BASALT_PACKAGES_PATH/$id/bins" ]; then
+		for file in "$BASALT_PACKAGES_PATH/$id"/bins/*; do
 			plumbing.bins_action_do_action "$action" "$file" "$remove_extensions"
 		done
 	else
-		for file in "$BPM_PACKAGES_PATH/$id"/*; do
+		for file in "$BASALT_PACKAGES_PATH/$id"/*; do
 			if [[ -f "$file" && -x "$file" ]]; then
 				plumbing.bins_action_do_action "$action" "$file" "$remove_extensions"
 			fi
@@ -131,17 +131,17 @@ plumbing.bins_action_do_action() {
 
 	case "$action" in
 		link)
-			mkdir -p "$BPM_INSTALL_BIN"
+			mkdir -p "$BASALT_INSTALL_BIN"
 
-			if [ -L "$BPM_INSTALL_BIN/$binName" ]; then
+			if [ -L "$BASALT_INSTALL_BIN/$binName" ]; then
 				log.error "Skipping '$binName' since an existing symlink with the same name already exists"
 			else
-				ln -sf "$fullBinFile" "$BPM_INSTALL_BIN/$binName"
-				chmod +x "$BPM_INSTALL_BIN/$binName"
+				ln -sf "$fullBinFile" "$BASALT_INSTALL_BIN/$binName"
+				chmod +x "$BASALT_INSTALL_BIN/$binName"
 			fi
 			;;
 		unlink)
-			if ! unlink "$BPM_INSTALL_BIN/$binName"; then
+			if ! unlink "$BASALT_INSTALL_BIN/$binName"; then
 				die "Unlink failed, but was expected to succeed"
 			fi
 			;;

@@ -49,8 +49,8 @@ do-actual-add() {
 		die "Cannot install packages owned by username 'local' because that conflicts with linked packages"
 	fi
 
-	if [ -e "$BPM_PACKAGES_PATH/$site/$package" ]; then
-		if [ "$BPM_MODE" = local ]; then
+	if [ -e "$BASALT_PACKAGES_PATH/$site/$package" ]; then
+		if [ "$BASALT_MODE" = local ]; then
 			log.info "Skipping '$site/$package' as it's already present"
 			return
 		else

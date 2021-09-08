@@ -31,8 +31,8 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/binn/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/binn/exec2.sh" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec1)" = "$BASALT_PACKAGES_PATH/$site/$pkg/binn/exec1" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec2.sh)" = "$BASALT_PACKAGES_PATH/$site/$pkg/binn/exec2.sh" ]
 }
 
 
@@ -53,17 +53,17 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec1)" ]
-	assert [ ! -e "$(readlink $BPM_INSTALL_BIN/exec2)" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec3)" = "$BPM_PACKAGES_PATH/$site/$pkg/ff/exec3" ]
+	assert [ ! -e "$(readlink $BASALT_INSTALL_BIN/exec1)" ]
+	assert [ ! -e "$(readlink $BASALT_INSTALL_BIN/exec2)" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec3)" = "$BASALT_PACKAGES_PATH/$site/$pkg/ff/exec3" ]
 }
 
-@test "adds bins determined from bpm.toml" {
+@test "adds bins determined from basalt.toml" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binDirs = [ "weird_dir" ]' > 'bpm.toml'
+		echo 'binDirs = [ "weird_dir" ]' > 'basalt.toml'
 		mkdir 'weird_dir'
 		touch 'weird_dir/exec1'
 		touch 'weird_dir/exec2.sh'
@@ -73,16 +73,16 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_dir/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_dir/exec2.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec1")" = "$BASALT_PACKAGES_PATH/$site/$pkg/weird_dir/exec1" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec2.sh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/weird_dir/exec2.sh" ]
 }
 
-@test "adds bins determined from bpm.toml (and not heuristics)" {
+@test "adds bins determined from basalt.toml (and not heuristics)" {
 	local site='github.com'
 	local pkg='username/package'
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binDirs = [ "weird_dir" ]' > 'bpm.toml'
+		echo 'binDirs = [ "weird_dir" ]' > 'basalt.toml'
 		mkdir 'bin'
 		touch 'bin/exec1'
 		touch 'bin/exec2'
@@ -94,9 +94,9 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec1" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec3")" = "$BPM_PACKAGES_PATH/$site/$pkg/weird_dir/exec3" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec3")" = "$BASALT_PACKAGES_PATH/$site/$pkg/weird_dir/exec3" ]
 }
 
 @test "adds bins determined with heuristics (bin directory)" {
@@ -113,8 +113,8 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec1)" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec2.sh)" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
 @test "adds bins determined with heuristics (bins directory)" {
@@ -131,8 +131,8 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bins/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/bins/exec2.sh" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec1)" = "$BASALT_PACKAGES_PATH/$site/$pkg/bins/exec1" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec2.sh)" = "$BASALT_PACKAGES_PATH/$site/$pkg/bins/exec2.sh" ]
 }
 
 @test "adds bins determined with heuristics (root directory)" {
@@ -149,8 +149,8 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/exec2.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec1")" = "$BASALT_PACKAGES_PATH/$site/$pkg/exec1" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec2.sh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/exec2.sh" ]
 }
 
 @test "does not add bins that are not executable in root directory)" {
@@ -166,8 +166,8 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/exec3" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec4.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec3" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec4.sh" ]
 }
 
 @test "does not add directories in root directory" {
@@ -183,7 +183,7 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ ! -e "$BPM_INSTALL_BIN/directory1" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/directory1" ]
 }
 
 @test "doesn't link root bins if there is a bin folder" {
@@ -201,8 +201,8 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
-	assert [ ! -e "$(readlink "$BPM_INSTALL_BIN/exec2")" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec1")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ ! -e "$(readlink "$BASALT_INSTALL_BIN/exec2")" ]
 }
 
 @test "remove extensions if REMOVE_EXTENSION is true in package.sh" {
@@ -220,8 +220,8 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec1")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec2")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
 # Backwards compatiblity
@@ -240,9 +240,9 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
-	assert [ ! -e "$BPM_INSTALL_BIN/exec2" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec1")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec2.sh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
+	assert [ ! -e "$BASALT_INSTALL_BIN/exec2" ]
 }
 
 @test "does not remove extensions if REMOVE_EXTENSION is false in package.sh" {
@@ -260,16 +260,16 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec1)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
-	assert [ "$(readlink $BPM_INSTALL_BIN/exec2.sh)" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec1)" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink $BASALT_INSTALL_BIN/exec2.sh)" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
-@test "remove extensions if binRemoveExtensions is 'yes' in bpm.toml" {
+@test "remove extensions if binRemoveExtensions is 'yes' in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binRemoveExtensions = "yes"' > 'bpm.toml'
+		echo 'binRemoveExtensions = "yes"' > 'basalt.toml'
 		mkdir bin
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
@@ -279,16 +279,16 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec1")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec2")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
-@test "do not remove extensions if binRemoveExtensions is 'no' in bpm.toml" {
+@test "do not remove extensions if binRemoveExtensions is 'no' in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binRemoveExtensions = "no"' > 'bpm.toml'
+		echo 'binRemoveExtensions = "no"' > 'basalt.toml'
 		mkdir bin
 		touch 'bin/exec1'
 		touch 'bin/exec2.sh'
@@ -298,11 +298,11 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_success
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec1")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
-	assert [ "$(readlink "$BPM_INSTALL_BIN/exec2.sh")" = "$BPM_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec1")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec1" ]
+	assert [ "$(readlink "$BASALT_INSTALL_BIN/exec2.sh")" = "$BASALT_PACKAGES_PATH/$site/$pkg/bin/exec2.sh" ]
 }
 
-@test "does not symlink package itself as bin when linked with bpm link" {
+@test "does not symlink package itself as bin when linked with basalt link" {
 	local dir='package'
 	local dir2='username/package2'
 
@@ -310,11 +310,11 @@ load 'util/init.sh'
 	test_util.create_package "$dir2"
 
 	# implicit call to plumbing.symlink-bins
-	run bpm global link "$BPM_ORIGIN_DIR/$dir" "$BPM_ORIGIN_DIR/$dir2"
+	run basalt global link "$BASALT_ORIGIN_DIR/$dir" "$BASALT_ORIGIN_DIR/$dir2"
 
 	assert_success
-	assert [ ! -e "$BPM_CELLAR/bin/package" ]
-	assert [ ! -e "$BPM_CELLAR/bin/package2" ]
+	assert [ ! -e "$BASALT_CELLAR/bin/package" ]
+	assert [ ! -e "$BASALT_CELLAR/bin/package2" ]
 }
 
 @test "fails link bins when specifying directory in package.sh" {
@@ -349,12 +349,12 @@ load 'util/init.sh'
 	assert_line -p "Executable file 'some_file' not found. Skipping"
 }
 
-@test "fails link bins when specifying file in bpm.toml" {
+@test "fails link bins when specifying file in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binDirs = ["file"]' > 'bpm.toml'
+		echo 'binDirs = ["file"]' > 'basalt.toml'
 		touch 'file'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
@@ -362,15 +362,15 @@ load 'util/init.sh'
 	run plumbing.symlink-bins "$site/$pkg"
 
 	assert_failure
-	assert_line -p "Specified file 'file' in bpm.toml; only directories are valid"
+	assert_line -p "Specified file 'file' in basalt.toml; only directories are valid"
 }
 
-@test "warns link bins when specifying non-existent directory in bpm.toml" {
+@test "warns link bins when specifying non-existent directory in basalt.toml" {
 	local site='github.com'
 	local pkg="username/package"
 
 	test_util.setup_pkg "$pkg"; {
-		echo 'binDirs = ["dir"]' > 'bpm.toml'
+		echo 'binDirs = ["dir"]' > 'basalt.toml'
 	}; test_util.finish_pkg
 	test_util.mock_clone "$pkg" "$site/$pkg"
 

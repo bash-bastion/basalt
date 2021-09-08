@@ -3,12 +3,12 @@
 do-upgrade() {
 	util.init_command
 
-	local upgrade_bpm='no'
+	local upgrade_basalt='no'
 	local flag_all='no'
 	local -a pkgs=()
 	for arg; do case "$arg" in
-	bpm)
-		upgrade_bpm='yes'
+	basalt)
+		upgrade_basalt='yes'
 		;;
 	--all)
 		flag_all='yes'
@@ -25,21 +25,21 @@ do-upgrade() {
 		die "No packages may be supplied when using '--all'"
 	fi
 
-	if [ "$BPM_MODE" = local ] && (( ${#pkgs[@]} > 0 )); then
-		die "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
+	if [ "$BASALT_MODE" = local ] && (( ${#pkgs[@]} > 0 )); then
+		die "Subcommands must use the '--all' flag when a 'basalt.toml' file is present"
 	fi
 
-	if [[ $upgrade_bpm == yes && "$flag_all" = yes ]]; then
-		die "Upgrading bpm and using '--all' are mutually exclusive behaviors"
+	if [[ $upgrade_basalt == yes && "$flag_all" = yes ]]; then
+		die "Upgrading basalt and using '--all' are mutually exclusive behaviors"
 	fi
 
-	if [[ $upgrade_bpm == yes && "$BPM_MODE" == local ]]; then
-		die "Cannot upgrade bpm with a local 'bpm.toml' file"
+	if [[ $upgrade_basalt == yes && "$BASALT_MODE" == local ]]; then
+		die "Cannot upgrade basalt with a local 'basalt.toml' file"
 	fi
 
-	if [ "$upgrade_bpm" = 'yes' ]; then
+	if [ "$upgrade_basalt" = 'yes' ]; then
 		if (( ${#pkgs[@]} > 0 )); then
-			die 'Packages cannot be upgraded at the same time as bpm'
+			die 'Packages cannot be upgraded at the same time as basalt'
 		fi
 
 		if [ -d "$PROGRAM_LIB_DIR/../../.git" ]; then
@@ -51,7 +51,7 @@ do-upgrade() {
 			git -C "$PROGRAM_LIB_DIR/../.." submodule sync --recursive
 			git -C "$PROGRAM_LIB_DIR/../.." submodule update --recursive --merge
 		else
-			log.error "bpm is not a Git repository"
+			log.error "basalt is not a Git repository"
 		fi
 
 		return
@@ -59,13 +59,13 @@ do-upgrade() {
 
 	# TODO: test this
 	if [ "$flag_all" = yes ]; then
-		local bpm_toml_file="$BPM_LOCAL_PROJECT_DIR/bpm.toml"
+		local basalt_toml_file="$BASALT_LOCAL_PROJECT_DIR/basalt.toml"
 
-		if util.get_toml_array "$bpm_toml_file" 'dependencies'; then
+		if util.get_toml_array "$basalt_toml_file" 'dependencies'; then
 			log.info "Adding all dependencies"
 
 			for pkg in "${REPLIES[@]}"; do
-				# TODO: only upgrade to latest as specified in bpm.toml
+				# TODO: only upgrade to latest as specified in basalt.toml
 				do-upgrade "$pkg"
 			done
 
@@ -90,9 +90,9 @@ do-upgrade() {
 			die "Refs must be omitted when upgrading packages. Remove ref '@$ref'"
 		fi
 
-		if [ -L "$BPM_PACKAGES_PATH/$site/$package" ]; then
+		if [ -L "$BASALT_PACKAGES_PATH/$site/$package" ]; then
 			die "Package '$site/$package' is locally symlinked and cannot be upgraded through Git"
-		elif [ -d "$BPM_PACKAGES_PATH/$site/$package" ]; then
+		elif [ -d "$BASALT_PACKAGES_PATH/$site/$package" ]; then
 			do_actual_upgrade "$site/$package"
 		else
 			die "Package '$site/$package' is not installed"
@@ -111,14 +111,14 @@ do_actual_upgrade() {
 
 	printf '  -> %s\n' "Fetching repository updates and merging"
 	local git_output=
-	if ! git_output="$(git -C "$BPM_PACKAGES_PATH/$id" pull 2>&1)"; then
+	if ! git_output="$(git -C "$BASALT_PACKAGES_PATH/$id" pull 2>&1)"; then
 		log.error "Could not update Git repository"
 		printf "  -> %s\n" "Git output:"
 		printf "    -> %s\n" "${git_output%.}"
 		exit 1
 	fi
 
-	if [ -n "${BPM_IS_TEST+x}" ]; then
+	if [ -n "${BASALT_IS_TEST+x}" ]; then
 		printf "%s\n" "$git_output"
 	fi
 

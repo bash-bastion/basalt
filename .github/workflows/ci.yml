@@ -45,12 +45,12 @@ jobs:
         run: |
           docker build \
             --build-arg bash_version=${{ matrix.bash-version }} \
-            --tag bpm:bash-${{ matrix.bash-version }} \
+            --tag basalt:bash-${{ matrix.bash-version }} \
             .
 
       - name: Run tests
         run: |
-          time docker run bpm:bash-${{ matrix.bash-version }} \
+          time docker run basalt:bash-${{ matrix.bash-version }} \
             --tap tests
 
   test-mac:

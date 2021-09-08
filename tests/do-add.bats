@@ -9,7 +9,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add
+	run basalt global add
 
 	assert_failure
 	assert_line -n 0 -p "At least one package must be supplied"
@@ -22,7 +22,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add 'local/pkg'
+	run basalt global add 'local/pkg'
 
 	assert_failure
 	assert_line -n 0 -p  "Cannot install packages owned by username 'local' because that conflicts with linked packages"
@@ -39,10 +39,10 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-mans
 
 	test_util.create_package "$pkg"
-	run bpm global add "$BPM_ORIGIN_DIR/$pkg"
+	run basalt global add "$BASALT_ORIGIN_DIR/$pkg"
 
 	assert_failure
-	assert_line -p "Identifier '$BPM_ORIGIN_DIR/$pkg' is a directory, not a package"
+	assert_line -p "Identifier '$BASALT_ORIGIN_DIR/$pkg' is a directory, not a package"
 }
 
 @test "executes install steps in right order" {
@@ -52,7 +52,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add username/package
+	run basalt global add username/package
 
 	assert_success
 	assert_line -n 0 -p "Adding 'username/package'"
@@ -70,7 +70,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add username/package username2/package2
+	run basalt global add username/package username2/package2
 
 	assert_success
 	assert_line -n 0 -p "Adding 'username/package'"
@@ -95,7 +95,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add https://gitlab.com/username/package
+	run basalt global add https://gitlab.com/username/package
 
 	assert_success
 	assert_line "plumbing.git-clone https://gitlab.com/username/package.git gitlab.com/username/package  "
@@ -108,7 +108,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add http://gitlab.com/username/package
+	run basalt global add http://gitlab.com/username/package
 
 	assert_success
 	assert_line "plumbing.git-clone http://gitlab.com/username/package.git gitlab.com/username/package  "
@@ -121,7 +121,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add site/username/package
+	run basalt global add site/username/package
 
 	assert_success
 	assert_line "plumbing.git-clone https://site/username/package.git site/username/package  "
@@ -134,7 +134,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add username/package
+	run basalt global add username/package
 
 	assert_success
 	assert_line "plumbing.git-clone https://github.com/username/package.git github.com/username/package  "
@@ -147,7 +147,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add git@github.com:username/package
+	run basalt global add git@github.com:username/package
 
 	assert_success
 	assert_line "plumbing.git-clone git@github.com:username/package github.com/username/package  "
@@ -160,7 +160,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add username/package@v1.2.3
+	run basalt global add username/package@v1.2.3
 
 	assert_success
 	assert_line "plumbing.git-clone https://github.com/username/package.git github.com/username/package v1.2.3 "
@@ -173,7 +173,7 @@ load 'util/init.sh'
 	test_util.stub_command plumbing.symlink-completions
 	test_util.stub_command plumbing.symlink-mans
 
-	run bpm global add username/package@
+	run basalt global add username/package@
 
 	assert_success
 	assert_line "plumbing.git-clone https://github.com/username/package.git github.com/username/package  "
@@ -188,14 +188,14 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.create_package "$pkg2"
 
-	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
+	echo "dependencies = [ 'file://$BASALT_ORIGIN_DIR/$pkg', 'file://$BASALT_ORIGIN_DIR/$pkg2' ]" > 'basalt.toml'
 
-	run bpm add --all
+	run basalt add --all
 
 	assert_success
 
-	assert [ -d "./bpm_packages/packages/$site/$pkg/.git" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg/.git" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg2/.git" ]
 }
 
 @test "--all works with transitive dependencies" {
@@ -207,19 +207,19 @@ load 'util/init.sh'
 	test_util.create_package "$pkg"
 	test_util.create_package "$pkg2"
 	test_util.create_package "$pkg3"
-	cd "$BPM_ORIGIN_DIR/$pkg2"
-	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg3' ]" > 'bpm.toml'
+	cd "$BASALT_ORIGIN_DIR/$pkg2"
+	echo "dependencies = [ 'file://$BASALT_ORIGIN_DIR/$pkg3' ]" > 'basalt.toml'
 	git add .
-	git commit -m 'Add bpm.toml'
+	git commit -m 'Add basalt.toml'
 	cd "$BATS_TEST_TMPDIR"
 
-	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	run bpm add --all
+	echo "dependencies = [ 'file://$BASALT_ORIGIN_DIR/$pkg', 'file://$BASALT_ORIGIN_DIR/$pkg2' ]" > 'basalt.toml'
+	run basalt add --all
 
 	assert_success
-	assert [ -d "./bpm_packages/packages/$site/$pkg/.git" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg2/bpm_packages/packages/$site/$pkg3/.git" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg/.git" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg2/.git" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg2/basalt_packages/packages/$site/$pkg3/.git" ]
 }
 
 @test "--all works with annotated ref" {
@@ -227,18 +227,18 @@ load 'util/init.sh'
 	local pkg1="user/project"
 
 	test_util.create_package "$pkg1"
-	cd "$BPM_ORIGIN_DIR/$pkg1"
+	cd "$BASALT_ORIGIN_DIR/$pkg1"
 	git commit --allow-empty -m 'v0.1.0'
 	git tag -a 'v0.1.0' -m 'Version: v0.1.0'
 	cd "$BATS_TEST_TMPDIR"
 
-	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
-	run bpm add --all
+	echo "dependencies = [ 'file://$BASALT_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'basalt.toml'
+	run basalt add --all
 
 	assert_success
-	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg1/.git" ]
-	assert [ "$(git -C "./bpm_packages/packages/$site/$pkg1" describe --exact-match --tags)" = "v0.1.0" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg1" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg1/.git" ]
+	assert [ "$(git -C "./basalt_packages/packages/$site/$pkg1" describe --exact-match --tags)" = "v0.1.0" ]
 }
 
 @test "--all works with non-annotated ref" {
@@ -246,24 +246,24 @@ load 'util/init.sh'
 	local pkg1="user/project"
 
 	test_util.create_package "$pkg1"
-	cd "$BPM_ORIGIN_DIR/$pkg1"
+	cd "$BASALT_ORIGIN_DIR/$pkg1"
 	git commit --allow-empty -m 'v0.1.0'
 	git tag 'v0.1.0' -m 'Version: v0.1.0'
 	cd "$BATS_TEST_TMPDIR"
 
-	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'bpm.toml'
-	run bpm add --all
+	echo "dependencies = [ 'file://$BASALT_ORIGIN_DIR/$pkg1@v0.1.0' ]" > 'basalt.toml'
+	run basalt add --all
 
 	assert_success
-	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg1/.git" ]
-	assert [ "$(git -C "./bpm_packages/packages/$site/$pkg1" describe --exact-match --tags)" = "v0.1.0" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg1" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg1/.git" ]
+	assert [ "$(git -C "./basalt_packages/packages/$site/$pkg1" describe --exact-match --tags)" = "v0.1.0" ]
 }
 
-@test "--all prints warning when no dependencies are specified in bpm.toml" {
-	touch 'bpm.toml'
+@test "--all prints warning when no dependencies are specified in basalt.toml" {
+	touch 'basalt.toml'
 
-	run bpm add --all
+	run basalt add --all
 
 	assert_success
 	assert_line -p "No dependencies specified in 'dependencies' key"
@@ -271,19 +271,19 @@ load 'util/init.sh'
 }
 
 @test "--all errors when a package is specified as argument" {
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
-	run bpm add --all pkg
+	run basalt add --all pkg
 
 	assert_failure
 	assert_line -p "No packages may be supplied when using '--all'"
 }
 
 @test "--all errors in global mode" {
-	run bpm global add --all
+	run basalt global add --all
 
 	assert_failure
-	assert_line -p "Cannot pass '--all' without a 'bpm.toml' file"
+	assert_line -p "Cannot pass '--all' without a 'basalt.toml' file"
 }
 
 @test "--all works if some are already installed" {
@@ -294,31 +294,31 @@ load 'util/init.sh'
 	test_util.create_package "$pkg1"
 	test_util.create_package "$pkg2"
 
-	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1' ]" > 'bpm.toml'
-	run bpm add --all
+	echo "dependencies = [ 'file://$BASALT_ORIGIN_DIR/$pkg1' ]" > 'basalt.toml'
+	run basalt add --all
 
 	assert_success
 
-	echo "dependencies = [ 'file://$BPM_ORIGIN_DIR/$pkg1', 'file://$BPM_ORIGIN_DIR/$pkg2' ]" > 'bpm.toml'
-	run bpm add --all
+	echo "dependencies = [ 'file://$BASALT_ORIGIN_DIR/$pkg1', 'file://$BASALT_ORIGIN_DIR/$pkg2' ]" > 'basalt.toml'
+	run basalt add --all
 
 	assert_success
-	assert [ -d "./bpm_packages/packages/$site/$pkg1" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg1/.git" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg2" ]
-	assert [ -d "./bpm_packages/packages/$site/$pkg2/.git" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg1" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg1/.git" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg2" ]
+	assert [ -d "./basalt_packages/packages/$site/$pkg2/.git" ]
 }
 
 @test "fails if in local mode" {
 	local site='github.com'
 	local pkg1='user/project'
 
-	touch 'bpm.toml'
+	touch 'basalt.toml'
 
 	test_util.create_package "$pkg1"
 
-	run bpm add "$pkg1"
+	run basalt add "$pkg1"
 
 	assert_failure
-	assert_line -p "Subcommands must use the '--all' flag when a 'bpm.toml' file is present"
+	assert_line -p "Subcommands must use the '--all' flag when a 'basalt.toml' file is present"
 }
