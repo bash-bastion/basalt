@@ -323,7 +323,7 @@ Subcommands (local):
   remove [--all] [--force] <package...>
     Uninstalls a package
 
-  link [--no-deps] <directory...>
+  link <directory...>
     Installs a package from a local directory. These have a
     namespace of 'local'
 

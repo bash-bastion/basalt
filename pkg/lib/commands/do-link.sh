@@ -3,13 +3,9 @@
 do-link() {
 	util.init_command
 
-	local flag_no_deps='yes'
 	local -a dirs=()
 	for arg; do
 		case "$arg" in
-		--no-deps)
-			flag_no_deps='no'
-			;;
 		-*)
 			die "Flag '$arg' not recognized"
 			;;
@@ -47,9 +43,6 @@ do-link() {
 		ln -s "$dir" "$BPM_PACKAGES_PATH/$package"
 
 		log.info "Symlinking '$dir'"
-		if [ "$flag_no_deps" = 'yes' ]; then
-			plumbing.add-dependencies "$package"
-		fi
 		plumbing.symlink-bins "$package"
 		plumbing.symlink-completions "$package"
 		plumbing.symlink-mans "$package"

@@ -17,7 +17,7 @@ set -l subcommandOptions sh bash zsh fish
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
 
 set subcmd link
-set -l subcommandOptions --no-deps
+set -l subcommandOptions
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
 
 set subcmd list

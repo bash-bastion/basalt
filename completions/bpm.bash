@@ -64,7 +64,7 @@ _bpm() {
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			link)
-				subcommandOptions=(--no-deps)
+				subcommandOptions=()
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			list)

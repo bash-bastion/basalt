@@ -101,10 +101,9 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir'"
-	assert_line -n 1 "plumbing.add-dependencies local/$dir"
-	assert_line -n 2 "plumbing.symlink-bins local/$dir"
-	assert_line -n 3 "plumbing.symlink-completions local/$dir"
-	assert_line -n 4 "plumbing.symlink-mans local/$dir"
+	assert_line -n 1 "plumbing.symlink-bins local/$dir"
+	assert_line -n 2 "plumbing.symlink-completions local/$dir"
+	assert_line -n 3 "plumbing.symlink-mans local/$dir"
 
 }
 
@@ -127,71 +126,14 @@ load 'util/init.sh'
 
 	assert_success
 	assert_line -n 0 -p "Symlinking '$srcDir1'"
-	assert_line -n 1 "plumbing.add-dependencies local/$dir1"
-	assert_line -n 2 "plumbing.symlink-bins local/$dir1"
-	assert_line -n 3 "plumbing.symlink-completions local/$dir1"
-	assert_line -n 4 "plumbing.symlink-mans local/$dir1"
-	assert_line -n 5 -p "Symlinking '$srcDir2'"
-	assert_line -n 6 "plumbing.add-dependencies local/$dir2"
-	assert_line -n 7 "plumbing.symlink-bins local/$dir2"
-	assert_line -n 8 "plumbing.symlink-completions local/$dir2"
-	assert_line -n 9 "plumbing.symlink-mans local/$dir2"
+	assert_line -n 1 "plumbing.symlink-bins local/$dir1"
+	assert_line -n 2 "plumbing.symlink-completions local/$dir1"
+	assert_line -n 3 "plumbing.symlink-mans local/$dir1"
+	assert_line -n 4 -p "Symlinking '$srcDir2'"
+	assert_line -n 5 "plumbing.symlink-bins local/$dir2"
+	assert_line -n 6 "plumbing.symlink-completions local/$dir2"
+	assert_line -n 7 "plumbing.symlink-mans local/$dir2"
 
-}
-
-@test "respects the --no-deps option in the correct order" {
-	test_util.stub_command plumbing.add-dependencies
-	test_util.stub_command plumbing.symlink-bins
-	test_util.stub_command plumbing.symlink-completions
-	test_util.stub_command plumbing.symlink-mans
-
-	local dir='package2'
-
-	test_util.create_package "$dir"
-
-
-	local srcDir="$(util.readlink "$BPM_ORIGIN_DIR/$dir")"
-
-	run bpm global link --no-deps "$srcDir"
-
-	assert_success
-	assert_line -n 0 -p "Symlinking '$srcDir'"
-	assert_line -n 1 "plumbing.symlink-bins local/$dir"
-	assert_line -n 2 "plumbing.symlink-completions local/$dir"
-	assert_line -n 3 "plumbing.symlink-mans local/$dir"
-}
-
-
-@test "respects the --no-deps option" {
-	test_util.stub_command plumbing.add-dependencies
-	test_util.stub_command plumbing.symlink-bins
-	test_util.stub_command plumbing.symlink-completions
-	test_util.stub_command plumbing.symlink-mans
-
-	local dir='package2'
-
-	test_util.create_package "$dir"
-
-	run bpm global link --no-deps "$BPM_ORIGIN_DIR/$dir"
-
-	assert_success
-	refute_line "plumbing.add-dependencies local/package2"
-}
-
-@test "respects the --no-deps option (at end)" {
-	test_util.stub_command plumbing.add-dependencies
-	test_util.stub_command plumbing.symlink-bins
-	test_util.stub_command plumbing.symlink-completions
-	test_util.stub_command plumbing.symlink-mans
-
-	local dir='package2'
-
-	test_util.create_package "$dir"
-
-	run bpm global link "$BPM_ORIGIN_DIR/$dir" --no-deps
-
-	assert_success
-	refute_line "plumbing.add-dependencies local/package2"
 }
 
 @test "links the current directory" {

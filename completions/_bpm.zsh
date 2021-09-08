@@ -40,7 +40,7 @@ case $state in
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(link)
-			local -a subcommandOptions=(--no-deps)
+			local -a subcommandOptions=()
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(list)
