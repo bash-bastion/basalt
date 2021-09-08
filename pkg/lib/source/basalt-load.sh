@@ -80,14 +80,14 @@ basalt-load() {
 	# shellcheck disable=SC1091
 	if ! source "$__basalt_basalt_lib_dir/util/util.sh"; then
 		printf '%s\n' "basalt-load: Error: Unexpected error sourcing file '$__basalt_basalt_lib_dir/util/util.sh'"
-		__basalt_basalt_load_restore_options
+		__basalt_load_restore_options
 		return 4
 	fi
 
 	# Get package information
 	if ! util.extract_data_from_input "$__basalt_pkg_name"; then
 		printf '%s\n' "basalt-load: Error: Unexpected error calling function 'util.extract_data_from_input' with argument '$__basalt_pkg_name'"
-		__basalt_basalt_load_restore_options
+		__basalt_load_restore_options
 		return 4
 	fi
 	local __basalt_site="$REPLY2"
@@ -97,11 +97,11 @@ basalt-load() {
 	# Get the basalt root dir (relative to this function's callsite)
 	local __basalt_cellar=
 	if [ "$__basalt_flag_global" = yes ]; then
-		__basalt_cellar="${BASALT_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
+		__basalt_cellar="${BASALT_GLOBAL_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
 	else
-		if ! __basalt_cellar="$(util.get_project_root_dir)/basalt_packages"; then
-			printf '%s\n' "basalt-load: Error: Unexpected error calling function 'util.get_project_root_dir' with \$PWD '$PWD'"
-			__basalt_basalt_load_restore_options
+		if ! __basalt_cellar="$(util.get_local_project_root_dir)/basalt_packages"; then
+			printf '%s\n' "basalt-load: Error: Unexpected error calling function 'util.get_local_project_root_dir' with \$PWD '$PWD'"
+			__basalt_load_restore_options
 			return 4
 		fi
 	fi
@@ -109,7 +109,7 @@ basalt-load() {
 	# Ensure package is actually installed
 	if [ ! -d "$__basalt_cellar/packages/$__basalt_site/$__basalt_package" ]; then
 		printf '%s\n' "basalt-load: Error: Package '$__basalt_site/$__basalt_package' is not installed. Does the '--global' flag apply?"
-		__basalt_basalt_load_restore_options
+		__basalt_load_restore_options
 		return 3
 	fi
 
@@ -119,24 +119,24 @@ basalt-load() {
 
 		if [ -d "$__basalt_full_path" ]; then
 			printf '%s\n' "basalt-load: Error: '$__basalt_full_path' is a directory"
-			__basalt_basalt_load_restore_options
+			__basalt_load_restore_options
 			return 3
 		elif [ -e "$__basalt_full_path" ]; then
 			if [ "$__basalt_flag_dry" = yes ]; then
 				printf '%s\n' "basalt-load: Would source file '$__basalt_full_path'"
-				__basalt_basalt_load_restore_options
+				__basalt_load_restore_options
 				return
 			else
 				# Ensure the error can be properly handled at the callsite, and not
 				# bail here if errexit is set
 				if ! source "$__basalt_full_path"; then
-					__basalt_basalt_load_restore_options
+					__basalt_load_restore_options
 					return 2
 				fi
 			fi
 		else
 			printf '%s\n' "basalt-load: Error: File '$__basalt_full_path' does not exist"
-			__basalt_basalt_load_restore_options
+			__basalt_load_restore_options
 			return 3
 		fi
 	else
@@ -150,13 +150,13 @@ basalt-load() {
 
 				if [ "$__basalt_flag_dry" = yes ]; then
 					printf '%s\n' "basalt-load: Would source file '$__basalt_full_path'"
-					__basalt_basalt_load_restore_options
+					__basalt_load_restore_options
 					return
 				else
 					# Ensure the error can be properly handled at the callsite, and not
 					# bail here if errexit is set
 					if ! source "$__basalt_full_path"; then
-						__basalt_basalt_load_restore_options
+						__basalt_load_restore_options
 						return 2
 					fi
 				fi
@@ -165,17 +165,17 @@ basalt-load() {
 
 		if [ "$__basalt_file_was_sourced" = 'no' ]; then
 			printf '%s\n' "basalt-load: Error: Could not automatically find package file to source. Did you mean to pass the file to source as the second argument?"
-			__basalt_basalt_load_restore_options
+			__basalt_load_restore_options
 			return 3
 		fi
 	fi
 
-	__basalt_basalt_load_restore_options
+	__basalt_load_restore_options
 }
 
 # @description Restore the previous options
 # @noargs
-__basalt_basalt_load_restore_options() {
+__basalt_load_restore_options() {
 	if [ "$__basalt_setNullglob" = 'yes' ]; then
 		shopt -s nullglob
 	else
@@ -189,6 +189,7 @@ __basalt_basalt_load_restore_options() {
 	fi
 }
 
+# TODO: this clobbers die
 # @description Internal functions might call 'die', so this prevents 'bash: die: command not found' errors,
 # but still allows the error to be exposed at the callsite
 die() {

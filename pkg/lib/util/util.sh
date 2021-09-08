@@ -9,10 +9,7 @@
 # @arg $1 repoSpec
 # @arg $2 with_ssh Whether to clone with SSH (yes/no)
 util.extract_data_from_input() {
-	REPLY1=
-	REPLY2=
-	REPLY3=
-	REPLY4=
+	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 
 	local repoSpec="$1"
 
@@ -25,7 +22,7 @@ util.extract_data_from_input() {
 	local regex="^https?://"
 	local regex2="^git@"
 	local regex3="^local/"
-	local regex4="^file://"
+	local regex4="^file://" # TODO:
 	if [[ "$repoSpec" =~ $regex ]]; then
 		local http="${repoSpec%%://*}"
 		repoSpec="${repoSpec#http?(s)://}"
@@ -90,6 +87,11 @@ util.extract_data_from_input() {
 		REPLY2="$site"
 		REPLY3="$package"
 		REPLY4="$ref"
+	fi
+
+	# TODO: do other sites
+	if [ "$site" = github.com ]; then
+		REPLY5="https://github.com/$package/archive/refs/tags/$ref.tar.gz"
 	fi
 }
 
@@ -172,6 +174,10 @@ util.get_toml_array() {
 	local tomlFile="$1"
 	local keyName="$2"
 
+	if [ ! -f "$tomlFile" ]; then
+		print.die 'Internal Error' "File '$tomlFile' does not exist"
+	fi
+
 	local grepLine=
 	while IFS= read -r line; do
 		if [[ $line == *"$keyName"*=* ]]; then
@@ -250,7 +256,7 @@ util.extract_shell_variable() {
 
 # @description Get the working directory of the project. Note
 # that this should always be called within a subshell
-util.get_project_root_dir() {
+util.get_local_project_root_dir() {
 	while [[ ! -f "basalt.toml" && "$PWD" != / ]]; do
 		cd ..
 	done
@@ -265,39 +271,23 @@ util.get_project_root_dir() {
 # @description Ensures particular variables exist and sets the current mode of
 # operation
 util.init_command() {
-	if [[ -z "$BASALT_REPO_SOURCE" || -z "$BASALT_CELLAR" ]]; then
-		die "Either 'BASALT_REPO_SOURCE' or 'BASALT_CELLAR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
+	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_CELLAR" ]; then
+		die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_CELLAR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
 
 	if [ "$BASALT_MODE" = local ]; then
-		local project_root_dir=
-		if project_root_dir="$(util.get_project_root_dir)"; then
-			# TODO: improve this output
-			# Output to standard error because some subcommands may be scriptable (ex. list)
-			if [ "${BASALT_IS_TEST+x}" ]; then
-				printf "  -> %s\n" "'$project_root_dir'"
-			fi
+		local local_project_root_dir=
+		if local_project_root_dir="$(util.get_local_project_root_dir)"; then
+			BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
 
-			BASALT_LOCAL_PROJECT_DIR="$project_root_dir"
-			BASALT_CELLAR="$project_root_dir/basalt_packages"
-			BASALT_PACKAGES_PATH="$BASALT_CELLAR/packages"
-
-			mkdir -p "$BASALT_CELLAR"/{bin,completion,man,tarballs,packages}
-
-			# TODO: remove these
-			BASALT_INSTALL_BIN="$BASALT_CELLAR/bin"
-			BASALT_INSTALL_MAN="$BASALT_CELLAR/man"
-			BASALT_INSTALL_COMPLETIONS="$BASALT_CELLAR/completions"
+			# TODO: don't create all?
+			mkdir -p "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"/{bin,completion,man,packages}
 		else
 			die "Could not find a 'basalt.toml' file"
 		fi
-	else
-		BASALT_CELLAR="$BASALT_CELLAR"
-		BASALT_PACKAGES_PATH="$BASALT_CELLAR/packages"
-		BASALT_INSTALL_BIN="$BASALT_CELLAR/bin"
-		BASALT_INSTALL_MAN="$BASALT_CELLAR/man"
-		BASALT_INSTALL_COMPLETIONS="$BASALT_CELLAR/completions"
+	elif [ "$BASALT_MODE" = global ]; then
+		:
 	fi
 }
 

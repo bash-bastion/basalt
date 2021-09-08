@@ -10,7 +10,7 @@ The location of the root `basalt` folder. Defaults to `"${XDG_DATA_HOME:-$HOME/.
 
 Set to a non-null string to clone the full repository history instead of only the last commit. By default, only the latest commit is cloned (`--depth=1`). The only exception to this is when a specific version is specified with `@v0.1.0` notation. When that is specified, the whole history is downloaded
 
-### `BASALT_CELLAR`
+### `BASALT_GLOBAL_CELLAR`
 
 Set the installation and package checkout prefix (default is `$BASALT_LOCAL_PROJECT_DIR/cellar`).  Setting this to `/usr/local`, for example, will install binaries to `/usr/local/bin`, manpages to `/usr/local/man`, completions to `/usr/local/completions`, and clone packages to `/usr/local/packages`
 

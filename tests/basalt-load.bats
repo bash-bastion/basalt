@@ -6,8 +6,8 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
-	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
@@ -24,8 +24,8 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
-	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
@@ -44,8 +44,8 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
-	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
@@ -62,8 +62,8 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
-	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'file.bash'
@@ -81,8 +81,8 @@ load 'util/init.sh'
 # 	local site='github.com'
 # 	local pkg="user/project2"
 
-# 	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
-# 	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
+# 	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
+# 	BASALT_GLOBAL_CELLAR="$BASALT_TEST_DIR/cellar"
 
 # 	test_util.setup_pkg "$pkg"; {
 # 		echo "printf '%s\n' 'it works :)'" > 'load.bash'
@@ -99,8 +99,8 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg="user/project2"
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
-	BASALT_CELLAR="$BASALT_TEST_DIR/cellar"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_CELLAR="$BASALT_TEST_DIR/cellar"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "printf '%s\n' 'it works :)'" > 'load.bash'

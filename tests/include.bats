@@ -3,7 +3,7 @@
 load 'util/init.sh'
 
 @test "with no arguments, prints an error" {
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	eval "$(basalt global init sh)"
 
@@ -14,7 +14,7 @@ load 'util/init.sh'
 }
 
 @test "with one argument, prints an error" {
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	eval "$(basalt global init sh)"
 
@@ -28,7 +28,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='user/repo'
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	eval "$(basalt global init sh)"
 
@@ -42,7 +42,7 @@ load 'util/init.sh'
 	local site='github.com'
 	local pkg='username/repo'
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	test_util.setup_pkg "$pkg"; {
 		:
@@ -55,14 +55,14 @@ load 'util/init.sh'
 	run include "$site/$pkg" non_existent
 
 	assert_failure
-	assert_output -p "File '$BASALT_CELLAR/packages/$site/$pkg/non_existent' not found"
+	assert_output -p "File '$BASALT_GLOBAL_CELLAR/packages/$site/$pkg/non_existent' not found"
 }
 
 @test "when file does exist, properly source file" {
 	local site='github.com'
 	local pkg='username/repo'
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	test_util.setup_pkg "$pkg"; {
 		echo "func_name() { echo 'done'; }" > 'function.sh'

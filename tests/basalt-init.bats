@@ -10,26 +10,26 @@ load './util/init.sh'
 }
 
 # TODO
-# @test "exports BASALT_REPO_SOURCE" {
-# 	unset BASALT_REPO_SOURCE
-# 	eval "$(BASALT_REPO_SOURCE=/lol basalt global init bash)"
+# @test "exports BASALT_GLOBAL_REPO" {
+# 	unset BASALT_GLOBAL_REPO
+# 	eval "$(BASALT_GLOBAL_REPO=/lol basalt global init bash)"
 
 # 	assert_success
-# 	assert [ "$BASALT_REPO_SOURCE" = '/lol' ]
-# 	assert test_util.is_exported 'BASALT_REPO_SOURCE'
+# 	assert [ "$BASALT_GLOBAL_REPO" = '/lol' ]
+# 	assert test_util.is_exported 'BASALT_GLOBAL_REPO'
 # }
 
-# @test "exports BASALT_CELLAR" {
-# 	unset BASALT_CELLAR
-# 	eval "$(BASALT_CELLAR=/lol basalt global init bash)"
+# @test "exports BASALT_GLOBAL_CELLAR" {
+# 	unset BASALT_GLOBAL_CELLAR
+# 	eval "$(BASALT_GLOBAL_CELLAR=/lol basalt global init bash)"
 
 # 	assert_success
-# 	assert [ "$BASALT_CELLAR" = '/lol' ]
-# 	assert test_util.is_exported 'BASALT_CELLAR'
+# 	assert [ "$BASALT_GLOBAL_CELLAR" = '/lol' ]
+# 	assert test_util.is_exported 'BASALT_GLOBAL_CELLAR'
 # }
 
 @test "sources basalt-load for Bash" {
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	eval "$(basalt global init bash)"
 
@@ -39,7 +39,7 @@ load './util/init.sh'
 
 
 @test "sources basalt-load for Zsh" {
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	eval "$(basalt global init zsh)"
 
@@ -57,7 +57,7 @@ load './util/init.sh'
 @test "bash completion works" {
 	! command -v _basalt
 
-	BASALT_REPO_SOURCE="$BASALT_TEST_REPO_ROOT/../source"
+	BASALT_GLOBAL_REPO="$BASALT_TEST_REPO_ROOT/../source"
 
 	eval "$(basalt global init bash)"
 

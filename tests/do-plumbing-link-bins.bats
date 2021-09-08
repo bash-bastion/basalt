@@ -313,8 +313,8 @@ load 'util/init.sh'
 	run basalt global link "$BASALT_ORIGIN_DIR/$dir" "$BASALT_ORIGIN_DIR/$dir2"
 
 	assert_success
-	assert [ ! -e "$BASALT_CELLAR/bin/package" ]
-	assert [ ! -e "$BASALT_CELLAR/bin/package2" ]
+	assert [ ! -e "$BASALT_GLOBAL_CELLAR/bin/package" ]
+	assert [ ! -e "$BASALT_GLOBAL_CELLAR/bin/package2" ]
 }
 
 @test "fails link bins when specifying directory in package.sh" {

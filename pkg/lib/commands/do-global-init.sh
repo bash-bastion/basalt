@@ -3,8 +3,8 @@
 echo_variables_posix() {
 	cat <<-EOF
 	# basalt variables
-	export BASALT_REPO_SOURCE="${BASALT_REPO_SOURCE:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"}"
-	export BASALT_CELLAR="${BASALT_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
+	export BASALT_GLOBAL_REPO="${BASALT_GLOBAL_REPO:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"}"
+	export BASALT_GLOBAL_CELLAR="${BASALT_GLOBAL_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
 
 	EOF
 }
@@ -12,8 +12,8 @@ echo_variables_posix() {
 echo_include_posix() {
 	cat <<-"EOF"
 	# basalt include function
-	if [ -f "$BASALT_REPO_SOURCE/pkg/share/include.sh" ]; then
-	  . "$BASALT_REPO_SOURCE/pkg/share/include.sh"
+	if [ -f "$BASALT_GLOBAL_REPO/pkg/share/include.sh" ]; then
+	  . "$BASALT_GLOBAL_REPO/pkg/share/include.sh"
 	fi
 
 	EOF
@@ -22,8 +22,8 @@ echo_include_posix() {
 echo_package_path_posix() {
 	cat <<-"EOF"
 	# basalt packages PATH
-	if [ "${PATH#*$BASALT_CELLAR/bin}" = "$PATH" ]; then
-	  export PATH="$BASALT_CELLAR/bin:$PATH"
+	if [ "${PATH#*$BASALT_GLOBAL_CELLAR/bin}" = "$PATH" ]; then
+	  export PATH="$BASALT_GLOBAL_CELLAR/bin:$PATH"
 	fi
 
 	EOF
@@ -51,26 +51,26 @@ do-global-init() {
 	fish)
 		cat <<-EOF
 		# basalt variables
-		set -gx BASALT_REPO_SOURCE "${BASALT_REPO_SOURCE:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"}"
-		set -gx "${BASALT_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
+		set -gx BASALT_GLOBAL_REPO "${BASALT_GLOBAL_REPO:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"}"
+		set -gx "${BASALT_GLOBAL_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
 
 		# basalt completion
-		source \$BASALT_REPO_SOURCE/completions/basalt.fish
+		source \$BASALT_GLOBAL_REPO/completions/basalt.fish
 
 		# basalt include function
-		if [ -f "$BASALT_REPO_SOURCE/pkg/share/include.fish" ]
-		  source "$BASALT_REPO_SOURCE/pkg/share/include.fish"
+		if [ -f "$BASALT_GLOBAL_REPO/pkg/share/include.fish" ]
+		  source "$BASALT_GLOBAL_REPO/pkg/share/include.fish"
 		end
 
 		# basalt packages PATH
-		if not contains \$BASALT_CELLAR/bin \$PATH
-		  set -gx PATH \$BASALT_CELLAR/bin \$PATH
+		if not contains \$BASALT_GLOBAL_CELLAR/bin \$PATH
+		  set -gx PATH \$BASALT_GLOBAL_CELLAR/bin \$PATH
 		end
 
 		# basalt packages completions
 		# set -gx fish_complete_path \$fish_complete_path
-		if [ -d \$BASALT_CELLAR/completions/fish ]
-		  for f in \$BASALT_CELLAR/completions/fish/?*.fish
+		if [ -d \$BASALT_GLOBAL_CELLAR/completions/fish ]
+		  for f in \$BASALT_GLOBAL_CELLAR/completions/fish/?*.fish
 		    source \$f
 		  end
 		end
@@ -80,22 +80,22 @@ do-global-init() {
 		echo_variables_posix
 		cat <<-EOF
 		# basalt completions
-		if [ -f "\$BASALT_REPO_SOURCE/completions/basalt.bash" ]; then
-		  . "\$BASALT_REPO_SOURCE/completions/basalt.bash"
+		if [ -f "\$BASALT_GLOBAL_REPO/completions/basalt.bash" ]; then
+		  . "\$BASALT_GLOBAL_REPO/completions/basalt.bash"
 		fi
 
 		EOF
 		echo_include_posix
 		cat <<-"EOF"
-		source "$BASALT_REPO_SOURCE/pkg/lib/source/basalt-load.sh"
+		source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
 
 		EOF
 
 		echo_package_path_posix
 		cat <<-"EOF"
 		# basalt packages completions
-		if [ -d "$BASALT_CELLAR/completions/bash" ]; then
-		  for f in "$BASALT_CELLAR"/completions/bash/*; do
+		if [ -d "$BASALT_GLOBAL_CELLAR/completions/bash" ]; then
+		  for f in "$BASALT_GLOBAL_CELLAR"/completions/bash/*; do
 		    source "$f"
 		  done
 		  unset f
@@ -107,21 +107,21 @@ do-global-init() {
 		echo_variables_posix
 		cat <<-EOF
 		# basalt completions
-		fpath=("\$BASALT_REPO_SOURCE/completions" \$fpath)
+		fpath=("\$BASALT_GLOBAL_REPO/completions" \$fpath)
 		EOF
 
 		echo_include_posix
 		cat <<-"EOF"
-		source "$BASALT_REPO_SOURCE/pkg/lib/source/basalt-load.sh"
+		source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
 
 		EOF
 
 		echo_package_path_posix
 		cat <<-"EOF"
 		# basalt packages completions
-		fpath=("$BASALT_CELLAR/completions/zsh/compsys" $fpath)
-		if [ -d "$BASALT_CELLAR/completions/zsh/compctl" ]; then
-		  for f in "$BASALT_CELLAR"/completions/zsh/compctl/*; do
+		fpath=("$BASALT_GLOBAL_CELLAR/completions/zsh/compsys" $fpath)
+		if [ -d "$BASALT_GLOBAL_CELLAR/completions/zsh/compctl" ]; then
+		  for f in "$BASALT_GLOBAL_CELLAR"/completions/zsh/compctl/*; do
 		    source "$f"
 		  done
 		  unset f

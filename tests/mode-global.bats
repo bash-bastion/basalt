@@ -47,5 +47,5 @@ load 'util/init.sh'
 	run basalt init bash
 	assert_success
 	assert_line -p "export PATH"
-	assert_line -p '. "$BASALT_REPO_SOURCE/'
+	assert_line -p '. "$BASALT_GLOBAL_REPO/'
 }
