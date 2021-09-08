@@ -16,7 +16,7 @@ _cmd_.bpm() {
 	--version|-v)
 		# TODO: version string out of date
 		cat <<-EOF
-		Version: v0.6.0
+		Version: v0.9.0
 		EOF
 		exit
 		;;

@@ -6,22 +6,20 @@ do-remove() {
 	local flag_all='no'
 	local flag_force='no'
 	local -a pkgs=()
-	for arg; do
-		case "$arg" in
-		--all)
-			flag_all='yes'
-			;;
-		--force)
-			flag_force='yes'
-			;;
-		-*)
-			die "Flag '$arg' not recognized"
-			;;
-		*)
-			pkgs+=("$arg")
-			;;
-		esac
-	done
+	for arg; do case "$arg" in
+	--all)
+		flag_all='yes'
+		;;
+	--force)
+		flag_force='yes'
+		;;
+	-*)
+		die "Flag '$arg' not recognized"
+		;;
+	*)
+		pkgs+=("$arg")
+		;;
+	esac done
 
 	if [ "$flag_all" = yes ] && (( ${#pkgs[@]} > 0 )); then
 		die "No packages may be supplied when using '--all'"

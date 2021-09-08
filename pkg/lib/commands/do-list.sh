@@ -8,26 +8,24 @@ do-list() {
 	local flag_fetch='no'
 	local flag_format=
 	local -a pkgs=()
-	for arg; do
-		case "$arg" in
-		--fetch)
-			flag_fetch='yes'
-			;;
-		--format=*)
-			IFS='=' read -r discard flag_format <<< "$arg"
+	for arg; do case "$arg" in
+	--fetch)
+		flag_fetch='yes'
+		;;
+	--format=*)
+		IFS='=' read -r discard flag_format <<< "$arg"
 
-			if [ -z "$flag_format" ]; then
-				die "Format cannot be empty"
-			fi
-			;;
-		-*)
-			die "Flag '$arg' not recognized"
-			;;
-		*)
-			pkgs+=("$arg")
-			;;
-		esac
-	done
+		if [ -z "$flag_format" ]; then
+			die "Format cannot be empty"
+		fi
+		;;
+	-*)
+		die "Flag '$arg' not recognized"
+		;;
+	*)
+		pkgs+=("$arg")
+		;;
+	esac done
 
 	# If packages are specified
 	if (( ${#pkgs[@]} > 0 )); then

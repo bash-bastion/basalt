@@ -6,22 +6,20 @@ do-upgrade() {
 	local upgrade_bpm='no'
 	local flag_all='no'
 	local -a pkgs=()
-	for arg; do
-		case "$arg" in
-		bpm)
-			upgrade_bpm='yes'
-			;;
-		--all)
-			flag_all='yes'
-			;;
-		-*)
-			die "Flag '$arg' not recognized"
-			;;
-		*)
-			pkgs+=("$arg")
-			;;
-		esac
-	done
+	for arg; do case "$arg" in
+	bpm)
+		upgrade_bpm='yes'
+		;;
+	--all)
+		flag_all='yes'
+		;;
+	-*)
+		die "Flag '$arg' not recognized"
+		;;
+	*)
+		pkgs+=("$arg")
+		;;
+	esac done
 
 	if [ "$flag_all" = yes ] && (( ${#pkgs[@]} > 0 )); then
 		die "No packages may be supplied when using '--all'"

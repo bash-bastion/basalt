@@ -4,23 +4,21 @@ do-link() {
 	util.init_command
 
 	local -a dirs=()
-	for arg; do
-		case "$arg" in
-		-*)
-			die "Flag '$arg' not recognized"
-			;;
-		*)
-			dirs+=("$arg")
-			;;
-		esac
-	done
+	for arg; do case "$arg" in
+	-*)
+		die "Flag '$arg' not recognized"
+		;;
+	*)
+		dirs+=("$arg")
+		;;
+	esac done
 
 	if (( ${#dirs[@]} == 0 )); then
 		die 'At least one package must be supplied'
 	fi
 
 	for dir in "${dirs[@]}"; do
-		if [ ! -d "$dir" ]; then
+		if [ ! -d "$dir" ]; then 
 			die "Directory '$dir' not found"
 		fi
 

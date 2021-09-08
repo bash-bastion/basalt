@@ -6,26 +6,24 @@ do-add() {
 	local flag_all='no'
 	local flag_branch=
 	local -a pkgs=()
-	for arg; do
-		case "$arg" in
-		--all)
-			flag_all='yes'
-			;;
-		--branch=*)
-			IFS='=' read -r discard flag_branch <<< "$arg"
+	for arg; do case "$arg" in
+	--all)
+		flag_all='yes'
+		;;
+	--branch=*)
+		IFS='=' read -r discard flag_branch <<< "$arg"
 
-			if [ -z "$flag_branch" ]; then
-				die "Branch cannot be empty"
-			fi
-			;;
-		-*)
-			die "Flag '$arg' not recognized"
-			;;
-		*)
-			pkgs+=("$arg")
-			;;
-		esac
-	done
+		if [ -z "$flag_branch" ]; then
+			die "Branch cannot be empty"
+		fi
+		;;
+	-*)
+		die "Flag '$arg' not recognized"
+		;;
+	*)
+		pkgs+=("$arg")
+		;;
+	esac done
 
 	if [ "$flag_all" = yes ] && (( ${#pkgs[@]} > 0 )); then
 		die "No packages may be supplied when using '--all'"
