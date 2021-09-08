@@ -270,7 +270,7 @@ util.get_project_root_dir() {
 # operation
 util.init_command() {
 	if [[ -z "$BPM_REPO_SOURCE" || -z "$BPM_CELLAR" ]]; then
-		die "Either 'BPM_REPO_SOURCE' or 'BPM_CELLAR' is empty. Did you forget to run add \`bpm init <shell>\` in your shell configuration?"
+		die "Either 'BPM_REPO_SOURCE' or 'BPM_CELLAR' is empty. Did you forget to run add 'bpm init <shell>' in your shell configuration?"
 	fi
 
 
@@ -283,7 +283,7 @@ util.init_command() {
 				printf "  -> %s\n" "'$project_root_dir'"
 			fi
 
-			# Set the variables as to make them orrect for 'local' mode
+			# Set the variables as to make them correct for 'local' mode
 			BPM_LOCAL_PROJECT_DIR="$project_root_dir"
 			BPM_REPO_SOURCE="$BPM_REPO_SOURCE"
 			BPM_CELLAR="$project_root_dir/bpm_packages"
@@ -295,6 +295,7 @@ util.init_command() {
 			die "No 'bpm.toml' file found"
 		fi
 	else
+		BPM_CELLAR="$BPM_CELLAR"
 		BPM_PACKAGES_PATH="$BPM_CELLAR/packages"
 		BPM_INSTALL_BIN="$BPM_CELLAR/bin"
 		BPM_INSTALL_MAN="$BPM_CELLAR/man"
