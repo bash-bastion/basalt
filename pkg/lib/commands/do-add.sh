@@ -3,15 +3,11 @@
 do-add() {
 	util.init_command
 
-	local flag_ssh='no'
 	local flag_all='no'
 	local flag_branch=
 	local -a pkgs=()
 	for arg; do
 		case "$arg" in
-		--ssh)
-			flag_ssh='yes'
-			;;
 		--all)
 			flag_all='yes'
 			;;
@@ -50,7 +46,7 @@ do-add() {
 			log.info "Adding all dependencies"
 
 			for pkg in "${REPLIES[@]}"; do
-				do-actual-add "$pkg" "$flag_ssh" "$flag_branch"
+				do-actual-add "$pkg" "$flag_branch"
 			done
 		else
 			log.warn "No dependencies specified in 'dependencies' key"
@@ -63,21 +59,20 @@ do-add() {
 		die "At least one package must be supplied"
 	else
 		for repoSpec in "${pkgs[@]}"; do
-			do-actual-add "$repoSpec" "$flag_ssh" "$flag_branch"
+			do-actual-add "$repoSpec" "$flag_branch"
 		done
 	fi
 }
 
 do-actual-add() {
 	local repoSpec="$1"
-	local flag_ssh="$2"
-	local flag_branch="$3"
+	local flag_branch="$2"
 
 	if [[ -d "$repoSpec" && "${repoSpec::1}" == / ]]; then
 		die "Identifier '$repoSpec' is a directory, not a package"
 	fi
 
-	util.extract_data_from_input "$repoSpec" "$flag_ssh"
+	util.extract_data_from_input "$repoSpec"
 	local uri="$REPLY1"
 	local site="$REPLY2"
 	local package="$REPLY3"

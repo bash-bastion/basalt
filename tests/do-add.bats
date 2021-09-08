@@ -140,32 +140,6 @@ load 'util/init.sh'
 	assert_line "plumbing.git-clone https://github.com/username/package.git github.com/username/package  "
 }
 
-@test "uses ssh protocol, when specified" {
-	test_util.stub_command plumbing.git-clone
-	test_util.stub_command plumbing.add-dependencies
-	test_util.stub_command plumbing.symlink-bins
-	test_util.stub_command plumbing.symlink-completions
-	test_util.stub_command plumbing.symlink-mans
-
-	run bpm global add --ssh username/package
-
-	assert_success
-	assert_line "plumbing.git-clone git@github.com:username/package github.com/username/package  "
-}
-
-@test "uses ssh protocol, when specified (at end)" {
-	test_util.stub_command plumbing.git-clone
-	test_util.stub_command plumbing.add-dependencies
-	test_util.stub_command plumbing.symlink-bins
-	test_util.stub_command plumbing.symlink-completions
-	test_util.stub_command plumbing.symlink-mans
-
-	run bpm global add username/package --ssh
-
-	assert_success
-	assert_line "plumbing.git-clone git@github.com:username/package github.com/username/package  "
-}
-
 @test "uses ssh protocol raw, when specified" {
 	test_util.stub_command plumbing.git-clone
 	test_util.stub_command plumbing.add-dependencies

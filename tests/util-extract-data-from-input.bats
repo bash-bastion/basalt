@@ -73,24 +73,6 @@ load 'util/init.sh'
 	assert [ "$REPLY4" = 'v0.1.0' ]
 }
 
-@test "parses with package and domain with ssh" {
-	util.extract_data_from_input 'gitlab.com/hyperupcall/proj' 'yes'
-
-	assert [ "$REPLY1" = 'git@gitlab.com:hyperupcall/proj' ]
-	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'hyperupcall/proj' ]
-	assert [ "$REPLY4" = '' ]
-}
-
-@test "parses with package and domain and ref with ssh" {
-	util.extract_data_from_input 'gitlab.com/hyperupcall/proj@v0.1.0' 'yes'
-
-	assert [ "$REPLY1" = 'git@gitlab.com:hyperupcall/proj' ]
-	assert [ "$REPLY2" = 'gitlab.com' ]
-	assert [ "$REPLY3" = 'hyperupcall/proj' ]
-	assert [ "$REPLY4" = 'v0.1.0' ]
-}
-
 @test "parses with package" {
 	util.extract_data_from_input 'hyperupcall/proj'
 
@@ -104,24 +86,6 @@ load 'util/init.sh'
 	util.extract_data_from_input 'hyperupcall/proj@v0.2.0'
 
 	assert [ "$REPLY1" = 'https://github.com/hyperupcall/proj.git' ]
-	assert [ "$REPLY2" = 'github.com' ]
-	assert [ "$REPLY3" = 'hyperupcall/proj' ]
-	assert [ "$REPLY4" = 'v0.2.0' ]
-}
-
-@test "parses with package with ssh" {
-	util.extract_data_from_input 'hyperupcall/proj' 'yes'
-
-	assert [ "$REPLY1" = 'git@github.com:hyperupcall/proj' ]
-	assert [ "$REPLY2" = 'github.com' ]
-	assert [ "$REPLY3" = 'hyperupcall/proj' ]
-	assert [ "$REPLY4" = '' ]
-}
-
-@test "parses with package with ssh and ref" {
-	util.extract_data_from_input 'hyperupcall/proj@v0.2.0' 'yes'
-
-	assert [ "$REPLY1" = 'git@github.com:hyperupcall/proj' ]
 	assert [ "$REPLY2" = 'github.com' ]
 	assert [ "$REPLY3" = 'hyperupcall/proj' ]
 	assert [ "$REPLY4" = 'v0.2.0' ]

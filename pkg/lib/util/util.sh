@@ -15,7 +15,6 @@ util.extract_data_from_input() {
 	REPLY4=
 
 	local repoSpec="$1"
-	local with_ssh="${2:-no}"
 
 	if [ -z "$repoSpec" ]; then
 		die "Must supply a repository"
@@ -86,11 +85,8 @@ util.extract_data_from_input() {
 			IFS='@' read -r package ref <<< "$package"
 		fi
 
-		if [ "$with_ssh" = yes ]; then
-			REPLY1="git@$site:$package"
-		else
-			REPLY1="https://$site/$package.git"
-		fi
+
+		REPLY1="https://$site/$package.git"
 		REPLY2="$site"
 		REPLY3="$package"
 		REPLY4="$ref"
@@ -314,7 +310,7 @@ Subcommands (local):
   init
     Configure shell environment for bpm
 
-  add [--all] [--ssh] [--branch=<name>] [[site/]<package>[@ref]...]
+  add [--all] [--branch=<name>] [[site/]<package>[@ref]...]
     Installs a package from GitHub (or a custom site)
 
   upgrade [--all] <package...>

@@ -9,7 +9,7 @@ complete -e $cmd
 complete -c $cmd -f -n "not __fish_seen_subcommand_from $listSubcommands" -a "$listSubcommands"
 
 set subcmd add
-set -l subcommandOptions --shh
+set -l subcommandOptions
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions"
 
 set subcmd init

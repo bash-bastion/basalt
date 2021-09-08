@@ -32,7 +32,7 @@ case $state in
 (options)
 	case $line[1] in
 		(add)
-			local -a subcommandOptions=(--shh)
+			local -a subcommandOptions=()
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 		(init)

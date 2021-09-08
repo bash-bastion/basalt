@@ -56,7 +56,7 @@ _bpm() {
 		local -a subcommandOptions=()
 		case "$subcommand" in
 			add)
-				subcommandOptions=(--ssh)
+				subcommandOptions=()
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")
 				;;
 			init)
