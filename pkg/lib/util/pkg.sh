@@ -20,7 +20,7 @@ pkg.install_package() {
 			# TODO: DRY files?
 			if [ -f "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version/basalt.toml" ]; then
 				pkg.do_strict_symlink "$site" "$package" "$version"
-				pkg.install_package "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
+				BASALT_TRANSITIVE_MODE= pkg.install_package "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
 			fi
 		done
 	fi
@@ -49,16 +49,16 @@ pkg.download_package_tarball() {
 			print.info "Downloaded" "$site/$package@$version"
 		else
 			# The '$version' could also be a SHA1 ref to a particular revision
-			if ! git clone --quiet "$repo_uri" "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/scratchspace/$site/$package" 2>/dev/null; then
+			if ! git clone --quiet "$repo_uri" "$BASALT_LOCAL_PACKAGE_DIR/scratchspace/$site/$package" 2>/dev/null; then
 				print.die 'Error' "Could not clone repository for $site/$package@$version"
 			fi
 
-			if ! git -C "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/scratchspace/$site/$package" archive -o "$download_dest" "$version" 2>/dev/null; then
-				rm -rf "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/scratchspace"
+			if ! git -C "$BASALT_LOCAL_PACKAGE_DIR/scratchspace/$site/$package" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
+				rm -rf "$BASALT_LOCAL_PACKAGE_DIR/scratchspace"
 				print.die 'Error' "Could not download archive or extract archive from temporary Git repository of $site/$package@$version"
 			fi
 
-			rm -rf "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/scratchspace"
+			rm -rf "$BASALT_LOCAL_PACKAGE_DIR/scratchspace"
 			print.info "Downloaded" "$site/$package@$version"
 		fi
 	fi
@@ -112,7 +112,7 @@ pkg.symlink_extracted_package() {
 	local version="$3"
 
 	local target="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
-	local link_name="$BASALT_LOCAL_PROJECT_DIR/basalt_packages/packages/$site/$package@$version"
+	local link_name="$BASALT_LOCAL_PACKAGE_DIR/packages/$site/$package@$version"
 
 	if [ ${DEBUG+x} ]; then
 		print.debug "Symlinking" "target    $target"
@@ -131,6 +131,8 @@ pkg.do_strict_symlink() {
 	local package="$2"
 	local version="$3"
 
+	mkdir -p "$BASALT_LOCAL_PACKAGE_DIR/bin"
+
 	local package_dir="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
 	if util.get_toml_array "$package_dir/basalt.toml" 'binDirs'; then
 		for dir in "${REPLIES[@]}"; do
@@ -139,7 +141,7 @@ pkg.do_strict_symlink() {
 				print.warn "Warning" "Package $site/$package@$version has a file ($dir) specified in 'binDirs'"
 			else
 				for target in "$package_dir/$dir"/*; do
-					local link_name="$BASALT_LOCAL_PROJECT_DIR/basalt_packages/bin/${target##*/}"
+					local link_name="$BASALT_LOCAL_PACKAGE_DIR/bin/${target##*/}"
 
 					# TODO: this replaces existing symlinks. In verify mode, can check if there are no duplicate binary names
 

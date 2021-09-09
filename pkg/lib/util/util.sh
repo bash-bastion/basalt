@@ -280,13 +280,12 @@ util.init_command() {
 		local local_project_root_dir=
 		if local_project_root_dir="$(util.get_local_project_root_dir)"; then
 			BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
-
-			# TODO: don't create all?
-			mkdir -p "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"/{bin,completion,man,packages}
+			BASALT_LOCAL_PACKAGE_DIR="$local_project_root_dir/basalt_packages"
 		else
 			die "Could not find a 'basalt.toml' file"
 		fi
 	elif [ "$BASALT_MODE" = global ]; then
+		# In global mode, only the variables set in 'basalt-global-init' are used
 		:
 	fi
 }
