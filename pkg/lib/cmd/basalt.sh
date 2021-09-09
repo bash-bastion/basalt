@@ -31,6 +31,7 @@ _cmd_.basalt() {
 	BASALT_MODE='local'
 	case "$1" in
 		init) shift; do-init "$@" ;;
+		add) shift; do-add "$@" ;;
 		install) shift; do-install "$@" ;;
 		link) shift; do-link "$@" ;;
 		list) shift; do-list "$@" ;;
