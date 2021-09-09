@@ -11,7 +11,7 @@ pkg.install_package() {
 			local site="$REPLY2"
 			local package="$REPLY3"
 			local version="$REPLY4"
-			local tarball_uri="$REPLYz5"
+			local tarball_uri="$REPLY5"
 
 			pkg.download_package_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
 			pkg.extract_package_tarball "$site" "$package" "$version"

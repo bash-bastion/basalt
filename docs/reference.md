@@ -1,5 +1,10 @@
 # Reference
 
+## For Packages
+
+The following are exposed in the context of a package
+
+
 ## Environment Variables
 
 ### `BASALT_LOCAL_PROJECT_DIR`

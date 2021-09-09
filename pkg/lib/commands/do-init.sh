@@ -1,8 +1,6 @@
 # shellcheck shell=bash
 
 do-init() {
-	util.init_command
-
 	if [ -e basalt.toml ]; then
 		die "basalt.toml already exists"
 	fi
@@ -16,4 +14,7 @@ do-init() {
 
 	dependencies = []
 	EOF
+
+	# TODO: create new non-indented category of prints
+	print.info 'Info' "Created basalt.toml"
 }
