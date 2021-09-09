@@ -1,9 +1,12 @@
 # shellcheck shell=bash
 
 echo_variables_posix() {
+	local basalt_global_repo="${0%/*}"
+	basalt_global_repo="${basalt_global_repo%/*}"; basalt_global_repo="${basalt_global_repo%/*}"
+
 	cat <<-EOF
 	# basalt variables
-	export BASALT_GLOBAL_REPO="${BASALT_GLOBAL_REPO:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"}"
+	export BASALT_GLOBAL_REPO="$basalt_global_repo"
 	export BASALT_GLOBAL_CELLAR="${BASALT_GLOBAL_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
 
 	EOF
