@@ -58,5 +58,5 @@ else
 fi
 
 # shellcheck disable=SC1091
-source "$PROGRAM_LIB_DIR/cmd/basalt.sh"
-basalt.main "$@"
+source "$PROGRAM_LIB_DIR/cmd/basalt-package-init.sh"
+basalt-package-init.main "$@"

@@ -131,10 +131,9 @@ pkg.do_strict_symlink() {
 	local package="$2"
 	local version="$3"
 
-	mkdir -p "$BASALT_LOCAL_PACKAGE_DIR/bin"
-
 	local package_dir="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
 	if util.get_toml_array "$package_dir/basalt.toml" 'binDirs'; then
+		mkdir -p "$BASALT_LOCAL_PACKAGE_DIR/bin"
 		for dir in "${REPLIES[@]}"; do
 			if [ -f "$package_dir/$dir" ]; then
 				# TODO: move this check somewhere else (subcommand check) (but still do -d)

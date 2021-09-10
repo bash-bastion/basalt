@@ -1,3 +1,0 @@
-# shellcheck shell=sh
-
-# TODO

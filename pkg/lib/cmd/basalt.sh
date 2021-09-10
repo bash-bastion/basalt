@@ -7,7 +7,7 @@ for f in "$PROGRAM_LIB_DIR"/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done
 
-_cmd_.basalt() {
+basalt.main() {
 	for arg; do case "$arg" in
 	--help|-h)
 		util.show_help

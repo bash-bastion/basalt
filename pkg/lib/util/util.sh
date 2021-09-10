@@ -257,11 +257,11 @@ util.extract_shell_variable() {
 # @description Get the working directory of the project. Note
 # that this should always be called within a subshell
 util.get_local_project_root_dir() {
-	while [[ ! -f "basalt.toml" && "$PWD" != / ]]; do
+	while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
 		cd ..
 	done
 
-	if [[ $PWD == / ]]; then
+	if [ "$PWD" = / ]; then
 		return 1
 	fi
 

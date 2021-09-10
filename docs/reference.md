@@ -2,8 +2,13 @@
 
 ## For Packages
 
-The following are exposed in the context of a package
+After running `basalt-package-init`, the following variables and functions are accessible
 
+### `BASALT_INTERNAL_DID_BASALT_INIT`
+
+Internal variable that you should not mess with
+
+### TODO
 
 ## Environment Variables
 

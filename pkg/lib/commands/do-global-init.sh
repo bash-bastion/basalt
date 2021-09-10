@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
 echo_variables_posix() {
+	# Set main variables (WET)
 	local basalt_global_repo="${0%/*}"
 	basalt_global_repo="${basalt_global_repo%/*}"; basalt_global_repo="${basalt_global_repo%/*}"
 
@@ -12,19 +13,9 @@ echo_variables_posix() {
 	EOF
 }
 
-echo_include_posix() {
-	cat <<-"EOF"
-	# basalt include function
-	if [ -f "$BASALT_GLOBAL_REPO/pkg/share/include.sh" ]; then
-	  . "$BASALT_GLOBAL_REPO/pkg/share/include.sh"
-	fi
-
-	EOF
-}
-
 echo_package_path_posix() {
 	cat <<-"EOF"
-	# basalt packages PATH
+	# basalt path
 	if [ "${PATH#*$BASALT_GLOBAL_CELLAR/bin}" = "$PATH" ]; then
 	  export PATH="$BASALT_GLOBAL_CELLAR/bin:$PATH"
 	fi
@@ -57,18 +48,13 @@ do-global-init() {
 		set -gx BASALT_GLOBAL_REPO "${BASALT_GLOBAL_REPO:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"}"
 		set -gx "${BASALT_GLOBAL_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
 
-		# basalt completion
-		source \$BASALT_GLOBAL_REPO/completions/basalt.fish
-
-		# basalt include function
-		if [ -f "$BASALT_GLOBAL_REPO/pkg/share/include.fish" ]
-		  source "$BASALT_GLOBAL_REPO/pkg/share/include.fish"
-		end
-
-		# basalt packages PATH
+		# basalt path
 		if not contains \$BASALT_GLOBAL_CELLAR/bin \$PATH
 		  set -gx PATH \$BASALT_GLOBAL_CELLAR/bin \$PATH
 		end
+
+		# basalt completion
+		source \$BASALT_GLOBAL_REPO/completions/basalt.fish
 
 		# basalt packages completions
 		# set -gx fish_complete_path \$fish_complete_path
@@ -81,21 +67,17 @@ do-global-init() {
 		;;
 	bash)
 		echo_variables_posix
-		cat <<-EOF
-		# basalt completions
-		if [ -f "\$BASALT_GLOBAL_REPO/completions/basalt.bash" ]; then
-		  . "\$BASALT_GLOBAL_REPO/completions/basalt.bash"
-		fi
+		echo_package_path_posix
 
-		EOF
-		echo_include_posix
 		cat <<-"EOF"
+		# basalt global functions
 		source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
 
-		EOF
+		# basalt completions
+		if [ -f "$BASALT_GLOBAL_REPO/completions/basalt.bash" ]; then
+		  . "$BASALT_GLOBAL_REPO/completions/basalt.bash"
+		fi
 
-		echo_package_path_posix
-		cat <<-"EOF"
 		# basalt packages completions
 		if [ -d "$BASALT_GLOBAL_CELLAR/completions/bash" ]; then
 		  for f in "$BASALT_GLOBAL_CELLAR"/completions/bash/*; do
@@ -108,19 +90,15 @@ do-global-init() {
 		;;
 	zsh)
 		echo_variables_posix
-		cat <<-EOF
-		# basalt completions
-		fpath=("\$BASALT_GLOBAL_REPO/completions" \$fpath)
-		EOF
+		echo_package_path_posix
 
-		echo_include_posix
 		cat <<-"EOF"
+		# basalt global functions
 		source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
 
-		EOF
+		# basalt completions
+		fpath=("$BASALT_GLOBAL_REPO/completions" $fpath)
 
-		echo_package_path_posix
-		cat <<-"EOF"
 		# basalt packages completions
 		fpath=("$BASALT_GLOBAL_CELLAR/completions/zsh/compsys" $fpath)
 		if [ -d "$BASALT_GLOBAL_CELLAR/completions/zsh/compctl" ]; then
@@ -134,8 +112,6 @@ do-global-init() {
 		;;
 	sh)
 		echo_variables_posix
-		echo_include_posix
-
 		echo_package_path_posix
 		;;
 	*)
