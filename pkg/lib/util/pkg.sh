@@ -4,38 +4,36 @@ pkg.install_package() {
 	local project_dir="$1"
 
 	# TODO: save the state and have rollback feature
-	if [ -f "$project_dir/basalt.toml" ]; then
-		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-			local pkg=
-			for pkg in "${REPLIES[@]}"; do
-				util.extract_data_from_input "$pkg"
-				local repo_uri="$REPLY1"
-				local site="$REPLY2"
-				local package="$REPLY3"
-				local version="$REPLY4"
-				local tarball_uri="$REPLY5"
 
-				# Download, extract
-				pkg.download_package_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
-				pkg.extract_package_tarball "$site" "$package" "$version"
+	if [ ! -f "$project_dir/basalt.toml" ]; then
+		return
+	fi
 
-				# Install transitive dependencies
-				pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
+	if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
+		local pkg=
+		for pkg in "${REPLIES[@]}"; do
+			util.extract_data_from_input "$pkg"
+			local repo_uri="$REPLY1"
+			local site="$REPLY2"
+			local package="$REPLY3"
+			local version="$REPLY4"
+			local tarball_uri="$REPLY5"
 
-				# Only after all the dependencies are installed do we transmogrify the package
-				pkg.transmogrify_package "$site" "$package" "$version"
+			# Download, extract
+			pkg.download_package_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
+			pkg.extract_package_tarball "$site" "$package" "$version"
 
-				# Create the local './basalt_packages' directory, and populate its contents accordingly. Note that this
-				# function is also used in pkg.transmogrify_package, since transitive dependencies need to have their
-				# respective './basalt_packages' directories as well. We do this last because we want all the modifications
-				# to the global package store to be successfull before symlinking to files and directories inside it
-				# pkg.symlink_package "$project_dir/basalt_packages/packages" "$site" "$package" "$version"
-				# pkg.symlink_bin "$project_dir/basalt_packages" "$site" "$package" "$version"
-			done
-			unset pkg
-		else
-			print_simple.die "Could not find a 'basalt.toml' file"
-		fi
+			# Install transitive dependencies
+			pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
+
+			# Only after all the dependencies are installed do we transmogrify the package
+			pkg.transmogrify_package "$site" "$package" "$version"
+
+			# Only if all the previous modifications to the global package store has been successfull do we symlink
+			# to it from the local project directory
+			pkg.do_global_symlink "$project_dir" "$project_dir" 'yes'
+		done
+		unset pkg
 	fi
 }
 
@@ -133,11 +131,7 @@ pkg.transmogrify_package() {
 		print.debug "Transforming" "project_dir $project_dir"
 	fi
 
-	declare -ag all_things=()
 	pkg.do_global_symlink "$project_dir" "$project_dir" 'yes'
-	for thing in "${all_things[@]}"; do
-		echo "$thing"
-	done
 
 	print.info "Transformed" "$site/$package@$version"
 }
