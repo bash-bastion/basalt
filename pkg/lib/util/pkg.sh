@@ -20,7 +20,7 @@ pkg.install_package() {
 				pkg.extract_package_tarball "$site" "$package" "$version"
 
 				# Install transitive dependencies
-				BASALT_INTERNAL_FLAG_TRANSITIVE= pkg.install_package "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
+				pkg.install_package "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
 
 				# Only after all the dependencies are installed do we transmogrify the package
 				pkg.transmogrify_package "$site" "$package" "$version"
@@ -32,10 +32,6 @@ pkg.install_package() {
 				# pkg.symlink_package "$project_dir/basalt_packages/packages" "$site" "$package" "$version"
 				# pkg.symlink_bin "$project_dir/basalt_packages" "$site" "$package" "$version"
 			done
-
-			# for pkg in "${REPLIES[@]}"; do
-
-			# done
 			unset pkg
 		else
 			# TODO
@@ -134,13 +130,12 @@ pkg.transmogrify_package() {
 	local project_dir="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
 
 	# TODO: properly cache transmogrifications
-
 	if [ ${DEBUG+x} ]; then
 		print.debug "Transmogrifying" "project_dir $project_dir"
 	fi
 
 	declare -ag all_things=()
-	pkg.do_global_symlink "$project_dir" 'direct'
+	pkg.do_global_symlink "$project_dir" "$project_dir" 'yes'
 	for thing in "${all_things[@]}"; do
 		echo "$thing"
 	done
@@ -151,19 +146,24 @@ pkg.transmogrify_package() {
 # Create a './basalt_packages' directory for a particular project directory
 pkg.do_global_symlink() {
 	unset REPLY
-	local project_dir="$1"
-	local dependency_type="$2" # TODO: explanation because dependency_type is a little confusion
+	local original_package_dir="$1"
+	local package_dir="$2"
+	local is_direct="$3"
+	# is_direct is 'yes' if the dependencies of the original '$package_dir' are the direct dependencies
+	# of the package of the original callsite of 'pkg.go_global_symlink'. In other worse, at the first call
+	# of pkg.do_global_symlink (that starts the recursion), specific to the value of _that_ "$package_dir". If
+	# is_direct is true, then it is a direct dependency of _that_ $package_dir, and false if it is not
 
-	# TODO: project_dir should be package_dir
+	# TODO: package_dir should be package_dir
 
 	# TODO error message
-	if [ ! -d "$project_dir" ]; then
-		printf '%s\n' "Error: Should be installed"
+	if [ ! -d "$package_dir" ]; then
+		die "Package at '$package_dir' expected to exist"
 		return
 	fi
 
-	if [ -f "$project_dir/basalt.toml" ]; then
-		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
+	if [ -f "$package_dir/basalt.toml" ]; then
+		if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
 			local pkg=
 			for pkg in "${REPLIES[@]}"; do
 				util.extract_data_from_input "$pkg"
@@ -173,56 +173,19 @@ pkg.do_global_symlink() {
 				local version="$REPLY4"
 				local tarball_uri="$REPLY5"
 
-				if [ "$dependency_type" = self ]; then
-					pkg.do_global_symlink "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version" 'direct'
-				elif [ "$dependency_type" = direct ]; then
-					pkg.do_global_symlink "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version" 'transitive'
-					all_things+=("$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version:direct")
-				elif [ "$dependency_type" = transitive ]; then
-					pkg.do_global_symlink "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version" 'transitive'
-					all_things+=("$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version:transitive")
+				if [ "$is_direct" = yes ]; then
+					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$site" "$package" "$version"
+					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
+				else
+					pkg.symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$site" "$package" "$version"
+					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
 				fi
+
+				pkg.do_global_symlink "$original_package_dir" "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version" 'no'
 			done
 			unset pkg
 		fi
 	fi
-	# if [ "$is_transitive" = yes ]; then
-	# 	pkg.symlink_package "$project_dir/basalt_packages/transitive/packages" "$site" "$package" "$version"
-	# else
-	# 	pkg.symlink_package "$project_dir/basalt_packages/packages" "$site" "$package" "$version"
-	# fi
-
-	# if [ -n "$link_from_previous" ]; then
-	# 	if [ "$is_transitive" = yes ]; then
-	# 		pkg.symlink_package "$link_from_previous/basalt_packages/transitive/packages" "$site" "$package" "$version"
-	# 	else
-	# 		pkg.symlink_package "$link_from_previous/basalt_packages/packages" "$site" "$package" "$version"
-	# 	fi
-	# fi
-
-	# if [ -f "$link_from/basalt.toml" ]; then
-	# 	if util.get_toml_array "$link_from/basalt.toml" 'dependencies'; then
-	# 		local pkg=
-	# 		for pkg in "${REPLIES[@]}"; do
-	# 			util.extract_data_from_input "$pkg"
-	# 			local repo_uri="$REPLY1"
-	# 			local site="$REPLY2"
-	# 			local package="$REPLY3"
-	# 			local version="$REPLY4"
-	# 			local tarball_uri="$REPLY5"
-
-	# 			if [ "$is_transitive" = yes ]; then
-	# 				pkg.symlink_package "$link_from_previous/basalt_packages/transitive/packages" "$site" "$package" "$version"
-	# 				pkg.symlink_bin "$project_dir/basalt_packages/transitive" "$site" "$package" "$version"
-	# 			else
-	# 				pkg.symlink_package "$link_from_previous/basalt_packages/packages" "$site" "$package" "$version"
-	# 				pkg.symlink_bin "$project_dir/basalt_packages" "$site" "$package" "$version"
-	# 			fi
-
-	# 			pkg.do_global_symlink "$project_dir" "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version" "$link_from" 'yes'
-	# 		done
-	# 	fi
-	# fi
 }
 
 pkg.symlink_package() {
