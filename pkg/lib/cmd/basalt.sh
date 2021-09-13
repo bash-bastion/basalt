@@ -12,14 +12,14 @@ basalt.main() {
 	for arg; do case "$arg" in
 	--help|-h)
 		util.show_help
-		return
+		exit
 		;;
 	--version|-v)
 		# TODO: version string out of date
 		cat <<-EOF
 		Version: v0.9.0
 		EOF
-		return
+		exit
 		;;
 	-*)
 		print_simple.die "Top level flag '$arg' is not recognized"

@@ -34,8 +34,7 @@ pkg.install_package() {
 			done
 			unset pkg
 		else
-			# TODO
-			:
+			print_simple.die "Could not find a 'basalt.toml' file"
 		fi
 	fi
 }
@@ -65,12 +64,12 @@ pkg.download_package_tarball() {
 		else
 			# The '$version' could also be a SHA1 ref to a particular revision
 			if ! git clone --quiet "$repo_uri" "$BASALT_LOCAL_STUFF_DIR/scratchspace/$site/$package" 2>/dev/null; then
-				print.die 'Error' "Could not clone repository for $site/$package@$version"
+				print.die "Could not clone repository for $site/$package@$version"
 			fi
 
 			if ! git -C "$BASALT_LOCAL_STUFF_DIR/scratchspace/$site/$package" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
 				rm -rf "$BASALT_LOCAL_STUFF_DIR/scratchspace"
-				print.die 'Error' "Could not download archive or extract archive from temporary Git repository of $site/$package@$version"
+				print.die "Could not download archive or extract archive from temporary Git repository of $site/$package@$version"
 			fi
 
 			rm -rf "$BASALT_LOCAL_STUFF_DIR/scratchspace"
@@ -83,7 +82,7 @@ pkg.download_package_tarball() {
 		# Ensure the downloaded file is really a .tar.gz file...
 		if [ "$magic_byte" != '1f8b' ]; then
 			rm -rf "$download_dest"
-			print.die 'Error' "Could not find a release tarball for $site/$package@$version"
+			print.die "Could not find a release tarball for $site/$package@$version"
 		fi
 	else
 		rm -rf "$download_dest"
@@ -117,7 +116,7 @@ pkg.extract_package_tarball() {
 	fi
 
 	if [ ! -d "$tarball_dest" ]; then
-		print.die 'Error' "Extracted tarball is not a directory at '$tarball_dest'"
+		print.die "Extracted tarball is not a directory at '$tarball_dest'"
 	fi
 }
 
@@ -150,9 +149,8 @@ pkg.do_global_symlink() {
 	local package_dir="$2"
 	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 
-	# TODO error message
 	if [ ! -d "$package_dir" ]; then
-		print_simple.die "Package at '$package_dir' was expected to be installed"
+		print_simple.die "A (non-empty) directory at '$package_dir' was expected to exist"
 		return
 	fi
 
@@ -196,10 +194,9 @@ pkg.symlink_package() {
 		print.debug "Symlinking" "link_name $link_name"
 	fi
 
-	# TODO: error message
 	mkdir -p "${link_name%/*}"
 	if ! ln -sfT "$target" "$link_name"; then
-		print.die 'Error' "Could not symlink directory '${target##*/}' for package $site/$package@$version"
+		print.die "Could not symlink directory '${target##*/}' for package $site/$package@$version"
 	fi
 }
 
@@ -229,7 +226,7 @@ pkg.symlink_bin() {
 						fi
 
 						if ! ln -sfT "$target" "$link_name"; then
-							print.die 'Error' "Could not symlink file '${target##*/}' for package $site/$package@$version"
+							print.die "Could not symlink file '${target##*/}' for package $site/$package@$version"
 						fi
 					done
 				fi

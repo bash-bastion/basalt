@@ -24,11 +24,11 @@ do-add() {
 		if [ -z "$version" ]; then
 			local latest_tarball_url=
 			if ! latest_tarball_url="$(curl -LsS https://api.github.com/repos/hyperupcall/basalt/releases/latest | jq -r '.tarball_url')"; then
-				print.die 'Error' "Could not determine latest release for package '$pkg'"
+				print.die "Could not determine latest release for package '$pkg'"
 			fi
 
 			if [ "$latest_tarball_url" = null ]; then
-				print.die 'Error' "Package '$pkg' does not have a release"
+				print.die "Package '$pkg' does not have a release"
 			else
 				version="${latest_tarball_url##*/}"
 
@@ -39,7 +39,6 @@ do-add() {
 					package_id="$site/$package@$version"
 				fi
 
-				# TODO
 				print.info 'Info' "Add '$package_id' to 'dependencies' in your basalt.toml, then 'basalt install'. Auto-add not yet implemented"
 			fi
 		fi

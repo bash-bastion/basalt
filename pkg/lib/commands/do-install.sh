@@ -12,6 +12,7 @@ do-install() {
 		pkgs+=("$arg")
 		;;
 	esac done
+
 	util.remove_local_basalt_packages
 	pkg.install_package "$BASALT_LOCAL_PROJECT_DIR"
 }

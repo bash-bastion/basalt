@@ -20,6 +20,6 @@ print_simple.info() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "Info: %s\n" "$1"
 	else
-		printf "\033[0;31mInfo\033[0m %s\n" "$1" >&2
+		printf "\033[0;32mInfo\033[0m %s\n" "$1" >&2
 	fi
 }

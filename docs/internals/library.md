@@ -1,7 +1,5 @@
 # Bash
 
-TODO: this is a draft
-
 ## Package Characteristics
 
 All usages of a package require that package's `bin` directory to be added to the path

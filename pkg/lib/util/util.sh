@@ -46,7 +46,6 @@ util.init_global() {
 	fi
 }
 
-# TODO: remove 'local'
 util.extract_data_from_input() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 
@@ -60,8 +59,7 @@ util.extract_data_from_input() {
 
 	local regex="^https?://"
 	local regex2="^git@"
-	local regex3="^local/"
-	local regex4="^file://" # TODO:
+	local regex3="^file://" # TODO:
 	if [[ "$repoSpec" =~ $regex ]]; then
 		local http="${repoSpec%%://*}"
 		repoSpec="${repoSpec#http?(s)://}"
@@ -84,14 +82,6 @@ util.extract_data_from_input() {
 		REPLY3="$package"
 		REPLY4=
 	elif [[ "$repoSpec" =~ $regex3 ]]; then
-		repoSpec="${repoSpec#local\/}"
-		IFS='@' read -r package ref <<< "$repoSpec"
-
-		REPLY1=
-		REPLY2='local'
-		REPLY3="$package"
-		REPLY4="$ref"
-	elif [[ "$repoSpec" =~ $regex4 ]]; then
 		local dir=
 
 		repoSpec="${repoSpec#file:\/\/}"
@@ -131,6 +121,8 @@ util.extract_data_from_input() {
 	# TODO: do other sites
 	if [ "$site" = github.com ]; then
 		REPLY5="https://github.com/$package/archive/refs/tags/$ref.tar.gz"
+	else
+		print_simple.die "Could not construct tarball_uri for site '$site'"
 	fi
 }
 
@@ -223,6 +215,9 @@ util.get_toml_array() {
 
 util.show_help() {
 	cat <<"EOF"
+Basalt:
+  The rock-solid Bash package manager
+
 Usage:
   basalt [--help|--version]
   basalt <subcommand> [args...]

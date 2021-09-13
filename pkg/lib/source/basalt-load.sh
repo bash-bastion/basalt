@@ -4,7 +4,6 @@
 # library
 
 # TODO: if BASALT_INTERNAL_DID_BASALT_INIT is set and --global is specified, fail
-# TODO: document passing in full path
 
 basalt.load() {
 	local __basalt_flag_global='no'
@@ -16,29 +15,30 @@ basalt.load() {
 		shift
 		;;
 	--dry)
+		# TODO: implement dry
 		__basalt_flag_dry='yes'
 		shift
 		;;
-	# TODO: help menu
 	--help|-h)
 		cat <<-"EOF"
-		basalt-load
+		basalt-load: Load a particular file
 
 		Usage:
-			basalt-load [flags] <package> [file]
+		  basalt-load [flags] <package> [file]
 
 		Flags:
-			--global
-				Use packages installed globally, rather than local packages
+		  --global
+		    Use packages installed globally, rather than local packages
 
-			--dry
-				Only print what would have been sourced
+		  --dry
+		    Only print what would have been sourced
 
-			--help
-				Print help menu
+		  --help
+		    Print help menu
 
 		Example:
-			basalt-load --global 'github.com/rupa/z' 'z.sh'
+		  basalt-load --global 'github.com/rupa/z' 'z.sh'
+		  basalt-load 'github.com/ztombol/bats-assert'
 		EOF
 		return
 		;;
