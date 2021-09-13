@@ -17,8 +17,8 @@ Info: Adding 'github.com/JosefZIla/bash2048'
 
 This does the following
 
-- Clones `JosefZIla/bash2048` to `$HOME/.local/share/basalt/cellar/packages/github.com/JosefZIla/bash2048`
-- Adds a symlink from the repository's `bash2048.sh` script to `$HOME/.local/share/basalt/cellar/bin/bash2048.sh`
+- Clones `JosefZIla/bash2048` to `$HOME/.local/share/basalt/packages/github.com/JosefZIla/bash2048`
+- Adds a symlink from the repository's `bash2048.sh` script to `$HOME/.local/share/basalt/bin/bash2048.sh`
 
 That's it - now you can use it!
 
@@ -50,8 +50,8 @@ Info: Adding 'rupa/z'
 
 This does the following
 
-- Clones `z` to `$HOME/.local/share/basalt/cellar/packages/github.com/rupa/z`
-- Adds a symlink from the repository's `z.1` man page to `$HOME/.local/share/basalt/cellar/man/man1/z.1`
+- Clones `z` to `$HOME/.local/share/basalt/packages/github.com/rupa/z`
+- Adds a symlink from the repository's `z.1` man page to `$HOME/.local/share/basalt/man/man1/z.1`
 
 Now, you can display the manual right away
 
@@ -74,7 +74,7 @@ The authors of `z` did not mark the file as executable because they did not inte
 
 ```sh
 $ basalt-load global --dry rupa/z z.sh
-basalt-load: Would source file '/home/edwin/data/basalt/cellar/packages/github.com/rupa/z/z.sh'
+basalt-load: Would source file '/home/edwin/data/basalt/packages/github.com/rupa/z/z.sh'
 ```
 
 Now, use the `basalt-load` to source `z.sh`. Note that `z.sh` only supports either Bash or Zsh, so you need to currently be in one of those shells for this to work.

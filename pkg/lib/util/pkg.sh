@@ -20,7 +20,7 @@ pkg.install_package() {
 				pkg.extract_package_tarball "$site" "$package" "$version"
 
 				# Install transitive dependencies
-				pkg.install_package "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
+				pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
 
 				# Only after all the dependencies are installed do we transmogrify the package
 				pkg.transmogrify_package "$site" "$package" "$version"
@@ -49,7 +49,7 @@ pkg.download_package_tarball() {
 	local version="$5"
 
 	local download_url="$tarball_uri"
-	local download_dest="$BASALT_GLOBAL_CELLAR/store/tarballs/$site/$package@$version.tar.gz"
+	local download_dest="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$site/$package@$version.tar.gz"
 
 	if [ ${DEBUG+x} ]; then
 		print.debug "Downloading" "download_url  $download_url"
@@ -97,8 +97,8 @@ pkg.extract_package_tarball() {
 	local package="$2"
 	local version="$3"
 
-	local tarball_src="$BASALT_GLOBAL_CELLAR/store/tarballs/$site/$package@$version.tar.gz"
-	local tarball_dest="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
+	local tarball_src="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$site/$package@$version.tar.gz"
+	local tarball_dest="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
 
 	if [ ${DEBUG+x} ]; then
 		print.debug "Extracting" "tarball_src  $tarball_src"
@@ -127,7 +127,7 @@ pkg.transmogrify_package() {
 	local package="$2"
 	local version="$3"
 
-	local project_dir="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
+	local project_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
 
 	# TODO: properly cache transmogrifications
 	if [ ${DEBUG+x} ]; then
@@ -175,7 +175,7 @@ pkg.do_global_symlink() {
 					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
 				fi
 
-				pkg.do_global_symlink "$original_package_dir" "$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version" 'no'
+				pkg.do_global_symlink "$original_package_dir" "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version" 'no'
 			done
 			unset pkg
 		fi
@@ -188,7 +188,7 @@ pkg.symlink_package() {
 	local package="$3"
 	local version="$4"
 
-	local target="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
+	local target="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
 	local link_name="$install_dir/$site/$package@$version"
 
 	if [ ${DEBUG+x} ]; then
@@ -209,7 +209,7 @@ pkg.symlink_bin() {
 	local package="$3"
 	local version="$4"
 
-	local package_dir="$BASALT_GLOBAL_CELLAR/store/packages/$site/$package@$version"
+	local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
 	if [ -f "$package_dir/basalt.toml" ]; then
 		if util.get_toml_array "$package_dir/basalt.toml" 'binDirs'; then
 			mkdir -p "$install_dir/bin"

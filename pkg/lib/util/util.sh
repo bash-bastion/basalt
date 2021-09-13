@@ -209,8 +209,8 @@ util.get_local_project_root_dir() {
 # @description Ensures particular variables exist and sets the current mode of
 # operation
 util.init_command() {
-	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_CELLAR" ]; then
-		die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_CELLAR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
+	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
+		die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
 	if [ "$BASALT_MODE" = local ]; then

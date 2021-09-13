@@ -5,7 +5,7 @@
 # bash libraries) to load in all the Basalt functions in the current shell
 # context. It must be a binary rather than a function because any new
 # Bash contexts won't inherit functions of previous contexts, but will inherit
-# the PATH, BASALT_GLOBAL_REPO, and BASALT_GLOBAL_CELLAR. The path contains an
+# the PATH, BASALT_GLOBAL_REPO, and BASALT_GLOBAL_DATA_DIR. The path contains an
 # entry for the directory containing this file, which we execute to load the
 # aforementioned Basalt utility functions
 
@@ -21,7 +21,7 @@ basalt.package-init() {
 	EOF
 
 	cat <<-"EOF"
-   export BASALT_GLOBAL_CELLAR="${BASALT_GLOBAL_CELLAR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/cellar"}"
+   export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
 
    # basalt global and internal functions
    source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"

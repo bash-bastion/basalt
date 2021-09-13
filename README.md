@@ -17,11 +17,11 @@ $ basalt global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
 
 ```sh
-$ exa -l --no-permissions --no-filesize --no-user ~/.local/share/basalt/cellar/bin/
-bash2048.sh -> /home/edwin/.local/share/basalt/cellar/packages/github.com/JosefZIla/bash2048/bash2048.sh
-bashtop -> /home/edwin/.local/share/basalt/cellar/packages/github.com/aristocratos/bashtop/bashtop
-git-alias -> /home/edwin/.local/share/basalt/cellar/packages/github.com/tj/git-extras/bin/git-alias
-git-archive-file -> /home/edwin/.local/share/basalt/cellar/packages/github.com/tj/git-extras/bin/git-archive-file
+$ exa -l --no-permissions --no-filesize --no-user ~/.local/share/basalt/bin/
+bash2048.sh -> /home/edwin/.local/share/basalt/packages/github.com/JosefZIla/bash2048/bash2048.sh
+bashtop -> /home/edwin/.local/share/basalt/packages/github.com/aristocratos/bashtop/bashtop
+git-alias -> /home/edwin/.local/share/basalt/packages/github.com/tj/git-extras/bin/git-alias
+git-archive-file -> /home/edwin/.local/share/basalt/packages/github.com/tj/git-extras/bin/git-archive-file
 ...
 ```
 
