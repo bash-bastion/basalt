@@ -275,17 +275,17 @@ util.init_command() {
 		die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_CELLAR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
-
 	if [ "$BASALT_MODE" = local ]; then
 		local local_project_root_dir=
 		if local_project_root_dir="$(util.get_local_project_root_dir)"; then
 			BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
 			BASALT_LOCAL_PACKAGE_DIR="$local_project_root_dir/basalt_packages"
 		else
+			# TODO: better die
 			die "Could not find a 'basalt.toml' file"
 		fi
 	elif [ "$BASALT_MODE" = global ]; then
-		# In global mode, only the variables set in 'basalt-global-init' are used
+		# In global mode, only the variables set in 'basalt global init' are used
 		:
 	fi
 }
