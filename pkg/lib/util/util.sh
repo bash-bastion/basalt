@@ -3,6 +3,15 @@
 # @file util.sh
 # @brief Utility functions for all subcommands
 
+util.remove_local_basalt_packages() {
+	# Everything in the local ./basalt_packages is a symlink to something in the global
+	# cellar directory. Thus, we can just remove it since it won't take long to re-symlink.
+	# This has the added benefit that outdated packages will automatically be pruned
+	if ! rm -rf "${BASALT_LOCAL_PACKAGE_DIR:?}"; then
+		print.die_early "Could not remove local 'basalt_packages' directory"
+	fi
+}
+
 # @description Given some user input, this extracts
 # data like the site it was cloned from, the owner of
 # the repository, and the name of the repository
@@ -95,42 +104,6 @@ util.extract_data_from_input() {
 	fi
 }
 
-# @description Given a path to a package directory, this extracts
-# data like the site it was cloned from, the owner of
-# the repository, and the name of the repository
-util.extract_data_from_package_dir() {
-	REPLY1=
-	REPLY2=
-	REPLY3=
-	REPLY4=
-
-	local dir="$1"
-	ensure.non_zero 'dir' "$dir"
-
-	local site="${dir%/*}"; site="${site%/*}"; site="${site##*/}"
-	local user="${dir%/*}"; user="${user##*/}"
-	local repository="${dir##*/}"
-
-	if [ "$user" = 'local' ]; then
-		REPLY1="$user"
-		REPLY2=''
-		REPLY3="$repository"
-	else
-		REPLY1="$site"
-		REPLY2="$user"
-		REPLY3="$repository"
-	fi
-	REPLY4=
-}
-
-util.readlink() {
-	if command -v realpath &>/dev/null; then
-		realpath "$1"
-	else
-		readlink -f "$1"
-	fi
-}
-
 # TODO: extract to own repo
 # @description Retrieve a string key from a toml file
 util.get_toml_string() {
@@ -218,41 +191,6 @@ util.get_toml_array() {
 	fi
 }
 
-# @description Extract a shell variable from a shell file. Of course, this doesn't
-# properly account for esacape characters and the such, but that shouldn't be included
-# in this string in the first place
-util.extract_shell_variable() {
-	REPLY=
-
-	local shellFile="$1"
-	local variableName="$2"
-
-	if [ ! -e "$shellFile" ]; then
-		die "File '$shellFile' not found"
-	fi
-
-	ensure.non_zero 'variableName' "$variableName"
-
-	# Note: the following code/regex fails on macOS, so a different parsing method was done below
-	# local regex="^[ \t]*(declare.*? |typeset.*? )?$variableName=[\"']?([^('|\")]*)"
-	# if [[ "$(<"$shellFile")" =~ $regex ]]; then
-		# REPLY="${BASH_REMATCH[2]}"
-	# fi
-
-	while IFS='=' read -r key value; do
-		if [ "$key" = "$variableName" ]; then
-			REPLY="$value"
-			REPLY="${REPLY#\'}"
-			REPLY="${REPLY%\'}"
-			REPLY="${REPLY#\"}"
-			REPLY="${REPLY%\"}"
-
-			return 0
-		fi
-	done < "$shellFile"
-
-	return 1
-}
 
 # @description Get the working directory of the project. Note
 # that this should always be called within a subshell

@@ -131,7 +131,7 @@ pkg.transmogrify_package() {
 
 	# TODO: properly cache transmogrifications
 	if [ ${DEBUG+x} ]; then
-		print.debug "Transmogrifying" "project_dir $project_dir"
+		print.debug "Transforming" "project_dir $project_dir"
 	fi
 
 	declare -ag all_things=()
@@ -140,7 +140,7 @@ pkg.transmogrify_package() {
 		echo "$thing"
 	done
 
-	print.info "Transmogrified" "$site/$package@$version"
+	print.info "Transformed" "$site/$package@$version"
 }
 
 # Create a './basalt_packages' directory for a particular project directory
@@ -148,17 +148,11 @@ pkg.do_global_symlink() {
 	unset REPLY
 	local original_package_dir="$1"
 	local package_dir="$2"
-	local is_direct="$3"
-	# is_direct is 'yes' if the dependencies of the original '$package_dir' are the direct dependencies
-	# of the package of the original callsite of 'pkg.go_global_symlink'. In other worse, at the first call
-	# of pkg.do_global_symlink (that starts the recursion), specific to the value of _that_ "$package_dir". If
-	# is_direct is true, then it is a direct dependency of _that_ $package_dir, and false if it is not
-
-	# TODO: package_dir should be package_dir
+	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 
 	# TODO error message
 	if [ ! -d "$package_dir" ]; then
-		die "Package at '$package_dir' expected to exist"
+		die "Package at '$package_dir' was expected to be installed"
 		return
 	fi
 
