@@ -7,23 +7,53 @@ util.remove_local_basalt_packages() {
 	# Everything in the local ./basalt_packages is a symlink to something in the global
 	# cellar directory. Thus, we can just remove it since it won't take long to re-symlink.
 	# This has the added benefit that outdated packages will automatically be pruned
-	if ! rm -rf "${BASALT_LOCAL_PACKAGE_DIR:?}"; then
-		print.die_early "Could not remove local 'basalt_packages' directory"
+	if ! rm -rf "${BASALT_LOCAL_STUFF_DIR:?}"; then
+		print_simple.die "Could not remove local 'basalt_packages' directory"
 	fi
 }
 
-# @description Given some user input, this extracts
-# data like the site it was cloned from, the owner of
-# the repository, and the name of the repository
-# @arg $1 repoSpec
-# @arg $2 with_ssh Whether to clone with SSH (yes/no)
+# @description Get the working directory of the project. Note
+# that this should always be called within a subshell
+util.get_local_project_root_dir() {
+	while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
+		cd ..
+	done
+
+	if [ "$PWD" = / ]; then
+		return 1
+	fi
+
+	printf "%s" "$PWD"
+}
+
+util.init_local() {
+	util.init_global
+
+	local local_project_root_dir=
+	if local_project_root_dir="$(util.get_local_project_root_dir)"; then
+		BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
+		BASALT_LOCAL_STUFF_DIR="$local_project_root_dir/basalt_packages"
+	else
+		print_simple.die "Could not find a 'basalt.toml' file"
+	fi
+}
+
+# @description Ensures particular variables exist and sets the current mode of
+# operation
+util.init_global() {
+	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
+		print_simple.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
+	fi
+}
+
+# TODO: remove 'local'
 util.extract_data_from_input() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 
 	local repoSpec="$1"
 
 	if [ -z "$repoSpec" ]; then
-		die "Must supply a repository"
+		print_simple.die "Must supply a repository"
 	fi
 
 	local site= package= ref=
@@ -73,7 +103,7 @@ util.extract_data_from_input() {
 		REPLY4="$ref"
 
 		if [ -z "${REPLY3%/*}" ]; then
-			die "Directory specified with file protocol must have at least one parent directory (for the package name)"
+			print_simple.die "Directory specified with file protocol must have at least one parent directory (for the package name)"
 		fi
 	else
 		repoSpec="${repoSpec%.git}"
@@ -84,7 +114,7 @@ util.extract_data_from_input() {
 			site="github.com"
 			package="$repoSpec"
 		else
-			die "Package '$repoSpec' does not appear to be formatted correctly"
+			print_simple.die "Package '$repoSpec' does not appear to be formatted correctly"
 		fi
 
 		if [[ "$package" == *@* ]]; then
@@ -112,7 +142,7 @@ util.get_toml_string() {
 	local keyName="$2"
 
 	if [ ! -f "$tomlFile" ]; then
-		die "File '$tomlFile' not found"
+		print_simple.die "File '$tomlFile' not found"
 	fi
 
 	local grepLine=
@@ -137,7 +167,7 @@ util.get_toml_string() {
 	if [[ $grepLine =~ $regex ]]; then
 		REPLY="${BASH_REMATCH[1]}"
 	else
-		die "Value for key '$keyName' not valid"
+		print_simple.die "Value for key '$keyName' not valid"
 	fi
 }
 
@@ -188,43 +218,6 @@ util.get_toml_array() {
 	else
 		log.error "Key '$keyName' in file '$tomlFile' must be set to an array that spans one line"
 		return 2
-	fi
-}
-
-
-# @description Get the working directory of the project. Note
-# that this should always be called within a subshell
-util.get_local_project_root_dir() {
-	while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
-		cd ..
-	done
-
-	if [ "$PWD" = / ]; then
-		return 1
-	fi
-
-	printf "%s" "$PWD"
-}
-
-# @description Ensures particular variables exist and sets the current mode of
-# operation
-util.init_command() {
-	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-		die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
-	fi
-
-	if [ "$BASALT_MODE" = local ]; then
-		local local_project_root_dir=
-		if local_project_root_dir="$(util.get_local_project_root_dir)"; then
-			BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
-			BASALT_LOCAL_PACKAGE_DIR="$local_project_root_dir/basalt_packages"
-		else
-			# TODO: better die
-			die "Could not find a 'basalt.toml' file"
-		fi
-	elif [ "$BASALT_MODE" = global ]; then
-		# In global mode, only the variables set in 'basalt global init' are used
-		:
 	fi
 }
 

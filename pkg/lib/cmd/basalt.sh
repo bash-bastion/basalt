@@ -22,7 +22,7 @@ basalt.main() {
 		return
 		;;
 	-*)
-		print.die_early "Top level flag '$arg' is not recognized"
+		print_simple.die "Top level flag '$arg' is not recognized"
 		;;
 	*)
 		break
@@ -46,7 +46,7 @@ basalt.main() {
 				list) shift; do-global-list "$@" ;;
 				*)
 					if [ -n "$1" ]; then
-						print.die_early "Global subcommand '$1' is not a valid"
+						print_simple.die "Global subcommand '$1' is not a valid"
 					else
 						util.show_help
 					fi
@@ -55,7 +55,7 @@ basalt.main() {
 			;;
 		*)
 			if [ -n "$1" ]; then
-				print.die_early "Subcommand '$1' is not valid"
+				print_simple.die "Subcommand '$1' is not valid"
 			else
 				util.show_help
 			fi

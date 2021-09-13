@@ -1,12 +1,12 @@
 # shellcheck shell=bash
 
 do-add() {
-	util.init_command
+	util.init_local
 
 	local -a pkgs=()
 	for arg; do case "$arg" in
 	-*)
-		die "Flag '$arg' not recognized"
+		print_simple.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")

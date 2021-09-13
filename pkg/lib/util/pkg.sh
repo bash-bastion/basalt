@@ -64,16 +64,16 @@ pkg.download_package_tarball() {
 			print.info "Downloaded" "$site/$package@$version"
 		else
 			# The '$version' could also be a SHA1 ref to a particular revision
-			if ! git clone --quiet "$repo_uri" "$BASALT_LOCAL_PACKAGE_DIR/scratchspace/$site/$package" 2>/dev/null; then
+			if ! git clone --quiet "$repo_uri" "$BASALT_LOCAL_STUFF_DIR/scratchspace/$site/$package" 2>/dev/null; then
 				print.die 'Error' "Could not clone repository for $site/$package@$version"
 			fi
 
-			if ! git -C "$BASALT_LOCAL_PACKAGE_DIR/scratchspace/$site/$package" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
-				rm -rf "$BASALT_LOCAL_PACKAGE_DIR/scratchspace"
+			if ! git -C "$BASALT_LOCAL_STUFF_DIR/scratchspace/$site/$package" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
+				rm -rf "$BASALT_LOCAL_STUFF_DIR/scratchspace"
 				print.die 'Error' "Could not download archive or extract archive from temporary Git repository of $site/$package@$version"
 			fi
 
-			rm -rf "$BASALT_LOCAL_PACKAGE_DIR/scratchspace"
+			rm -rf "$BASALT_LOCAL_STUFF_DIR/scratchspace"
 			print.info "Downloaded" "$site/$package@$version"
 		fi
 	fi
@@ -152,7 +152,7 @@ pkg.do_global_symlink() {
 
 	# TODO error message
 	if [ ! -d "$package_dir" ]; then
-		die "Package at '$package_dir' was expected to be installed"
+		print_simple.die "Package at '$package_dir' was expected to be installed"
 		return
 	fi
 
@@ -183,7 +183,7 @@ pkg.do_global_symlink() {
 }
 
 pkg.symlink_package() {
-	local install_dir="$1" # e.g. "$BASALT_LOCAL_PACKAGE_DIR/packages"
+	local install_dir="$1" # e.g. "$BASALT_LOCAL_STUFF_DIR/packages"
 	local site="$2"
 	local package="$3"
 	local version="$4"
@@ -204,7 +204,7 @@ pkg.symlink_package() {
 }
 
 pkg.symlink_bin() {
-	local install_dir="$1" # e.g. "$BASALT_LOCAL_PACKAGE_DIR"
+	local install_dir="$1" # e.g. "$BASALT_LOCAL_STUFF_DIR"
 	local site="$2"
 	local package="$3"
 	local version="$4"

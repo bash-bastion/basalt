@@ -2,7 +2,7 @@
 
 do-init() {
 	if [ -e basalt.toml ]; then
-		die "basalt.toml already exists"
+		print_simple.die "File 'basalt.toml' already exists"
 	fi
 
 	# TODO: create directories / files as well / git clone from main template repository
@@ -15,6 +15,5 @@ do-init() {
 	dependencies = []
 	EOF
 
-	# TODO: create new non-indented category of prints
-	print.info 'Info' "Created basalt.toml"
+	print_simple.info "Created basalt.toml"
 }
