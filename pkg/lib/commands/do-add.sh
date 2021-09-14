@@ -23,7 +23,7 @@ do-add() {
 
 		if [ -z "$version" ]; then
 			local latest_tarball_url=
-			if ! latest_tarball_url="$(curl -LsS https://api.github.com/repos/hyperupcall/basalt/releases/latest | jq -r '.tarball_url')"; then
+			if ! latest_tarball_url="$(curl -LsS "https://api.github.com/repos/$package/releases/latest" | jq -r '.tarball_url')"; then
 				print.die "Could not determine latest release for package '$pkg'"
 			fi
 
