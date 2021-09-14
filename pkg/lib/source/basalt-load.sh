@@ -68,7 +68,7 @@ basalt.load() {
 				source "$__basalt_pkg_path/load.bash"
 
 				if declare -f basalt_load &>/dev/null; then
-					basalt_load
+					BASALT_PACKAGE_PATH="$__basalt_pkg_path" basalt_load
 					unset basalt_load
 				fi
 			fi
@@ -89,7 +89,7 @@ basalt.load() {
 
 			if [ -n "$__basalt_file" ]; then
 				if [ -f "$__basalt_actual_pkg_path/$__basalt_file" ]; then
-					source "$__basalt_actual_pkg_path/$__basalt_file"
+					BASALT_PACKAGE_PATH="$__basalt_actual_pkg_path" source "$__basalt_actual_pkg_path/$__basalt_file"
 					__basalt_did_run_source='yes'
 				else
 					printf '%s\n' "Error: basalt-load: File '$__basalt_file' not found in package '$__basalt_pkg_path'"
@@ -101,7 +101,7 @@ basalt.load() {
 				source "$__basalt_actual_pkg_path/load.bash"
 
 				if declare -f basalt_load &>/dev/null; then
-					basalt_load
+					BASALT_PACKAGE_PATH="$__basalt_actual_pkg_path" basalt_load
 					unset basalt_load
 				fi
 
@@ -110,7 +110,7 @@ basalt.load() {
 		done
 
 		if [ "$__basalt_did_run_source" = 'no' ]; then
-			printf '%s\n' "Warning: basalt-load: Nothing was sourced when calling 'basalt-load $*'. Is the package actually installed?"
+			printf '%s\n' "Warning: basalt-load: Nothing was sourced when calling 'basalt-load $*'. Does the package or file actually exist?"
 		fi
 
 		unset __basalt_actual_pkg_path

@@ -8,10 +8,11 @@ do-init() {
 	# TODO: create directories / files as well / git clone from main template repository
 	cat >| basalt.toml <<-"EOF"
 	[package]
-	name = ""
-	version = ""
+	name = ''
+	version = ''
 	authors = []
 
+	[requirements]
 	dependencies = []
 	EOF
 

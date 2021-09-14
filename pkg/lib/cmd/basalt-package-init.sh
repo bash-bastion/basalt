@@ -27,7 +27,6 @@ basalt.package-init() {
    source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
    source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-package.sh"
 
-
    if [ -z "$BASALT_PACKAGE_PATH" ]; then
       if ! BASALT_PACKAGE_PATH="$(
          while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do

@@ -8,6 +8,8 @@ for f in "$PROGRAM_LIB_DIR"/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done
 
+# TODO: ensure only one Basalt process running at the same time
+
 basalt.main() {
 	for arg; do case "$arg" in
 	--help|-h)
@@ -33,8 +35,6 @@ basalt.main() {
 		init) shift; do-init "$@" ;;
 		add) shift; do-add "$@" ;;
 		install) shift; do-install "$@" ;;
-		link) shift; do-link "$@" ;;
-		list) shift; do-list "$@" ;;
 		complete) shift; do-complete "$@" ;;
 		global) shift
 			case "$1" in
@@ -42,8 +42,6 @@ basalt.main() {
 				add) shift; do-global-add "$@" ;;
 				upgrade) shift; do-global-upgrade "$@" ;;
 				remove) shift; do-global-remove "$@" ;;
-				link) shift; do-global-link "$@" ;;
-				list) shift; do-global-list "$@" ;;
 				*)
 					if [ -n "$1" ]; then
 						print_simple.die "Global subcommand '$1' is not a valid"

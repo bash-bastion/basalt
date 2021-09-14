@@ -18,6 +18,10 @@ basalt.package-load() {
 	shopt -s nullglob
 
 	local __basalt_site= __basalt_repository_owner=  __basalt_package=
+	if [ ! -d "$BASALT_PACKAGE_PATH"/basalt_packages/packages ]; then
+		printf '%s\n' "Error: basalt.package-load: No installed packages were found"
+		return 1
+	fi
 	for __basalt_site in "$BASALT_PACKAGE_PATH"/basalt_packages/packages/*; do
 		for __basalt_repository_owner in "$__basalt_site"/*; do
 			for __basalt_package in "$__basalt_repository_owner"/*; do
@@ -38,7 +42,6 @@ basalt.package-load() {
 	if [ -f "$BASALT_PACKAGE_PATH/load.bash" ]; then
 		# Load package (WET)
 		unset basalt_load
-
 		source "$BASALT_PACKAGE_PATH/load.bash"
 
 		if declare -f basalt_load &>/dev/null; then

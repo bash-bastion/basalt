@@ -20,8 +20,8 @@ pkg.install_package() {
 			local tarball_uri="$REPLY5"
 
 			# Download, extract
-			pkg.download_package_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
-			pkg.extract_package_tarball "$site" "$package" "$version"
+			pkg.store_download_package_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
+			pkg.store_extract_package_tarball "$site" "$package" "$version"
 
 			# Install transitive dependencies
 			pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
@@ -37,8 +37,9 @@ pkg.install_package() {
 	fi
 }
 
-# @description Downloads packages to the global store as tarballs
-pkg.download_package_tarball() {
+# @description Downloads package tarballs from the internet to the global store. If a git revision is specified, it
+# will extract that revision after cloning the repository and using git-archive
+pkg.store_download_package_tarball() {
 	local repo_uri="$1"
 	local tarball_uri="$2"
 	local site="$3"
@@ -60,17 +61,19 @@ pkg.download_package_tarball() {
 		if curl -fLso "$download_dest" "$download_url"; then
 			print.info "Downloaded" "$site/$package@$version"
 		else
+			rm -rf  "$BASALT_GLOBAL_DATA_DIR/scratch"
+
 			# The '$version' could also be a SHA1 ref to a particular revision
-			if ! git clone --quiet "$repo_uri" "$BASALT_LOCAL_STUFF_DIR/scratchspace/$site/$package" 2>/dev/null; then
+			if ! git clone --quiet "$repo_uri" "$BASALT_GLOBAL_DATA_DIR/scratch/$site/$package" 2>/dev/null; then
 				print.die "Could not clone repository for $site/$package@$version"
 			fi
 
-			if ! git -C "$BASALT_LOCAL_STUFF_DIR/scratchspace/$site/$package" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
-				rm -rf "$BASALT_LOCAL_STUFF_DIR/scratchspace"
+			if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$site/$package" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
+				rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 				print.die "Could not download archive or extract archive from temporary Git repository of $site/$package@$version"
 			fi
 
-			rm -rf "$BASALT_LOCAL_STUFF_DIR/scratchspace"
+			rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 			print.info "Downloaded" "$site/$package@$version"
 		fi
 	fi
@@ -89,7 +92,7 @@ pkg.download_package_tarball() {
 }
 
 # @description Extracts the tarballs in the global store to a directory
-pkg.extract_package_tarball() {
+pkg.store_extract_package_tarball() {
 	local site="$1"
 	local package="$2"
 	local version="$3"
@@ -118,6 +121,50 @@ pkg.extract_package_tarball() {
 	fi
 }
 
+pkg.global_add_package() {
+	for pkg; do
+		util.extract_data_from_input "$pkg"
+		local repo_uri="$REPLY1"
+		local site="$REPLY2"
+		local package="$REPLY3"
+		local version="$REPLY4"
+		local tarball_uri="$REPLY5"
+
+		# TODO
+		mkdir -p "$BASALT_GLOBAL_DATA_DIR/stub_project"
+		printf '%s\n' "$site/$package@$version" >> "$BASALT_GLOBAL_DATA_DIR/stub_project/list"
+		awk -i inplace '!seen[$0]++' "$BASALT_GLOBAL_DATA_DIR/stub_project/list"
+	done
+}
+
+pkg.global_install_packages() {
+	local project_dir="$BASALT_GLOBAL_DATA_DIR/stub_project"
+
+	while IFS= read -r pkg; do
+		util.extract_data_from_input "$pkg"
+		local repo_uri="$REPLY1"
+		local site="$REPLY2"
+		local package="$REPLY3"
+		local version="$REPLY4"
+		local tarball_uri="$REPLY5"
+
+		# Download, extract
+		pkg.store_download_package_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
+		pkg.store_extract_package_tarball "$site" "$package" "$version"
+
+		# Install transitive dependencies
+		pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
+
+		# Only after all the dependencies are installed do we transmogrify the package
+		pkg.transmogrify_package "$site" "$package" "$version"
+
+		# Only if all the previous modifications to the global package store has been successfull do we symlink
+		# to it from the local project directory
+		pkg.do_global_symlink "$project_dir" "$project_dir" 'yes'
+	done < "$BASALT_GLOBAL_DATA_DIR/stub_project/list"
+	unset pkg
+}
+
 # @description This performs modifications a particular package in the global store
 pkg.transmogrify_package() {
 	local site="$1"
@@ -144,7 +191,8 @@ pkg.do_global_symlink() {
 	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 
 	if [ ! -d "$package_dir" ]; then
-		print_simple.die "A (non-empty) directory at '$package_dir' was expected to exist"
+		# TODO: make internal
+		print_simple.die "A directory at '$package_dir' was expected to exist"
 		return
 	fi
 
@@ -175,7 +223,7 @@ pkg.do_global_symlink() {
 }
 
 pkg.symlink_package() {
-	local install_dir="$1" # e.g. "$BASALT_LOCAL_STUFF_DIR/packages"
+	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/packages"
 	local site="$2"
 	local package="$3"
 	local version="$4"
@@ -195,7 +243,7 @@ pkg.symlink_package() {
 }
 
 pkg.symlink_bin() {
-	local install_dir="$1" # e.g. "$BASALT_LOCAL_STUFF_DIR"
+	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"
 	local site="$2"
 	local package="$3"
 	local version="$4"
