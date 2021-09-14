@@ -2,13 +2,13 @@
 
 Basalt provides various functions in certain contexts. This page details them
 
-### Global Context
+## Global Context
 
-When executing `eval "$(basalt global init bash)"`, Basalt makes available the following functions
+Global environment variables are both valid globally (after `eval "$(basalt global init bash)"`) and locally (after `eval "$(basalt-package-init)"; basalt.package-init`)
 
-## basalt.load
+### basalt.load
 
-This sources a particular file of a particular package
+Sources a particular file of a particular package
 
 For example, the below example sources the `z.sh` file that is present at the root of [rupa/z](https://github.com/rupa/z). Note that you must pass in the website, as well as the repository owner and repository name
 
@@ -18,6 +18,14 @@ basalt.load --global 'github.com/rupa/z' 'z.sh'
 
 If you do not pass a file, it will automatically source a `load.bash` at the root of the repository, if it exists
 
-### Local context
+## Local context
 
-When executing `eval "$(basalt-package-init)"`, Basalt makes available the following functions, in addition to functions you would normally find in the global context
+Local environment variables are only valid within a Bash package (after `eval "$(basalt-package-init)"; basalt.package-init`)
+
+### `basalt.package-load`
+
+Loads all Basalt dependencies
+
+```sh
+basalt.package-load
+```

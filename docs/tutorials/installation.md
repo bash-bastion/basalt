@@ -1,5 +1,8 @@
 # Installation
 
+TODO WARNING: THIS TUTORIAL IS OUT OF DATE
+TODO: CURL PREREQ
+
 Note: `basalt` is currently BETA quality
 
 ## Prerequisites

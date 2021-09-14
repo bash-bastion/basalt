@@ -1,5 +1,7 @@
 # Getting Started
 
+TODO WARNING: THIS TUTORIAL IS OUT OF DATE
+
 Succinctly, basalt is a fancy combination of `git clone` and `ln -s`. It clones a repositories, and puts all of its man pages, completion scripts, and binaries in common folders. Let's see it in action
 
 This page assumes you have completed the [Installation](./installation.md) properly

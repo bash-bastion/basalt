@@ -6,12 +6,20 @@ Accepted
 
 ## Context
 
-Currently, for a per-project installation, all dependencies are installed to the `basalt_packages` directory. The way transitive dependencies are installed create some issues. For example, if B is a dependency of A, it will be installed in the `basalt_packages` directory of package A. This deep nesting caused a similar problem for early versions of `npm`, where, long paths names would cause installations to fail on Windows (`basalt` does not currently explicitly support Windows). Not only that, but it is harder to introspect the source code of transitive dependencies if they are deep in a dependency hierarchy. This is especially true for Bash and POSIX shell, where it is more commonplace to do so. It also wastes space if multiple packages depend on the same version of a package.
+Currently, for a per-project installation, all dependencies are installed to the `./basalt_packages` directory. The way transitive dependencies are installed create some issues. For example, if B is a dependency of A, it will be installed in the `./basalt_packages` directory of package A. This creates a deep hierarchy (early versions of `npm` ran into this)
 
 ## Decision
 
-When installing dependencies for a per-project installation, all dependencies should be hoisted to the top level, contained within `basalt_packages`. To prevent version conflicts, version numbers are appended to the package when downloading and extracting. For example, if B is a dependency of A, it will be installed in the `basalt_packages` directory of the current project (top level). More details can be found in [Package Installation](./docs/internals/package-installation.md)
+When installing dependencies for a per-project installation, all dependencies should be hoisted to the top level `./basalt_packages` directory, or to the `./basalt_packages` directory. To prevent version conflicts, version numbers are appended to the package when downloading and extracting. For example, if `package-b@v0.1.0` is a dependency of `package-a@v0.8.0`, it will be installed to the `./basalt_packages/transitive` directory. More details can be found in [Package Installation](./docs/internals/package-installation.md)
 
 ## Consequences
 
-Current users of `basalt` will have to completely remove their previous `basalt_packages` directory, and reinstall packages. Since the main `./basalt_packages/bin`, `./basalt_packages/completions`, and `./basalt_packages/man` folders are not changing, code changes are unecessary. Negative impact will be minimal. By implementing this, it will be easier to manage, transmogrify, and symlikn dependencies. It will also potentially decrease the total disk space of `basalt_packages`
+### Negatives
+
+Current users of `basalt` will have to completely remove their previous `basalt_packages` directory, and reinstall packages. Since the main `./basalt_packages/bin`, `./basalt_packages/completions`, and `./basalt_packages/man` folders are not changing, code changes within packages are unecessary
+
+### Positives
+
+- More maintainable and less buggy code
+- Potentially decrease the total disk space of `basalt_packages`
+- Easier to introspect source code of packages

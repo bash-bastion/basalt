@@ -1,47 +1,47 @@
 # Package Installation
 
-TODO: Note that information in this page reflects a future design and not the current implementation
+This page provides information on how and where packages are installed.
 
-Package management has some similarities to `npm`, with many important differences. This page provides information when installation packages in 'local' mode. 'global' mode behaves a bit differently
+Installation of packages is split into four phases
 
-## Downloading
+1. Package download
+2. Package extraction
+3. Package global integration
+4. Package local integration
 
-When downloading a package, a Git tag _must_ be provided. This ensures that the versions of the package is more traceable (it is more likely for a commit to be replaced (e.g. interactive rebase) compared to a release). Later, supporting revision sums _may_ be supported. But, this will likely entail performing a full clone of the repository, resetting to the revision, and using `git archive` on it.
+## 1. Package download
 
-Packages are downloaded as tarballs because they are much easier to manage compared to Git repositories (this contrasts basalt's previous behavior and Basher). We also edit the contents of the files so the package manager system works, as we'll get to later - this kind of stuff shouldn't be in history, and will be harder to persist if Git is involved
+During this stage, tarballs files are downloaded from the internet to `$BASALT_GLOBAL_DATA_DIR/store/tarballs`
 
-For a particular project folder, the `basalt_packages` directory is structured as such
+In most cases, tarballs can be downloaded directly. From the point of view of a consumer, you can access these types of tarballs by specifying a revision like `@v0.3.0'` in `dependencies`. From the point of view of a package maintainer, enable this behavior by authoring a GitHub release based on a release commit of a Git repository. Doing this is most efficient since the whole Git repository does not need to be downloaded
+
+Sometimes, a package consumer may want to use a revision that is not a release (e.g. `@e5466e6c3998790ebd99768cf0f910e161b84a95`). When this type of revision is specified, Basalt will clone the entire repsitory, then use `git-archive(1)` to extract the revision in the form of a tarball
+
+## 2. Package extraction
+
+During this stage, tarball files located in `$BASALT_GLOBAL_DATA_DIR/store/tarballs` are simply extracted and placed in `$BASALT_GLOBAL_DATA_DIR/store/packages`
+
+### 3. Global integration
+
+TODO: expand on this
+
+For each package in `$BASALT_GLOBAL_DATA_DIR/store/packages`, modifications are done. This includes modifying the source code with regular expressions and creating `./basalt_packages` directories for each one
+
+### 4. Local integration
+
+TODO: expand on this
+
+When working with per-project dependencies, the final step involves creating a `./basalt_packages` directory for the current project. It is structured like so
 
 ```txt
 - basalt_packages/
   - bin/
   - completion/
   - man/
-  - tarballs/
   - packages/
   - transitive/
     - bin/
     - completion/
     - man/
-    - tarballs/
     - packages/
 ```
-
-Packages are directly downloaded to `tarballs`, extracted `packages`, and are transmogrified as detailed below. Unfortunately, some modification needs to be done so different versions of the same transitive package located at different locations in the dependency hierarchy work properly
-
-For each `package`, a `basalt_packages` directory will still be created with the directories `bin`, `completions`, and `man`, containing symlinks resolved properly to their respective location in `transitive/{bin,completions,man}`. (Symlinks are not resolved directly to the package since an extra symlink indirection should make things easier and more maintainable)
-
-## Package transmogrification
-
-Files of all transitive dependencies are transmogrified. They are modified in the following way
-
-- String replacement of consumer functions (functions used from a dependency)
-- String replacement of producer functions (functions defined for the current package)
-
-Only the string of the package name is replaced. For example `bash_toml.parse` will be rewritten to `bash_toml_1_2_0`, assuming the current version is `1.2.0`. `bash_toml` is specified as the package name slug in the `basalt.toml` file
-
-Direct dependencies are still transmogrified, but only their consumers functions are replaced
-
-## Final symlinking
-
-Once the package has been downloaded and transmogrified, then it can be properly symlinked so consumers can use it. Packages that are transmogrified are symlinked to the directories contained within `transitive`. Other packages are symlinked to the same directories one level higher

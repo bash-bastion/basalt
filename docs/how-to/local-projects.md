@@ -1,5 +1,7 @@
 # Local Projects
 
+TODO: WARNING: This is out of date
+
 Similar to `npm`, `carto`, etc. `basalt` allows for the installation of packages on a per-project basis. Use `basalt.toml` for this
 
 ```sh
