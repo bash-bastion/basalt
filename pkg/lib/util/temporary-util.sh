@@ -88,3 +88,40 @@ util.get_toml_array() {
 		return 2
 	fi
 }
+
+# Append an element to a TOML array in a file
+# NOTE: this is currently specialized for modifying basalt.toml 'dependencies' array
+util.append_toml_array() {
+	declare -ga REPLIES=()
+
+	local toml_file="$1"
+	local key_name="$2"
+	local key_value="$3"
+
+	if [ ! -f "$toml_file" ]; then
+		print-simple.die "File '$toml_file' does not exist"
+	fi
+
+	if util.get_toml_array "$toml_file" "$key_name"; then
+		local name=
+		for name in "${REPLIES[@]}"; do
+			if [ "${name%@*}" = "${key_value%@*}" ]; then
+				print.warn 'Warning' "A version of '${name%@*}' is already installed. Skipping"
+				return
+			fi
+		done
+		unset name
+
+		if ((${#REPLIES[@]} == 0)); then
+			mv "$toml_file" "$toml_file.bak"
+			sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*.*\)\],\1'${key_value}']," "$toml_file.bak" > "$toml_file"
+			rm "$toml_file.bak"
+		else
+			mv "$toml_file" "$toml_file.bak"
+			sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*.*\(['\"]\)\),\1\, \2${key_value}\2," "$toml_file.bak" > "$toml_file"
+			rm "$toml_file.bak"
+		fi
+	else
+		print_simple.die "Key '$key_name' not found in file '$toml_file'"
+	fi
+}

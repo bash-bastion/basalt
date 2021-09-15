@@ -16,6 +16,14 @@ print_simple.error() {
 	fi
 }
 
+print_simple.warn() {
+	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
+		printf "Warn: %s\n" "$1"
+	else
+		printf "\033[0;33mWarn\033[0m %s\n" "$1" >&2
+	fi
+}
+
 print_simple.info() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "Info: %s\n" "$1"

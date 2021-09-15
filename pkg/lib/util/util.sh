@@ -43,6 +43,37 @@ util.remove_local_basalt_packages() {
 	fi
 }
 
+util.get_latest_package_version() {
+	unset REPLY; REPLY=
+	local package="$1"
+
+	local latest_tarball_url=
+	if latest_tarball_url="$(
+		curl -LsS "https://api.github.com/repos/$package/releases/latest" | jq -r '.tarball_url'
+	)"; then
+		if [ "$latest_tarball_url" != null ]; then
+			version="${latest_tarball_url##*/}"
+			if [ "$site" = 'github.com' ]; then
+				REPLY="$package@$version"
+			else
+				REPLY="$site/$package@$version"
+			fi
+
+			return
+		fi
+	fi
+
+	local latest_commit=
+	if latest_commit="$(
+		git ls-remote "https://github.com/$package" | awk '{ if($2 == "HEAD") print $1 }'
+	)"; then
+		REPLY="$latest_commit"
+		return
+	fi
+
+	print.die "Could not get latest release or commit for package '$package'"
+}
+
 util.extract_data_from_input() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 
