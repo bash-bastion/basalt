@@ -37,53 +37,6 @@ pkg.install_package() {
 	fi
 }
 
-
-pkg.global_add_package() {
-	for pkg; do
-		util.extract_data_from_input "$pkg"
-		local repo_uri="$REPLY1"
-		local site="$REPLY2"
-		local package="$REPLY3"
-		local version="$REPLY4"
-		local tarball_uri="$REPLY5"
-
-		# TODO
-		mkdir -p "$BASALT_GLOBAL_DATA_DIR/stub_project"
-		printf '%s\n' "$site/$package@$version" >> "$BASALT_GLOBAL_DATA_DIR/stub_project/list"
-		awk -i inplace '!seen[$0]++' "$BASALT_GLOBAL_DATA_DIR/stub_project/list"
-	done
-}
-
-pkg.global_install_packages() {
-	local project_dir="$BASALT_GLOBAL_DATA_DIR/stub_project"
-
-	while IFS= read -r pkg; do
-		util.extract_data_from_input "$pkg"
-		local repo_uri="$REPLY1"
-		local site="$REPLY2"
-		local package="$REPLY3"
-		local version="$REPLY4"
-		local tarball_uri="$REPLY5"
-
-		# Download, extract
-		pkg-phase.download_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
-		pkg-phase.extract_tarball "$site" "$package" "$version"
-
-		# Install transitive dependencies
-		pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
-
-		# Only after all the dependencies are installed do we transmogrify the package
-		pkg-phase.global-integration "$site" "$package" "$version"
-
-		# Only if all the previous modifications to the global package store has been successfull do we symlink
-		# to it from the local project directory
-		pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
-	done < "$BASALT_GLOBAL_DATA_DIR/stub_project/list"
-	unset pkg
-}
-
-
-
 pkg.symlink_package() {
 	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/packages"
 	local site="$2"

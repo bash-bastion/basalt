@@ -140,3 +140,43 @@ pkg-phase.local-integration() {
 		fi
 	fi
 }
+
+# TODO: REMOVE
+# Create a './basalt_packages' directory for a particular project directory
+pkg-phase.local-integration-2() {
+	unset REPLY
+	local original_package_dir="$1"
+	local package_dir="$2"
+	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
+
+	if [ -f "$BASALT_GLOBAL_DATA_DIR/global_package_list" ]; then
+		while IFS=':' read -r site package version; do
+
+		# if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
+			local pkg="$site/$package/$version"
+			# for pkg in "${REPLIES[@]}"; do
+				util.extract_data_from_input "$pkg"
+				local repo_uri="$REPLY1"
+				local site="$REPLY2"
+				local package="$REPLY3"
+				local version="$REPLY4"
+				local tarball_uri="$REPLY5"
+
+				if [ "$is_direct" = yes ]; then
+					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$site" "$package" "$version"
+					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
+				else
+					pkg.symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$site" "$package" "$version"
+					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
+				fi
+
+				pkg-phase.local-integration "$original_package_dir" "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version" 'no'
+			# done
+			unset pkg
+		# fi
+		done
+	else
+		echo "some error 44d"
+		exit 1
+	fi
+}

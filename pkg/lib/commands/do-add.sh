@@ -13,6 +13,7 @@ do-add() {
 		;;
 	esac done
 
+	# TODO: better validate packages (and better switch arguments order of REPLY's)
 	for pkg in "${pkgs[@]}"; do
 		util.extract_data_from_input "$pkg"
 		local repo_uri="$REPLY1"
