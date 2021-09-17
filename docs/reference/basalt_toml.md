@@ -12,6 +12,10 @@ Metadata that describes the package and its purpose
 
 Not yet used
 
+## `slug`
+
+Not yet used
+
 ### `version`
 
 Not yet used

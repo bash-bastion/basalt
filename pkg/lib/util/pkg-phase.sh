@@ -119,12 +119,12 @@ pkg-phase.local-integration() {
 		if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
 			local pkg=
 			for pkg in "${REPLIES[@]}"; do
-				util.extract_data_from_input "$pkg"
+				util.get_package_info "$pkg"
 				local repo_uri="$REPLY1"
 				local site="$REPLY2"
 				local package="$REPLY3"
 				local version="$REPLY4"
-				local tarball_uri="$REPLY5"
+				# util.assert_package_valid "$site" "$package" "$version"
 
 				if [ "$is_direct" = yes ]; then
 					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$site" "$package" "$version"
@@ -154,13 +154,13 @@ pkg-phase.local-integration-2() {
 
 		# if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
 			local pkg="$site/$package/$version"
+				util.assert_package_valid "$pkg"
 			# for pkg in "${REPLIES[@]}"; do
-				util.extract_data_from_input "$pkg"
+				util.get_package_info "$pkg"
 				local repo_uri="$REPLY1"
 				local site="$REPLY2"
 				local package="$REPLY3"
 				local version="$REPLY4"
-				local tarball_uri="$REPLY5"
 
 				if [ "$is_direct" = yes ]; then
 					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$site" "$package" "$version"

@@ -88,3 +88,10 @@ Prior art
 [sparrow]: https://github.com/melezhik/sparrow
 [tarp]: https://code.google.com/archive/p/tarp-package-manager/
 [shundle]: https://github.com/javier-lopez/shundle
+
+## Tests
+
+Tests currently require
+
+Bats
+jq (not just for testing)

@@ -13,18 +13,23 @@ do-add() {
 		;;
 	esac done
 
-	# TODO: better validate packages (and better switch arguments order of REPLY's)
 	for pkg in "${pkgs[@]}"; do
-		util.extract_data_from_input "$pkg"
+		util.get_package_info "$pkg"
 		local repo_uri="$REPLY1"
 		local site="$REPLY2"
 		local package="$REPLY3"
 		local version="$REPLY4"
-		local tarball_uri="$REPLY5"
 
 		if [ -z "$version" ]; then
-			util.get_latest_package_version "$package"
-			package_str="$REPLY"
+			util.get_latest_package_version "$repo_uri" "$site" "$package"
+			version="$REPLY"
+		fi
+
+		if [ "${repo_uri::7}" = 'file://' ]; then
+			package_str="$repo_uri@$version"
+		else
+			package_str="$site/$package@$version"
+			package_str="${package_str#github.com/}"
 		fi
 
 		util.append_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'dependencies' "$package_str"

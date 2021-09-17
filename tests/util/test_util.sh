@@ -21,8 +21,35 @@ test_util.get_repo_root() {
 	fi
 }
 
+test_util.create_fake_remote() {
+	unset REPLY; REPLY=
+	local package="$1"
+
+	local git_dir="$BATS_TEST_TMPDIR/fake_remote_${package%/*}_${package#*/}"
+
+	{
+		mkdir -p "$git_dir"
+		cd "$git_dir"
+		git init
+		touch 'README.md'
+		git add .
+		git commit -m 'Initial commit'
+		git branch -M main
+		git commit --allow-empty -m 'v0.0.1'
+		git tag -m 'v0.0.1' 'v0.0.1'
+	}
+	printf '%s\n' "test_util.create_fake_remote: $*"
+
+
+	REPLY="$git_dir"
+}
+
 # @description This stubs a command by creating a function for it, which
 # prints the command name and its arguments
 test_util.stub_command() {
 	eval "$1() { echo \"$1 \$*\"; }"
+}
+
+test_util.toml_test() {
+	"$REPO_ROOT/tests/node/toml.cjs" "$@"
 }

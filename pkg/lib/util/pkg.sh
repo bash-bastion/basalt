@@ -12,12 +12,16 @@ pkg.install_package() {
 	if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
 		local pkg=
 		for pkg in "${REPLIES[@]}"; do
-			util.extract_data_from_input "$pkg"
+
+			util.get_package_info "$pkg"
 			local repo_uri="$REPLY1"
 			local site="$REPLY2"
 			local package="$REPLY3"
 			local version="$REPLY4"
-			local tarball_uri="$REPLY5"
+			util.assert_package_valid "$site" "$package" "$version"
+
+			util.get_tarball_url "$site" "$package" "$version"
+			local tarball_uri="$REPLY"
 
 			# Download, extract
 			pkg-phase.download_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"

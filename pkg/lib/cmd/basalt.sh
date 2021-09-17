@@ -1,8 +1,10 @@
 # shellcheck shell=bash
 
+# TODO
 set -ETeo pipefail
 shopt -s nullglob extglob
 export LANG="C" LANGUAGE="C" LC_ALL="C"
+export GIT_TERMINAL_PROMPT=0
 
 for f in "$PROGRAM_LIB_DIR"/{commands,plumbing,util}/?*.sh; do
 	source "$f"

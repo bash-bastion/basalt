@@ -17,11 +17,13 @@ do-global-add() {
 
 	# TODO: WET
 	for pkg in "${pkgs[@]}"; do
-		util.extract_data_from_input "$pkg"
+		util.get_package_info "$pkg"
 		local repo_uri="$REPLY1"
 		local site="$REPLY2"
 		local package="$REPLY3"
 		local version="$REPLY4"
+
+		util.get_tarball_url "$site" "$package" "$version"
 		local tarball_uri="$REPLY5"
 
 		if [ -z "$version" ]; then
@@ -32,7 +34,7 @@ do-global-add() {
 		local project_dir="$BASALT_GLOBAL_DATA_DIR/global_packages"
 		mkdir -p "$project_dir"
 		# Download, extract
-		pkg-phase.download_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
+		pkg-phase.download_tarball "$repo_url" "$tarball_uri" "$site" "$package" "$version"
 		pkg-phase.extract_tarball "$site" "$package" "$version"
 
 		# Install transitive dependencies
@@ -72,11 +74,14 @@ global-add-package() {
 	echo "installing package $site $package"
 	# pkg.install_package "$BASALT_GLOBAL_DATA_DIR/global_packages"
 
-	util.extract_data_from_input "$site/$package/$version"
+	util.assert_package_valid  "$site/$package"
+	util.get_package_info "$site/$package@$version"
 	local repo_uri="$REPLY1"
 	local site="$REPLY2"
 	local package="$REPLY3"
 	local version="$REPLY4"
-	local tarball_uri="$REPLY5"
+
+	util.get_tarball_url "$site" "$package" "ref"
+	local tarball_uri="$REPLY"
 
 }

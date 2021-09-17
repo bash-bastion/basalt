@@ -9,11 +9,23 @@ do-init() {
 	cat >| basalt.toml <<-"EOF"
 	[package]
 	name = ''
+	slug = ''
 	version = ''
 	authors = []
+	description = ''
 
-	[requirements]
+	[run]
 	dependencies = []
+	sourceDirs = []
+	binDirs = []
+	completionDirs = []
+	manDirs = []
+
+	[run.shellEnvironment]
+
+	[run.setOptions]
+
+	[run.shoptOptions]
 	EOF
 
 	print_simple.info "Created basalt.toml"
