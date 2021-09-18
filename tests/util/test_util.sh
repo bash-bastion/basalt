@@ -25,7 +25,7 @@ test_util.create_fake_remote() {
 	unset REPLY; REPLY=
 	local package="$1"
 
-	local git_dir="$BATS_SUITE_TMPDIR/fake_remote_${package%/*}_${package#*/}"
+	local git_dir="$BATS_TEST_TMPDIR/fake_remote_${package%/*}_${package#*/}"
 
 	{
 		mkdir -p "$git_dir"

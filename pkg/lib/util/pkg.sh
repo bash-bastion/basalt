@@ -19,7 +19,8 @@ pkg.install_package() {
 			local package="$REPLY4"
 			local version="$REPLY5"
 
-			util.assert_package_valid "$site" "$package" "$version"
+			# TODO
+			# util.assert_package_valid "$repo_type" "$site" "$package" "$version"
 
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			local package_id="$REPLY"

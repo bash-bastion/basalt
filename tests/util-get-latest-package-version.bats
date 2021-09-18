@@ -7,7 +7,7 @@ setup() {
 		local package="$2"; package="${package#https://api.github.com/repos/}"; package="${package%/releases/latest}"
 		if [ "$package" = 'user/name1' ]; then
 			printf '%s\n' '{ "name": "v0.0.1" }'
-		else [ "$package" = 'user/name2' ]; t hen
+		elif [ "$package" = 'user/name2' ]; then
 			printf '%s\n' '{ "message": "Not Found", "documentation_url": "" }'
 		else
 			command curl "$@"
@@ -28,13 +28,13 @@ setup() {
 }
 
 @test "works if package has a release" {
-	util.get_latest_package_version 'empty' 'github.com' 'user/name1'
+	util.get_latest_package_version 'remote' 'empty' 'github.com' 'user/name1'
 
 	assert [ "$REPLY" = 'v0.0.1' ]
 }
 
 @test "works if package has no release" {
-	util.get_latest_package_version 'fakeuri1' 'github.com' 'user/name2'
+	util.get_latest_package_version 'remote' 'fakeuri1' 'github.com' 'user/name2'
 
 	assert [ "$REPLY" = 'ccc5e0a847e25b59ce2999340fdad51d50a896a5' ]
 }

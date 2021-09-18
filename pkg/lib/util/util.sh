@@ -193,28 +193,34 @@ util.get_package_id() {
 }
 
 util.assert_package_valid() {
-	# local site="$1"
-	# local package="$2"
-	# local ref="$3"
+	# local repo_type="$1"
+	local site="$1"
+	local package="$2"
+	local ref="$3"
 
-	# if [[ "$site" =~ ^.*\..*$ ]]; then
-	# 	return 0
-	# else
-	# 	return 1
+	# if [ "$repo_type" = 'remote' ]; then
+		if [[ "$site" =~ ^[-a-zA-Z0-9_]*\.[-a-zA-Z0-9_]*$ ]]; then
+			:
+		else
+			return 1
+		fi
+	# elif [ "$repo_type" = 'local' ]; then
+	# 	if [ "$site" != '' ]; then
+	# 		return 1
+	# 	fi
 	# fi
 
-	# if [[ "$package" =~ ^[-a-zA-Z0-9_]*/[a-zA-Z][-a-zA-Z0-9_]*$ ]]; then
-	# 	return 0
-	# else
-	# 	return 1
-	# fi
+	if [[ "$package" =~ ^[-a-zA-Z0-9_]*/[-a-zA-Z0-9_]*$ ]]; then
+		:
+	else
+		return 1
+	fi
 
-	# if [[ "$ref" =~ ^(v|{"}"})*$ ]]; then
-	# 	return 0
-	# else
-	# 	print_simple.die "Package owner or name has invalid characters"
-	# fi
-	:
+	if [[ "$ref" =~ ^(v.*|[a-z0-9]{40})$ ]]; then
+		:
+	else
+		return 1
+	fi
 }
 
 util.show_help() {
