@@ -25,8 +25,6 @@ pkg.install_package() {
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			local package_id="$REPLY"
 
-			echo pkg "$pkg" package_id "$package_id"
-
 			# Download, extract
 			pkg-phase.download_tarball "$repo_type" "$url" "$site" "$package" "$version"
 			pkg-phase.extract_tarball "$package_id"

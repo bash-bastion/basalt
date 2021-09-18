@@ -92,8 +92,6 @@ util.get_toml_array() {
 # Append an element to a TOML array in a file
 # NOTE: this is currently specialized for modifying basalt.toml 'dependencies' array
 util.append_toml_array() {
-	declare -ga REPLIES=()
-
 	local toml_file="$1"
 	local key_name="$2"
 	local key_value="$3"
@@ -121,6 +119,60 @@ util.append_toml_array() {
 			sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*.*\(['\"]\)\),\1\, \2${key_value}\2," "$toml_file.bak" > "$toml_file"
 			rm "$toml_file.bak"
 		fi
+	else
+		print_simple.die "Key '$key_name' not found in file '$toml_file'"
+	fi
+}
+
+util.unappend_toml_array() {
+	local toml_file="$1"
+	local key_name="$2"
+	local key_value="$3"
+
+	if [ ! -f "$toml_file" ]; then
+		print-simple.die "File '$toml_file' does not exist"
+	fi
+
+	if util.get_toml_array "$toml_file" "$key_name"; then
+		local dependency_array=()
+		local name=
+		local does_exist='no'
+		for name in "${REPLIES[@]}"; do
+			if [ "${name%@*}" = "${key_value%@*}" ]; then
+				does_exist='yes'
+			else
+				dependency_array+=("$name")
+			fi
+		done
+		unset name
+
+		if [ "$does_exist" != 'yes' ]; then
+			# TODO
+			print.warn 'Warning' "A version of '${key_value%@*}' is not already installed. Skipping"
+			return
+		fi
+
+		mv "$toml_file" "$toml_file.bak"
+		while IFS= read -r line; do
+			if [[ "$line" == *dependencies*=* ]]; then
+				local new_line='dependencies = ['
+				for dep in "${dependency_array[@]}"; do
+					printf -v new_line "%s'%s', " "$new_line" "$dep"
+				done
+				unset dep
+
+				new_line="${new_line%, }]"
+				printf '%s\n' "$new_line"
+			else
+				printf '%s\n' "$line"
+			fi
+		done < "$toml_file.bak" > "$toml_file"
+		rm "$toml_file.bak"
+
+
+		# mv "$toml_file" "$toml_file.bak"
+		# sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*\[.*\)\(['\"]${key_value}\(@.*\)?['\"]\)\(.*\),\1\3," "$toml_file"
+		# rm "$toml_file.bak"
 	else
 		print_simple.die "Key '$key_name' not found in file '$toml_file'"
 	fi

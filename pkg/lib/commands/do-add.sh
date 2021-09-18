@@ -26,6 +26,7 @@ do-add() {
 			version="$REPLY"
 		fi
 
+		# Don't use 'util.get_package_id' here
 		local package_str=
 		if [ "$repo_type" = 'remote' ]; then
 			package_str="$site/$package@$version"
