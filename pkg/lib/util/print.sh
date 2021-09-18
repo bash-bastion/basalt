@@ -36,6 +36,6 @@ print.debug() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
-		printf "\033[0;32m%11s\033[0m %s\n" "$1" "$2"
+		printf "\033[0;35m%11s\033[0m %s\n" "$1" "$2"
 	fi
 }

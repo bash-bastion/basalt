@@ -28,9 +28,8 @@ basalt() { basalt.main "$@"; }
 
 # Testing variables
 export XDG_DATA_HOME=
-export BASALT_TEST_DIR="$BATS_TMPDIR/basalt"
-export BASALT_GLOBAL_REPO="$BASALT_TEST_DIR/source"
-export BASALT_GLOBAL_DATA_DIR="$BASALT_TEST_DIR/localshare"
+export BASALT_GLOBAL_REPO="$BATS_TEST_TMPDIR/source"
+export BASALT_GLOBAL_DATA_DIR="$BATS_TEST_TMPDIR/localshare"
 
 setup() {
 	cd "$BATS_TEST_TMPDIR"

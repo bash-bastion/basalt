@@ -3,82 +3,93 @@
 # @description Downloads package tarballs from the internet to the global store. If a git revision is specified, it
 # will extract that revision after cloning the repository and using git-archive
 pkg-phase.download_tarball() {
-	local repo_uri="$1"
-	local tarball_uri="$2"
+	local repo_type="$1"
+	local url="$2"
 	local site="$3"
 	local package="$4"
 	local version="$5"
 
-	local download_url="$tarball_uri"
-	local download_dest="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$site/$package@$version.tar.gz"
+	util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+	local package_id="$REPLY"
+
+	local download_dest="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
+	mkdir -p "${download_dest%/*}"
 
 	if [ ${DEBUG+x} ]; then
-		print.debug "Downloading" "download_url  $download_url"
-		print.debug "Downloading" "download_dest $download_dest"
+		print.debug "Downloading" "$package_id | $download_dest"
 	fi
 
+	# Use cache if it already exists
 	if [ -e "$download_dest" ]; then
-		print.info "Downloaded" "$site/$package@$version (cached)"
-	else
-		mkdir -p "${download_dest%/*}"
+		print.info "Downloaded" "$package_id (cached)"
+		return
+	fi
+
+	# Only try to download a release if the repository is actually a remote URL
+	if [ "$repo_type" = remote ]; then
+		util.get_tarball_url "$site" "$package" "$version"
+		local download_url="$REPLY"
+
 		if curl -fLso "$download_dest" "$download_url"; then
+			if ! util.file_is_targz "$download_dest"; then
+				rm -rf "$download_dest"
+				print.die "File '$download_dest' is not actually a tarball"
+			fi
+
 			print.info "Downloaded" "$site/$package@$version"
+			return
 		else
-			rm -rf  "$BASALT_GLOBAL_DATA_DIR/scratch"
-
-			# The '$version' could also be a SHA1 ref to a particular revision
-			if ! git clone --quiet "$repo_uri" "$BASALT_GLOBAL_DATA_DIR/scratch/$site/$package" 2>/dev/null; then
-				print.die "Could not clone repository for $site/$package@$version"
-			fi
-
-			if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$site/$package" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
-				rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
-				print.die "Could not download archive or extract archive from temporary Git repository of $site/$package@$version"
-			fi
-
-			rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
-			print.info "Downloaded" "$site/$package@$version"
+			# This is OK, since the 'version' could be an actual ref. In that case,
+			# download the package as below
+			:
 		fi
 	fi
 
-	local magic_byte=
-	if magic_byte="$(xxd -p -l 2 "$download_dest")"; then
-		# Ensure the downloaded file is really a .tar.gz file...
-		if [ "$magic_byte" != '1f8b' ]; then
-			rm -rf "$download_dest"
-			print.die "Could not find a release tarball for $site/$package@$version"
-		fi
-	else
+	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
+	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" 2>/dev/null; then
+		print.die "Could not clone repository for $package_id"
+	fi
+
+	if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" archive --prefix="prefix/" -o "$download_dest" "$version"; then
+		rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
+		print.die "Could not download archive or extract archive from temporary Git repository of $package_id"
+	fi
+	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
+
+	if ! util.file_is_targz "$download_dest"; then
 		rm -rf "$download_dest"
-		print.die "Error" "Could not get a magic byte of the release tarball for $site/$package@$version"
+		print.die "File '$download_dest' is not actually a tarball"
 	fi
+
+	print.info "Downloaded" "$package_id"
 }
 
 # @description Extracts the tarballs in the global store to a directory
 pkg-phase.extract_tarball() {
-	local site="$1"
-	local package="$2"
-	local version="$3"
+	local package_id="$1"
 
-	local tarball_src="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$site/$package@$version.tar.gz"
-	local tarball_dest="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
+	local tarball_src="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
+	local tarball_dest="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 
 	if [ ${DEBUG+x} ]; then
-		print.debug "Extracting" "tarball_src  $tarball_src"
-		print.debug "Extracting" "tarball_dest $tarball_dest"
+		print.debug "Extracting" "$package_id | $tarball_dest"
 	fi
 
+	# Use cache if it already exists
 	if [ -d "$tarball_dest" ]; then
-		print.info "Extracted" "$site/$package@$version (cached)"
-	else
-		mkdir -p "$tarball_dest"
-		if ! tar xf "$tarball_src" -C "$tarball_dest" --strip-components 1 2>/dev/null; then
-			print.die "Error" "Could not extract package $site/$package@$version"
-		else
-			print.info "Extracted" "$site/$package@$version"
-		fi
+		print.info "Extracted" "$package_id (cached)"
+		return
 	fi
 
+	# Actually extract
+	mkdir -p "$tarball_dest"
+	if ! tar xf "$tarball_src" -C "$tarball_dest" --strip-components 1 2>/dev/null; then
+		print.die "Error" "Could not extract package $package_id"
+	else
+		print.info "Extracted" "$package_id"
+	fi
+
+	# Ensure extraction actually worked
 	if [ ! -d "$tarball_dest" ]; then
 		print.die "Extracted tarball is not a directory at '$tarball_dest'"
 	fi
@@ -86,25 +97,25 @@ pkg-phase.extract_tarball() {
 
 # @description This performs modifications a particular package in the global store
 pkg-phase.global-integration() {
-	local site="$1"
-	local package="$2"
-	local version="$3"
+	local package_id="$1"
 
-	local project_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
+	# TODO: move this up
+	local project_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 
-	# TODO: properly cache transmogrifications
+	# TODO: properly cache transformations
+
 	if [ ${DEBUG+x} ]; then
-		print.debug "Transforming" "project_dir $project_dir"
+		print.debug "Transforming" "$project_dir"
 	fi
 
 	pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
 
-	print.info "Transformed" "$site/$package@$version"
+	print.info "Transformed" "$package_id"
 }
 
 # Create a './basalt_packages' directory for a particular project directory
 pkg-phase.local-integration() {
-	unset REPLY
+	unset REPLY; REPLY=
 	local original_package_dir="$1"
 	local package_dir="$2"
 	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
@@ -120,63 +131,27 @@ pkg-phase.local-integration() {
 			local pkg=
 			for pkg in "${REPLIES[@]}"; do
 				util.get_package_info "$pkg"
-				local repo_uri="$REPLY1"
-				local site="$REPLY2"
-				local package="$REPLY3"
-				local version="$REPLY4"
+				local repo_type="$REPLY1"
+				local url="$REPLY2"
+				local site="$REPLY3"
+				local package="$REPLY4"
+				local version="$REPLY5"
 				# util.assert_package_valid "$site" "$package" "$version"
 
+				util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+				local package_id="$REPLY"
+
 				if [ "$is_direct" = yes ]; then
-					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$site" "$package" "$version"
-					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
+					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$package_id"
+					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$package_id
 				else
-					pkg.symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$site" "$package" "$version"
-					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
+					pkg.symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
+					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$package_id"
 				fi
 
-				pkg-phase.local-integration "$original_package_dir" "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version" 'no'
+				pkg-phase.local-integration "$original_package_dir" "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" 'no'
 			done
 			unset pkg
 		fi
-	fi
-}
-
-# TODO: REMOVE
-# Create a './basalt_packages' directory for a particular project directory
-pkg-phase.local-integration-2() {
-	unset REPLY
-	local original_package_dir="$1"
-	local package_dir="$2"
-	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
-
-	if [ -f "$BASALT_GLOBAL_DATA_DIR/global_package_list" ]; then
-		while IFS=':' read -r site package version; do
-
-		# if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
-			local pkg="$site/$package/$version"
-				util.assert_package_valid "$pkg"
-			# for pkg in "${REPLIES[@]}"; do
-				util.get_package_info "$pkg"
-				local repo_uri="$REPLY1"
-				local site="$REPLY2"
-				local package="$REPLY3"
-				local version="$REPLY4"
-
-				if [ "$is_direct" = yes ]; then
-					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$site" "$package" "$version"
-					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
-				else
-					pkg.symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$site" "$package" "$version"
-					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$site" "$package" "$version"
-				fi
-
-				pkg-phase.local-integration "$original_package_dir" "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version" 'no'
-			# done
-			unset pkg
-		# fi
-		done
-	else
-		echo "some error 44d"
-		exit 1
 	fi
 }

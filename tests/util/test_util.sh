@@ -25,7 +25,7 @@ test_util.create_fake_remote() {
 	unset REPLY; REPLY=
 	local package="$1"
 
-	local git_dir="$BATS_TEST_TMPDIR/fake_remote_${package%/*}_${package#*/}"
+	local git_dir="$BATS_SUITE_TMPDIR/fake_remote_${package%/*}_${package#*/}"
 
 	{
 		mkdir -p "$git_dir"
@@ -37,8 +37,8 @@ test_util.create_fake_remote() {
 		git branch -M main
 		git commit --allow-empty -m 'v0.0.1'
 		git tag -m 'v0.0.1' 'v0.0.1'
-	}
-	printf '%s\n' "test_util.create_fake_remote: $*"
+	} >/dev/null 2>&1
+	printf '%s\n' "test_util.create_fake_remote: $git_dir"
 
 
 	REPLY="$git_dir"

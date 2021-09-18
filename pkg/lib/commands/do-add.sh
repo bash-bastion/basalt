@@ -15,24 +15,27 @@ do-add() {
 
 	for pkg in "${pkgs[@]}"; do
 		util.get_package_info "$pkg"
-		local repo_uri="$REPLY1"
-		local site="$REPLY2"
-		local package="$REPLY3"
-		local version="$REPLY4"
+		local repo_type="$REPLY1"
+		local url="$REPLY2"
+		local site="$REPLY3"
+		local package="$REPLY4"
+		local version="$REPLY5"
 
 		if [ -z "$version" ]; then
-			util.get_latest_package_version "$repo_uri" "$site" "$package"
+			util.get_latest_package_version "$repo_type" "$url" "$site" "$package"
 			version="$REPLY"
 		fi
 
-		if [ "${repo_uri::7}" = 'file://' ]; then
-			package_str="$repo_uri@$version"
-		else
+		local package_str=
+		if [ "$repo_type" = 'remote' ]; then
 			package_str="$site/$package@$version"
 			package_str="${package_str#github.com/}"
+		elif [ "$repo_type" = 'local' ]; then
+			package_str="$url@$version"
 		fi
 
 		util.append_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'dependencies' "$package_str"
-		do-install
 	done
+
+	do-install
 }

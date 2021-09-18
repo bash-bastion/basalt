@@ -12,26 +12,47 @@ pkg.install_package() {
 	if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
 		local pkg=
 		for pkg in "${REPLIES[@]}"; do
-
 			util.get_package_info "$pkg"
-			local repo_uri="$REPLY1"
-			local site="$REPLY2"
-			local package="$REPLY3"
-			local version="$REPLY4"
+			local repo_type="$REPLY1"
+			local url="$REPLY2"
+			local site="$REPLY3"
+			local package="$REPLY4"
+			local version="$REPLY5"
+
 			util.assert_package_valid "$site" "$package" "$version"
 
-			util.get_tarball_url "$site" "$package" "$version"
-			local tarball_uri="$REPLY"
+			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+			local package_id="$REPLY"
+
+			echo pkg "$pkg" package_id "$package_id"
 
 			# Download, extract
-			pkg-phase.download_tarball "$repo_uri" "$tarball_uri" "$site" "$package" "$version"
-			pkg-phase.extract_tarball "$site" "$package" "$version"
+			pkg-phase.download_tarball "$repo_type" "$url" "$site" "$package" "$version"
+			pkg-phase.extract_tarball "$package_id"
 
 			# Install transitive dependencies
-			pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
+			pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 
 			# Only after all the dependencies are installed do we transmogrify the package
-			pkg-phase.global-integration "$site" "$package" "$version"
+			pkg-phase.global-integration "$package_id"
+
+			# Only if all the previous modifications to the global package store has been successfull do we symlink
+			# to it from the local project directory
+			# pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
+		done
+		unset pkg
+	fi
+
+	# TODO: fix later
+	if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
+		local pkg=
+		for pkg in "${REPLIES[@]}"; do
+			util.get_package_info "$pkg"
+			local repo_type="$REPLY1"
+			local url="$REPLY2"
+			local site="$REPLY3"
+			local package="$REPLY4"
+			local version="$REPLY5"
 
 			# Only if all the previous modifications to the global package store has been successfull do we symlink
 			# to it from the local project directory
@@ -43,26 +64,25 @@ pkg.install_package() {
 
 pkg.symlink_package() {
 	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/packages"
-	local site="$2"
-	local package="$3"
-	local version="$4"
+	local package_id="$2"
 
-	local target="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
-	local link_name="$install_dir/$site/$package@$version"
+	local target="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
+	local link_name="$install_dir/$package_id"
 
 	if [ ${DEBUG+x} ]; then
-		print.debug "Symlinking" "target    $target"
-		print.debug "Symlinking" "link_name $link_name"
+		print.debug "Symlinking" "$link_name -> $target"
 	fi
 
 	mkdir -p "${link_name%/*}"
 	if ! ln -sfT "$target" "$link_name"; then
-		print.die "Could not symlink directory '${target##*/}' for package $site/$package@$version"
+		print.die "Could not symlink directory '${target##*/}' for package $package_id"
 	fi
 }
 
 pkg.symlink_bin() {
 	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"
+	local package_id="$2"
+
 	local site="$2"
 	local package="$3"
 	local version="$4"

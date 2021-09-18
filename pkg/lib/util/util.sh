@@ -21,6 +21,7 @@ util.init_local() {
 
 		printf '%s' "$PWD"
 	)"; then
+		# shellcheck disable=SC2034
 		BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
 	else
 		print_simple.die "Could not find a 'basalt.toml' file"
@@ -32,15 +33,7 @@ util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
 		print_simple.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
-}
-
-util.remove_local_basalt_packages() {
-	# Everything in the local ./basalt_packages is a symlink to something in the global
-	# cellar directory. Thus, we can just remove it since it won't take long to re-symlink.
-	# This has the added benefit that outdated packages will automatically be pruned
-	if ! rm -rf "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"; then
-		print_simple.die "Could not remove local 'basalt_packages' directory"
-	fi
+	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 }
 
 util.get_package_info() {
@@ -63,10 +56,11 @@ util.get_package_info() {
 
 		IFS='/' read -r site package <<< "$input"
 
-		REPLY1="$http://$input.git"
-		REPLY2="$site"
-		REPLY3="$package"
-		REPLY4=
+		REPLY1='remote'
+		REPLY2="$http://$input.git"
+		REPLY3="$site"
+		REPLY4="$package"
+		REPLY5=
 	elif [[ "$input" =~ $regex2 ]]; then
 		local site= package=
 
@@ -75,25 +69,22 @@ util.get_package_info() {
 
 		IFS=':' read -r site package <<< "$input"
 
-		REPLY1="git@$input"
-		REPLY2="$site"
-		REPLY3="$package"
-		REPLY4=
+		REPLY1='remote'
+		REPLY2="git@$input"
+		REPLY3="$site"
+		REPLY4="$package"
+		REPLY5=
 	elif [[ "$input" =~ $regex3 ]]; then
 		local ref= dir=
 
-		input="${input#file:\/\/}"
+		input="${input#file://}"
 		IFS='@' read -r dir ref <<< "$input"
 
-		REPLY1="file://$dir"
-		REPLY2="github.com"
-		REPLY3="${dir%/*}"; REPLY3="${REPLY3##*/}/${dir##*/}"
-		REPLY4="$ref"
-
-		# TODO
-		if [ -z "${REPLY3%/*}" ]; then
-			print_simple.die "Directory specified with file protocol must have at least one parent directory (for the package name)"
-		fi
+		REPLY1='local'
+		REPLY2="file://$dir"
+		REPLY3=
+		REPLY4="${dir##*/}"
+		REPLY5="$ref"
 	else
 		local site= package=
 		input="${input%.git}"
@@ -111,11 +102,11 @@ util.get_package_info() {
 			IFS='@' read -r package ref <<< "$package"
 		fi
 
-
-		REPLY1="https://$site/$package.git"
-		REPLY2="$site"
-		REPLY3="$package"
-		REPLY4="$ref"
+		REPLY1='remote'
+		REPLY2="https://$site/$package.git"
+		REPLY3="$site"
+		REPLY4="$package"
+		REPLY5="$ref"
 	fi
 }
 
@@ -137,44 +128,68 @@ util.get_tarball_url() {
 # @description Get the latest package version
 util.get_latest_package_version() {
 	unset REPLY; REPLY=
-	local repo_uri="$1"
-	local site="$2"
-	local package="$3"
-
-	local index_url=
-	local -a index_jq=()
-	if [ "$site" = 'github.com' ]; then
-		index_url="https://api.github.com/repos/$package/releases/latest"
-		index_jq=(jq -r '.name')
-	else
-		# TODO gitlab
-		print_simple.die "Site '$site' not supported"
-	fi
+	local repo_type="$1"
+	local url="$2"
+	local site="$3"
+	local package="$4"
 
 	# TODO: will it get beta/alpha/pre-releases??
-	# Get the latest pacakge version that has been released
 
-	local latest_package_version=
-	if latest_package_version="$(
-		curl -LsS "$index_url" | "${index_jq[@]}"
-	)"; then
-		if [ "$latest_package_version" != null ]; then
-			REPLY="${latest_package_version##*/}"
-			return
+	# Get the latest pacakge version that has been released
+	if [ "$repo_type" = remote ]; then
+		if [ "$site" = 'github.com' ]; then
+			local latest_package_version=
+			if latest_package_version="$(
+				curl -LsS "https://api.github.com/repos/$package/releases/latest" | jq -r '.name'
+			)" && [ "$latest_package_version" != null ]; then
+				REPLY="$latest_package_version"
+				return
+			fi
+		else
+			# TODO: gitlab
+			print_simple.die "Site '$site' not supported"
 		fi
 	fi
 
-	# If there is not a release, then just get the latest commit
-	# of the project
+	# If there is not an official release, then just get the latest commit of the project
 	local latest_commit=
 	if latest_commit="$(
-		git ls-remote "$repo_uri" | awk '{ if($2 == "HEAD") print $1 }'
+		git ls-remote "$url" | awk '{ if($2 == "HEAD") print $1 }'
 	)"; then
 		REPLY="$latest_commit"
 		return
 	fi
 
 	print.die "Could not get latest release or commit for package '$package'"
+}
+
+# @description Ensure the downloaded file is really a .tar.gz file...
+util.file_is_targz() {
+	local file="$1"
+
+	local magic_byte=
+	if magic_byte="$(xxd -p -l 2 "$file")"; then
+		if [ "$magic_byte" != '1f8b' ]; then
+			return 1
+		fi
+	else
+		return 1
+	fi
+}
+
+# @description Get id of package we can use for printing
+util.get_package_id() {
+	local repo_type="$1"
+	local url="$2"
+	local site="$3"
+	local package="$4"
+	local version="$5"
+
+	if [ "$repo_type" = 'remote' ]; then
+		REPLY="$site/$package@$version"
+	elif [ "$repo_type" = 'local' ]; then
+		REPLY="local/${url##*/}"
+	fi
 }
 
 util.assert_package_valid() {
