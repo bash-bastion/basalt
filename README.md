@@ -33,7 +33,7 @@ export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
 eval "$(basalt init bash)" # zsh and fish are also supported
 ```
 
-See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-started.md) for more details
+See [Installation](./docs/tutorials/installation.md) and [Getting Started](./docs/tutorials/getting-started.md) for more details
 
 
 ## Features
