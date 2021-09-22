@@ -15,6 +15,7 @@ setup() {
 
 	run printf '%s' "$(<basalt.toml)"
 	assert_success
+	assert_failure
 	assert_line -n 7 -e "dependencies = \['file://$dir@[a-z0-9]*'\]"
 }
 
