@@ -98,7 +98,7 @@ util.toml_add_dependency() {
 		print.die "File '$toml_file' does not exist"
 	fi
 
-	if util.get_toml_array "$toml_file" "$key_name"; then
+	if util.get_toml_array "$toml_file" 'dependencies'; then
 		local name=
 		for name in "${REPLIES[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
@@ -110,15 +110,15 @@ util.toml_add_dependency() {
 
 		if ((${#REPLIES[@]} == 0)); then
 			mv "$toml_file" "$toml_file.bak"
-			sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*.*\)\],\1'${key_value}']," "$toml_file.bak" > "$toml_file"
+			sed -e "s,\([ \t]*dependencies[ \t]*=[ \t]*.*\)\],\1'${key_value}']," "$toml_file.bak" > "$toml_file"
 			rm "$toml_file.bak"
 		else
 			mv "$toml_file" "$toml_file.bak"
-			sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*.*\(['\"]\)\),\1\, \2${key_value}\2," "$toml_file.bak" > "$toml_file"
+			sed -e "s,\([ \t]*dependencies[ \t]*=[ \t]*.*\(['\"]\)\),\1\, \2${key_value}\2," "$toml_file.bak" > "$toml_file"
 			rm "$toml_file.bak"
 		fi
 	else
-		print.die "Key '$key_name' not found in file '$toml_file'"
+		print.die "Key 'dependencies' not found in file '$toml_file'"
 	fi
 }
 
