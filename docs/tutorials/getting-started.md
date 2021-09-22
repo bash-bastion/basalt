@@ -120,4 +120,4 @@ $ basalt global list
 
 Note that we specified the SSH URL and the HTTPS URL when removing. You can specify the package this way with all commands, including the `add`, `remove`, and `upgrade` commands
 
-And you are done! To learn more, see [Recepies](./.recepies.md), [Reference](./reference.md), or [Tips](./tips.md)
+And you are done! To learn more, check the `reference` and `how-to` directories

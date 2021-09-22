@@ -6,7 +6,9 @@ setup() {
 	curl() {
 		local package="$2"; package="${package#https://api.github.com/repos/}"; package="${package%/releases/latest}"
 		if [ "$package" = 'user/name1' ]; then
-			printf '%s\n' '{ "name": "v0.0.1" }'
+			printf '%s\n' '{
+  "tag_name": "v0.0.1"
+}'
 		elif [ "$package" = 'user/name2' ]; then
 			printf '%s\n' '{ "message": "Not Found", "documentation_url": "" }'
 		else
