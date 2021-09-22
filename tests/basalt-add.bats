@@ -3,6 +3,8 @@
 load './util/init.sh'
 
 setup() {
+	# this affects lines="$($output)" # TODO Bats 1.5 remove
+	shopt -u nullglob
 	test_util.stub_command 'do-install'
 }
 
@@ -13,7 +15,6 @@ setup() {
 	basalt init
 	basalt add "file://$dir"
 
-	shopt -u nullglob # this affects lines="$($output)"
 	run printf '%s' "$(<basalt.toml)"
 	assert_success
 	assert_line -n 7 -e "dependencies = \['file://$dir@[a-z0-9]+'\]"
@@ -27,7 +28,6 @@ setup() {
 	basalt init
 	basalt add "file://$dir1" "file://$dir2"
 
-	shopt -u nullglob # this affects lines="$($output)"
 	run printf '%s' "$(<basalt.toml)"
 	assert_success
 	assert_line -n 7 -e "dependencies = \['file://$dir1@[a-z0-9]+', 'file://$dir2@[a-z0-9]+'\]"

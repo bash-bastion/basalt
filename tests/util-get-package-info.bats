@@ -110,7 +110,7 @@ load './util/init.sh'
 }
 
 @test "parses with file:// protocol" {
-	util.get_package_info 'file:///home/directory' 'no'
+	util.get_package_info 'file:///home/directory'
 
 	assert [ "$REPLY1" = 'local' ]
 	assert [ "$REPLY2" = 'file:///home/directory' ]
@@ -120,7 +120,7 @@ load './util/init.sh'
 }
 
 @test "parses with file:// protocol and ref" {
-	util.get_package_info 'file:///home/user/directory@v0.2.0' 'no'
+	util.get_package_info 'file:///home/user/directory@v0.2.0'
 
 	assert [ "$REPLY1" = 'local' ]
 	assert [ "$REPLY2" = 'file:///home/user/directory' ]
@@ -133,5 +133,6 @@ load './util/init.sh'
 	run util.get_package_info 'UwU'
 
 	assert_failure
+	# TODO: better message
 	assert_line -p "Package 'UwU' does not appear to be formatted correctly"
 }

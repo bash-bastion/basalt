@@ -88,7 +88,7 @@ pkg.symlink_bin() {
 	local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
 	if [ -f "$package_dir/basalt.toml" ]; then
 		if util.get_toml_array "$package_dir/basalt.toml" 'binDirs'; then
-			mkdir -p "$install_dir/bin"
+			mkdir -p "$install_dir/bin" # TODO
 			for dir in "${REPLIES[@]}"; do
 				if [ -f "$package_dir/$dir" ]; then
 					# TODO: move this check somewhere else (subcommand check) (but still do -d)
