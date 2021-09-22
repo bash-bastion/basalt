@@ -14,6 +14,8 @@ Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extra
 $ basalt global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 ```
 
+**NOTE**: This project is called `Basalt`, but the binary is called `bpm` and not `basalt` because that was the previous name of this repository. The name change is only reflected in the `wip` branch, which is essentially a near-complete rewrite of the package manager with reasoning explained in [ADR-1](./docs/architecture/ADR-1.md). It will be merged soon
+
 This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
 
 ```sh
@@ -34,6 +36,7 @@ eval "$(basalt init bash)" # zsh and fish are also supported
 ```
 
 See [Installation](./docs/installation.md) and [Getting Started](./docs/getting-started.md) for more details
+
 
 ## Features
 
