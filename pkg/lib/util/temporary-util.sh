@@ -10,7 +10,7 @@ util.get_toml_string() {
 	local key_name="$2"
 
 	if [ ! -f "$toml_file" ]; then
-		print_simple.die "File '$toml_file' not found"
+		print.die "File '$toml_file' not found"
 	fi
 
 	local grep_line=
@@ -35,7 +35,7 @@ util.get_toml_string() {
 	if [[ $grep_line =~ $regex ]]; then
 		REPLY="${BASH_REMATCH[1]}"
 	else
-		print_simple.die "Value for key '$key_name' not valid"
+		print.die "Value for key '$key_name' not valid"
 	fi
 }
 
@@ -46,7 +46,7 @@ util.get_toml_array() {
 	local key_name="$2"
 
 	if [ ! -f "$toml_file" ]; then
-		print.die 'Internal Error' "File '$toml_file' does not exist"
+		print-indent.die 'Internal Error' "File '$toml_file' does not exist"
 	fi
 
 	local grep_line=
@@ -79,32 +79,30 @@ util.get_toml_array() {
 			if [[ ${REPLIES[$i]} =~ $regex ]]; then
 				REPLIES[$i]="${BASH_REMATCH[1]}"
 			else
-				print_simple.die "Array for key '$key_name' not valid"
+				print.die "Array for key '$key_name' not valid"
 				return 2
 			fi
 		done
 	else
-		print_simple.die "Key '$key_name' in file '$toml_file' must be set to an array that spans one line"
+		print.die "Key '$key_name' in file '$toml_file' must be set to an array that spans one line"
 		return 2
 	fi
 }
 
 # Append an element to a TOML array in a file
-# NOTE: this is currently specialized for modifying basalt.toml 'dependencies' array
-util.append_toml_array() {
+util.toml_add_dependency() {
 	local toml_file="$1"
-	local key_name="$2"
-	local key_value="$3"
+	local key_value="$2"
 
 	if [ ! -f "$toml_file" ]; then
-		print-simple.die "File '$toml_file' does not exist"
+		print.die "File '$toml_file' does not exist"
 	fi
 
 	if util.get_toml_array "$toml_file" "$key_name"; then
 		local name=
 		for name in "${REPLIES[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
-				print.warn 'Warning' "A version of '${name%@*}' is already installed. Skipping"
+				print-indent.warn 'Warning' "A version of '${name%@*}' is already installed. Skipping"
 				return
 			fi
 		done
@@ -120,17 +118,16 @@ util.append_toml_array() {
 			rm "$toml_file.bak"
 		fi
 	else
-		print_simple.die "Key '$key_name' not found in file '$toml_file'"
+		print.die "Key '$key_name' not found in file '$toml_file'"
 	fi
 }
 
-util.unappend_toml_array() {
+util.toml_remove_dependency() {
 	local toml_file="$1"
-	local key_name="$2"
-	local key_value="$3"
+	local key_value="$2"
 
 	if [ ! -f "$toml_file" ]; then
-		print-simple.die "File '$toml_file' does not exist"
+		print.die "File '$toml_file' does not exist"
 	fi
 
 	if util.get_toml_array "$toml_file" "$key_name"; then
@@ -148,7 +145,7 @@ util.unappend_toml_array() {
 
 		if [ "$does_exist" != 'yes' ]; then
 			# TODO
-			print.warn 'Warning' "A version of '${key_value%@*}' is not already installed. Skipping"
+			print-indent.warn 'Warning' "A version of '${key_value%@*}' is not already installed. Skipping"
 			return
 		fi
 
@@ -174,6 +171,6 @@ util.unappend_toml_array() {
 		# sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*\[.*\)\(['\"]${key_value}\(@.*\)?['\"]\)\(.*\),\1\3," "$toml_file"
 		# rm "$toml_file.bak"
 	else
-		print_simple.die "Key '$key_name' not found in file '$toml_file'"
+		print.die "Key '$key_name' not found in file '$toml_file'"
 	fi
 }

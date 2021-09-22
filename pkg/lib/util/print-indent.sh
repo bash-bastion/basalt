@@ -1,14 +1,14 @@
 # shellcheck shell=bash
 
-# @file print.sh
+# @file print-indent.sh
 # @brief Prints statements that have proper indentation
 
-print.die() {
-	print.error 'Error' "$1"
+print-indent.die() {
+	print-indent.error 'Error' "$1"
 	exit 1
 }
 
-print.error() {
+print-indent.error() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
@@ -16,7 +16,7 @@ print.error() {
 	fi
 }
 
-print.warn() {
+print-indent.warn() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
@@ -24,7 +24,7 @@ print.warn() {
 	fi
 }
 
-print.info() {
+print-indent.info() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
@@ -32,10 +32,10 @@ print.info() {
 	fi
 }
 
-print.debug() {
+print-indent.debug() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
-		printf "\033[0;35m%11s\033[0m %s\n" "$1" "$2"
+		printf "\033[0;36m%11s\033[0m %s\n" "$1" "$2"
 	fi
 }

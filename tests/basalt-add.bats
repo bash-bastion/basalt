@@ -2,6 +2,10 @@
 
 load './util/init.sh'
 
+setup() {
+	test_util.stub_command 'do-install'
+}
+
 @test "Adds one dependency" {
 	local dir=
 	test_util.create_fake_remote 'user/repo'; dir="$REPLY"

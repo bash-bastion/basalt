@@ -21,7 +21,6 @@ pkg.install_package() {
 
 			# TODO
 			# util.assert_package_valid "$repo_type" "$site" "$package" "$version"
-
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			local package_id="$REPLY"
 
@@ -69,12 +68,12 @@ pkg.symlink_package() {
 	local link_name="$install_dir/$package_id"
 
 	if [ ${DEBUG+x} ]; then
-		print.debug "Symlinking" "$link_name -> $target"
+		print-indent.debug "Symlinking" "$link_name -> $target"
 	fi
 
 	mkdir -p "${link_name%/*}"
 	if ! ln -sfT "$target" "$link_name"; then
-		print.die "Could not symlink directory '${target##*/}' for package $package_id"
+		print-indent.die "Could not symlink directory '${target##*/}' for package $package_id"
 	fi
 }
 
@@ -93,7 +92,7 @@ pkg.symlink_bin() {
 			for dir in "${REPLIES[@]}"; do
 				if [ -f "$package_dir/$dir" ]; then
 					# TODO: move this check somewhere else (subcommand check) (but still do -d)
-					print.warn "Warning" "Package $site/$package@$version has a file ($dir) specified in 'binDirs'"
+					print-indent.warn "Warning" "Package $site/$package@$version has a file ($dir) specified in 'binDirs'"
 				else
 					for target in "$package_dir/$dir"/*; do
 						local link_name="$install_dir/bin/${target##*/}"
@@ -101,12 +100,12 @@ pkg.symlink_bin() {
 						# TODO: this replaces existing symlinks. In verify mode, can check if there are no duplicate binary names
 
 						if [ ${DEBUG+x} ]; then
-							print.debug "Symlinking" "target    $target"
-							print.debug "Symlinking" "link_name $link_name"
+							print-indent.debug "Symlinking" "target    $target"
+							print-indent.debug "Symlinking" "link_name $link_name"
 						fi
 
 						if ! ln -sfT "$target" "$link_name"; then
-							print.die "Could not symlink file '${target##*/}' for package $site/$package@$version"
+							print-indent.die "Could not symlink file '${target##*/}' for package $site/$package@$version"
 						fi
 					done
 				fi

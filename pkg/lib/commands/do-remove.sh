@@ -6,7 +6,7 @@ do-remove() {
 	local -a pkgs=()
 	for arg; do case "$arg" in
 	-*)
-		print_simple.die "Flag '$arg' not recognized"
+		print.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -14,8 +14,8 @@ do-remove() {
 	esac done
 
 	for pkg in "${pkgs[@]}"; do
-		util.unappend_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'dependencies' "$pkg"
+		util.toml_remove_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$pkg"
 	done
 
-
+	do-install
 }

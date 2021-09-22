@@ -24,44 +24,56 @@ util.init_local() {
 		# shellcheck disable=SC2034
 		BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
 	else
-		print_simple.die "Could not find a 'basalt.toml' file"
+		print.die "Could not find a 'basalt.toml' file"
 	fi
 }
 
 # @description Check for the initialization of variables essential for global subcommands
 util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-		print_simple.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
+		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 }
 
 util.get_package_info() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
-
 	local input="$1"
 
 	if [ -z "$input" ]; then
-		print_simple.die "Must supply a repository"
+		print.die "Must supply a repository"
 	fi
 
 	local regex1="^https?://"
-	local regex2="^git@"
-	local regex3="^file://"
+	local regex2="^file://"
+	local regex3="^git@"
 	if [[ "$input" =~ $regex1 ]]; then
 		local site= package=
-		local http="${input%%://*}"
 		input="${input#http?(s)://}"
+		ref="${input##*@}"
+		if [ "$ref" = "$input" ]; then ref=; fi
+		input="${input%@*}"
 		input="${input%.git}"
 
 		IFS='/' read -r site package <<< "$input"
 
 		REPLY1='remote'
-		REPLY2="$http://$input.git"
+		REPLY2="https://$input.git"
 		REPLY3="$site"
 		REPLY4="$package"
-		REPLY5=
+		REPLY5="$ref"
 	elif [[ "$input" =~ $regex2 ]]; then
+		local ref= dir=
+
+		input="${input#file://}"
+		IFS='@' read -r dir ref <<< "$input"
+
+		REPLY1='local'
+		REPLY2="file://$dir"
+		REPLY3=
+		REPLY4="${dir##*/}"
+		REPLY5="$ref"
+	elif [[ "$input" =~ $regex3 ]]; then
 		local site= package=
 
 		input="${input#git@}"
@@ -74,17 +86,6 @@ util.get_package_info() {
 		REPLY3="$site"
 		REPLY4="$package"
 		REPLY5=
-	elif [[ "$input" =~ $regex3 ]]; then
-		local ref= dir=
-
-		input="${input#file://}"
-		IFS='@' read -r dir ref <<< "$input"
-
-		REPLY1='local'
-		REPLY2="file://$dir"
-		REPLY3=
-		REPLY4="${dir##*/}"
-		REPLY5="$ref"
 	else
 		local site= package=
 		input="${input%.git}"
@@ -95,7 +96,7 @@ util.get_package_info() {
 			site="github.com"
 			package="$input"
 		else
-			print_simple.die "Package '$input' does not appear to be formatted correctly"
+			print.die "Package '$input' does not appear to be formatted correctly"
 		fi
 
 		if [[ "$package" == *@* ]]; then
@@ -121,7 +122,7 @@ util.get_tarball_url() {
 	elif [ "$site" = gitlab.com ]; then
 		REPLY="https://gitlab.com/$package/-/archive/$ref/${package#*/}-$ref.tar.gz"
 	else
-		print_simple.die "Could not construct tarball_uri for site '$site'"
+		print.die "Could not construct tarball_uri for site '$site'"
 	fi
 }
 
@@ -147,7 +148,7 @@ util.get_latest_package_version() {
 			fi
 		else
 			# TODO: gitlab
-			print_simple.die "Site '$site' not supported"
+			print.die "Site '$site' not supported"
 		fi
 	fi
 
@@ -160,7 +161,7 @@ util.get_latest_package_version() {
 		return
 	fi
 
-	print.die "Could not get latest release or commit for package '$package'"
+	print-indent.die "Could not get latest release or commit for package '$package'"
 }
 
 # @description Ensure the downloaded file is really a .tar.gz file...
@@ -223,6 +224,7 @@ util.assert_package_valid() {
 	fi
 }
 
+# TODO: check command line arguments --force, etc.
 util.show_help() {
 	cat <<"EOF"
 Basalt:
@@ -230,38 +232,42 @@ Basalt:
 
 Usage:
   basalt [--help|--version]
-  basalt <subcommand> [args...]
-  basalt global <subcommand> [args...]
+  basalt <local-subcommand> [args...]
+  basalt global <global-subcommand> [args...]
 
-Subcommands (local):
+Local subcommands:
   init
-    Create a new basalt package in the current directory
+    Creates a new Basalt package in the current directory
 
-  install
-    Resolve and install dependencies specified in basalt.toml
-
-  link <directory...>
-    Installs a package from a local directory. These have a
-    namespace of 'local'
-
-  list [--fetch] [--format=<simple>] [package...]
-    List installed packages or just the specified ones
-
-Subcommands (global):
-  init <shell>
-    Print shell variables and functions to be eval'd during shell initialization
-
-  add [--branch=<name>] [[site/]<package>[@ref]...]
-    Installs a package from GitHub (or a custom site)
+  add <package>
+    Adds a dependency to the current local project
 
   upgrade <package>
-    Upgrades a package
+    Upgrades a dependency for the current local project
 
   remove [--force] <package>
-    Uninstalls a package
+    Removes a dependency from the current local project
 
-  link <directory>
-    Installs a package from a local directory
+  install
+    Resolves and installs all dependencies for the current local
+    project
+
+  list [--fetch] [--format=<simple>] [package...]
+    Lists particular dependencies for the current local project
+
+Global subcommands:
+  init <shell>
+    Prints shell code that must be evaluated during shell
+    initialization for the proper functioning of Basalt
+
+  add <package>
+    Installs a global package
+
+  upgrade <package>
+    Upgrades a global package
+
+  remove [--force] <package>
+    Uninstalls a global package
 
   list [--fetch] [--format=<simple>] [package...]
     List all installed packages or just the specified ones

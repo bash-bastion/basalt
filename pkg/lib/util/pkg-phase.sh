@@ -16,12 +16,12 @@ pkg-phase.download_tarball() {
 	mkdir -p "${download_dest%/*}"
 
 	if [ ${DEBUG+x} ]; then
-		print.debug "Downloading" "$package_id | $download_dest"
+		print-indent.debug "Downloading" "$package_id | $download_dest"
 	fi
 
 	# Use cache if it already exists
 	if [ -e "$download_dest" ]; then
-		print.info "Downloaded" "$package_id (cached)"
+		print-indent.info "Downloaded" "$package_id (cached)"
 		return
 	fi
 
@@ -33,10 +33,10 @@ pkg-phase.download_tarball() {
 		if curl -fLso "$download_dest" "$download_url"; then
 			if ! util.file_is_targz "$download_dest"; then
 				rm -rf "$download_dest"
-				print.die "File '$download_dest' is not actually a tarball"
+				print-indent.die "File '$download_dest' is not actually a tarball"
 			fi
 
-			print.info "Downloaded" "$site/$package@$version"
+			print-indent.info "Downloaded" "$site/$package@$version"
 			return
 		else
 			# This is OK, since the 'version' could be an actual ref. In that case,
@@ -47,21 +47,21 @@ pkg-phase.download_tarball() {
 
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" 2>/dev/null; then
-		print.die "Could not clone repository for $package_id"
+		print-indent.die "Could not clone repository for $package_id"
 	fi
 
 	if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" archive --prefix="prefix/" -o "$download_dest" "$version"; then
 		rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
-		print.die "Could not download archive or extract archive from temporary Git repository of $package_id"
+		print-indent.die "Could not download archive or extract archive from temporary Git repository of $package_id"
 	fi
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 
 	if ! util.file_is_targz "$download_dest"; then
 		rm -rf "$download_dest"
-		print.die "File '$download_dest' is not actually a tarball"
+		print-indent.die "File '$download_dest' is not actually a tarball"
 	fi
 
-	print.info "Downloaded" "$package_id"
+	print-indent.info "Downloaded" "$package_id"
 }
 
 # @description Extracts the tarballs in the global store to a directory
@@ -72,26 +72,26 @@ pkg-phase.extract_tarball() {
 	local tarball_dest="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 
 	if [ ${DEBUG+x} ]; then
-		print.debug "Extracting" "$package_id | $tarball_dest"
+		print-indent.debug "Extracting" "$package_id | $tarball_dest"
 	fi
 
 	# Use cache if it already exists
 	if [ -d "$tarball_dest" ]; then
-		print.info "Extracted" "$package_id (cached)"
+		print-indent.info "Extracted" "$package_id (cached)"
 		return
 	fi
 
 	# Actually extract
 	mkdir -p "$tarball_dest"
 	if ! tar xf "$tarball_src" -C "$tarball_dest" --strip-components 1 2>/dev/null; then
-		print.die "Error" "Could not extract package $package_id"
+		print-indent.die "Error" "Could not extract package $package_id"
 	else
-		print.info "Extracted" "$package_id"
+		print-indent.info "Extracted" "$package_id"
 	fi
 
 	# Ensure extraction actually worked
 	if [ ! -d "$tarball_dest" ]; then
-		print.die "Extracted tarball is not a directory at '$tarball_dest'"
+		print-indent.die "Extracted tarball is not a directory at '$tarball_dest'"
 	fi
 }
 
@@ -105,12 +105,12 @@ pkg-phase.global-integration() {
 	# TODO: properly cache transformations
 
 	if [ ${DEBUG+x} ]; then
-		print.debug "Transforming" "$project_dir"
+		print-indent.debug "Transforming" "$project_dir"
 	fi
 
 	pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
 
-	print.info "Transformed" "$package_id"
+	print-indent.info "Transformed" "$package_id"
 }
 
 # Create a './basalt_packages' directory for a particular project directory
@@ -122,7 +122,7 @@ pkg-phase.local-integration() {
 
 	if [ ! -d "$package_dir" ]; then
 		# TODO: make internal
-		print_simple.die "A directory at '$package_dir' was expected to exist"
+		print.die "A directory at '$package_dir' was expected to exist"
 		return
 	fi
 

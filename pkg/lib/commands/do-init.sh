@@ -2,7 +2,7 @@
 
 do-init() {
 	if [ -e basalt.toml ]; then
-		print_simple.die "File 'basalt.toml' already exists"
+		print.die "File 'basalt.toml' already exists"
 	fi
 
 	# TODO: create directories / files as well / git clone from main template repository
@@ -28,5 +28,5 @@ do-init() {
 	[run.shoptOptions]
 	EOF
 
-	print_simple.info "Created basalt.toml"
+	print.info "Created basalt.toml"
 }

@@ -6,7 +6,7 @@ do-add() {
 	local -a pkgs=()
 	for arg; do case "$arg" in
 	-*)
-		print_simple.die "Flag '$arg' not recognized"
+		print.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -26,16 +26,7 @@ do-add() {
 			version="$REPLY"
 		fi
 
-		# Don't use 'util.get_package_id' here
-		local package_str=
-		if [ "$repo_type" = 'remote' ]; then
-			package_str="$site/$package@$version"
-			package_str="${package_str#github.com/}"
-		elif [ "$repo_type" = 'local' ]; then
-			package_str="$url@$version"
-		fi
-
-		util.append_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'dependencies' "$package_str"
+		util.toml_add_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$url@$version"
 	done
 
 	do-install

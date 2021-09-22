@@ -70,7 +70,7 @@ source bash-args parse "$@" <<-"EOF"
 @flag [port.p] {3000} - The port to open on
 EOF
 
-echo "Using port '${args[port]}'"
+printf '%s\n' "Using port '${args[port]}'"
 ```
 
 Cool, now let's try it

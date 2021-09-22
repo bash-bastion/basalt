@@ -53,7 +53,7 @@ if [ -d "$REPLY/lib/basalt" ]; then
 elif [ -d "$REPLY/lib" ]; then
 	PROGRAM_LIB_DIR="$REPLY/lib"
 else
-	echo "Error: Could not determine \$PROGRAM_LIB_DIR"
+	printf '%s\n' "Error: Could not determine \$PROGRAM_LIB_DIR"
 	exit 1
 fi
 

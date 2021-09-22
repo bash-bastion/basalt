@@ -6,7 +6,7 @@ do-global-add() {
 	local -a pkgs=()
 	for arg; do case "$arg" in
 	-*)
-		print_simple.die "Flag '$arg' not recognized"
+		print.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")

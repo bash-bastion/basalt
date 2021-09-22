@@ -26,7 +26,7 @@ basalt.main() {
 		exit
 		;;
 	-*)
-		print_simple.die "Top level flag '$arg' is not recognized"
+		print.die "Top level flag '$arg' is not recognized"
 		;;
 	*)
 		break
@@ -38,6 +38,7 @@ basalt.main() {
 		add) shift; do-add "$@" ;;
 		remove) shift; do-remove "$@" ;;
 		install) shift; do-install "$@" ;;
+		list) shift; do-list "$@" ;; # TODO
 		complete) shift; do-complete "$@" ;;
 		global) shift
 			case "$1" in
@@ -45,9 +46,10 @@ basalt.main() {
 				add) shift; do-global-add "$@" ;;
 				upgrade) shift; do-global-upgrade "$@" ;;
 				remove) shift; do-global-remove "$@" ;;
+				list) shift; do-global-list "$@" ;; # TODO
 				*)
 					if [ -n "$1" ]; then
-						print_simple.die "Global subcommand '$1' is not a valid"
+						print.die "Global subcommand '$1' is not a valid"
 					else
 						util.show_help
 					fi
@@ -56,7 +58,7 @@ basalt.main() {
 			;;
 		*)
 			if [ -n "$1" ]; then
-				print_simple.die "Subcommand '$1' is not valid"
+				print.die "Subcommand '$1' is not valid"
 			else
 				util.show_help
 			fi
