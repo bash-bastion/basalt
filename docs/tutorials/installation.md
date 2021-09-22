@@ -1,16 +1,16 @@
 # Installation
 
-TODO WARNING: THIS TUTORIAL IS OUT OF DATE
-TODO: CURL PREREQ
+***NOTE***: Warning: THIS TUTORIAL IS OUT OF DATE (TODO)
 
-Note: `basalt` is currently BETA quality
+***NOTE***: `basalt` is currently BETA quality. I would _highly_ recommend waiting to try out Basalt (TODO)
 
 ## Prerequisites
 
 - `bash >= 4.3`
 - GNU coreutils
+- `jq`
 
-If you are on macOS, you need to install the latest `bash` and `coreutils`:
+If you are on macOS, you need to install the latest `Bash` and `coreutils`:
 
 ```sh
 # Install prerequisite packages

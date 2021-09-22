@@ -1,6 +1,8 @@
 # Getting Started
 
-TODO WARNING: THIS TUTORIAL IS OUT OF DATE
+***NOTE***: Warning: THIS TUTORIAL IS OUT OF DATE (TODO)
+
+***NOTE***: `basalt` is currently BETA quality. I would _highly_ recommend waiting to try out Basalt (TODO)
 
 Succinctly, basalt is a fancy combination of `git clone` and `ln -s`. It clones a repositories, and puts all of its man pages, completion scripts, and binaries in common folders. Let's see it in action
 
