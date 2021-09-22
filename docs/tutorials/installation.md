@@ -8,7 +8,6 @@
 
 - `bash >= 4.3`
 - GNU coreutils
-- `jq`
 
 If you are on macOS, you need to install the latest `Bash` and `coreutils`:
 

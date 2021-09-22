@@ -141,7 +141,8 @@ util.get_latest_package_version() {
 		if [ "$site" = 'github.com' ]; then
 			local latest_package_version=
 			if latest_package_version="$(
-				curl -LsS "https://api.github.com/repos/$package/releases/latest" | jq -r '.name'
+				curl -LsS "https://api.github.com/repos/$package/releases/latest" \
+					| awk -F ':' '{ if ($1 ~ /"tag_name"/) { print gensub(/^[ \t]*"(.*)",$/, "\\1", "g", $2) } }'
 			)" && [ "$latest_package_version" != null ]; then
 				REPLY="$latest_package_version"
 				return
