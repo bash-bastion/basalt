@@ -72,7 +72,7 @@ pkg.symlink_package() {
 	fi
 
 	mkdir -p "${link_name%/*}"
-	if ! ln -sfT "$target" "$link_name"; then
+	if ! ln -sf "$target" "$link_name"; then
 		print-indent.die "Could not symlink directory '${target##*/}' for package $package_id"
 	fi
 }
@@ -104,7 +104,7 @@ pkg.symlink_bin() {
 							print-indent.debug "Symlinking" "link_name $link_name"
 						fi
 
-						if ! ln -sfT "$target" "$link_name"; then
+						if ! ln -sf "$target" "$link_name"; then
 							print-indent.die "Could not symlink file '${target##*/}' for package $site/$package@$version"
 						fi
 					done
