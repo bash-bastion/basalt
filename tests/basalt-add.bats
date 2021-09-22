@@ -13,10 +13,10 @@ setup() {
 	basalt init
 	basalt add "file://$dir"
 
+	shopt -u nullglob # this affects lines="$($output)"
 	run printf '%s' "$(<basalt.toml)"
 	assert_success
-	assert_failure
-	assert_line -n 7 -e "dependencies = \['file://$dir@[a-z0-9]*'\]"
+	assert_line -n 7 -e "dependencies = \['file://$dir@[a-z0-9]+'\]"
 }
 
 @test "Adds two dependencies" {
@@ -27,7 +27,8 @@ setup() {
 	basalt init
 	basalt add "file://$dir1" "file://$dir2"
 
+	shopt -u nullglob # this affects lines="$($output)"
 	run printf '%s' "$(<basalt.toml)"
 	assert_success
-	assert_line -n 7 -e "dependencies = \['file://$dir1@[a-z0-9]*', 'file://$dir2@[a-z0-9]*'\]"
+	assert_line -n 7 -e "dependencies = \['file://$dir1@[a-z0-9]+', 'file://$dir2@[a-z0-9]+'\]"
 }
