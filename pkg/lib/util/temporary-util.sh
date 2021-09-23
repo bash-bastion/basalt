@@ -9,8 +9,11 @@ util.get_toml_string() {
 	local toml_file="$1"
 	local key_name="$2"
 
+	util.ensure_nonzero 'toml_file'
+	util.ensure_nonzero 'key_name'
+
 	if [ ! -f "$toml_file" ]; then
-		print.die "File '$toml_file' not found"
+		print.internal_die "File '$toml_file' not found"
 	fi
 
 	local grep_line=
@@ -35,18 +38,22 @@ util.get_toml_string() {
 	if [[ $grep_line =~ $regex ]]; then
 		REPLY="${BASH_REMATCH[1]}"
 	else
-		print.die "Value for key '$key_name' not valid"
+		# This should not happen due to the '[[ $line == *"$key_name"*=* ]]' check above
+		print.internal_die "Could not find key '$key_name' in file '$toml_file'"
 	fi
 }
 
-# @description Retrieve an array key from a TOML file
+# @description Retrieve an array key from a Toml file
 util.get_toml_array() {
-	declare -ga REPLIES=()
+	unset REPLIES; declare -ga REPLIES=()
 	local toml_file="$1"
 	local key_name="$2"
 
+	util.ensure_nonzero 'toml_file'
+	util.ensure_nonzero 'key_name'
+
 	if [ ! -f "$toml_file" ]; then
-		print-indent.internal_die "File '$toml_file' does not exist"
+		print.internal_die "File '$toml_file' does not exist"
 	fi
 
 	local grep_line=
@@ -73,13 +80,13 @@ util.get_toml_array() {
 
 		IFS=',' read -ra REPLIES <<< "$arrayString"
 		for i in "${!REPLIES[@]}"; do
-			# Treat all TOML strings the same; there shouldn't be
+			# Treat all Toml strings the same; there shouldn't be
 			# any escape characters anyways
 			local regex="[ \t]*['\"](.*)['\"]"
 			if [[ ${REPLIES[$i]} =~ $regex ]]; then
 				REPLIES[$i]="${BASH_REMATCH[1]}"
 			else
-				print.die "Array for key '$key_name' not valid"
+				print.die "Key '$key_name' in file '$toml_file' is not valid"
 				return 2
 			fi
 		done
@@ -89,13 +96,16 @@ util.get_toml_array() {
 	fi
 }
 
-# Append an element to a TOML array in a file
+# Append an element to a Toml array in a file
 util.toml_add_dependency() {
 	local toml_file="$1"
 	local key_value="$2"
 
+	util.ensure_nonzero 'toml_file'
+	util.ensure_nonzero 'key_name'
+
 	if [ ! -f "$toml_file" ]; then
-		print.die "File '$toml_file' does not exist"
+		print.internal_die "File '$toml_file' does not exist"
 	fi
 
 	if util.get_toml_array "$toml_file" 'dependencies'; then
@@ -126,11 +136,14 @@ util.toml_remove_dependency() {
 	local toml_file="$1"
 	local key_value="$2"
 
+	util.ensure_nonzero 'toml_file'
+	util.ensure_nonzero 'key_name'
+
 	if [ ! -f "$toml_file" ]; then
-		print.die "File '$toml_file' does not exist"
+		print.internal_die "File '$toml_file' does not exist"
 	fi
 
-	if util.get_toml_array "$toml_file" "$key_name"; then
+	if util.get_toml_array "$toml_file" 'dependencies'; then
 		local dependency_array=()
 		local name=
 		local does_exist='no'
@@ -144,8 +157,7 @@ util.toml_remove_dependency() {
 		unset name
 
 		if [ "$does_exist" != 'yes' ]; then
-			# TODO
-			print-indent.warn 'Warning' "A version of '${key_value%@*}' is not already installed. Skipping"
+			print-indent.die "The package '$key_value' is not currently a dependency"
 			return
 		fi
 
@@ -165,12 +177,7 @@ util.toml_remove_dependency() {
 			fi
 		done < "$toml_file.bak" > "$toml_file"
 		rm "$toml_file.bak"
-
-
-		# mv "$toml_file" "$toml_file.bak"
-		# sed -e "s,\([ \t]*${key_name}[ \t]*=[ \t]*\[.*\)\(['\"]${key_value}\(@.*\)?['\"]\)\(.*\),\1\3," "$toml_file"
-		# rm "$toml_file.bak"
 	else
-		print.die "Key '$key_name' not found in file '$toml_file'"
+		print.die "Key 'dependencies' not found in file '$toml_file'"
 	fi
 }
