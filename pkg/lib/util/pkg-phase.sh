@@ -130,7 +130,9 @@ pkg-phase.local-integration() {
 		if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
 			local pkg=
 			for pkg in "${REPLIES[@]}"; do
-				util.get_package_info "$pkg"
+				if ! util.get_package_info "$pkg"; then
+					print.die "String '$pkg' does not look like a package"
+				fi
 				local repo_type="$REPLY1"
 				local url="$REPLY2"
 				local site="$REPLY3"

@@ -40,9 +40,7 @@ util.get_package_info() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 	local input="$1"
 
-	if [ -z "$input" ]; then
-		print.die "Must supply a repository"
-	fi
+	util.ensure_nonzero 'input'
 
 	local regex1="^https?://"
 	local regex2="^file://"
@@ -96,7 +94,7 @@ util.get_package_info() {
 			site="github.com"
 			package="$input"
 		else
-			print.die "Package '$input' does not appear to be formatted correctly"
+			return 1
 		fi
 
 		if [[ "$package" == *@* ]]; then
@@ -111,6 +109,30 @@ util.get_package_info() {
 	fi
 }
 
+# Check if the package exists (either as a remote URL or file)
+util.does_package_exist() {
+	local repo_type="$1"
+	local url="$2"
+
+	if [ "$repo_type" = 'remote' ]; then
+		# TODO: make this cleaner (use GitHub, GitLab, etc. API)?
+		if ! curl -LsfIo /dev/null --connect-timeout 1 --max-time 1 --retry 0 "$url"; then
+			return 1
+		fi
+	elif [ "$repo_type" = 'local' ]; then
+		local git_output=
+		if ! git_output="$(git -C "${url:7}" rev-parse --show-toplevel 2>/dev/null)"; then
+			return 1
+		fi
+
+		if [ "$git_output" != "${url:7}" ]; then
+			return 1
+		fi
+	fi
+
+	return 0
+}
+
 # @description Get path to download tarball of particular package revision
 util.get_tarball_url() {
 	local site="$1"
@@ -123,6 +145,15 @@ util.get_tarball_url() {
 		REPLY="https://gitlab.com/$package/-/archive/$ref/${package#*/}-$ref.tar.gz"
 	else
 		print.die "Could not construct tarball_uri for site '$site'"
+	fi
+}
+
+util.ensure_nonzero() {
+	local name="$1"
+
+	local -n value="$name"
+	if [ -z "$value" ]; then
+		print.internal_die "Argument '$name' for function '${FUNCNAME[1]}' is empty"
 	fi
 }
 

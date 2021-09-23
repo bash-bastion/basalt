@@ -4,8 +4,27 @@
 # @brief Prints statements that are not indented
 
 print.die() {
-	print.error "$@"
+	print.error "$1"
+	if (($# > 1)); then
+		print.auxiliary "${@:2}"
+	fi
 	exit 1
+}
+
+print.internal_die() {
+	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
+		printf "Internal Error: %s\n" "$1"
+	else
+		printf "\033[0;31mInternal Error\033[0m %s\n" "$1" >&2
+	fi
+	if (($# > 1)); then
+		print.auxiliary "${@:2}"
+	fi
+	exit 1
+}
+
+print.auxiliary() {
+	printf '      -> %s\n' "$@"
 }
 
 print.error() {

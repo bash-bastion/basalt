@@ -38,8 +38,6 @@ test_util.create_fake_remote() {
 		git commit --allow-empty -m 'v0.0.1'
 		git tag -m 'v0.0.1' 'v0.0.1'
 	} >/dev/null 2>&1
-	printf '%s\n' "test_util.create_fake_remote: $git_dir"
-
 
 	REPLY="$git_dir"
 }

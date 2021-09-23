@@ -6,7 +6,7 @@ load './util/init.sh'
 	run util.get_package_info
 
 	assert_failure
-	assert_line -p "Must supply a repository"
+	assert_line -p "Argument 'input' for function 'util.get_package_info' is empty"
 }
 
 @test "parses with full https url" {
@@ -129,10 +129,8 @@ load './util/init.sh'
 	assert [ "$REPLY5" = 'v0.2.0' ]
 }
 
-@test "errors with friendly message if format is not proper" {
+@test "errors if format is not proper" {
 	run util.get_package_info 'UwU'
 
 	assert_failure
-	# TODO: better message
-	assert_line -p "Package 'UwU' does not appear to be formatted correctly"
 }
