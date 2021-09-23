@@ -36,15 +36,11 @@ basalt.main() {
 		add) shift; do-add "$@" ;;
 		remove) shift; do-remove "$@" ;;
 		install) shift; do-install "$@" ;;
-		list) shift; do-list "$@" ;; # TODO
 		complete) shift; do-complete "$@" ;;
 		global) shift
 			case "$1" in
 				init) shift; do-global-init "$@" ;;
 				add) shift; do-global-add "$@" ;;
-				upgrade) shift; do-global-upgrade "$@" ;;
-				remove) shift; do-global-remove "$@" ;;
-				list) shift; do-global-list "$@" ;; # TODO
 				*)
 					if [ -n "$1" ]; then
 						print.die "Global subcommand '$1' is not a valid"

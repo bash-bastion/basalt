@@ -112,7 +112,6 @@ util.toml_add_dependency() {
 		local name=
 		for name in "${REPLIES[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
-				# TODO: print reinstalling (same with text_dependency)
 				print-indent.yellow 'Warning' "A version of '${name%@*}' is already installed. Skipping"
 				return
 			fi

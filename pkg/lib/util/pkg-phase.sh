@@ -9,6 +9,12 @@ pkg-phase.download_tarball() {
 	local package="$4"
 	local version="$5"
 
+	ensure.nonzero 'repo_type'
+	ensure.nonzero 'url'
+	# 'site' not required if  "$repo_type" is 'local'
+	ensure.nonzero 'package'
+	ensure.nonzero 'version'
+
 	util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
 
@@ -46,10 +52,10 @@ pkg-phase.download_tarball() {
 	fi
 
 	# TODO Print warning if a local dependency has a dirty index
-	# if [ "$repo_type" = 'local' ]; then
-	# 	# TODO
-	# 	:
-	# fi
+	if [ "$repo_type" = 'local' ]; then
+		:
+		# print-indent.yellow 'Warn' "Local dependency at '$url' has a dirty index"
+	fi
 
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" 2>/dev/null; then
@@ -73,6 +79,8 @@ pkg-phase.download_tarball() {
 # @description Extracts the tarballs in the global store to a directory
 pkg-phase.extract_tarball() {
 	local package_id="$1"
+
+	ensure.nonzero 'package_id'
 
 	local tarball_src="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
 	local tarball_dest="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
@@ -105,7 +113,8 @@ pkg-phase.extract_tarball() {
 pkg-phase.global-integration() {
 	local package_id="$1"
 
-	# TODO: move this up
+	ensure.nonzero 'package_id'
+
 	local project_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 
 	# TODO: properly cache transformations
@@ -130,6 +139,9 @@ pkg-phase.local-integration() {
 	local original_package_dir="$1"
 	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 	shift 2
+
+	ensure.nonzero 'original_package_dir'
+	ensure.nonzero 'is_direct'
 
 	local pkg=
 	for pkg; do

@@ -169,7 +169,7 @@ util.get_package_info() {
 
 	local regex1="^https?://"
 	local regex2="^file://"
-	local regex3="^git@" # TODO: continue with git@?
+	local regex3="^git@"
 	if [[ "$input" =~ $regex1 ]]; then
 		local site= package=
 		input="${input#http?(s)://}"
@@ -254,7 +254,6 @@ util.get_tarball_url() {
 	fi
 }
 
-# TODO: check command line arguments --force, etc.
 util.show_help() {
 	cat <<"EOF"
 Basalt:

@@ -4,6 +4,8 @@ pkg.install_package() {
 	local project_dir="$1"
 	shift
 
+	ensure.nonzero 'project_dir'
+
 	# TODO: save the state and have rollback feature
 
 	local pkg=
@@ -74,6 +76,9 @@ pkg.local_symlink_package() {
 	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/packages"
 	local package_id="$2"
 
+	ensure.nonzero 'install_dir'
+	ensure.nonzero 'package_id'
+
 	local target="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 	local link_name="$install_dir/$package_id"
 
@@ -91,27 +96,26 @@ pkg.local_symlink_bin() {
 	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"
 	local package_id="$2"
 
-	local site="$2"
-	local package="$3"
-	local version="$4"
+	ensure.nonzero 'install_dir'
+	ensure.nonzero 'package_id'
 
 	local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$site/$package@$version"
 	if [ -f "$package_dir/basalt.toml" ]; then
 		if util.get_toml_array "$package_dir/basalt.toml" 'binDirs'; then
-			mkdir -p "$install_dir/bin" # TODO
+			# This `mkdir` could be placed further down, but at the cost of execution speed
+			mkdir -p "$install_dir/bin"
 			for dir in "${REPLIES[@]}"; do
-				if [ -f "$package_dir/$dir" ]; then
-					# TODO: move this check somewhere else (subcommand check) (but still do -d)
-					print-indent.yellow "Warning" "Package $site/$package@$version has a file ($dir) specified in 'binDirs'"
-				else
+				if [ -d "$package_dir/$dir" ]; then
 					for target in "$package_dir/$dir"/*; do
 						local link_name="$install_dir/bin/${target##*/}"
-
-						# TODO: this replaces existing symlinks. In verify mode, can check if there are no duplicate binary names
 
 						if [ ${DEBUG+x} ]; then
 							print-indent.light-cyan "Symlinking" "target    $target"
 							print-indent.light-cyan "Symlinking" "link_name $link_name"
+						fi
+
+						if [ -e "$link_name" ]; then
+							print-indent 'Warning' "Executable file '${target##*/} for package $package_id will clobber an identically-named file owned by a different package"
 						fi
 
 						if ! ln -sf "$target" "$link_name"; then

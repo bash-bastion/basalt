@@ -6,6 +6,8 @@
 ensure.cd() {
 	local dir="$1"
 
+	ensure.nonzero 'dir'
+
 	if ! cd "$dir"; then
 		print.internal_die "Could not cd to directory '$dir'"
 	fi
@@ -13,6 +15,8 @@ ensure.cd() {
 
 ensure.not_absolute_path() {
 	local path="$1"
+
+	ensure.nonzero 'path'
 
 	if [ "${path::1}" = / ]; then
 		print.die "Path '$path' is not absolute"
