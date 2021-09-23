@@ -81,7 +81,7 @@ util.get_package_id() {
 
 	util.ensure_nonzero 'repo_type'
 	util.ensure_nonzero 'url'
-	util.ensure_nonzero 'site'
+	# 'site' not required if  "$repo_type" is 'local'
 	util.ensure_nonzero 'package'
 	util.ensure_nonzero 'version'
 
@@ -127,7 +127,7 @@ util.get_latest_package_version() {
 
 	util.ensure_nonzero 'repo_type'
 	util.ensure_nonzero 'url'
-	util.ensure_nonzero 'site'
+	# 'site' not required if  "$repo_type" is 'local'
 	util.ensure_nonzero 'package'
 
 	# TODO: will it get beta/alpha/pre-releases??
