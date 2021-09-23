@@ -121,7 +121,7 @@ util.does_package_exist() {
 
 	if [ "$repo_type" = 'remote' ]; then
 		# TODO: make this cleaner (use GitHub, GitLab, etc. API)?
-		if ! curl -LsfIo /dev/null --connect-timeout 1 --max-time 1 --retry 0 "$url"; then
+		if ! curl -LsfIo /dev/null --connect-timeout 1 --max-time 2.5 --retry 0 "$url"; then
 			return 1
 		fi
 	elif [ "$repo_type" = 'local' ]; then
