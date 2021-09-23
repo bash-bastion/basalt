@@ -33,12 +33,25 @@ util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
 		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
+	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 
+	# Use a lock directory for Basalt
+	___basalt_lock_dir=
+	if [ -n "$XDG_RUNTIME_DIR" ]; then
+		___basalt_lock_dir="$XDG_RUNTIME_DIR/basalt.lock"
+	else
+		___basalt_lock_dir="$BASALT_GLOBAL_DATA_DIR/basalt.lock"
+	fi
+	if mkdir "$___basalt_lock_dir"; then
+		trap 'rm -rf "$___basalt_lock_dir"' EXIT
+	else
+		print.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
+	fi
+
+	# Ensure other prerequisites
 	if ! command -v curl &>/dev/null; then
 		print.die "Program 'curl' not installed. Please install curl"
 	fi
-
-	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 }
 
 # @description Ensure the downloaded file is really a .tar.gz file...
