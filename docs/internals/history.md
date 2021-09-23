@@ -1,8 +1,8 @@
 # History
 
-Basalt originally started out as a fork of [Basher](https://github.com/basherpm/basher). I liked the behavior of Basher (moreso compared to `bpkg`), but there were a few features I wanted to add. This includes the ability to download multiple packages at once and making the program more compliant to the XDG Base Directory Specification
+Basalt originally started out as a fork of [Basher](https://github.com/basherpm/basher). I liked the behavior of Basher (moreso compared to `bpkg`), but there were a few features I wanted to add. Such features are detailed in [Motivation](./docs/internals/motivation.md)
 
-Although some of my features were merged, I wanted to improve the config format by replacing the `package.sh` with Toml configuration, along with improving the code quality and style to my liking. At around this time, I forked the project, calling it `neobasher`, then quickly renamed to `bpm` once my modifications became more significant
+After contributing a few PR's to Basher, I decided to fork the project, calling it `neobasher` since I wanted to make more major modifications. Quickly thereafter, I renamed it to `bpm` once my modifications became more significant
 
 I essentially rewrote most of the codebase, authoring an additional ~100 tests. Some of the features at this point included
 

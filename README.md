@@ -38,8 +38,10 @@ See [Installation](./docs/tutorials/installation.md) and [Getting Started](./doc
 
 ## Features
 
-Note that most of these featuers have been implemented before, but require a reimplementation since the major rewrite
+Note that many of these featuers have been implemented before, but require a reimplementation since the major rewrite
 
+- [x] Lockfile usage
+- [ ] Transaction rollback
 - [ ] Works with essentially all popular Bash projects out of the box
 - [ ] Specifying specific man, completion, etc. directories
 - [x] Local package installation

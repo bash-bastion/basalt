@@ -143,17 +143,16 @@ pkg-phase.local-integration() {
 				local site="$REPLY3"
 				local package="$REPLY4"
 				local version="$REPLY5"
-				# util.assert_package_valid "$site" "$package" "$version"
 
 				util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 				local package_id="$REPLY"
 
 				if [ "$is_direct" = yes ]; then
-					pkg.symlink_package "$original_package_dir/basalt_packages/packages" "$package_id"
-					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$package_id
+					pkg.local_symlink_package "$original_package_dir/basalt_packages/packages" "$package_id"
+					# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id
 				else
-					pkg.symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
-					# pkg.symlink_bin "$package_dir/basalt_packages/transitive" "$package_id"
+					pkg.local_symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
+					# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id"
 				fi
 
 				pkg-phase.local-integration "$original_package_dir" "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" 'no'

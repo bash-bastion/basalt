@@ -16,7 +16,7 @@ When installing dependencies for a per-project installation, all dependencies sh
 
 ### Negatives
 
-Current users of `basalt` will have to completely remove their previous `basalt_packages` directory, and reinstall packages. Since the main `./basalt_packages/bin`, `./basalt_packages/completions`, and `./basalt_packages/man` folders are not changing, code changes within packages are unecessary
+Current users of `basalt` will have to completely remove their previous `basalt_packages` directory, and reinstall packages. Since the main `./basalt_packages/bin`, `./basalt_packages/completions`, and `./basalt_packages/man` directories are not changing, code changes within packages are unecessary
 
 ### Positives
 

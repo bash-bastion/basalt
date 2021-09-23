@@ -42,8 +42,7 @@ pkg.install_package() {
 
 	for pkg; do
 		if ! util.get_package_info "$pkg"; then
-			# TODO: message
-			print.die "String '$pkg' does not look like a package"
+			print-indent.die "String '$pkg' does not look like a package"
 		fi
 		local repo_type="$REPLY1"
 		local url="$REPLY2"
@@ -60,7 +59,7 @@ pkg.install_package() {
 
 pkg.do-global-install() {
 	if ! rm -rf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages"; then
-		print.die "Could not remove global 'basalt_packages' directory"
+		print-indent.die "Could not remove global 'basalt_packages' directory"
 	fi
 
 	local -a dependencies=()
@@ -69,7 +68,7 @@ pkg.do-global-install() {
 	pkg.install_package "$BASALT_GLOBAL_DATA_DIR/global" "${dependencies[@]}"
 }
 
-pkg.symlink_package() {
+pkg.local_symlink_package() {
 	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/packages"
 	local package_id="$2"
 
@@ -86,7 +85,7 @@ pkg.symlink_package() {
 	fi
 }
 
-pkg.symlink_bin() {
+pkg.local_symlink_bin() {
 	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"
 	local package_id="$2"
 

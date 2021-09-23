@@ -2,29 +2,30 @@
 
 A mechanism to facilitate composability within the Bash ecosystem, á la a package manager
 
-The general idea isn't new(popular frameworks such as `oh-my-zsh`, `bash-it`, `bash-oo-framework` exist, while some exploration of package management has been done (`bpkg`, `Basher`)
+The general idea isn't new; there exist two prominent package managers (`bpkg` and `Basher`) along with a slew of other highly prolific Bash/shell projects (`oh-my-zsh`, `bash-it`, `bash-oo-framework`) that aim to solve similar problems. How is Basalt different?
 
-`oh-my-zsh` and friends are more geared towards reusability in the context of shell initialization
+1. `oh-my-zsh`, `bash-it`, and friends are more geared towards reusability (not composability) in the context of shell initialization
+2. `bash-oo-framework` contains a lot of useful functionality, but as the name implies, it must be used as a framework rather than a library; this doesn't mame it very composable. Furthermore, the project itself recommends directly copying and pasting code from the repository as a usage pattern, which is highly laborious and frictious
+3. `bpkg` and `Basher` are two projects that fit the criteria, but have some disadvantages in my opinion
 
-`bash-oo-framework` contains a lot of useful functionality, but as the name implies, it must be used as a framework rather than a library. The project itself recommends directly copying and pasting code from the repository as a usage pattern.
+### `bpkg` disadvantages
 
-`bpkg` and `Basher` are two projects that fit the criteria, but have some disadvantages. The following lists features of Basalt that are absent from either `bpkg` and/or `Basher` (TODO(not all of this is actually implemented since the rewrite, update later)
+- Uses a `package.json` package format that clobbers with NPM's `package.json`
+- During installation, `make` is automatically invoked ("ACE" on package download)
+- Packages must be supported manually
+- Does not respect the XDG Base Directory specification
 
-- Can install multiple packages at once
-- Install local dependencies for a particular project (bpkg and basher)
-- Does not use a `package.json` that clobbers with NPM's `package.json` (bpkg)
-- Does not automatically invoke `make` commands on your behalf (bpkg)
-- Does not automatically source a `package.sh` for package configuration (basher)
-- Is able to install more repositories out-of-the-box
-- Respects the XDG Base Directory specification (bpkg)
-- Is faster (basalt considers exec and subshell creation overhead)
-- Has a _much_ improved help output (basher)
-- Prints why a command failed, rather than just printing the help menu (basher)
-- Better basalt completion scripts
-- More flexibly parses command line arguments (basher)
-- Install local directories as packages (bpkg)
+### `Basher` disadvantages
 
-I forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me, compared to `bpkg`
+- During installation a `package.sh` is automatically sourced ("ACE" on package download)
+- Cannot install specific versions of packages
+- Package names originating from different origins (i.e. github.com vs gitlab.com) clash
+- Has subpar help output and CLI ergonomics (such as argument parsing)
 
+### `bpkg` and `Basher` disadvantages
 
-There are also other similar projects; neither of which are really fully developed: [bpm-rocks/bpm](https://github.com/bpm-rocks/bpm), [Themis](https://github.com/ByCh4n-Group/themis), [xsh](https://github.com/alexzhangs/xsh), [shpkg](https://github.com/shpkg/shpkg), [jean](https://github.com/ziyaddin/jean), [sparrow](https://github.com/melezhik/sparrow), [tarp](https://code.google.com/archive/p/tarp-package-manager), and [shundle](https://github.com/javier-lopez/shundle).bruh
+- Cannot install multiple packages at once
+- Cannot install local, per-project dependencies
+- Have subpar completion scripts
+
+These disadvantages gave me reason to create a new package manager that was significantly improved. I originally forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me. However, since a massive refactoring effort in addition to a near-complete rewrite took effect, there is almost no original Basher code that exists currently

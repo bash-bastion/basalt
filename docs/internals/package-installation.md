@@ -2,7 +2,7 @@
 
 This page provides information on how and where packages are installed.
 
-Installation of packages is split into four phases
+The installation of packages is split into four phases. Each of these phases corresponds to a function in `pkg-phase.sh`
 
 1. Package download
 2. Package extraction
@@ -23,15 +23,15 @@ During this stage, tarball files located in `$BASALT_GLOBAL_DATA_DIR/store/tarba
 
 ### 3. Global integration
 
-TODO: expand on this
+For each package in `$BASALT_GLOBAL_DATA_DIR/store/packages`, modifications are done. This includes but is not limited to
 
-For each package in `$BASALT_GLOBAL_DATA_DIR/store/packages`, modifications are done. This includes modifying the source code with regular expressions and creating `./basalt_packages` directories for each one
+- Appending version numbers to all functions
+- Creating a local `./basalt_packages` directory (local integration)
+- Converting the runtime essence of the `./basalt.toml` file into other files that are either sourcable or easier to parse
 
 ### 4. Local integration
 
-TODO: expand on this
-
-When working with per-project dependencies, the final step involves creating a `./basalt_packages` directory for the current project. It is structured like so
+The final step involves creating a `basalt_packages` directory so the functionality of all dependencies can be properly exposed. The directory is located at `./basalt_packages` for local dependencies and at `BASALT_GLOBAL_DATA_DIR/global/basalt_packages` for global dependencies
 
 ```txt
 - basalt_packages/

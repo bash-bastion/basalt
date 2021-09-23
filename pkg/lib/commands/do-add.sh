@@ -13,6 +13,10 @@ do-add() {
 		;;
 	esac done
 
+	if ((${#pkgs[@]} == 0)); then
+		print-indent.yellow 'Warning' "No packages were specified"
+	fi
+
 	# Package parsing (WET)
 	for pkg in "${pkgs[@]}"; do
 		if ! util.get_package_info "$pkg"; then

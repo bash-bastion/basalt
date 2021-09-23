@@ -13,6 +13,10 @@ do-remove() {
 		;;
 	esac done
 
+	if ((${#pkgs[@]} == 0)); then
+		print-indent.yellow 'Warning' "No packages were specified"
+	fi
+
 	for pkg in "${pkgs[@]}"; do
 		util.toml_remove_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$pkg"
 	done

@@ -6,7 +6,7 @@ Global environment variables are both valid globally (after `eval "$(basalt glob
 
 ### `BASALT_GLOBAL_REPO`
 
-The location of the source code. By default (when using the `install.sh` script), this will be at `${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source`. If you move this directory to a different location, the variable will reflect that accordingly
+The location of the source code. By default (when using the `install.sh` script), this will be at `${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source`. If you move this directory to a different location, the value will be reflected accordingly
 
 ### `BASALT_GLOBAL_DATA_DIR`
 

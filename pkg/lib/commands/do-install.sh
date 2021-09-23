@@ -3,13 +3,9 @@
 do-install() {
 	util.init_local
 
-	local -a pkgs=()
 	for arg; do case "$arg" in
 	-*)
 		print.die "Flag '$arg' not recognized"
-		;;
-	*)
-		pkgs+=("$arg")
 		;;
 	esac done
 

@@ -1,6 +1,6 @@
 # Interface
 
-Basalt provides various functions in certain contexts. This page details them
+Basalt provides various functions in certain contexts
 
 ## Global Context
 
