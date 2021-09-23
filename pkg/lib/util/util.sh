@@ -33,6 +33,11 @@ util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
 		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
+
+	if ! command -v curl &>/dev/null; then
+		print.die "Program 'curl' not installed. Please install curl"
+	fi
+
 	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 }
 

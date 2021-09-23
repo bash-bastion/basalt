@@ -70,7 +70,8 @@ jobs:
 
       - name: Install Prerequisites
         run: |
-          brew install bash coreutils gnu-tar
+          # gnu-tar is only for the 'Install Bats' step
+          brew install bash coreutils curl gnu-tar
 
       - name: Install Bats
         run: |
