@@ -16,12 +16,12 @@ pkg-phase.download_tarball() {
 	mkdir -p "${download_dest%/*}"
 
 	if [ ${DEBUG+x} ]; then
-		print-indent.debug "Downloading" "$package_id | $download_dest"
+		print-indent.light-cyan "Downloading" "$package_id | $download_dest"
 	fi
 
 	# Use cache if it already exists
 	if [ -e "$download_dest" ]; then
-		print-indent.info "Downloaded" "$package_id (cached)"
+		print-indent.green "Downloaded" "$package_id (cached)"
 		return
 	fi
 
@@ -36,7 +36,7 @@ pkg-phase.download_tarball() {
 				print-indent.die "File '$download_dest' is not actually a tarball"
 			fi
 
-			print-indent.info "Downloaded" "$site/$package@$version"
+			print-indent.green "Downloaded" "$site/$package@$version"
 			return
 		else
 			# This is OK, since the 'version' could be an actual ref. In that case,
@@ -61,7 +61,7 @@ pkg-phase.download_tarball() {
 		print-indent.die "File '$download_dest' is not actually a tarball"
 	fi
 
-	print-indent.info "Downloaded" "$package_id"
+	print-indent.green "Downloaded" "$package_id"
 }
 
 # @description Extracts the tarballs in the global store to a directory
@@ -72,12 +72,12 @@ pkg-phase.extract_tarball() {
 	local tarball_dest="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 
 	if [ ${DEBUG+x} ]; then
-		print-indent.debug "Extracting" "$package_id | $tarball_dest"
+		print-indent.light-cyan "Extracting" "$package_id | $tarball_dest"
 	fi
 
 	# Use cache if it already exists
 	if [ -d "$tarball_dest" ]; then
-		print-indent.info "Extracted" "$package_id (cached)"
+		print-indent.green "Extracted" "$package_id (cached)"
 		return
 	fi
 
@@ -86,7 +86,7 @@ pkg-phase.extract_tarball() {
 	if ! tar xf "$tarball_src" -C "$tarball_dest" --strip-components 1 2>/dev/null; then
 		print-indent.die "Error" "Could not extract package $package_id"
 	else
-		print-indent.info "Extracted" "$package_id"
+		print-indent.green "Extracted" "$package_id"
 	fi
 
 	# Ensure extraction actually worked
@@ -105,12 +105,12 @@ pkg-phase.global-integration() {
 	# TODO: properly cache transformations
 
 	if [ ${DEBUG+x} ]; then
-		print-indent.debug "Transforming" "$project_dir"
+		print-indent.light-cyan "Transforming" "$project_dir"
 	fi
 
 	pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
 
-	print-indent.info "Transformed" "$package_id"
+	print-indent.green "Transformed" "$package_id"
 }
 
 # Create a './basalt_packages' directory for a particular project directory

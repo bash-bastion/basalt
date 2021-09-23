@@ -68,7 +68,7 @@ pkg.symlink_package() {
 	local link_name="$install_dir/$package_id"
 
 	if [ ${DEBUG+x} ]; then
-		print-indent.debug "Symlinking" "$link_name -> $target"
+		print-indent.light-cyan "Symlinking" "$link_name -> $target"
 	fi
 
 	mkdir -p "${link_name%/*}"
@@ -92,7 +92,7 @@ pkg.symlink_bin() {
 			for dir in "${REPLIES[@]}"; do
 				if [ -f "$package_dir/$dir" ]; then
 					# TODO: move this check somewhere else (subcommand check) (but still do -d)
-					print-indent.warn "Warning" "Package $site/$package@$version has a file ($dir) specified in 'binDirs'"
+					print-indent.yellow "Warning" "Package $site/$package@$version has a file ($dir) specified in 'binDirs'"
 				else
 					for target in "$package_dir/$dir"/*; do
 						local link_name="$install_dir/bin/${target##*/}"
@@ -100,8 +100,8 @@ pkg.symlink_bin() {
 						# TODO: this replaces existing symlinks. In verify mode, can check if there are no duplicate binary names
 
 						if [ ${DEBUG+x} ]; then
-							print-indent.debug "Symlinking" "target    $target"
-							print-indent.debug "Symlinking" "link_name $link_name"
+							print-indent.light-cyan "Symlinking" "target    $target"
+							print-indent.light-cyan "Symlinking" "link_name $link_name"
 						fi
 
 						if ! ln -sf "$target" "$link_name"; then

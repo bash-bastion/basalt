@@ -4,11 +4,11 @@
 # @brief Prints statements that have proper indentation
 
 print-indent.die() {
-	print-indent.error 'Error' "$1"
+	print-indent.red 'Error' "$1"
 	exit 1
 }
 
-print-indent.error() {
+print-indent.red() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
@@ -16,7 +16,7 @@ print-indent.error() {
 	fi
 }
 
-print-indent.warn() {
+print-indent.yellow() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
@@ -24,7 +24,7 @@ print-indent.warn() {
 	fi
 }
 
-print-indent.info() {
+print-indent.green() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
@@ -32,7 +32,7 @@ print-indent.info() {
 	fi
 }
 
-print-indent.debug() {
+print-indent.light-cyan() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s %s\n" "$1" "$2"
 	else
