@@ -1,6 +1,5 @@
 # shellcheck shell=bash
 
-# TODO
 set -ETeo pipefail
 shopt -s nullglob extglob
 export LANG="C" LANGUAGE="C" LC_ALL="C"
@@ -19,7 +18,6 @@ basalt.main() {
 		exit
 		;;
 	--version|-v)
-		# TODO: version string out of date
 		cat <<-EOF
 		Version: v0.9.0
 		EOF

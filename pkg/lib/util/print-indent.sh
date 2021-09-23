@@ -10,17 +10,17 @@ print-indent.die() {
 
 print-indent.red() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "%11s %s\n" "$1" "$2"
+		printf "%11s %s\n" "$1" "$2" >&2
 	else
-		printf "\033[0;31m%11s\033[0m %s\n" "$1" "$2"
+		printf "\033[0;31m%11s\033[0m %s\n" "$1" "$2" >&2
 	fi
 }
 
 print-indent.yellow() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "%11s %s\n" "$1" "$2"
+		printf "%11s %s\n" "$1" "$2" >&2
 	else
-		printf "\033[0;33m%11s\033[0m %s\n" "$1" "$2"
+		printf "\033[0;33m%11s\033[0m %s\n" "$1" "$2" >&2
 	fi
 }
 

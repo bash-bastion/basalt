@@ -127,8 +127,7 @@ pkg-phase.local-integration() {
 	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 
 	if [ ! -d "$package_dir" ]; then
-		# TODO: make internal
-		print.die "A directory at '$package_dir' was expected to exist"
+		print.internal_die "A directory at '$package_dir' was expected to exist"
 		return
 	fi
 

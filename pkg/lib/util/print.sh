@@ -5,32 +5,22 @@
 
 print.die() {
 	print.error "$1"
-	if (($# > 1)); then
-		print.auxiliary "${@:2}"
-	fi
 	exit 1
 }
 
 print.internal_die() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "Internal Error: %s\n" "$1"
+		printf "Internal Error: %s\n" "$1" >&2
 	else
 		printf "\033[0;31mInternal Error\033[0m %s\n" "$1" >&2
 	fi
-	if (($# > 1)); then
-		print.auxiliary "${@:2}"
-	fi
-	exit 1
-}
 
-# TODO: is this needed?
-print.auxiliary() {
-	printf '      -> %s\n' "$@"
+	exit 1
 }
 
 print.error() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "Error: %s\n" "$1"
+		printf "Error: %s\n" "$1" >&2
 	else
 		printf "\033[0;31mError\033[0m %s\n" "$1" >&2
 	fi
@@ -38,7 +28,7 @@ print.error() {
 
 print.warn() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "Warn: %s\n" "$1"
+		printf "Warn: %s\n" "$1" >&2
 	else
 		printf "\033[0;33mWarn\033[0m %s\n" "$1" >&2
 	fi
@@ -48,6 +38,6 @@ print.info() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "Info: %s\n" "$1"
 	else
-		printf "\033[0;32mInfo\033[0m %s\n" "$1" >&2
+		printf "\033[0;32mInfo\033[0m %s\n" "$1"
 	fi
 }
