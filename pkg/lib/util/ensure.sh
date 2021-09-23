@@ -7,7 +7,7 @@ ensure.cd() {
 	local dir="$1"
 
 	if ! cd "$dir"; then
-		print.die "Could not cd to directory '$dir'"
+		print.internal_die "Could not cd to directory '$dir'"
 	fi
 }
 
@@ -16,5 +16,18 @@ ensure.not_absolute_path() {
 
 	if [ "${path::1}" = / ]; then
 		print.die "Path '$path' is not absolute"
+	fi
+}
+# @description Ensure that a variable name is non-zero
+ensure.nonzero() {
+	local name="$1"
+
+	if [ -z "$name" ]; then
+		print.internal_die "Argument 'name' for function 'ensure.nonzero' is empty"
+	fi
+
+	local -n value="$name"
+	if [ -z "$value" ]; then
+		print.internal_die "Argument '$name' for function '${FUNCNAME[1]}' is empty"
 	fi
 }

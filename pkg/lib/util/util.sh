@@ -41,25 +41,11 @@ util.init_global() {
 	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 }
 
-# @description Ensure that a variable name is non-zero
-util.ensure_nonzero() {
-	local name="$1"
-
-	if [ -z "$name" ]; then
-		print.internal_die "Argument 'name' for function 'util.ensure_nonzero' is empty"
-	fi
-
-	local -n value="$name"
-	if [ -z "$value" ]; then
-		print.internal_die "Argument '$name' for function '${FUNCNAME[1]}' is empty"
-	fi
-}
-
 # @description Ensure the downloaded file is really a .tar.gz file...
 util.file_is_targz() {
 	local file="$1"
 
-	util.ensure_nonzero 'file'
+	ensure.nonzero 'file'
 
 	local magic_byte=
 	if magic_byte="$(xxd -p -l 2 "$file")"; then
@@ -79,11 +65,11 @@ util.get_package_id() {
 	local package="$4"
 	local version="$5"
 
-	util.ensure_nonzero 'repo_type'
-	util.ensure_nonzero 'url'
+	ensure.nonzero 'repo_type'
+	ensure.nonzero 'url'
 	# 'site' not required if  "$repo_type" is 'local'
-	util.ensure_nonzero 'package'
-	util.ensure_nonzero 'version'
+	ensure.nonzero 'package'
+	ensure.nonzero 'version'
 
 	if [ "$repo_type" = 'remote' ]; then
 		REPLY="$site/$package@$version"
@@ -99,8 +85,8 @@ util.does_package_exist() {
 	local repo_type="$1"
 	local url="$2"
 
-	util.ensure_nonzero 'repo_type'
-	util.ensure_nonzero 'url'
+	ensure.nonzero 'repo_type'
+	ensure.nonzero 'url'
 
 	if [ "$repo_type" = 'remote' ]; then
 		# TODO: make this cleaner (use GitHub, GitLab, etc. API)?
@@ -125,10 +111,10 @@ util.get_latest_package_version() {
 	local site="$3"
 	local package="$4"
 
-	util.ensure_nonzero 'repo_type'
-	util.ensure_nonzero 'url'
+	ensure.nonzero 'repo_type'
+	ensure.nonzero 'url'
 	# 'site' not required if  "$repo_type" is 'local'
-	util.ensure_nonzero 'package'
+	ensure.nonzero 'package'
 
 	# TODO: will it get beta/alpha/pre-releases??
 
@@ -164,7 +150,7 @@ util.get_package_info() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 	local input="$1"
 
-	util.ensure_nonzero 'input'
+	ensure.nonzero 'input'
 
 	local regex1="^https?://"
 	local regex2="^file://"
@@ -240,9 +226,9 @@ util.get_tarball_url() {
 	local package="$2"
 	local ref="$3"
 
-	util.ensure_nonzero 'site'
-	util.ensure_nonzero 'package'
-	util.ensure_nonzero 'ref'
+	ensure.nonzero 'site'
+	ensure.nonzero 'package'
+	ensure.nonzero 'ref'
 
 	if [ "$site" = 'github.com' ]; then
 		REPLY="https://github.com/$package/archive/refs/tags/$ref.tar.gz"

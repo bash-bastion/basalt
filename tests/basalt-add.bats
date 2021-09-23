@@ -3,7 +3,7 @@
 load './util/init.sh'
 
 setup() {
-	cd "$BATS_TEST_TMPDIR"
+	ensure.cd "$BATS_TEST_TMPDIR"
 
 	# this affects lines=($output) # TODO Bats 1.5 remove
 	shopt -u nullglob

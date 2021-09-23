@@ -9,8 +9,8 @@ util.get_toml_string() {
 	local toml_file="$1"
 	local key_name="$2"
 
-	util.ensure_nonzero 'toml_file'
-	util.ensure_nonzero 'key_name'
+	ensure.nonzero 'toml_file'
+	ensure.nonzero 'key_name'
 
 	if [ ! -f "$toml_file" ]; then
 		print.internal_die "File '$toml_file' not found"
@@ -49,8 +49,8 @@ util.get_toml_array() {
 	local toml_file="$1"
 	local key_name="$2"
 
-	util.ensure_nonzero 'toml_file'
-	util.ensure_nonzero 'key_name'
+	ensure.nonzero 'toml_file'
+	ensure.nonzero 'key_name'
 
 	if [ ! -f "$toml_file" ]; then
 		print.internal_die "File '$toml_file' does not exist"
@@ -101,8 +101,8 @@ util.toml_add_dependency() {
 	local toml_file="$1"
 	local key_value="$2"
 
-	util.ensure_nonzero 'toml_file'
-	util.ensure_nonzero 'key_value'
+	ensure.nonzero 'toml_file'
+	ensure.nonzero 'key_value'
 
 	if [ ! -f "$toml_file" ]; then
 		print.internal_die "File '$toml_file' does not exist"
@@ -136,8 +136,8 @@ util.toml_remove_dependency() {
 	local toml_file="$1"
 	local key_value="$2"
 
-	util.ensure_nonzero 'toml_file'
-	util.ensure_nonzero 'key_name'
+	ensure.nonzero 'toml_file'
+	ensure.nonzero 'key_name'
 
 	if [ ! -f "$toml_file" ]; then
 		print.internal_die "File '$toml_file' does not exist"

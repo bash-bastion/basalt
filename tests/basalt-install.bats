@@ -30,7 +30,7 @@ load './util/init.sh'
 	local dir1= dir2=
 	test_util.create_fake_remote 'user/repo1'; dir1="$REPLY"
 	test_util.create_fake_remote 'user/repo2'; dir2="$REPLY"
-	(cd "$dir1" && basalt init && basalt add "file://$dir2" && git add -A && git commit -m 'Add dependency')
+	(ensure.cd "$dir1" && basalt init && basalt add "file://$dir2" && git add -A && git commit -m 'Add dependency')
 
 	basalt init
 	run basalt add "file://$dir1"

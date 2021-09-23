@@ -45,6 +45,12 @@ pkg-phase.download_tarball() {
 		fi
 	fi
 
+	# TODO Print warning if a local dependency has a dirty index
+	# if [ "$repo_type" = 'local' ]; then
+	# 	# TODO
+	# 	:
+	# fi
+
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" 2>/dev/null; then
 		print-indent.die "Could not clone repository for $package_id"

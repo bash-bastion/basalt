@@ -29,7 +29,7 @@ test_util.create_fake_remote() {
 
 	{
 		mkdir -p "$git_dir"
-		cd "$git_dir"
+		ensure.cd "$git_dir"
 		git init
 		touch 'README.md'
 		git add .

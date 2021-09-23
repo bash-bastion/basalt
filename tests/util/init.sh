@@ -32,9 +32,9 @@ export BASALT_GLOBAL_REPO="$BATS_TEST_TMPDIR/source"
 export BASALT_GLOBAL_DATA_DIR="$BATS_TEST_TMPDIR/localshare"
 
 setup() {
-	cd "$BATS_TEST_TMPDIR"
+	ensure.cd "$BATS_TEST_TMPDIR"
 }
 
 teardown() {
-	cd "$BATS_SUITE_TMPDIR"
+	ensure.cd "$BATS_SUITE_TMPDIR"
 }
