@@ -13,6 +13,7 @@ do-add() {
 		;;
 	esac done
 
+	# Package parsing (WET)
 	for pkg in "${pkgs[@]}"; do
 		if ! util.get_package_info "$pkg"; then
 			print.die "String '$pkg' does not look like a package"

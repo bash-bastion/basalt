@@ -112,6 +112,7 @@ util.toml_add_dependency() {
 		local name=
 		for name in "${REPLIES[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
+				# TODO: print reinstalling (same with text_dependency)
 				print-indent.yellow 'Warning' "A version of '${name%@*}' is already installed. Skipping"
 				return
 			fi
@@ -180,4 +181,26 @@ util.toml_remove_dependency() {
 	else
 		print.die "Key 'dependencies' not found in file '$toml_file'"
 	fi
+}
+
+util.text_add_dependency() {
+	local text_file="$1"
+	local dependency="$2"
+
+	ensure.nonzero 'text_file'
+	ensure.nonzero 'dependency'
+
+	mkdir -p "${text_file%/*}"
+	touch "$text_file"
+
+	local line=
+	while IFS= read -r line; do
+		if [ "${line%@*}" = "${dependency%@*}" ]; then
+			print-indent.yellow 'Warning' "A version of '${line%@*}' is already installed. Skipping"
+			return
+		fi
+	done < "$text_file"
+	unset line
+
+	printf '%s\n' "$dependency" >> "$text_file"
 }

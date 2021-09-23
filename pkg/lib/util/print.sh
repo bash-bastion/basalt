@@ -23,6 +23,7 @@ print.internal_die() {
 	exit 1
 }
 
+# TODO: is this needed?
 print.auxiliary() {
 	printf '      -> %s\n' "$@"
 }

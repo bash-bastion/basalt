@@ -40,28 +40,33 @@ pkg.install_package() {
 	done
 	unset pkg
 
-	# TODO: fix later
-	if [ -f "$project_dir/basalt.toml" ]; then
-		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-			local pkg=
-			for pkg in "${REPLIES[@]}"; do
-				if ! util.get_package_info "$pkg"; then
-					# TODO: message
-					print.die "String '$pkg' does not look like a package"
-				fi
-				local repo_type="$REPLY1"
-				local url="$REPLY2"
-				local site="$REPLY3"
-				local package="$REPLY4"
-				local version="$REPLY5"
-
-				# Only if all the previous modifications to the global package store has been successfull do we symlink
-				# to it from the local project directory
-				pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
-			done
-			unset pkg
+	for pkg; do
+		if ! util.get_package_info "$pkg"; then
+			# TODO: message
+			print.die "String '$pkg' does not look like a package"
 		fi
+		local repo_type="$REPLY1"
+		local url="$REPLY2"
+		local site="$REPLY3"
+		local package="$REPLY4"
+		local version="$REPLY5"
+
+		# Only if all the previous modifications to the global package store has been successfull do we symlink
+		# to it from the local project directory
+		pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
+	done
+	unset pkg
+}
+
+pkg.do-global-install() {
+	if ! rm -rf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages"; then
+		print.die "Could not remove global 'basalt_packages' directory"
 	fi
+
+	local -a dependencies=()
+	touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+	readarray -t dependencies < "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+	pkg.install_package "$BASALT_GLOBAL_DATA_DIR/global" "${dependencies[@]}"
 }
 
 pkg.symlink_package() {
