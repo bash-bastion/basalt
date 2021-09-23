@@ -35,17 +35,19 @@ util.init_global() {
 	fi
 	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 
-	# Use a lock directory for Basalt
-	___basalt_lock_dir=
-	if [ -n "$XDG_RUNTIME_DIR" ]; then
-		___basalt_lock_dir="$XDG_RUNTIME_DIR/basalt.lock"
-	else
-		___basalt_lock_dir="$BASALT_GLOBAL_DATA_DIR/basalt.lock"
-	fi
-	if mkdir "$___basalt_lock_dir"; then
-		trap 'rm -rf "$___basalt_lock_dir"' EXIT
-	else
-		print.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
+	# Use a lock directory for Basalt if not under testing
+	if [ -z "$BATS_TMPDIR" ]; then
+		___basalt_lock_dir=
+		if [ -n "$XDG_RUNTIME_DIR" ]; then
+			___basalt_lock_dir="$XDG_RUNTIME_DIR/basalt.lock"
+		else
+			___basalt_lock_dir="$BASALT_GLOBAL_DATA_DIR/basalt.lock"
+		fi
+		if mkdir "$___basalt_lock_dir"; then
+			trap 'rm -rf "$___basalt_lock_dir"' INT TERM EXIT
+		else
+			print.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
+		fi
 	fi
 
 	# Ensure other prerequisites
