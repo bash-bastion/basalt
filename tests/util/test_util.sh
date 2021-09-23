@@ -47,7 +47,3 @@ test_util.create_fake_remote() {
 test_util.stub_command() {
 	eval "$1() { echo \"$1 \$*\"; }"
 }
-
-test_util.toml_test() {
-	"$REPO_ROOT/tests/node/toml.cjs" "$@"
-}

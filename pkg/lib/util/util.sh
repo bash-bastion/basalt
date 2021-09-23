@@ -41,6 +41,125 @@ util.init_global() {
 	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 }
 
+# @description Ensure that a variable name is non-zero
+util.ensure_nonzero() {
+	local name="$1"
+
+	if [ -z "$name" ]; then
+		print.internal_die "Argument 'name' for function 'util.ensure_nonzero' is empty"
+	fi
+
+	local -n value="$name"
+	if [ -z "$value" ]; then
+		print.internal_die "Argument '$name' for function '${FUNCNAME[1]}' is empty"
+	fi
+}
+
+# @description Ensure the downloaded file is really a .tar.gz file...
+util.file_is_targz() {
+	local file="$1"
+
+	util.ensure_nonzero 'file'
+
+	local magic_byte=
+	if magic_byte="$(xxd -p -l 2 "$file")"; then
+		if [ "$magic_byte" != '1f8b' ]; then
+			return 1
+		fi
+	else
+		return 1
+	fi
+}
+
+# @description Get id of package we can use for printing
+util.get_package_id() {
+	local repo_type="$1"
+	local url="$2"
+	local site="$3"
+	local package="$4"
+	local version="$5"
+
+	util.ensure_nonzero 'repo_type'
+	util.ensure_nonzero 'url'
+	util.ensure_nonzero 'site'
+	util.ensure_nonzero 'package'
+	util.ensure_nonzero 'version'
+
+	if [ "$repo_type" = 'remote' ]; then
+		REPLY="$site/$package@$version"
+	elif [ "$repo_type" = 'local' ]; then
+		REPLY="local/${url##*/}"
+	fi
+}
+
+## Larger Utilities (have tests)
+
+# @description Check if the package exists (either as a remote URL or file)
+util.does_package_exist() {
+	local repo_type="$1"
+	local url="$2"
+
+	util.ensure_nonzero 'repo_type'
+	util.ensure_nonzero 'url'
+
+	if [ "$repo_type" = 'remote' ]; then
+		# TODO: make this cleaner (use GitHub, GitLab, etc. API)?
+		if ! curl -LsfIo /dev/null --connect-timeout 1 --max-time 2.5 --retry 0 "$url"; then
+			return 1
+		fi
+	elif [ "$repo_type" = 'local' ]; then
+		# Assume '.git/' contains Git repository information
+		if [ ! -d "${url:7}/.git" ]; then
+			return 1
+		fi
+	fi
+
+	return 0
+}
+
+# @description Get the latest package version
+util.get_latest_package_version() {
+	unset REPLY; REPLY=
+	local repo_type="$1"
+	local url="$2"
+	local site="$3"
+	local package="$4"
+
+	util.ensure_nonzero 'repo_type'
+	util.ensure_nonzero 'url'
+	util.ensure_nonzero 'site'
+	util.ensure_nonzero 'package'
+
+	# TODO: will it get beta/alpha/pre-releases??
+
+	# Get the latest pacakge version that has been released
+	if [ "$repo_type" = remote ]; then
+		if [ "$site" = 'github.com' ]; then
+			local latest_package_version=
+			if latest_package_version="$(
+				curl -LsS "https://api.github.com/repos/$package/releases/latest" \
+					| awk -F '"' '{ if($2 == "tag_name") print $4 }'
+			)" && [[ "$latest_package_version" == v* ]]; then
+				REPLY="$latest_package_version"
+				return
+			fi
+		else
+			print.warn "Could not automatically retrieve latest release for '$package' since '$site' is not supported. Falling back to retrieving latest commit"
+		fi
+	fi
+
+	# If there is not an official release, then just get the latest commit of the project
+	local latest_commit=
+	if latest_commit="$(
+		git ls-remote "$url" | awk '{ if($2 == "HEAD") print $1 }'
+	)"; then
+		REPLY="$latest_commit"
+		return
+	fi
+
+	print-indent.die "Could not get latest release or commit for package '$package'"
+}
+
 util.get_package_info() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 	local input="$1"
@@ -49,7 +168,7 @@ util.get_package_info() {
 
 	local regex1="^https?://"
 	local regex2="^file://"
-	local regex3="^git@"
+	local regex3="^git@" # TODO: continue with git@?
 	if [[ "$input" =~ $regex1 ]]; then
 		local site= package=
 		input="${input#http?(s)://}"
@@ -114,25 +233,6 @@ util.get_package_info() {
 	fi
 }
 
-# Check if the package exists (either as a remote URL or file)
-util.does_package_exist() {
-	local repo_type="$1"
-	local url="$2"
-
-	if [ "$repo_type" = 'remote' ]; then
-		# TODO: make this cleaner (use GitHub, GitLab, etc. API)?
-		if ! curl -LsfIo /dev/null --connect-timeout 1 --max-time 2.5 --retry 0 "$url"; then
-			return 1
-		fi
-	elif [ "$repo_type" = 'local' ]; then
-		# Assume '.git/' contains Git repository information
-		if [ ! -d "${url:7}/.git" ]; then
-			return 1
-		fi
-	fi
-
-	return 0
-}
 
 # @description Get path to download tarball of particular package revision
 util.get_tarball_url() {
@@ -140,120 +240,16 @@ util.get_tarball_url() {
 	local package="$2"
 	local ref="$3"
 
-	if [ "$site" = github.com ]; then
+	util.ensure_nonzero 'site'
+	util.ensure_nonzero 'package'
+	util.ensure_nonzero 'ref'
+
+	if [ "$site" = 'github.com' ]; then
 		REPLY="https://github.com/$package/archive/refs/tags/$ref.tar.gz"
-	elif [ "$site" = gitlab.com ]; then
+	elif [ "$site" = 'gitlab.com' ]; then
 		REPLY="https://gitlab.com/$package/-/archive/$ref/${package#*/}-$ref.tar.gz"
 	else
-		print.die "Could not construct tarball_uri for site '$site'"
-	fi
-}
-
-util.ensure_nonzero() {
-	local name="$1"
-
-	local -n value="$name"
-	if [ -z "$value" ]; then
-		print.internal_die "Argument '$name' for function '${FUNCNAME[1]}' is empty"
-	fi
-}
-
-# @description Get the latest package version
-util.get_latest_package_version() {
-	unset REPLY; REPLY=
-	local repo_type="$1"
-	local url="$2"
-	local site="$3"
-	local package="$4"
-
-	# TODO: will it get beta/alpha/pre-releases??
-
-	# Get the latest pacakge version that has been released
-	if [ "$repo_type" = remote ]; then
-		if [ "$site" = 'github.com' ]; then
-			local latest_package_version=
-			if latest_package_version="$(
-				curl -LsS "https://api.github.com/repos/$package/releases/latest" \
-					| awk -F '"' '{ if($2 == "tag_name") print $4 }'
-			)" && [[ "$latest_package_version" == v* ]]; then
-				REPLY="$latest_package_version"
-				return
-			fi
-		else
-			# TODO: gitlab
-			print.die "Site '$site' not supported"
-		fi
-	fi
-
-	# If there is not an official release, then just get the latest commit of the project
-	local latest_commit=
-	if latest_commit="$(
-		git ls-remote "$url" | awk '{ if($2 == "HEAD") print $1 }'
-	)"; then
-		REPLY="$latest_commit"
-		return
-	fi
-
-	print-indent.die "Could not get latest release or commit for package '$package'"
-}
-
-# @description Ensure the downloaded file is really a .tar.gz file...
-util.file_is_targz() {
-	local file="$1"
-
-	local magic_byte=
-	if magic_byte="$(xxd -p -l 2 "$file")"; then
-		if [ "$magic_byte" != '1f8b' ]; then
-			return 1
-		fi
-	else
-		return 1
-	fi
-}
-
-# @description Get id of package we can use for printing
-util.get_package_id() {
-	local repo_type="$1"
-	local url="$2"
-	local site="$3"
-	local package="$4"
-	local version="$5"
-
-	if [ "$repo_type" = 'remote' ]; then
-		REPLY="$site/$package@$version"
-	elif [ "$repo_type" = 'local' ]; then
-		REPLY="local/${url##*/}"
-	fi
-}
-
-util.assert_package_valid() {
-	# local repo_type="$1"
-	local site="$1"
-	local package="$2"
-	local ref="$3"
-
-	# if [ "$repo_type" = 'remote' ]; then
-		if [[ "$site" =~ ^[-a-zA-Z0-9_]*\.[-a-zA-Z0-9_]*$ ]]; then
-			:
-		else
-			return 1
-		fi
-	# elif [ "$repo_type" = 'local' ]; then
-	# 	if [ "$site" != '' ]; then
-	# 		return 1
-	# 	fi
-	# fi
-
-	if [[ "$package" =~ ^[-a-zA-Z0-9_]*/[-a-zA-Z0-9_]*$ ]]; then
-		:
-	else
-		return 1
-	fi
-
-	if [[ "$ref" =~ ^(v.*|[a-z0-9]{40})$ ]]; then
-		:
-	else
-		return 1
+		print.die "Could not construct the location of the package tarball since '$site' is not supported"
 	fi
 }
 

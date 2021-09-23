@@ -2,41 +2,46 @@
 
 load './util/init.sh'
 
-setup() {
-	curl() {
-		local package="$2"; package="${package#https://api.github.com/repos/}"; package="${package%/releases/latest}"
-		if [ "$package" = 'user/name1' ]; then
-			printf '%s\n' '{
-  "tag_name": "v0.0.1"
-}'
-		elif [ "$package" = 'user/name2' ]; then
-			printf '%s\n' '{ "message": "Not Found", "documentation_url": "" }'
-		else
-			command curl "$@"
-		fi
+@test "Works if site is not supported" {
+	git() {
+		printf '%s\n' 'acc5e0a847e25b59ce2999340fdad51d50a896a5	HEAD'
 	}
 
-	git() {
-		if [ "$1" = 'ls-remote' ]; then
-			if [ "$2" = 'fakeuri1' ]; then
-				printf '%s\n' 'ccc5e0a847e25b59ce2999340fdad51d50a896a5 HEAD'
-			else
-				command git "$@"
-			fi
-		else
-			command git "$@"
-		fi
-	}
+	# Test warning
+	run util.get_latest_package_version 'remote' '_whatever_' 'gitlab.com' '_whatever_'
+
+	assert_success
+	assert_line -p "Could not automatically retrieve latest release for '_whatever_' since 'gitlab.com' is not supported. Falling back to retrieving latest commit"
+
+	# Test output
+	util.get_latest_package_version 'remote' '_whatever_' 'gitlab.com' '_whatever_'
+
+	assert [ "$REPLY" = 'acc5e0a847e25b59ce2999340fdad51d50a896a5' ]
 }
 
-@test "works if package has a release" {
-	util.get_latest_package_version 'remote' 'empty' 'github.com' 'user/name1'
+@test "Works if package has a release" {
+	curl() {
+		printf '%s\n' '{
+		  "tag_name": "v0.0.1"
+		}'
+	}
+	util.get_latest_package_version 'remote' '_whatever_' 'github.com' '_whatever_'
 
 	assert [ "$REPLY" = 'v0.0.1' ]
 }
 
-@test "works if package has no release" {
-	util.get_latest_package_version 'remote' 'fakeuri1' 'github.com' 'user/name2'
+@test "Works if package has no release" {
+	curl() {
+		printf '%s\n' '{
+		  "message": "Not Found",
+		  "documentation_url": "https://blah"
+		}'
+	}
+	git() {
+		printf '%s\n' 'ccc5e0a847e25b59ce2999340fdad51d50a896a5	HEAD'
+	}
+
+	util.get_latest_package_version 'remote' '_whatever_' 'github.com' '_whatever_'
 
 	assert [ "$REPLY" = 'ccc5e0a847e25b59ce2999340fdad51d50a896a5' ]
 }
