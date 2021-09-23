@@ -20,5 +20,8 @@ do-install() {
 		print.die "Could not remove local 'basalt_packages' directory"
 	fi
 
-	pkg.install_package "$BASALT_LOCAL_PROJECT_DIR"
+	# 'basalt.toml' is guaranteed to exist due to 'util.init_local'
+	if util.get_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'dependencies'; then
+		pkg.install_package "$BASALT_LOCAL_PROJECT_DIR" "${REPLIES[@]}"
+	fi
 }

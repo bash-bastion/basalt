@@ -2,47 +2,41 @@
 
 pkg.install_package() {
 	local project_dir="$1"
+	shift
 
 	# TODO: save the state and have rollback feature
 
-	if [ ! -f "$project_dir/basalt.toml" ]; then
-		return
-	fi
+	local pkg=
+	for pkg; do
+		if ! util.get_package_info "$pkg"; then
+			print.die "String '$pkg' does not look like a package"
+		fi
+		local repo_type="$REPLY1"
+		local url="$REPLY2"
+		local site="$REPLY3"
+		local package="$REPLY4"
+		local version="$REPLY5"
 
-	if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-		local pkg=
-		for pkg in "${REPLIES[@]}"; do
-			if ! util.get_package_info "$pkg"; then
-				# TODO error
-				print.die "String '$pkg' does not look like a package"
-			fi
-			local repo_type="$REPLY1"
-			local url="$REPLY2"
-			local site="$REPLY3"
-			local package="$REPLY4"
-			local version="$REPLY5"
+		util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+		local package_id="$REPLY"
 
-			# TODO
-			# util.assert_package_valid "$repo_type" "$site" "$package" "$version"
-			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
-			local package_id="$REPLY"
+		# Download, extract
+		pkg-phase.download_tarball "$repo_type" "$url" "$site" "$package" "$version"
+		pkg-phase.extract_tarball "$package_id"
 
-			# Download, extract
-			pkg-phase.download_tarball "$repo_type" "$url" "$site" "$package" "$version"
-			pkg-phase.extract_tarball "$package_id"
+		# Install transitive dependencies
+		if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
+			pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" "${REPLIES[@]}"
+		fi
 
-			# Install transitive dependencies
-			pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
+		# Only after all the dependencies are installed do we transmogrify the package
+		pkg-phase.global-integration "$package_id"
 
-			# Only after all the dependencies are installed do we transmogrify the package
-			pkg-phase.global-integration "$package_id"
-
-			# Only if all the previous modifications to the global package store has been successfull do we symlink
-			# to it from the local project directory
-			# pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
-		done
-		unset pkg
-	fi
+		# Only if all the previous modifications to the global package store has been successfull do we symlink
+		# to it from the local project directory
+		# pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
+	done
+	unset pkg
 
 	# TODO: fix later
 	if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then

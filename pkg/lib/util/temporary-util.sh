@@ -46,7 +46,7 @@ util.get_toml_array() {
 	local key_name="$2"
 
 	if [ ! -f "$toml_file" ]; then
-		print-indent.die 'Internal Error' "File '$toml_file' does not exist"
+		print-indent.internal_die "File '$toml_file' does not exist"
 	fi
 
 	local grep_line=
