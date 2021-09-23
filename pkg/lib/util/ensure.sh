@@ -31,3 +31,13 @@ ensure.nonzero() {
 		print.internal_die "Argument '$name' for function '${FUNCNAME[1]}' is empty"
 	fi
 }
+
+ensure.dir() {
+	local dir="$1"
+
+	ensure.nonzero 'dir'
+
+	if [ ! -d "$dir" ]; then
+		print.internal_die "A directory at '$dir' was expected to exist"
+	fi
+}

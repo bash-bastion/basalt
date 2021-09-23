@@ -31,15 +31,14 @@ pkg.install_package() {
 			fi
 		fi
 
-		# Only after all the dependencies are installed do we transmogrify the package
+		# Only after all the dependencies are installed do we much with the package
 		pkg-phase.global-integration "$package_id"
-
-		# Only if all the previous modifications to the global package store has been successfull do we symlink
-		# to it from the local project directory
-		# pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
 	done
 	unset pkg
 
+	# Only if all the previous modifications to the global package store has been successfull
+	# do we symlink to it from the local project directory. This is in a separate loop so we
+	# don't run into weird recursion issues with 'pkg.install_package'
 	for pkg; do
 		if ! util.get_package_info "$pkg"; then
 			print-indent.die "String '$pkg' does not look like a package"
@@ -50,9 +49,12 @@ pkg.install_package() {
 		local package="$REPLY4"
 		local version="$REPLY5"
 
-		# Only if all the previous modifications to the global package store has been successfull do we symlink
-		# to it from the local project directory
-		pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
+		ensure.dir "$project_dir"
+		if [ -f "$project_dir/basalt.toml" ]; then
+			if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
+				pkg-phase.local-integration "$project_dir" 'yes' "${REPLIES[@]}"
+			fi
+		fi
 	done
 	unset pkg
 }

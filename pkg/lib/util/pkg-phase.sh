@@ -114,7 +114,12 @@ pkg-phase.global-integration() {
 		print-indent.light-cyan "Transforming" "$project_dir"
 	fi
 
-	pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
+	ensure.dir "$project_dir"
+	if [ -f "$project_dir/basalt.toml" ]; then
+		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
+			pkg-phase.local-integration "$project_dir" 'yes' "${REPLIES[@]}"
+		fi
+	fi
 
 	print-indent.green "Transformed" "$package_id"
 }
@@ -123,41 +128,37 @@ pkg-phase.global-integration() {
 pkg-phase.local-integration() {
 	unset REPLY; REPLY=
 	local original_package_dir="$1"
-	local package_dir="$2"
-	local is_direct="$3" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
+	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
+	shift 2
 
-	if [ ! -d "$package_dir" ]; then
-		print.internal_die "A directory at '$package_dir' was expected to exist"
-		return
-	fi
-
-	if [ -f "$package_dir/basalt.toml" ]; then
-		if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
-			local pkg=
-			for pkg in "${REPLIES[@]}"; do
-				if ! util.get_package_info "$pkg"; then
-					print.die "String '$pkg' does not look like a package"
-				fi
-				local repo_type="$REPLY1"
-				local url="$REPLY2"
-				local site="$REPLY3"
-				local package="$REPLY4"
-				local version="$REPLY5"
-
-				util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
-				local package_id="$REPLY"
-
-				if [ "$is_direct" = yes ]; then
-					pkg.local_symlink_package "$original_package_dir/basalt_packages/packages" "$package_id"
-					# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id
-				else
-					pkg.local_symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
-					# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id"
-				fi
-
-				pkg-phase.local-integration "$original_package_dir" "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" 'no'
-			done
-			unset pkg
+	local pkg=
+	for pkg; do
+		if ! util.get_package_info "$pkg"; then
+			print.die "String '$pkg' does not look like a package"
 		fi
-	fi
+		local repo_type="$REPLY1"
+		local url="$REPLY2"
+		local site="$REPLY3"
+		local package="$REPLY4"
+		local version="$REPLY5"
+
+		util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+		local package_id="$REPLY"
+
+		if [ "$is_direct" = yes ]; then
+			pkg.local_symlink_package "$original_package_dir/basalt_packages/packages" "$package_id"
+			# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id
+		else
+			pkg.local_symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
+			# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id"
+		fi
+
+		ensure.dir "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
+		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
+			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
+				pkg-phase.local-integration "$original_package_dir" 'no' "${REPLIES[@]}"
+			fi
+		fi
+	done
+	unset pkg
 }
