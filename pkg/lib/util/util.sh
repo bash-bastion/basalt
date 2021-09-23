@@ -125,12 +125,8 @@ util.does_package_exist() {
 			return 1
 		fi
 	elif [ "$repo_type" = 'local' ]; then
-		local git_output=
-		if ! git_output="$(git -C "${url:7}" rev-parse --show-toplevel 2>/dev/null)"; then
-			return 1
-		fi
-
-		if [ "$git_output" != "${url:7}" ]; then
+		# Assume '.git/' contains Git repository information
+		if [ ! -d "${url:7}/.git" ]; then
 			return 1
 		fi
 	fi
