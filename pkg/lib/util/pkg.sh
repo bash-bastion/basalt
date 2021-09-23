@@ -24,9 +24,11 @@ pkg.install_package() {
 		pkg-phase.download_tarball "$repo_type" "$url" "$site" "$package" "$version"
 		pkg-phase.extract_tarball "$package_id"
 
-		# Install transitive dependencies
-		if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
-			pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" "${REPLIES[@]}"
+		# Install transitive dependencies if they exist
+		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
+			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
+				pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" "${REPLIES[@]}"
+			fi
 		fi
 
 		# Only after all the dependencies are installed do we transmogrify the package
@@ -39,24 +41,26 @@ pkg.install_package() {
 	unset pkg
 
 	# TODO: fix later
-	if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-		local pkg=
-		for pkg in "${REPLIES[@]}"; do
-			if ! util.get_package_info "$pkg"; then
-				# TODO: message
-				print.die "String '$pkg' does not look like a package"
-			fi
-			local repo_type="$REPLY1"
-			local url="$REPLY2"
-			local site="$REPLY3"
-			local package="$REPLY4"
-			local version="$REPLY5"
+	if [ -f "$project_dir/basalt.toml" ]; then
+		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
+			local pkg=
+			for pkg in "${REPLIES[@]}"; do
+				if ! util.get_package_info "$pkg"; then
+					# TODO: message
+					print.die "String '$pkg' does not look like a package"
+				fi
+				local repo_type="$REPLY1"
+				local url="$REPLY2"
+				local site="$REPLY3"
+				local package="$REPLY4"
+				local version="$REPLY5"
 
-			# Only if all the previous modifications to the global package store has been successfull do we symlink
-			# to it from the local project directory
-			pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
-		done
-		unset pkg
+				# Only if all the previous modifications to the global package store has been successfull do we symlink
+				# to it from the local project directory
+				pkg-phase.local-integration "$project_dir" "$project_dir" 'yes'
+			done
+			unset pkg
+		fi
 	fi
 }
 

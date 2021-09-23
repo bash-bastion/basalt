@@ -102,7 +102,7 @@ util.toml_add_dependency() {
 	local key_value="$2"
 
 	util.ensure_nonzero 'toml_file'
-	util.ensure_nonzero 'key_name'
+	util.ensure_nonzero 'key_value'
 
 	if [ ! -f "$toml_file" ]; then
 		print.internal_die "File '$toml_file' does not exist"
