@@ -14,12 +14,12 @@ symlink.package() {
 	local link_name="$install_dir/$package_id"
 
 	if [ ${DEBUG+x} ]; then
-		print-indent.light-cyan "Symlinking" "$link_name -> $target"
+		print.indent-light-cyan "Symlinking" "$link_name -> $target"
 	fi
 
 	mkdir -p "${link_name%/*}"
 	if ! ln -sf "$target" "$link_name"; then
-		print-indent.die "Could not symlink directory '${target##*/}' for package $package_id"
+		print.indent-die "Could not symlink directory '${target##*/}' for package $package_id"
 	fi
 }
 
@@ -43,8 +43,8 @@ symlink.bin_strict() {
 						local link_name="$install_dir/bin/${target##*/}"
 
 						if [ ${DEBUG+x} ]; then
-							print-indent.light-cyan "Symlinking" "target    $target"
-							print-indent.light-cyan "Symlinking" "link_name $link_name"
+							print.indent-light-cyan "Symlinking" "target    $target"
+							print.indent-light-cyan "Symlinking" "link_name $link_name"
 						fi
 
 						if [ -e "$link_name" ]; then
@@ -52,7 +52,7 @@ symlink.bin_strict() {
 						fi
 
 						if ! ln -sf "$target" "$link_name"; then
-							print-indent.die "Could not symlink file '${target##*/}' for package $site/$package@$version"
+							print.indent-die "Could not symlink file '${target##*/}' for package $site/$package@$version"
 						fi
 					done
 				fi

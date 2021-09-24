@@ -112,7 +112,7 @@ util.toml_add_dependency() {
 		local name=
 		for name in "${REPLIES[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
-				print-indent.yellow 'Warning' "A version of '${name%@*}' is already installed. Skipping"
+				print.indent-yellow 'Warning' "A version of '${name%@*}' is already installed. Skipping"
 				return
 			fi
 		done
@@ -157,7 +157,7 @@ util.toml_remove_dependency() {
 		unset name
 
 		if [ "$does_exist" != 'yes' ]; then
-			print-indent.die "The package '$key_value' is not currently a dependency"
+			print.indent-die "The package '$key_value' is not currently a dependency"
 			return
 		fi
 
@@ -195,7 +195,7 @@ util.text_add_dependency() {
 	local line=
 	while IFS= read -r line; do
 		if [ "${line%@*}" = "${dependency%@*}" ]; then
-			print-indent.yellow 'Warning' "A version of '${line%@*}' is already installed. Skipping"
+			print.indent-yellow 'Warning' "A version of '${line%@*}' is already installed. Skipping"
 			return
 		fi
 	done < "$text_file"

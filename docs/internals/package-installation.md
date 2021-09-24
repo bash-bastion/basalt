@@ -2,7 +2,7 @@
 
 This page provides information on how and where packages are installed.
 
-The installation of packages is split into four phases. Each of these phases corresponds to a function in `pkg-phase.sh`
+The installation of packages is split into four phases. Each of these phases corresponds to a function in `pkg.sh`
 
 1. Package download
 2. Package extraction

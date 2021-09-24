@@ -54,6 +54,9 @@ util.init_global() {
 	if ! command -v curl &>/dev/null; then
 		print.die "Program 'curl' not installed. Please install curl"
 	fi
+
+	mkdir -p "$BASALT_GLOBAL_DATA_DIR"/{global,store}
+	touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
 }
 
 # @description Ensure the downloaded file is really a .tar.gz file...
@@ -172,7 +175,7 @@ util.get_latest_package_version() {
 		return
 	fi
 
-	print-indent.die "Could not get latest release or commit for package '$package'"
+	print.indent-die "Could not get latest release or commit for package '$package'"
 }
 
 util.get_package_info() {
