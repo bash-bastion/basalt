@@ -6,7 +6,7 @@ STATUS: BETA (expect breaking changes until a post-beta release)
 
 ---
 
-`basalt` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects / scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third-party apt repositories or the [AUR](https://aur.archlinux.org)
+`basalt` is a fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects/scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third-party apt repositories or the [AUR](https://aur.archlinux.org)
 
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
 
@@ -45,5 +45,5 @@ Note that many of these featuers have been implemented before, but require a rei
 - [ ] Works with essentially all popular Bash projects out of the box
 - [ ] Specifying specific man, completion, etc. directories
 - [x] Local package installation
-- [ ] Global (user-wide) package installation
+- [x] Global (user-wide) package installation
 - [ ] Custom builtins

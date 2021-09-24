@@ -126,7 +126,7 @@ pkg-phase.global-integration() {
 	ensure.dir "$project_dir"
 	if [ -f "$project_dir/basalt.toml" ]; then
 		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-			pkg-phase.local-integration "$project_dir" 'yes' "${REPLIES[@]}"
+			pkg-phase.local-integration "$project_dir" 'yes' 'strict' "${REPLIES[@]}"
 		fi
 	fi
 
@@ -138,7 +138,8 @@ pkg-phase.local-integration() {
 	unset REPLY; REPLY=
 	local original_package_dir="$1"
 	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
-	shift 2
+	local symlink_mode="$3"
+	shift 3
 
 	ensure.nonzero 'original_package_dir'
 	ensure.nonzero 'is_direct'
@@ -158,17 +159,33 @@ pkg-phase.local-integration() {
 		local package_id="$REPLY"
 
 		if [ "$is_direct" = yes ]; then
-			pkg.local_symlink_package "$original_package_dir/basalt_packages/packages" "$package_id"
-			# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id
+			symlink.package "$original_package_dir/basalt_packages/packages" "$package_id"
+
+			if [ "$symlink_mode" = 'strict' ]; then
+				symlink.bin_strict "$original_package_dir/basalt_packages/transitive" "$package_id"
+			elif [ "$symlink_mode" = 'lenient' ]; then
+				symlink.bin_lenient "$original_package_dir/basalt_packages/transitive" "$package_id"
+			else
+				util.die_unexpected_value 'symlink_mode'
+			fi
+		elif [ "$is_direct" = no ]; then
+			symlink.package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
+
+			if [ "$symlink_mode" = 'strict' ]; then
+				symlink.bin_strict "$original_package_dir/basalt_packages/transitive" "$package_id" "$package_id"
+			elif [ "$symlink_mode" = 'lenient' ]; then
+				symlink.bin_lenient "$original_package_dir/basalt_packages/transitive" "$package_id" "$package_id"
+			else
+				util.die_unexpected_value 'symlink_mode'
+			fi
 		else
-			pkg.local_symlink_package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
-			# pkg.local_symlink_bin "$package_dir/basalt_packages/transitive" "$package_id"
+			util.die_unexpected_value 'is_direct'
 		fi
 
 		ensure.dir "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
 			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
-				pkg-phase.local-integration "$original_package_dir" 'no' "${REPLIES[@]}"
+				pkg-phase.local-integration "$original_package_dir" 'no' 'strict' "${REPLIES[@]}"
 			fi
 		fi
 	done

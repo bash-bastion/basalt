@@ -72,6 +72,16 @@ util.file_is_targz() {
 	fi
 }
 
+# @description Abort with error message relating to unexpected value
+util.die_unexpected_value() {
+	local variable="$1"
+
+	ensure.nonzero 'variable'
+
+	local -n value="$variable"
+	print.internal_die "Variable '$variable' has unexpected value of '$value'"
+}
+
 # @description Get id of package we can use for printing
 util.get_package_id() {
 	local repo_type="$1"
@@ -90,6 +100,8 @@ util.get_package_id() {
 		REPLY="$site/$package@$version"
 	elif [ "$repo_type" = 'local' ]; then
 		REPLY="local/${url##*/}"
+	else
+		util.die_unexpected_value 'repo_type'
 	fi
 }
 
@@ -113,6 +125,8 @@ util.does_package_exist() {
 		if [ ! -d "${url:7}/.git" ]; then
 			return 1
 		fi
+	else
+		util.die_unexpected_value 'repo_type'
 	fi
 
 	return 0
@@ -233,7 +247,6 @@ util.get_package_info() {
 		REPLY5="$ref"
 	fi
 }
-
 
 # @description Get path to download tarball of particular package revision
 util.get_tarball_url() {
