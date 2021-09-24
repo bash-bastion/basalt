@@ -9,9 +9,9 @@ for f in "$PROGRAM_LIB_DIR"/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done
 
-# TODO: ensure only one Basalt process running at the same time
-
 basalt.main() {
+	util.init_always
+
 	for arg; do case "$arg" in
 	--help|-h)
 		util.show_help

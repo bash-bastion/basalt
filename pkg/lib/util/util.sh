@@ -33,8 +33,12 @@ util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
 		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
-	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"
 
+	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"/{global,store}
+	touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+}
+
+util.init_always() {
 	# Use a lock directory for Basalt if not under testing
 	if [ -z "$BATS_TMPDIR" ]; then
 		___basalt_lock_dir=
@@ -50,13 +54,9 @@ util.init_global() {
 		fi
 	fi
 
-	# Ensure other prerequisites
 	if ! command -v curl &>/dev/null; then
 		print.die "Program 'curl' not installed. Please install curl"
 	fi
-
-	mkdir -p "$BASALT_GLOBAL_DATA_DIR"/{global,store}
-	touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
 }
 
 # @description Ensure the downloaded file is really a .tar.gz file...
