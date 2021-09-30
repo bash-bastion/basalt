@@ -16,8 +16,8 @@ echo_variables_posix() {
 echo_package_path_posix() {
 	cat <<-"EOF"
 	# basalt path
-	if [ "${PATH#*$BASALT_GLOBAL_DATA_DIR/bin}" = "$PATH" ]; then
-	  export PATH="$BASALT_GLOBAL_DATA_DIR/bin:$PATH"
+	if [ "${PATH#*$BASALT_GLOBAL_DATA_DIR/global/bin}" = "$PATH" ]; then
+	  export PATH="$BASALT_GLOBAL_DATA_DIR/global/bin:$PATH"
 	fi
 
 	EOF
@@ -49,8 +49,8 @@ do-global-init() {
 		set -gx "${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
 
 		# basalt path
-		if not contains \$BASALT_GLOBAL_DATA_DIR/bin \$PATH
-		  set -gx PATH \$BASALT_GLOBAL_DATA_DIR/bin \$PATH
+		if not contains \$BASALT_GLOBAL_DATA_DIR/global/bin \$PATH
+		  set -gx PATH \$BASALT_GLOBAL_DATA_DIR/global/bin \$PATH
 		end
 
 		# basalt completion

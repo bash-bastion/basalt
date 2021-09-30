@@ -3,7 +3,9 @@
 # This function is usable by anyone to source some or all functions of a Bash
 # library
 
-# TODO: if BASALT_INTERNAL_DID_BASALT_INIT is set and --global is specified, fail
+__basalt_load_dosource() {
+	:
+}
 
 basalt.load() {
 	local __basalt_flag_global='no'
@@ -21,7 +23,7 @@ basalt.load() {
 		;;
 	--help|-h)
 		cat <<-"EOF"
-		basalt-load: Load a particular file
+		basalt.load Load a particular file
 
 		Usage:
 		  basalt-load [flags] <package> [file]
@@ -43,7 +45,7 @@ basalt.load() {
 		return
 		;;
 	-*)
-		printf '%s\n' "Error: basalt-load: Flag '$arg' not recognized"
+		printf '%s\n' "Error: basalt.load Flag '$arg' not recognized"
 		return 1
 		;;
 	esac done
@@ -52,13 +54,26 @@ basalt.load() {
 	local __basalt_file="${2:-}"
 
 	if [ -z "$__basalt_pkg_path" ]; then
-		printf '%s\n' "Error: basalt-load: Missing package as first parameter"
+		printf '%s\n' "Error: basalt.load Missing package as first parameter"
 		return 1
 	fi
 
 	if [ "$__basalt_flag_global" = 'yes' ]; then
-		# TODO
-		:
+		# TODO: Possible bug if nullglob is not set
+		local -ra __basalt_pkg_path_full_array=("$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/$__basalt_pkg_path"@*)
+		local __basalt_pkg_path_full="${__basalt_pkg_path_full_array[0]}"
+
+		if [ ! -d "$__basalt_pkg_path_full" ]; then
+			printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' not installed globally"
+			return 1
+		fi
+
+		if [ ! -f "$__basalt_pkg_path_full/$__basalt_file" ]; then
+			printf '%s\n' "Error: basalt.load: File '$__basalt_file' not found in package '$__basalt_pkg_path'"
+			return 1
+		fi
+
+		source "$__basalt_pkg_path_full/$__basalt_file"
 	else
 		# If 'package' is an absoluate path, we can skip to executing the file
 		if [ "${__basalt_pkg_path::1}" = / ]; then
@@ -81,7 +96,7 @@ basalt.load() {
 		local __basalt_actual_pkg_path=
 		for __basalt_actual_pkg_path in "$BASALT_PACKAGE_PATH/basalt_packages/packages/$__basalt_pkg_path"*; do
 			if [ "$__basalt_load_package_exists" = yes ]; then
-				printf '%s\n' "Error: basalt-load: There are multiple direct dependencies for package '$__basalt_pkg_path'. This should not happen"
+				printf '%s\n' "Error: basalt.load There are multiple direct dependencies for package '$__basalt_pkg_path'. This should not happen"
 				return 1
 			else
 				__basalt_load_package_exists='yes'
@@ -92,7 +107,7 @@ basalt.load() {
 					BASALT_PACKAGE_PATH="$__basalt_actual_pkg_path" source "$__basalt_actual_pkg_path/$__basalt_file"
 					__basalt_did_run_source='yes'
 				else
-					printf '%s\n' "Error: basalt-load: File '$__basalt_file' not found in package '$__basalt_pkg_path'"
+					printf '%s\n' "Error: basalt.load File '$__basalt_file' not found in package '$__basalt_pkg_path'"
 					return 1
 				fi
 			elif [ -f "$__basalt_actual_pkg_path/load.bash" ]; then
@@ -110,7 +125,7 @@ basalt.load() {
 		done
 
 		if [ "$__basalt_did_run_source" = 'no' ]; then
-			printf '%s\n' "Warning: basalt-load: Nothing was sourced when calling 'basalt-load $*'. Does the package or file actually exist?"
+			printf '%s\n' "Warning: basalt.load Nothing was sourced when calling 'basalt-load $*'. Does the package or file actually exist?"
 		fi
 
 		unset __basalt_actual_pkg_path
