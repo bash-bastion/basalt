@@ -60,8 +60,10 @@ basalt.load() {
 
 	if [ "$__basalt_flag_global" = 'yes' ]; then
 		# TODO: Possible bug if nullglob is not set
-		local -ra __basalt_pkg_path_full_array=("$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/$__basalt_pkg_path"@*)
+		# TODO: should check to ensure first (zeroith) element is not empty
+		local -a __basalt_pkg_path_full_array=("$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/$__basalt_pkg_path"@*)
 		local __basalt_pkg_path_full="${__basalt_pkg_path_full_array[0]}"
+		unset __basalt_pkg_path_full_array
 
 		if [ ! -d "$__basalt_pkg_path_full" ]; then
 			printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' not installed globally"
@@ -75,6 +77,7 @@ basalt.load() {
 
 		source "$__basalt_pkg_path_full/$__basalt_file"
 	else
+		# TODO: this should be removable
 		# If 'package' is an absoluate path, we can skip to executing the file
 		if [ "${__basalt_pkg_path::1}" = / ]; then
 			if [ -f "$__basalt_pkg_path/load.bash" ]; then

@@ -50,7 +50,7 @@ sourceDirs = ['./pkg/lib', './pkg/lib/source', './pkg/lib/util']
 
 ### `builtinDirs`
 
-Array of directories that contain c source code for custom builtins. These files will automatically be loaded, somewhat analogous to `sourceDirs`
+Array of directories that contain C source code for custom builtins. These files will automatically be loaded, somewhat analogous to `sourceDirs`
 
 ```toml
 builtinDirs = ['./builtins']

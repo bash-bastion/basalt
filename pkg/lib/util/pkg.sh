@@ -141,7 +141,6 @@ pkg.phase-download_tarball() {
 # @description Extracts the tarballs in the global store to a directory
 pkg.phase-extract_tarball() {
 	local package_id="$1"
-
 	ensure.nonzero 'package_id'
 
 	local tarball_src="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
@@ -171,15 +170,13 @@ pkg.phase-extract_tarball() {
 	fi
 }
 
+# TODO: properly cache transformations
 # @description This performs modifications a particular package in the global store
 pkg.phase-global-integration() {
 	local package_id="$1"
-
 	ensure.nonzero 'package_id'
 
 	local project_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
-
-	# TODO: properly cache transformations
 
 	if [ ${DEBUG+x} ]; then
 		print.indent-light-cyan "Transforming" "$project_dir"
@@ -187,6 +184,24 @@ pkg.phase-global-integration() {
 
 	ensure.dir "$project_dir"
 	if [ -f "$project_dir/basalt.toml" ]; then
+		local content=
+
+		# Create shell scripts to quick source
+		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
+			local sourceDir=
+			for sourceDir in "${REPLIES[@]}"; do
+				printf -v content '%s%s\n' "$content" "for __basalt_f in \"\$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/$sourceDir\"/*; do
+  source \"\$__basalt_f\"
+done"
+			done
+			unset sourceDir
+			printf -v content '%s%s' "$content" 'unset __basalt_f'
+
+			[ -d "$project_dir/.basalt/actions" ] || mkdir -p "$project_dir/.basalt/actions"
+			cat <<< "$content" > "$project_dir/.basalt/actions/source_package.sh"
+		fi
+
+		# Install dependencies
 		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
 			pkg.phase-local-integration "$project_dir" 'yes' 'strict' "${REPLIES[@]}"
 		fi

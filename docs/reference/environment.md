@@ -16,6 +16,6 @@ The directory Basalt stores nearly all data. This includes downloaded tarballs, 
 
 Local environment variables are only valid within a Bash package (after `eval "$(basalt-package-init)"; basalt.package-init`)
 
-### `BASALT_LOCAL_PROJECT_DIR`
+### `BASALT_PACKAGE_PATH`
 
-The full path to the current project. It is calculated by walking up the file tree from `$PWD`, only stopping after detecting a `./basalt.toml`. The directory that was stopped at is the new value of `BASALT_LOCAL_PROJECT_DIR`
+The full path to the current project. It is calculated by walking up the file tree from `$PWD`, only stopping after detecting a `./basalt.toml`. The directory that was stopped at is the new value of `BASALT_PACKAGE_PATH`
