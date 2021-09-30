@@ -22,6 +22,7 @@ pkg.install_package() {
 	shift 2
 
 	ensure.nonzero 'project_dir'
+	ensure.nonzero 'symlink_mode'
 
 	# TODO: save the state and have rollback feature
 
@@ -115,7 +116,7 @@ pkg.phase-download_tarball() {
 	# TODO Print warning if a local dependency has a dirty index
 	if [ "$repo_type" = 'local' ]; then
 		:
-		# print.indent-yellow 'Warn' "Local dependency at '$url' has a dirty index"
+		# print.indent-yellow 'Warning' "Local dependency at '$url' has a dirty index"
 	fi
 
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
@@ -223,9 +224,9 @@ pkg.phase-local-integration() {
 			symlink.package "$original_package_dir/basalt_packages/packages" "$package_id"
 
 			if [ "$symlink_mode" = 'strict' ]; then
-				symlink.bin_strict "$original_package_dir/basalt_packages/transitive" "$package_id"
+				symlink.bin_strict "$original_package_dir/basalt_packages/packages" "$package_id"
 			elif [ "$symlink_mode" = 'lenient' ]; then
-				symlink.bin_lenient "$original_package_dir/basalt_packages/transitive" "$package_id"
+				symlink.bin_lenient "$original_package_dir/basalt_packages/packages" "$package_id"
 			else
 				util.die_unexpected_value 'symlink_mode'
 			fi
@@ -233,9 +234,9 @@ pkg.phase-local-integration() {
 			symlink.package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
 
 			if [ "$symlink_mode" = 'strict' ]; then
-				symlink.bin_strict "$original_package_dir/basalt_packages/transitive" "$package_id" "$package_id"
+				symlink.bin_strict "$original_package_dir/basalt_packages/transitive/packages" "$package_id" "$package_id"
 			elif [ "$symlink_mode" = 'lenient' ]; then
-				symlink.bin_lenient "$original_package_dir/basalt_packages/transitive" "$package_id" "$package_id"
+				symlink.bin_lenient "$original_package_dir/basalt_packages/transitive/packages" "$package_id" "$package_id"
 			else
 				util.die_unexpected_value 'symlink_mode'
 			fi

@@ -19,7 +19,7 @@ basalt.package-load() {
 
 	local __basalt_site= __basalt_repository_owner=  __basalt_package=
 	if [ ! -d "$BASALT_PACKAGE_PATH"/basalt_packages/packages ]; then
-		printf '%s\n' "Error: basalt.package-load: No installed packages were found"
+		printf '%s\n' "Error: basalt.package-load: No installed packages were found. Is there a './basalt_packages/packages' directory?"
 		return 1
 	fi
 	for __basalt_site in "$BASALT_PACKAGE_PATH"/basalt_packages/packages/*; do

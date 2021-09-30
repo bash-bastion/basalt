@@ -34,8 +34,14 @@ util.init_global() {
 		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
-	mkdir -p "$BASALT_GLOBAL_REPO" "$BASALT_GLOBAL_DATA_DIR"/{global,store}
-	touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+	[ -d "$BASALT_GLOBAL_REPO" ] || mkdir -p "$BASALT_GLOBAL_REPO"
+	[ -d "$BASALT_GLOBAL_DATA_DIR/global" ] || mkdir -p "$BASALT_GLOBAL_DATA_DIR/global"
+	[ -d "$BASALT_GLOBAL_DATA_DIR/store" ] || mkdir -p "$BASALT_GLOBAL_DATA_DIR/store"
+	[ -f "$BASALT_GLOBAL_DATA_DIR/global/dependencies" ] || touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+
+	[ -L "$BASALT_GLOBAL_DATA_DIR/global/bin" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/bin" "$BASALT_GLOBAL_DATA_DIR/global/bin"
+	[ -L "$BASALT_GLOBAL_DATA_DIR/global/completion" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/completion" "$BASALT_GLOBAL_DATA_DIR/global/completion"
+	[ -L "$BASALT_GLOBAL_DATA_DIR/global/man" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/man" "$BASALT_GLOBAL_DATA_DIR/global/man"
 }
 
 util.init_always() {
