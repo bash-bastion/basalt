@@ -38,7 +38,7 @@ See [Installation](./docs/tutorials/installation.md) and [Getting Started](./doc
 
 ## Features
 
-Note that many of these featuers have been implemented before, but require a reimplementation since the major rewrite
+Note that many of these features have been implemented before, but require a reimplementation since the major rewrite
 
 - [x] Lockfile usage
 - [ ] Transaction rollback
@@ -47,3 +47,7 @@ Note that many of these featuers have been implemented before, but require a rei
 - [x] Local package installation
 - [x] Global (user-wide) package installation
 - [ ] Custom builtins
+
+## Ecosystem
+
+There is a small, but growing number of packages installable with Basalt. See the list at [awesome-bash-packages](https://github.com/hyperupcall/awesome-bash-packages)
