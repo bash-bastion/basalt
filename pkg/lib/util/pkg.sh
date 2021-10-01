@@ -188,17 +188,22 @@ pkg.phase-global-integration() {
 
 		# Create shell scripts to quick source
 		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
-			local sourceDir=
-			for sourceDir in "${REPLIES[@]}"; do
-				printf -v content '%s%s\n' "$content" "for __basalt_f in \"\$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/$sourceDir\"/*; do
+			if ((${REPLIES[@]} > 0)); then
+				local source_dir=
+				for source_dir in "${REPLIES[@]}"; do
+					printf -v content '%s%s\n' "$content" "for __basalt_f in \"\$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/$source_dir\"/*; do
   source \"\$__basalt_f\"
 done"
-			done
-			unset sourceDir
-			printf -v content '%s%s' "$content" 'unset __basalt_f'
+				done
+				unset source_dir
 
-			[ -d "$project_dir/.basalt/actions" ] || mkdir -p "$project_dir/.basalt/actions"
-			cat <<< "$content" > "$project_dir/.basalt/actions/source_package.sh"
+				printf -v content '%s%s' "$content" 'unset __basalt_f'
+
+				if [ ! -d "$project_dir/.basalt/actions" ]; then
+					mkdir -p "$project_dir/.basalt/actions"
+				fi
+				cat <<< "$content" > "$project_dir/.basalt/actions/source_package.sh"
+			fi
 		fi
 
 		# Install dependencies
