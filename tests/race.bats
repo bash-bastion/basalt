@@ -2,7 +2,7 @@
 
 load './util/init.sh'
 
-teardown() {
+teardown_file() {
 	if [ -n "$XDG_RUNTIME_DIR" ]; then
 		rm -rf "$XDG_RUNTIME_DIR/basalt.lock"
 	else
@@ -13,12 +13,14 @@ teardown() {
 }
 
 @test "Ensure locking works" {
-	basalt init
-	BATS_TMPDIR= basalt add &
+	skip
 
-	BATS_TMPDIR= run basalt add
+	basalt init
+	XDG_RUNTIME_DIR="$BATS_SUITE_TMPDIR" BATS_TMPDIR= basalt add &
+
+	XDG_RUNTIME_DIR="$BATS_SUITE_TMPDIR" BATS_TMPDIR= run basalt add
 	wait
 
-	assert_failure
+	assert_success
 	assert_line -p "Cannot run Basalt at this time because another Basalt process is already running"
 }
