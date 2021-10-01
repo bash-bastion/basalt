@@ -58,7 +58,7 @@ builtinDirs = ['./builtins']
 
 ### `binDirs`
 
-Array of directories that contain executable files. These files will be symlinked under a `bin` directory in `basalt_packages`. If the package is installed globally or locally, executables in this directory are made available via the `PATH` variable
+Array of directories that contain executable files. These files will be symlinked under a `bin` directory in `.basalt`. If the package is installed globally or locally, executables in this directory are made available via the `PATH` variable
 
 ```toml
 binDirs = ['./pkg/bin']
@@ -66,7 +66,7 @@ binDirs = ['./pkg/bin']
 
 ### `completionDirs`
 
-Array of directories that contain completion scripts. These files will be symlinked under a `completion` directory in `basalt_packages`. If the package is installed globally, these files will automatically be made available to the shell after `basalt global init`
+Array of directories that contain completion scripts. These files will be symlinked under a `completion` directory in `.basalt`. If the package is installed globally, these files will automatically be made available to the shell after `basalt global init`
 
 ```toml
 completionDirs = ['./completions']
@@ -74,7 +74,7 @@ completionDirs = ['./completions']
 
 ### `manDirs`
 
-Array of directories that contain numbered-man directories (`man1`, `man5`, etc.). These files will be symlinked under a `man` directory in `basalt_packages`. Currently, the `MANPATH` is not modified for global installations; they should be detected automatically
+Array of directories that contain numbered-man directories (`man1`, `man5`, etc.). These files will be symlinked under a `man` directory in `.basalt`. Currently, the `MANPATH` is not modified for global installations; they should be detected automatically
 
 ```toml
 manDirs = ['./man']

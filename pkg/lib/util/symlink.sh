@@ -4,7 +4,7 @@
 # @brief Functions that aid in symlinking a local project to global packages
 
 symlink.package() {
-	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages/packages"
+	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/.basalt/packages"
 	local package_id="$2"
 
 	ensure.nonzero 'install_dir'
@@ -24,7 +24,7 @@ symlink.package() {
 }
 
 symlink.bin_strict() {
-	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/basalt_packages"
+	local install_dir="$1" # e.g. "$BASALT_LOCAL_PROJECT_DIR/.basalt"
 	local package_id="$2"
 
 	ensure.nonzero 'install_dir'

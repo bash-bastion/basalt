@@ -4,8 +4,8 @@
 # command. Since that's not a real command, it does not have its own
 # file in 'commands'; it's here instead
 pkg.do-global-install() {
-	if ! rm -rf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages"; then
-		print.indent-die "Could not remove global 'basalt_packages' directory"
+	if ! rm -rf "$BASALT_GLOBAL_DATA_DIR/global/.basalt"; then
+		print.indent-die "Could not remove global '.basalt' directory"
 	fi
 
 	local -a dependencies=()
@@ -215,7 +215,7 @@ done"
 	print.indent-green "Transformed" "$package_id"
 }
 
-# Create a './basalt_packages' directory for a particular project directory
+# Create a './.basalt' directory for a particular project directory
 pkg.phase-local-integration() {
 	unset REPLY; REPLY=
 	local original_package_dir="$1"
@@ -241,22 +241,22 @@ pkg.phase-local-integration() {
 		local package_id="$REPLY"
 
 		if [ "$is_direct" = yes ]; then
-			symlink.package "$original_package_dir/basalt_packages/packages" "$package_id"
+			symlink.package "$original_package_dir/.basalt/packages" "$package_id"
 
 			if [ "$symlink_mode" = 'strict' ]; then
-				symlink.bin_strict "$original_package_dir/basalt_packages/packages" "$package_id"
+				symlink.bin_strict "$original_package_dir/.basalt/packages" "$package_id"
 			elif [ "$symlink_mode" = 'lenient' ]; then
-				symlink.bin_lenient "$original_package_dir/basalt_packages/packages" "$package_id"
+				symlink.bin_lenient "$original_package_dir/.basalt/packages" "$package_id"
 			else
 				util.die_unexpected_value 'symlink_mode'
 			fi
 		elif [ "$is_direct" = no ]; then
-			symlink.package "$original_package_dir/basalt_packages/transitive/packages" "$package_id"
+			symlink.package "$original_package_dir/.basalt/transitive/packages" "$package_id"
 
 			if [ "$symlink_mode" = 'strict' ]; then
-				symlink.bin_strict "$original_package_dir/basalt_packages/transitive/packages" "$package_id" "$package_id"
+				symlink.bin_strict "$original_package_dir/.basalt/transitive/packages" "$package_id" "$package_id"
 			elif [ "$symlink_mode" = 'lenient' ]; then
-				symlink.bin_lenient "$original_package_dir/basalt_packages/transitive/packages" "$package_id" "$package_id"
+				symlink.bin_lenient "$original_package_dir/.basalt/transitive/packages" "$package_id" "$package_id"
 			else
 				util.die_unexpected_value 'symlink_mode'
 			fi

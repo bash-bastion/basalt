@@ -39,9 +39,9 @@ util.init_global() {
 	[ -d "$BASALT_GLOBAL_DATA_DIR/store" ] || mkdir -p "$BASALT_GLOBAL_DATA_DIR/store"
 	[ -f "$BASALT_GLOBAL_DATA_DIR/global/dependencies" ] || touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
 
-	[ -L "$BASALT_GLOBAL_DATA_DIR/global/bin" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/bin" "$BASALT_GLOBAL_DATA_DIR/global/bin"
-	[ -L "$BASALT_GLOBAL_DATA_DIR/global/completion" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/completion" "$BASALT_GLOBAL_DATA_DIR/global/completion"
-	[ -L "$BASALT_GLOBAL_DATA_DIR/global/man" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/man" "$BASALT_GLOBAL_DATA_DIR/global/man"
+	[ -L "$BASALT_GLOBAL_DATA_DIR/global/bin" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/bin" "$BASALT_GLOBAL_DATA_DIR/global/bin"
+	[ -L "$BASALT_GLOBAL_DATA_DIR/global/completion" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/completion" "$BASALT_GLOBAL_DATA_DIR/global/completion"
+	[ -L "$BASALT_GLOBAL_DATA_DIR/global/man" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/man" "$BASALT_GLOBAL_DATA_DIR/global/man"
 }
 
 util.init_always() {

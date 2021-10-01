@@ -48,7 +48,7 @@ github.com/hyperupcall/bash-args
   State: Up to date
 ```
 
-You'll notice a `basalt_packages` directory has been created. Since the project is now installed, let's use it
+You'll notice a `.basalt` directory has been created. Since the project is now installed, let's use it
 
 Create a `script.sh` file
 
@@ -59,7 +59,7 @@ Create a `script.sh` file
 # @brief Demonstration of the bash-args library
 
 # Append to the PATH so we have access to `bash-args` in the PATH
-PATH="$PWD/basalt_packages/bin:$PATH"
+PATH="$PWD/.basalt/bin:$PATH"
 
 # Declare an associative array for storing the argument flags
 declare -A args=()

@@ -61,7 +61,7 @@ basalt.load() {
 	if [ "$__basalt_flag_global" = 'yes' ]; then
 		# TODO: Possible bug if nullglob is not set
 		# TODO: should check to ensure first (zeroith) element is not empty
-		local -a __basalt_pkg_path_full_array=("$BASALT_GLOBAL_DATA_DIR/global/basalt_packages/packages/$__basalt_pkg_path"@*)
+		local -a __basalt_pkg_path_full_array=("$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/$__basalt_pkg_path"@*)
 		local __basalt_pkg_path_full="${__basalt_pkg_path_full_array[0]}"
 		unset __basalt_pkg_path_full_array
 
@@ -97,7 +97,7 @@ basalt.load() {
 		# Assume can only have one version of a particular package for direct dependencies
 		local __basalt_load_package_exists='no' __basalt_did_run_source='no'
 		local __basalt_actual_pkg_path=
-		for __basalt_actual_pkg_path in "$BASALT_PACKAGE_PATH/basalt_packages/packages/$__basalt_pkg_path"*; do
+		for __basalt_actual_pkg_path in "$BASALT_PACKAGE_PATH/.basalt/packages/$__basalt_pkg_path"*; do
 			if [ "$__basalt_load_package_exists" = yes ]; then
 				printf '%s\n' "Error: basalt.load There are multiple direct dependencies for package '$__basalt_pkg_path'. This should not happen"
 				return 1
