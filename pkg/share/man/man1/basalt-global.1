@@ -1,0 +1,33 @@
+.\" Basalt manpage
+
+.TH BASALT 1 "01 Oct 2021" "v0.9.0" "Basalt man page"
+.SH NAME
+basalt \- Bash papackage manager (NOTE THAT THESE MAN PAGES ARE OUTDATED)
+.SH SYNOPSIS
+basalt global <subcommand> [args...]
+.SH DESCRIPTION
+Execute a command for the global context
+.SH SUBCOMMANDS
+.PP
+\fBinit\fP
+	Creates a new Basalt package in the current directory
+.PP
+\fBadd\fP [package...]
+	Adds a dependency to the current local project
+.PP
+\fBupgrade\fP [package...]
+	Upgrades a dependency for the current local project
+.PP
+\fBremove\fP [package...]
+	Removes a dependency from the current local project
+.PP
+\fBlist\fP
+	Resolves and installs all dependencies for the current local project
+.SH SEE ALSO
+basalt-global(1)
+.SH BUGS
+Bugs are tracked in GitHub Issues: \fBhttps://github.com/hyperupcall/basalt/issues\fB
+.SH AUTHOR
+Written by Edwin Kofler (edwin@kofler.dev) and contributors
+.SH COPYRIGHT
+See LICENSE: \fBhttps://github.com/hyperupcall/basalt/blob/main/LICENSE\fB
