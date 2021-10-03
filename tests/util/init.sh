@@ -14,7 +14,7 @@ test_util.get_repo_root
 REPO_ROOT="$REPLY"
 
 # Source Basalt
-for f in "$REPO_ROOT"/pkg/lib/{cmd,commands,source,util}/?*.sh; do
+for f in "$REPO_ROOT"/pkg/lib/{cmd,commands,public,util}/?*.sh; do
 	source "$f"
 done; unset f
 
