@@ -24,8 +24,8 @@ basalt.package-init() {
    export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
 
    # basalt global and internal functions
-   source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
-   source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-package.sh"
+   source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-load.sh"
+   source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-package.sh"
 
 	# TODO: this needs to be redone
    if [ -z "$BASALT_PACKAGE_PATH" ]; then

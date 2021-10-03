@@ -71,7 +71,7 @@ do-global-init() {
 
 		cat <<-"EOF"
 		# basalt global functions
-		source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
+		source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-load.sh"
 
 		# basalt completions
 		if [ -f "$BASALT_GLOBAL_REPO/completions/basalt.bash" ]; then
@@ -94,7 +94,7 @@ do-global-init() {
 
 		cat <<-"EOF"
 		# basalt global functions
-		source "$BASALT_GLOBAL_REPO/pkg/lib/source/basalt-load.sh"
+		source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-load.sh"
 
 		# basalt completions
 		fpath=("$BASALT_GLOBAL_REPO/completions" $fpath)
