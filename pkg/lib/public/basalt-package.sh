@@ -27,8 +27,8 @@ basalt.package-load() {
 					shopt -u nullglob
 				fi
 
-				if [ -f "$__basalt_package/.basalt/generated/source_package.sh" ]; then
-					source "$__basalt_package/.basalt/generated/source_package.sh"
+				if [ -f "$__basalt_package/.basalt/generated/source-package.sh" ]; then
+					source "$__basalt_package/.basalt/generated/source-package.sh"
 				fi
 
 				shopt -s nullglob
@@ -37,8 +37,8 @@ basalt.package-load() {
 	done
 	unset __basalt_site __basalt_repository_owner __basalt_package
 
-	if [ -f "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh" ]; then
-		source "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh"
+	if [ -f "$BASALT_PACKAGE_PATH/.basalt/generated/source-package.sh" ]; then
+		source "$BASALT_PACKAGE_PATH/.basalt/generated/source-package.sh"
 	fi
 
 	if [ "$__basalt_shopt_nullglob" = 'yes' ]; then

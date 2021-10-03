@@ -1,16 +1,16 @@
 [package]
-name = ''
-slug = ''
-version = ''
-authors = []
+name = 'basalt'
+slug = 'basalt'
+version = '0.9.0'
+authors = ['Edwin Kofler <edwin@kofler.dev>']
 description = ''
 
 [run]
 dependencies = []
-sourceDirs = []
-binDirs = []
+sourceDirs = ['pkg/lib/cmd', 'pkg/lib/commands', 'pkg/lib/public', 'pkg/lib/util']
+binDirs = ['pkg/bin']
 completionDirs = []
-manDirs = []
+manDirs = ['pkg/share/man']
 
 [run.shellEnvironment]
 
