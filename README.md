@@ -51,3 +51,7 @@ Note that many of these features have been implemented before, but require a rei
 ## Ecosystem
 
 There is a small, but growing number of packages installable with Basalt. See the list at [awesome-bash-packages](https://github.com/hyperupcall/awesome-bash-packages)
+
+## License
+
+Original code is licensed under MIT by Juan Ibiapina. Modifications are licensed under BSD 3-Clause by Edwin Kofler
