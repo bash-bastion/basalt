@@ -1,12 +1,7 @@
 # shellcheck shell=bash
 
 # Source testing dependencies
-load './vendor/bats-assert/assert.sh'
-load './vendor/bats-file/file.sh'
-load './vendor/bats-file/temp.sh'
-load './vendor/bats-support/error.sh'
-load './vendor/bats-support/lang.sh'
-load './vendor/bats-support/output.sh'
+load './vendor/bats-common-utils/load.bash'
 load './util/test_util.sh'
 
 # Get the current directory of the Basalt git repository
@@ -27,6 +22,7 @@ basalt-package-init() { basalt-package-init.main "$@"; }
 basalt() { basalt.main "$@"; }
 
 # Testing variables
+export NO_COLOR=
 export XDG_DATA_HOME=
 export BASALT_GLOBAL_REPO="$BATS_TEST_TMPDIR/source"
 export BASALT_GLOBAL_DATA_DIR="$BATS_TEST_TMPDIR/localshare"

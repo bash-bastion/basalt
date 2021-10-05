@@ -83,10 +83,6 @@ pkg.phase_download_tarball() {
 	local download_dest="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
 	mkdir -p "${download_dest%/*}"
 
-	if [ ${DEBUG+x} ]; then
-		print.indent-light-cyan "Downloading" "$package_id | $download_dest"
-	fi
-
 	# Use cache if it already exists
 	if [ -e "$download_dest" ]; then
 		print.indent-green "Downloaded" "$package_id (cached)"
@@ -104,13 +100,12 @@ pkg.phase_download_tarball() {
 				print.indent-die "File '$download_dest' is not actually a tarball"
 			fi
 
-			print.indent-green "Downloaded" "$site/$package@$version"
+			print.indent-green "Downloaded" "$package_id"
 			return
-		else
-			# This is OK, since the 'version' could be an actual ref. In that case,
-			# download the package as below
-			:
 		fi
+
+		# If cURL fails, this is OK, since the 'version' could be an actual ref. In that case,
+		# download the package as below. It does this automatically for 'local' packages
 	fi
 
 	# TODO Print warning if a local dependency has a dirty index
@@ -120,12 +115,12 @@ pkg.phase_download_tarball() {
 	fi
 
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
-	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" 2>/dev/null; then
+	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id"; then
 		print.indent-die "Could not clone repository for $package_id"
 	fi
 
-	if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" archive --prefix="prefix/" -o "$download_dest" "$version"; then
-		rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
+	if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
+		rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch" "$download_dest"
 		print.indent-die "Could not download archive or extract archive from temporary Git repository of $package_id"
 	fi
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
@@ -145,10 +140,6 @@ pkg.phase_extract_tarball() {
 
 	local tarball_src="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
 	local tarball_dest="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
-
-	if [ ${DEBUG+x} ]; then
-		print.indent-light-cyan "Extracting" "$package_id | $tarball_dest"
-	fi
 
 	# Use cache if it already exists
 	if [ -d "$tarball_dest" ]; then
@@ -177,10 +168,6 @@ pkg.phase_global_integration() {
 	ensure.nonzero 'package_id'
 
 	local project_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
-
-	if [ ${DEBUG+x} ]; then
-		print.indent-light-cyan "Transforming" "$project_dir"
-	fi
 
 	ensure.dir "$project_dir"
 	if [ -f "$project_dir/basalt.toml" ]; then

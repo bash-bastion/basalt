@@ -108,7 +108,7 @@ util.get_package_id() {
 	if [ "$repo_type" = 'remote' ]; then
 		REPLY="$site/$package@$version"
 	elif [ "$repo_type" = 'local' ]; then
-		REPLY="local/${url##*/}"
+		REPLY="local/${url##*/}@$version"
 	else
 		util.die_unexpected_value 'repo_type'
 	fi

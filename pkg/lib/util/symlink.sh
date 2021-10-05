@@ -13,10 +13,6 @@ symlink.package() {
 	local target="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 	local link_name="$install_dir/$package_id"
 
-	if [ ${DEBUG+x} ]; then
-		print.indent-light-cyan "Symlinking" "$link_name -> $target"
-	fi
-
 	mkdir -p "${link_name%/*}"
 	if ! ln -sf "$target" "$link_name"; then
 		print.indent-die "Could not symlink directory '${target##*/}' for package $package_id"
@@ -41,11 +37,6 @@ symlink.bin_strict() {
 				if [ -d "$package_dir/$dir" ]; then
 					for target in "$package_dir/$dir"/*; do
 						local link_name="$install_dir/bin/${target##*/}"
-
-						if [ ${DEBUG+x} ]; then
-							print.indent-light-cyan "Symlinking" "target    $target"
-							print.indent-light-cyan "Symlinking" "link_name $link_name"
-						fi
 
 						if [ -e "$link_name" ]; then
 							print-indent 'Warning' "Executable file '${target##*/} for package $package_id will clobber an identically-named file owned by a different package"
