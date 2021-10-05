@@ -18,27 +18,29 @@ basalt.package-load() {
 	shopt -s nullglob
 
 	local __basalt_site= __basalt_repository_owner=  __basalt_package=
-	for __basalt_site in "$BASALT_PACKAGE_PATH"/.basalt/packages/*; do
-		for __basalt_repository_owner in "$__basalt_site"/*; do
-			for __basalt_package in "$__basalt_repository_owner"/*; do
-				if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
+	if [ -d "$BASALT_PACKAGE_PATH"/.basalt/packages ]; then
+		for __basalt_site in "$BASALT_PACKAGE_PATH"/.basalt/packages/*/; do
+			for __basalt_repository_owner in "$__basalt_site"/*/; do
+				for __basalt_package in "$__basalt_repository_owner"/*/; do
+					if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
+						shopt -s nullglob
+					else
+						shopt -u nullglob
+					fi
+
+					if [ -f "$__basalt_package.basalt/generated/source_package.sh" ]; then
+						source "$__basalt_package.basalt/generated/source_package.sh"
+					fi
+
 					shopt -s nullglob
-				else
-					shopt -u nullglob
-				fi
-
-				if [ -f "$__basalt_package/.basalt/generated/source-package.sh" ]; then
-					source "$__basalt_package/.basalt/generated/source-package.sh"
-				fi
-
-				shopt -s nullglob
+				done
 			done
 		done
-	done
+	fi
 	unset __basalt_site __basalt_repository_owner __basalt_package
 
-	if [ -f "$BASALT_PACKAGE_PATH/.basalt/generated/source-package.sh" ]; then
-		source "$BASALT_PACKAGE_PATH/.basalt/generated/source-package.sh"
+	if [ -f "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh" ]; then
+		source "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh"
 	fi
 
 	if [ "$__basalt_shopt_nullglob" = 'yes' ]; then

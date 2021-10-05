@@ -52,14 +52,14 @@ pkg.install_package() {
 		fi
 
 		# Only after all the dependencies are installed do we muck with the package
-		pkg.phase_global-integration "$package_id"
+		pkg.phase_global_integration "$package_id"
 	done
 	unset pkg
 
 	# Only if all the previous modifications to the global package store has been successfull
 	# do we muck with the current local project
-	pkg.phase_local-integration "$project_dir" 'yes' "$symlink_mode" "$@"
-	pkg.phase_local-generate-scripts "$project_dir"
+	pkg.phase_local_integration "$project_dir" 'yes' "$symlink_mode" "$@"
+	pkg.phase_local_generate-scripts "$project_dir"
 }
 
 # @description Downloads package tarballs from the internet to the global store. If a git revision is specified, it
@@ -172,7 +172,7 @@ pkg.phase_extract_tarball() {
 
 # TODO: properly cache transformations
 # @description This performs modifications a particular package in the global store
-pkg.phase_global-integration() {
+pkg.phase_global_integration() {
 	local package_id="$1"
 	ensure.nonzero 'package_id'
 
@@ -186,8 +186,8 @@ pkg.phase_global-integration() {
 	if [ -f "$project_dir/basalt.toml" ]; then
 		# Install dependencies
 		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-			pkg.phase_local-integration "$project_dir" 'yes' 'strict' "${REPLIES[@]}"
-			pkg.phase_local-generate-scripts "$project_dir"
+			pkg.phase_local_integration "$project_dir" 'yes' 'strict' "${REPLIES[@]}"
+			pkg.phase_local_generate-scripts "$project_dir"
 		fi
 	fi
 
@@ -195,7 +195,7 @@ pkg.phase_global-integration() {
 }
 
 # Create a './.basalt' directory for a particular project directory
-pkg.phase_local-integration() {
+pkg.phase_local_integration() {
 	unset REPLY; REPLY=
 	local original_package_dir="$1"
 	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
@@ -247,7 +247,7 @@ pkg.phase_local-integration() {
 		ensure.dir "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
 			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
-				pkg.phase_local-integration "$original_package_dir" 'no' 'strict' "${REPLIES[@]}"
+				pkg.phase_local_integration "$original_package_dir" 'no' 'strict' "${REPLIES[@]}"
 			fi
 		fi
 	done
@@ -255,7 +255,7 @@ pkg.phase_local-integration() {
 }
 
 # @description Generate scripts for './.basalt/generated' directory
-pkg.phase_local-generate-scripts() {
+pkg.phase_local_generate-scripts() {
 	local project_dir="$1"
 	local mode="$2"
 
@@ -269,8 +269,11 @@ pkg.phase_local-generate-scripts() {
 			for source_dir in "${REPLIES[@]}"; do
 				# TODO: use BASALT_GLOBAL_DATA_DIR
 				printf -v content '%s%s\n' "$content" "for __basalt_f in \"$project_dir/$source_dir\"/*; do
-  source \"\$__basalt_f\"
-done"
+	if [ -f \"\$__basalt_f\" ]; then
+		source \"\$__basalt_f\"
+	fi
+done
+"
 			done
 			unset source_dir
 

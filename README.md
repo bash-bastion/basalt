@@ -54,4 +54,4 @@ There is a small, but growing number of packages installable with Basalt. See th
 
 ## License
 
-Original code is licensed under MIT by Juan Ibiapina. Modifications are licensed under BSD 3-Clause by Edwin Kofler
+Original code is licensed under `MIT` by Juan Ibiapina. Modifications are licensed under `BSD-3-Clause` by Edwin Kofler
