@@ -7,7 +7,8 @@ The installation of packages is split into four phases. Each of these phases cor
 1. Package download
 2. Package extraction
 3. Package global integration
-4. Package local integration
+4. Package local integration (recursive)
+5. Package local integration (non-recursive)
 
 ## 1. Package download
 
@@ -29,9 +30,9 @@ For each package in `$BASALT_GLOBAL_DATA_DIR/store/packages`, modifications are 
 - Creating a local `./.basalt` directory (local integration)
 - Converting the runtime essence of the `./basalt.toml` file into other files that are either sourcable or easier to parse
 
-### 4. Local integration
+### 4. Local integration (recursive)
 
-The final step involves creating a `.basalt` directory so the functionality of all dependencies can be properly exposed. The directory is located at `./.basalt` for local dependencies and at `BASALT_GLOBAL_DATA_DIR/global/.basalt` for global dependencies
+This step involves creating a `.basalt` directory so the functionality of all dependencies can be properly exposed. The directory is located at `$BASALT_LOCAL_PROJECT_DIR/.basalt` for local dependencies and at `$BASALT_GLOBAL_DATA_DIR/global/.basalt` for global dependencies
 
 ```txt
 - .basalt/
@@ -45,3 +46,7 @@ The final step involves creating a `.basalt` directory so the functionality of a
     - man/
     - packages/
 ```
+
+### 5. Local integration (non-recursive)
+
+This is similar to the previous step, except it performs functionalities that are inherently non recursive. This includes creating the `./basalt/generated` subdirectory and the files within it

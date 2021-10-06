@@ -31,16 +31,15 @@ pkg.install_package() {
 			fi
 		fi
 
-		# Only after all the dependencies are installed do we muck with the package
+		# Only after all the dependencies are installed do we muck with the global packages
 		pkg.phase_global_integration "$package_id"
 	done; unset pkg
 
 	# TODO: make this happen only once (recursion)
-
 	# Only if all the previous modifications to the global package store has been successfull
 	# do we muck with the current local project
-	pkg.phase_local_integration "$project_dir" 'yes' "$symlink_mode" "$@"
-	pkg.phase_local_generate-scripts "$project_dir"
+	pkg.phase_local_integration_recursive "$project_dir" 'yes' "$symlink_mode" "$@"
+	pkg.phase_local_integration_nonrecursive "$project_dir"
 }
 
 # @description Downloads package tarballs from the internet to the global store. If a git revision is specified, it
@@ -154,8 +153,8 @@ pkg.phase_global_integration() {
 	if [ -f "$project_dir/basalt.toml" ]; then
 		# Install dependencies
 		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-			pkg.phase_local_integration "$project_dir" 'yes' 'strict' "${REPLIES[@]}"
-			pkg.phase_local_generate-scripts "$project_dir"
+			pkg.phase_local_integration_recursive "$project_dir" 'yes' 'strict' "${REPLIES[@]}"
+			pkg.phase_local_integration_nonrecursive "$project_dir"
 		fi
 	fi
 
@@ -163,7 +162,7 @@ pkg.phase_global_integration() {
 }
 
 # Create a './.basalt' directory for a particular project directory
-pkg.phase_local_integration() {
+pkg.phase_local_integration_recursive() {
 	unset REPLY; REPLY=
 	local original_package_dir="$1"
 	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
@@ -213,7 +212,7 @@ pkg.phase_local_integration() {
 		ensure.dir "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
 			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
-				pkg.phase_local_integration "$original_package_dir" 'no' 'strict' "${REPLIES[@]}"
+				pkg.phase_local_integration_recursive "$original_package_dir" 'no' 'strict' "${REPLIES[@]}"
 			fi
 		fi
 	done
@@ -221,7 +220,7 @@ pkg.phase_local_integration() {
 }
 
 # @description Generate scripts for './.basalt/generated' directory
-pkg.phase_local_generate-scripts() {
+pkg.phase_local_integration_nonrecursive() {
 	local project_dir="$1"
 	local mode="$2"
 
