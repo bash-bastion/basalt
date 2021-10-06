@@ -20,11 +20,7 @@ do-add() {
 	# Package parsing (WET)
 	for pkg in "${pkgs[@]}"; do
 		util.get_package_info "$pkg"
-		local repo_type="$REPLY1"
-		local url="$REPLY2"
-		local site="$REPLY3"
-		local package="$REPLY4"
-		local version="$REPLY5"
+		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 		if ! util.does_package_exist "$repo_type" "$url"; then
 			print.die "Package located at '$url' does not exist"

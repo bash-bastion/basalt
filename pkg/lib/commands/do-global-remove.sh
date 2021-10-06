@@ -23,16 +23,13 @@ do-global-remove() {
 
 	for pkg in "${pkgs[@]}"; do
 		util.get_package_info "$pkg"
-		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
+		local url="$REPLY2" version="$REPLY5"
 
 		if [ -n "$version" ]; then
 			newindent.die "Must not specify ref when removing packages"
 		fi
 
-		util.get_package_id --allow-empty-version "$repo_type" "$url" "$site" "$package" "$version"
-		local package_id="$REPLY"
-
-		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$package_id" "$flag_force"
+		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$flag_force"
 	done
 
 	pkg.do-global-install

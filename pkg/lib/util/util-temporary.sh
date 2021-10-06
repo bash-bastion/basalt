@@ -192,13 +192,13 @@ util.text_add_dependency() {
 	mkdir -p "${text_file%/*}"
 	touch "$text_file"
 
+	util.get_package_info "$dependency"
+	local url2="$REPLY2"
+
 	local line=
 	while IFS= read -r line; do
 		util.get_package_info "$line"
 		local url1="$REPLY2"
-
-		util.get_package_info "$dependency"
-		local url2="$REPLY2"
 
 		if [ "$url1" = "$url2" ]; then
 			print.indent-yellow 'Warning' "A version of '${line%@*}' is already installed. Skipping"
@@ -211,19 +211,29 @@ util.text_add_dependency() {
 util.text_remove_dependency() {
 	local text_file="$1"
 	local dependency="$2"
-	local package_id="$3"
-	local flag_force="$4"
+	local flag_force="$3"
 
 	ensure.nonzero 'text_file'
 	ensure.nonzero 'dependency'
-	ensure.nonzero 'package_id'
 	ensure.nonzero 'flag_force'
+
+	util.get_package_info "$dependency"
+	local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
+
+	util.get_package_id --allow-empty-version "$repo_type" "$url" "$site" "$package" "$version"
+	local package_id="$REPLY"
 
 	local -a arr=()
 	if util.text_dependency_is_installed "$text_file" "$dependency"; then
 		local line=
 		while IFS= read -r line; do
-			if [ "${dependency%@*}" != "${line%@*}" ]; then
+			util.get_package_info "$line"
+			local url1="$REPLY2"
+
+			util.get_package_info "$dependency"
+			local url2="$REPLY2"
+
+			if [ "$url1" != "$url2" ]; then
 				arr+=("$line")
 			fi
 		done < "$text_file"

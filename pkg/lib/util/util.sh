@@ -294,6 +294,7 @@ util.get_tarball_url() {
 	fi
 }
 
+# TODO: remove this
 # If any version of a text dependency is installed
 util.text_dependency_is_installed() {
 	local text_file="$1"
