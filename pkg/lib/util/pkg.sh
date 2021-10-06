@@ -34,12 +34,6 @@ pkg.install_package() {
 		# Only after all the dependencies are installed do we muck with the global packages
 		pkg.phase_global_integration "$package_id"
 	done; unset pkg
-
-	# TODO: make this happen only once (recursion)
-	# Only if all the previous modifications to the global package store has been successfull
-	# do we muck with the current local project
-	pkg.phase_local_integration_recursive "$project_dir" 'yes' "$symlink_mode" "$@"
-	pkg.phase_local_integration_nonrecursive "$project_dir"
 }
 
 # @description Downloads package tarballs from the internet to the global store. If a git revision is specified, it
@@ -171,6 +165,7 @@ pkg.phase_local_integration_recursive() {
 
 	ensure.nonzero 'original_package_dir'
 	ensure.nonzero 'is_direct'
+	ensure.nonzero 'symlink_mode'
 
 	local pkg=
 	for pkg; do
@@ -222,11 +217,11 @@ pkg.phase_local_integration_recursive() {
 # @description Generate scripts for './.basalt/generated' directory
 pkg.phase_local_integration_nonrecursive() {
 	local project_dir="$1"
-	local mode="$2"
+	ensure.nonzero 'project_dir'
 
 	# Create generated files
 	local content=
-	if [ -d "$project_dir/basalt.toml" ]; then
+	if [ -f "$project_dir/basalt.toml" ]; then
 		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
 			if ((${#REPLIES[@]} > 0)); then
 				# TODO output to file descriptor with exec
@@ -252,5 +247,4 @@ done
 			fi
 		fi
 	fi
-
 }
