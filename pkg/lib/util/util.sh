@@ -44,7 +44,7 @@ util.init_global() {
 		mkdir -p "$BASALT_GLOBAL_DATA_DIR/store"
 	fi
 	if [ ! -f "$BASALT_GLOBAL_DATA_DIR/global/dependencies" ]; then
-		"$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+		touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
 	fi
 
 	# Note that I would prefer to check the existence of the target directory as well, but that would mean if the user installs
