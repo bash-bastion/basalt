@@ -34,15 +34,30 @@ util.init_global() {
 		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
-	# TODO
-	[ -d "$BASALT_GLOBAL_REPO" ] || mkdir -p "$BASALT_GLOBAL_REPO"
-	[ -d "$BASALT_GLOBAL_DATA_DIR/global" ] || mkdir -p "$BASALT_GLOBAL_DATA_DIR/global"
-	[ -d "$BASALT_GLOBAL_DATA_DIR/store" ] || mkdir -p "$BASALT_GLOBAL_DATA_DIR/store"
-	[ -f "$BASALT_GLOBAL_DATA_DIR/global/dependencies" ] || touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+	if [ ! -d "$BASALT_GLOBAL_REPO" ]; then
+		mkdir -p "$BASALT_GLOBAL_REPO"
+	fi
+	if [ ! -d "$BASALT_GLOBAL_DATA_DIR/global" ]; then
+		mkdir -p "$BASALT_GLOBAL_DATA_DIR/global"
+	fi
+	if [ ! -d "$BASALT_GLOBAL_DATA_DIR/store" ]; then
+		mkdir -p "$BASALT_GLOBAL_DATA_DIR/store"
+	fi
+	if [ ! -f "$BASALT_GLOBAL_DATA_DIR/global/dependencies" ]; then
+		"$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+	fi
 
-	[ -L "$BASALT_GLOBAL_DATA_DIR/global/bin" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/bin" "$BASALT_GLOBAL_DATA_DIR/global/bin"
-	[ -L "$BASALT_GLOBAL_DATA_DIR/global/completion" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/completion" "$BASALT_GLOBAL_DATA_DIR/global/completion"
-	[ -L "$BASALT_GLOBAL_DATA_DIR/global/man" ] || ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/man" "$BASALT_GLOBAL_DATA_DIR/global/man"
+	# Note that I would prefer to check the existence of the target directory as well, but that would mean if the user installs
+	# a package that creates for example a 'completion' directory, it would not show up until 'basalt' is executed again
+	if [ ! -L "$BASALT_GLOBAL_DATA_DIR/global/bin" ]; then
+		ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/bin" "$BASALT_GLOBAL_DATA_DIR/global/bin"
+	fi
+	if [ ! -L "$BASALT_GLOBAL_DATA_DIR/global/completion" ]; then
+		ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/completion" "$BASALT_GLOBAL_DATA_DIR/global/completion"
+	fi
+	if [ ! -L "$BASALT_GLOBAL_DATA_DIR/global/man" ]; then
+		ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/man" "$BASALT_GLOBAL_DATA_DIR/global/man"
+	fi
 }
 
 util.init_always() {
