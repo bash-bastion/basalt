@@ -202,8 +202,7 @@ pkg.phase_local_integration_recursive() {
 				pkg.phase_local_integration_recursive "$original_package_dir" 'no' 'strict' "${REPLIES[@]}"
 			fi
 		fi
-	done
-	unset pkg
+	done; unset pkg
 }
 
 # @description Generate scripts for './.basalt/generated' directory
@@ -227,8 +226,7 @@ pkg.phase_local_integration_nonrecursive() {
   fi
 done
 "
-				done
-				unset source_dir
+				done; unset source_dir
 
 				printf -v content '%s%s' "$content" 'unset __basalt_f'
 

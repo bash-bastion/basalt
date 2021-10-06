@@ -82,8 +82,7 @@ do-global-init() {
 		if [ -d "$BASALT_GLOBAL_DATA_DIR/completions/bash" ]; then
 		  for f in "$BASALT_GLOBAL_DATA_DIR"/completions/bash/*; do
 		    source "$f"
-		  done
-		  unset f
+		  done; unset f
 		fi
 
 		EOF
@@ -104,8 +103,7 @@ do-global-init() {
 		if [ -d "$BASALT_GLOBAL_DATA_DIR/completions/zsh/compctl" ]; then
 		  for f in "$BASALT_GLOBAL_DATA_DIR"/completions/zsh/compctl/*; do
 		    source "$f"
-		  done
-		  unset f
+		  done; unset f
 		fi
 
 		EOF

@@ -115,8 +115,7 @@ util.toml_add_dependency() {
 				print.indent-yellow 'Warning' "A version of '${name%@*}' is already installed. Skipping"
 				return
 			fi
-		done
-		unset name
+		done; unset name
 
 		if ((${#REPLIES[@]} == 0)); then
 			mv "$toml_file" "$toml_file.bak"
@@ -145,16 +144,15 @@ util.toml_remove_dependency() {
 
 	if util.get_toml_array "$toml_file" 'dependencies'; then
 		local dependency_array=()
-		local name=
 		local does_exist='no'
+		local name=
 		for name in "${REPLIES[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
 				does_exist='yes'
 			else
 				dependency_array+=("$name")
 			fi
-		done
-		unset name
+		done; unset name
 
 		if [ "$does_exist" != 'yes' ]; then
 			print.indent-die "The package '$key_value' is not currently a dependency"
@@ -165,10 +163,10 @@ util.toml_remove_dependency() {
 		while IFS= read -r line; do
 			if [[ "$line" == *dependencies*=* ]]; then
 				local new_line='dependencies = ['
+				local dep=
 				for dep in "${dependency_array[@]}"; do
 					printf -v new_line "%s'%s', " "$new_line" "$dep"
-				done
-				unset dep
+				done; unset dep
 
 				new_line="${new_line%, }]"
 				printf '%s\n' "$new_line"

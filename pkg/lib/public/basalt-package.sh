@@ -33,11 +33,10 @@ basalt.package-load() {
 					fi
 
 					shopt -s nullglob
-				done
-			done
-		done
+				done; unset __basalt_package
+			done; unset __basalt_repository_owner
+		done; unset __basalt_site
 	fi
-	unset __basalt_site __basalt_repository_owner __basalt_package
 
 	if [ -f "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh" ]; then
 		source "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh"
