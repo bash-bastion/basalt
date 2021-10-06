@@ -73,10 +73,15 @@ print.indent-green() {
 	fi
 }
 
-print.indent-light-cyan() {
+newindent.die() {
+	newindent.error "$1"
+	exit 1
+}
+
+newindent.error() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "%11s %s\n" "$1" "$2"
+		printf "%11s %s\n" "Error" "$1"
 	else
-		printf "\033[0;36m%11s\033[0m %s\n" "$1" "$2"
+		printf "\033[0;31m%11s\033[0m %s\n" 'Error' "$1"
 	fi
 }

@@ -194,12 +194,49 @@ util.text_add_dependency() {
 
 	local line=
 	while IFS= read -r line; do
-		if [ "${line%@*}" = "${dependency%@*}" ]; then
+		util.get_package_info "$line"
+		local url1="$REPLY2"
+
+		util.get_package_info "$dependency"
+		local url2="$REPLY2"
+
+		if [ "$url1" = "$url2" ]; then
 			print.indent-yellow 'Warning' "A version of '${line%@*}' is already installed. Skipping"
-			return
 		fi
-	done < "$text_file"
-	unset line
+	done < "$text_file"; unset line
 
 	printf '%s\n' "$dependency" >> "$text_file"
+}
+
+util.text_remove_dependency() {
+	local text_file="$1"
+	local dependency="$2"
+	local package_id="$3"
+	local flag_force="$4"
+
+	ensure.nonzero 'text_file'
+	ensure.nonzero 'dependency'
+	ensure.nonzero 'package_id'
+	ensure.nonzero 'flag_force'
+
+	local -a arr=()
+	if util.text_dependency_is_installed "$text_file" "$dependency"; then
+		local line=
+		while IFS= read -r line; do
+			if [ "${dependency%@*}" != "${line%@*}" ]; then
+				arr+=("$line")
+			fi
+		done < "$text_file"
+
+		printf "%s\n" "${arr[@]}" > "$text_file"
+	else
+		if [ "$flag_force" = 'no' ]; then
+			newindent.die "Dependency '${dependency%@*}' is not installed. Skipping"
+		fi
+	fi
+
+	rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"*
+	if [ "$flag_force" = 'yes' ]; then
+		rm -rf "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id"*
+	fi
 }

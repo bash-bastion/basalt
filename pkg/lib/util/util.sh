@@ -93,6 +93,12 @@ util.die_unexpected_value() {
 
 # @description Get id of package we can use for printing
 util.get_package_id() {
+	local flag_allow_empty_version='no' # Allow for version to be empty
+	for arg; do case "$arg" in
+		--allow-empty-version) flag_allow_empty_version='yes'; shift ;;
+		-*) newindent.die "Internal flag '$arg' not recognized" ;;
+		*) break ;;
+	esac done
 	local repo_type="$1"
 	local url="$2"
 	local site="$3"
@@ -101,14 +107,27 @@ util.get_package_id() {
 
 	ensure.nonzero 'repo_type'
 	ensure.nonzero 'url'
-	# 'site' not required if  "$repo_type" is 'local'
+	if [ "$repo_type" != 'local' ]; then
+		ensure.nonzero 'site'
+	fi
+	if [ "$flag_allow_empty_version" = 'no' ]; then
+		ensure.nonzero 'version'
+	fi
 	ensure.nonzero 'package'
-	ensure.nonzero 'version'
+
+	local maybe_version=
+	if [ "$flag_allow_empty_version" = 'no' ]; then
+		maybe_version="@$version"
+	else
+		if [ -n "$version" ]; then
+			maybe_version="@$version"
+		fi
+	fi
 
 	if [ "$repo_type" = 'remote' ]; then
-		REPLY="$site/$package@$version"
+		REPLY="$site/${package}$maybe_version"
 	elif [ "$repo_type" = 'local' ]; then
-		REPLY="local/${url##*/}@$version"
+		REPLY="local/${url##*/}${maybe_version}"
 	else
 		util.die_unexpected_value 'repo_type'
 	fi
@@ -187,7 +206,6 @@ util.get_latest_package_version() {
 util.get_package_info() {
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 	local input="$1"
-
 	ensure.nonzero 'input'
 
 	local regex1="^https?://"
@@ -233,7 +251,7 @@ util.get_package_info() {
 		REPLY4="$package"
 		REPLY5=
 	else
-		local site= package=
+		local site= package= ref=
 		input="${input%.git}"
 
 		if [[ "$input" == */*/* ]]; then
@@ -242,7 +260,7 @@ util.get_package_info() {
 			site="github.com"
 			package="$input"
 		else
-			return 1
+			newindent.die "String '$pkg' does not look like a package"
 		fi
 
 		if [[ "$package" == *@* ]]; then
@@ -274,6 +292,25 @@ util.get_tarball_url() {
 	else
 		print.die "Could not construct the location of the package tarball since '$site' is not supported"
 	fi
+}
+
+# If any version of a text dependency is installed
+util.text_dependency_is_installed() {
+	local text_file="$1"
+	local dependency="$2"
+
+	ensure.nonzero 'text_file'
+	ensure.nonzero 'dependency'
+
+	local line=
+	while IFS= read -r line; do
+		# TODO: use get_package_info
+		if [ "${line%@*}" = "${dependency%@*}" ]; then
+			return 0
+		fi
+	done < "$text_file"
+
+	return 1
 }
 
 util.show_help() {
@@ -317,7 +354,7 @@ Global subcommands:
   upgrade <package>
     Upgrades a global package
 
-  remove [--force] <package>
+  remove [--force] [package...]
     Uninstalls a global package
 
   list [--fetch] [--format=<simple>] [package...]

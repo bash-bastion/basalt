@@ -1,10 +1,14 @@
 # shellcheck shell=bash
 
-do-global-add() {
+do-global-remove() {
 	util.init_global
 
+	local flag_force='no'
 	local -a pkgs=()
 	for arg; do case "$arg" in
+	--force)
+		flag_force='yes'
+		;;
 	-*)
 		print.die "Flag '$arg' not recognized"
 		;;
@@ -21,16 +25,14 @@ do-global-add() {
 		util.get_package_info "$pkg"
 		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
-		if ! util.does_package_exist "$repo_type" "$url"; then
-			print.die "Package located at '$url' does not exist"
+		if [ -n "$version" ]; then
+			newindent.die "Must not specify ref when removing packages"
 		fi
 
-		if [ -z "$version" ]; then
-			util.get_latest_package_version "$repo_type" "$url" "$site" "$package"
-			version="$REPLY"
-		fi
+		util.get_package_id --allow-empty-version "$repo_type" "$url" "$site" "$package" "$version"
+		local package_id="$REPLY"
 
-		util.text_add_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url@$version"
+		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$package_id" "$flag_force"
 	done
 
 	pkg.do-global-install

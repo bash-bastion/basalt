@@ -2,6 +2,7 @@
 
 load './util/init.sh'
 
+# TODO: setup file
 setup() {
 	ensure.cd "$BATS_TEST_TMPDIR"
 

@@ -19,9 +19,7 @@ do-add() {
 
 	# Package parsing (WET)
 	for pkg in "${pkgs[@]}"; do
-		if ! util.get_package_info "$pkg"; then
-			print.die "String '$pkg' does not look like a package"
-		fi
+		util.get_package_info "$pkg"
 		local repo_type="$REPLY1"
 		local url="$REPLY2"
 		local site="$REPLY3"

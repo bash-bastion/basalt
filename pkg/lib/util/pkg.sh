@@ -8,9 +8,18 @@ pkg.do-global-install() {
 		print.indent-die "Could not remove global '.basalt' directory"
 	fi
 
-	local -a dependencies=()
-	readarray -t dependencies < "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
-	pkg.install_package "$BASALT_GLOBAL_DATA_DIR/global" 'lenient' "${dependencies[@]}"
+	local -a deps=()
+	local dep=
+
+	while IFS= read -r dep; do
+		if [ -z "$dep" ]; then
+			continue
+		fi
+
+		deps+=("$dep")
+	done < "$BASALT_GLOBAL_DATA_DIR/global/dependencies"; unset dep
+
+	pkg.install_package "$BASALT_GLOBAL_DATA_DIR/global" 'lenient' "${deps[@]}"
 }
 
 # @description Installs a pacakge and all its dependencies, relative to a
@@ -25,17 +34,10 @@ pkg.install_package() {
 	ensure.nonzero 'symlink_mode'
 
 	# TODO: save the state and have rollback feature
-
 	local pkg=
 	for pkg; do
-		if ! util.get_package_info "$pkg"; then
-			print.die "String '$pkg' does not look like a package"
-		fi
-		local repo_type="$REPLY1"
-		local url="$REPLY2"
-		local site="$REPLY3"
-		local package="$REPLY4"
-		local version="$REPLY5"
+		util.get_package_info "$pkg"
+		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 		util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 		local package_id="$REPLY"
@@ -53,8 +55,9 @@ pkg.install_package() {
 
 		# Only after all the dependencies are installed do we muck with the package
 		pkg.phase_global_integration "$package_id"
-	done
-	unset pkg
+	done; unset pkg
+
+	# TODO: make this happen only once (recursion)
 
 	# Only if all the previous modifications to the global package store has been successfull
 	# do we muck with the current local project
@@ -194,9 +197,7 @@ pkg.phase_local_integration() {
 
 	local pkg=
 	for pkg; do
-		if ! util.get_package_info "$pkg"; then
-			print.die "String '$pkg' does not look like a package"
-		fi
+		util.get_package_info "$pkg"
 		local repo_type="$REPLY1"
 		local url="$REPLY2"
 		local site="$REPLY3"
@@ -248,28 +249,31 @@ pkg.phase_local_generate-scripts() {
 
 	# Create generated files
 	local content=
-	if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
-		if ((${#REPLIES[@]} > 0)); then
-			# TODO output to file descriptor with exec
+	if [ -d "$project_dir/basalt.toml" ]; then
+		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
+			if ((${#REPLIES[@]} > 0)); then
+				# TODO output to file descriptor with exec
 
-			local source_dir=
-			for source_dir in "${REPLIES[@]}"; do
-				# TODO: use BASALT_GLOBAL_DATA_DIR
-				printf -v content '%s%s\n' "$content" "for __basalt_f in \"$project_dir/$source_dir\"/*; do
-	if [ -f \"\$__basalt_f\" ]; then
-		source \"\$__basalt_f\"
-	fi
+				local source_dir=
+				for source_dir in "${REPLIES[@]}"; do
+					# TODO: use BASALT_GLOBAL_DATA_DIR
+					printf -v content '%s%s\n' "$content" "for __basalt_f in \"$project_dir/$source_dir\"/*; do
+  if [ -f \"\$__basalt_f\" ]; then
+    source \"\$__basalt_f\"
+  fi
 done
 "
-			done
-			unset source_dir
+				done
+				unset source_dir
 
-			printf -v content '%s%s' "$content" 'unset __basalt_f'
+				printf -v content '%s%s' "$content" 'unset __basalt_f'
 
-			if [ ! -d "$project_dir/.basalt/generated" ]; then
-				mkdir -p "$project_dir/.basalt/generated"
+				if [ ! -d "$project_dir/.basalt/generated" ]; then
+					mkdir -p "$project_dir/.basalt/generated"
+				fi
+				cat <<< "$content" > "$project_dir/.basalt/generated/source_package.sh"
 			fi
-			cat <<< "$content" > "$project_dir/.basalt/generated/source_package.sh"
 		fi
 	fi
+
 }

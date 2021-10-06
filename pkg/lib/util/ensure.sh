@@ -32,7 +32,7 @@ ensure.nonzero() {
 
 	local -n value="$name"
 	if [ -z "$value" ]; then
-		print.internal_die "Argument '$name' for function '${FUNCNAME[1]}' is empty"
+		print.internal_die "Argument '$name' for function '${FUNCNAME[1]} ${FUNCNAME[2]} ${FUNCNAME[3]}' is empty"
 	fi
 }
 
