@@ -16,7 +16,7 @@ During this stage, tarballs files are downloaded from the internet to `$BASALT_G
 
 In most cases, tarballs can be downloaded directly. From the point of view of a consumer, you can access these types of tarballs by specifying a revision like `@v0.3.0'` in `dependencies`. From the point of view of a package maintainer, enable this behavior by authoring a GitHub release based on a release commit of a Git repository. Doing this is most efficient since the whole Git repository does not need to be downloaded
 
-Sometimes, a package consumer may want to use a revision that is not a release (e.g. `@e5466e6c3998790ebd99768cf0f910e161b84a95`). When this type of revision is specified, Basalt will clone the entire repsitory, then use `git-archive(1)` to extract the revision in the form of a tarball
+Sometimes, a package consumer may want to use a revision that is not a release (e.g. `@e5466e6c3998790ebd99768cf0f910e161b84a95`). When this type of revision is specified, Basalt will clone the entire repository, then use `git-archive(1)` to extract the revision in the form of a tarball
 
 ## 2. Package extraction
 
@@ -28,7 +28,7 @@ For each package in `$BASALT_GLOBAL_DATA_DIR/store/packages`, modifications are 
 
 - Appending version numbers to all functions
 - Creating a local `./.basalt` directory (local integration)
-- Converting the runtime essence of the `./basalt.toml` file into other files that are either sourcable or easier to parse
+- Converting the runtime essence of the `./basalt.toml` file into other files that are either sourceable or easier to parse
 
 ### 4. Local integration (recursive)
 

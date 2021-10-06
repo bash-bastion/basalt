@@ -3,7 +3,7 @@
 # @description Installs a pacakge and all its dependencies, relative to a
 # particular project_dir. symlink_mode changes how components of its direct
 # dependencies are synced
-pkg.install_package() {
+pkg.install_packages() {
 	local project_dir="$1"
 	local symlink_mode="$2"
 	shift 2
@@ -27,7 +27,7 @@ pkg.install_package() {
 		# Install transitive dependencies if they exist
 		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
 			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
-				pkg.install_package "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" 'strict' "${REPLIES[@]}"
+				pkg.install_packages "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" 'strict' "${REPLIES[@]}"
 			fi
 		fi
 
