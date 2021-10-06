@@ -1,27 +1,5 @@
 # shellcheck shell=bash
 
-# @description This fufills the function of a 'basalt global install'
-# command. Since that's not a real command, it does not have its own
-# file in 'commands'; it's here instead
-pkg.do-global-install() {
-	if ! rm -rf "$BASALT_GLOBAL_DATA_DIR/global/.basalt"; then
-		print.indent-die "Could not remove global '.basalt' directory"
-	fi
-
-	local -a deps=()
-	local dep=
-
-	while IFS= read -r dep; do
-		if [ -z "$dep" ]; then
-			continue
-		fi
-
-		deps+=("$dep")
-	done < "$BASALT_GLOBAL_DATA_DIR/global/dependencies"; unset dep
-
-	pkg.install_package "$BASALT_GLOBAL_DATA_DIR/global" 'lenient' "${deps[@]}"
-}
-
 # @description Installs a pacakge and all its dependencies, relative to a
 # particular project_dir. symlink_mode changes how components of its direct
 # dependencies are synced

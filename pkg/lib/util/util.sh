@@ -34,6 +34,7 @@ util.init_global() {
 		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
+	# TODO
 	[ -d "$BASALT_GLOBAL_REPO" ] || mkdir -p "$BASALT_GLOBAL_REPO"
 	[ -d "$BASALT_GLOBAL_DATA_DIR/global" ] || mkdir -p "$BASALT_GLOBAL_DATA_DIR/global"
 	[ -d "$BASALT_GLOBAL_DATA_DIR/store" ] || mkdir -p "$BASALT_GLOBAL_DATA_DIR/store"
@@ -352,11 +353,11 @@ Global subcommands:
   add <package>
     Installs a global package
 
-  upgrade <package>
-    Upgrades a global package
-
   remove [--force] [package...]
     Uninstalls a global package
+
+  install
+    Installs all global dependencies
 
   list [--fetch] [--format=<simple>] [package...]
     List all installed packages or just the specified ones

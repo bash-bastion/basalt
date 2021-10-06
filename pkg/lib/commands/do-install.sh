@@ -3,15 +3,10 @@
 do-install() {
 	util.init_local
 
-	for arg; do case "$arg" in
-	-*)
-		print.die "Flag '$arg' not recognized"
-		;;
-	esac done
+	if (($# != 0)); then
+		newindent.die "No arguments or flags must be specified"
+	fi
 
-	# Everything in the local ./.basalt is a symlink to some file or directory
-	# stored globally (per-user). Thus, we can just remove it since it won't take long
-	# to re-symlink. Additionally, this will provide auto package pruning
 	if ! rm -rf "$BASALT_LOCAL_PROJECT_DIR/.basalt"; then
 		print.die "Could not remove local '.basalt' directory"
 	fi

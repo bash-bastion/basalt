@@ -32,5 +32,5 @@ do-global-remove() {
 		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$flag_force"
 	done
 
-	pkg.do-global-install
+	do-global-install
 }
