@@ -85,3 +85,11 @@ newindent.error() {
 		printf "\033[0;31m%11s\033[0m %s\n" 'Error' "$1"
 	fi
 }
+
+newindent.warn() {
+	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
+		printf "%11s %s\n" 'Warn' "$1" >&2
+	else
+		printf "\033[0;33m%11s\033[0m %s\n" 'Warn' "$1" >&2
+	fi
+}

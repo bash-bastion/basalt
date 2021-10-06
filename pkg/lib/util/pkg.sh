@@ -25,13 +25,15 @@ pkg.install_packages() {
 		pkg.phase_extract_tarball "$package_id"
 
 		# Install transitive dependencies if they exist
-		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
-			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
-				pkg.install_packages "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id" 'strict' "${REPLIES[@]}"
+		local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
+		if [ -f "$package_dir/basalt.toml" ]; then
+			if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
+				pkg.install_packages "$package_dir" 'strict' "${REPLIES[@]}"
 			fi
 		fi
 
-		# Only after all the dependencies are installed do we muck with the global packages
+		# Only after all the transitive dependencies _for a particular direct dependency_ are installed do we
+		# muck with the direct dependency itself
 		pkg.phase_global_integration "$package_id"
 	done; unset pkg
 }
@@ -147,7 +149,7 @@ pkg.phase_global_integration() {
 	if [ -f "$project_dir/basalt.toml" ]; then
 		# Install dependencies
 		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-			pkg.phase_local_integration_recursive "$project_dir" 'yes' 'strict' "${REPLIES[@]}"
+			pkg.phase_local_integration_recursive "$project_dir" 'yes' 'lenient' "${REPLIES[@]}"
 			pkg.phase_local_integration_nonrecursive "$project_dir"
 		fi
 	fi
@@ -167,6 +169,10 @@ pkg.phase_local_integration_recursive() {
 	ensure.nonzero 'is_direct'
 	ensure.nonzero 'symlink_mode'
 
+	if [[ "$symlink_mode" != @(strict|lenient) ]]; then
+		util.die_unexpected_value 'symlink_mode'
+	fi
+
 	local pkg=
 	for pkg; do
 		util.get_package_info "$pkg"
@@ -182,24 +188,10 @@ pkg.phase_local_integration_recursive() {
 		# Perform symlinking
 		if [ "$is_direct" = yes ]; then
 			symlink.package "$original_package_dir/.basalt/packages" "$package_id"
-
-			if [ "$symlink_mode" = 'strict' ]; then
-				symlink.bin_strict "$original_package_dir/.basalt/packages" "$package_id"
-			elif [ "$symlink_mode" = 'lenient' ]; then
-				symlink.bin_lenient "$original_package_dir/.basalt/packages" "$package_id"
-			else
-				util.die_unexpected_value 'symlink_mode'
-			fi
+			symlink.bin_"$symlink_mode" "$original_package_dir/.basalt/packages" "$package_id"
 		elif [ "$is_direct" = no ]; then
 			symlink.package "$original_package_dir/.basalt/transitive/packages" "$package_id"
-
-			if [ "$symlink_mode" = 'strict' ]; then
-				symlink.bin_strict "$original_package_dir/.basalt/transitive/packages" "$package_id" "$package_id"
-			elif [ "$symlink_mode" = 'lenient' ]; then
-				symlink.bin_lenient "$original_package_dir/.basalt/transitive/packages" "$package_id" "$package_id"
-			else
-				util.die_unexpected_value 'symlink_mode'
-			fi
+			symlink.bin_"$symlink_mode" "$original_package_dir/.basalt/transitive/packages" "$package_id" "$package_id"
 		else
 			util.die_unexpected_value 'is_direct'
 		fi
