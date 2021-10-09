@@ -36,6 +36,7 @@ basalt.main() {
 		add) shift; do-add "$@" ;;
 		remove) shift; do-remove "$@" ;;
 		install) shift; do-install "$@" ;;
+		list) shift; do-list "$@" ;;
 		run) shift; do-run "$@" ;;
 		complete) shift; do-complete "$@" ;;
 		global) shift
