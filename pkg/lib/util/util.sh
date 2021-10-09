@@ -360,6 +360,9 @@ Local subcommands:
   list [--fetch] [--format=<simple>] [package...]
     Lists particular dependencies for the current local project
 
+  run <command>
+    Runs a particular command from any particular locally installed package
+
 Global subcommands:
   init <shell>
     Prints shell code that must be evaluated during shell
