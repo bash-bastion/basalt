@@ -47,4 +47,6 @@ basalt.package-load() {
 	else
 		shopt -u nullglob
 	fi
+
+	unset __basalt_shopt_nullglob
 }

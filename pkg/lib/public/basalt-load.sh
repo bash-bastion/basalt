@@ -7,6 +7,7 @@ __basalt_load_dosource() {
 	:
 }
 
+# TODO: rename this function to 'basalt-global.sh' or something and the other to 'basalt-local.sh'
 basalt.load() {
 	local __basalt_flag_global='no'
 	local __basalt_flag_dry='no'
