@@ -37,7 +37,7 @@ do-global-init() {
 	local shell="$1"
 
 	if [ -z "$shell" ]; then
-		print.die "Shell not specified"
+		bprint.die "Shell not specified"
 	fi
 
 	# Set common basalt variables; add PATH

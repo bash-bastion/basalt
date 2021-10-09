@@ -6,7 +6,7 @@ do-run() {
 	local -a args=()
 	for arg; do case "$arg" in
 	-*)
-		print.die "Flag '$arg' not recognized"
+		bprint.die "Flag '$arg' not recognized"
 		;;
 	*)
 		args+=("$arg")
@@ -14,7 +14,7 @@ do-run() {
 	esac done
 
 	if ((${#args[@]} > 1)); then
-		newindent.die "The only argument must be the executable name"
+		bprint.die "The only argument must be the executable name"
 	fi
 
 	local bin_name="${args[0]}"
@@ -22,8 +22,8 @@ do-run() {
 	if [ -x "$bin_file" ]; then
 		exec "$bin_file"
 	elif [ -f "$bin_file" ]; then
-		newindent.die "File '$bin_name' is found, but the package providing it has not made it executable"
+		bprint.die "File '$bin_name' is found, but the package providing it has not made it executable"
 	else
-		newindent.die "No executable called '$bin_name' was found"
+		bprint.die "No executable called '$bin_name' was found"
 	fi
 }

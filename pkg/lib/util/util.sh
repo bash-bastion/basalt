@@ -24,14 +24,14 @@ util.init_local() {
 		# shellcheck disable=SC2034
 		BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
 	else
-		print.die "Could not find a 'basalt.toml' file"
+		bprint.die "Could not find a 'basalt.toml' file"
 	fi
 }
 
 # @description Check for the initialization of variables essential for global subcommands
 util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
+		bprint.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
 	fi
 
 	if [ ! -d "$BASALT_GLOBAL_REPO" ]; then
@@ -72,12 +72,12 @@ util.init_always() {
 		if mkdir "$___basalt_lock_dir"; then
 			trap 'rm -rf "$___basalt_lock_dir"' INT TERM EXIT
 		else
-			print.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
+			bprint.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
 		fi
 	fi
 
 	if ! command -v curl &>/dev/null; then
-		print.die "Program 'curl' not installed. Please install curl"
+		bprint.die "Program 'curl' not installed. Please install curl"
 	fi
 }
 
@@ -104,7 +104,7 @@ util.die_unexpected_value() {
 	ensure.nonzero 'variable'
 
 	local -n value="$variable"
-	print.internal_die "Variable '$variable' has unexpected value of '$value'"
+	bprint.fatal "Variable '$variable' has unexpected value of '$value'"
 }
 
 # @description Get id of package we can use for printing
@@ -112,7 +112,7 @@ util.get_package_id() {
 	local flag_allow_empty_version='no' # Allow for version to be empty
 	for arg; do case "$arg" in
 		--allow-empty-version) flag_allow_empty_version='yes'; shift ;;
-		-*) newindent.die "Internal flag '$arg' not recognized" ;;
+		-*) bprint.fatal "Flag '$arg' not recognized" ;;
 		*) break ;;
 	esac done
 	local repo_type="$1"
@@ -203,7 +203,7 @@ util.get_latest_package_version() {
 				return
 			fi
 		else
-			print.warn "Could not automatically retrieve latest release for '$package' since '$site' is not supported. Falling back to retrieving latest commit"
+			bprint.warn "Could not automatically retrieve latest release for '$package' since '$site' is not supported. Falling back to retrieving latest commit"
 		fi
 	fi
 
@@ -216,7 +216,7 @@ util.get_latest_package_version() {
 		return
 	fi
 
-	print.indent-die "Could not get latest release or commit for package '$package'"
+	bprint.die "Could not get latest release or commit for package '$package'"
 }
 
 util.get_package_info() {
@@ -276,7 +276,7 @@ util.get_package_info() {
 			site="github.com"
 			package="$input"
 		else
-			newindent.die "String '$pkg' does not look like a package"
+			bprint.die "String '$pkg' does not look like a package"
 		fi
 
 		if [[ "$package" == *@* ]]; then
@@ -306,7 +306,7 @@ util.get_tarball_url() {
 	elif [ "$site" = 'gitlab.com' ]; then
 		REPLY="https://gitlab.com/$package/-/archive/$ref/${package#*/}-$ref.tar.gz"
 	else
-		print.die "Could not construct the location of the package tarball since '$site' is not supported"
+		bprint.die "Could not construct the location of the package tarball since '$site' is not supported"
 	fi
 }
 
@@ -346,9 +346,6 @@ Local subcommands:
 
   add <package>
     Adds a dependency to the current local project
-
-  upgrade <package>
-    Upgrades a dependency for the current local project
 
   remove [--force] <package>
     Removes a dependency from the current local project

@@ -2,7 +2,7 @@
 
 do-init() {
 	if [ -e basalt.toml ]; then
-		print.die "File 'basalt.toml' already exists"
+		bprint.die "File 'basalt.toml' already exists"
 	fi
 
 	cat >| basalt.toml <<-"EOF"
@@ -28,5 +28,5 @@ do-init() {
 	[run.shoptOptions]
 	EOF
 
-	print.info "Created basalt.toml"
+	bprint.info "Created basalt.toml"
 }

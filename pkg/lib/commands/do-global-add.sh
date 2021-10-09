@@ -6,7 +6,7 @@ do-global-add() {
 	local -a pkgs=()
 	for arg; do case "$arg" in
 	-*)
-		print.die "Flag '$arg' not recognized"
+		bprint.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -14,7 +14,7 @@ do-global-add() {
 	esac done
 
 	if ((${#pkgs[@]} == 0)); then
-		newindent.die "Must specify at least one package"
+		bprint.die "Must specify at least one package"
 	fi
 
 	for pkg in "${pkgs[@]}"; do
@@ -22,7 +22,7 @@ do-global-add() {
 		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 		if ! util.does_package_exist "$repo_type" "$url"; then
-			print.die "Package located at '$url' does not exist"
+			bprint.die "Package located at '$url' does not exist"
 		fi
 
 		if [ -z "$version" ]; then

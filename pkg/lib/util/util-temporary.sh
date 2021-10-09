@@ -13,7 +13,7 @@ util.get_toml_string() {
 	ensure.nonzero 'key_name'
 
 	if [ ! -f "$toml_file" ]; then
-		print.internal_die "File '$toml_file' not found"
+		bprint.fatal "File '$toml_file' not found"
 	fi
 
 	local grep_line=
@@ -39,7 +39,7 @@ util.get_toml_string() {
 		REPLY="${BASH_REMATCH[1]}"
 	else
 		# This should not happen due to the '[[ $line == *"$key_name"*=* ]]' check above
-		print.internal_die "Could not find key '$key_name' in file '$toml_file'"
+		bprint.fatal "Could not find key '$key_name' in file '$toml_file'"
 	fi
 }
 
@@ -53,7 +53,7 @@ util.get_toml_array() {
 	ensure.nonzero 'key_name'
 
 	if [ ! -f "$toml_file" ]; then
-		print.internal_die "File '$toml_file' does not exist"
+		bprint.fatal "File '$toml_file' does not exist"
 	fi
 
 	local grep_line=
@@ -86,12 +86,12 @@ util.get_toml_array() {
 			if [[ ${REPLIES[$i]} =~ $regex ]]; then
 				REPLIES[$i]="${BASH_REMATCH[1]}"
 			else
-				print.die "Key '$key_name' in file '$toml_file' is not valid"
+				bprint.die "Key '$key_name' in file '$toml_file' is not valid"
 				return 2
 			fi
 		done
 	else
-		print.die "Key '$key_name' in file '$toml_file' must be set to an array that spans one line"
+		bprint.die "Key '$key_name' in file '$toml_file' must be set to an array that spans one line"
 		return 2
 	fi
 }
@@ -105,14 +105,14 @@ util.toml_add_dependency() {
 	ensure.nonzero 'key_value'
 
 	if [ ! -f "$toml_file" ]; then
-		print.internal_die "File '$toml_file' does not exist"
+		bprint.fatal "File '$toml_file' does not exist"
 	fi
 
 	if util.get_toml_array "$toml_file" 'dependencies'; then
 		local name=
 		for name in "${REPLIES[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
-				print.indent-yellow 'Warning' "A version of '${name%@*}' is already installed. Skipping"
+				bprint.warn "A version of '${name%@*}' is already installed. Skipping"
 				return
 			fi
 		done; unset name
@@ -127,7 +127,7 @@ util.toml_add_dependency() {
 			rm "$toml_file.bak"
 		fi
 	else
-		print.die "Key 'dependencies' not found in file '$toml_file'"
+		bprint.die "Key 'dependencies' not found in file '$toml_file'"
 	fi
 }
 
@@ -139,7 +139,7 @@ util.toml_remove_dependency() {
 	ensure.nonzero 'key_name'
 
 	if [ ! -f "$toml_file" ]; then
-		print.internal_die "File '$toml_file' does not exist"
+		bprint.fatal "File '$toml_file' does not exist"
 	fi
 
 	if util.get_toml_array "$toml_file" 'dependencies'; then
@@ -155,7 +155,7 @@ util.toml_remove_dependency() {
 		done; unset name
 
 		if [ "$does_exist" != 'yes' ]; then
-			print.indent-die "The package '$key_value' is not currently a dependency"
+			bprint.die "The package '$key_value' is not currently a dependency"
 			return
 		fi
 
@@ -176,7 +176,7 @@ util.toml_remove_dependency() {
 		done < "$toml_file.bak" > "$toml_file"
 		rm "$toml_file.bak"
 	else
-		print.die "Key 'dependencies' not found in file '$toml_file'"
+		bprint.die "Key 'dependencies' not found in file '$toml_file'"
 	fi
 }
 
@@ -199,7 +199,7 @@ util.text_add_dependency() {
 		local url1="$REPLY2"
 
 		if [ "$url1" = "$url2" ]; then
-			print.indent-yellow 'Warning' "A version of '${line%@*}' is already installed. Skipping"
+			bprint.warn "A version of '${line%@*}' is already installed. Skipping"
 		fi
 	done < "$text_file"; unset line
 
@@ -239,7 +239,7 @@ util.text_remove_dependency() {
 		printf "%s\n" "${arr[@]}" > "$text_file"
 	else
 		if [ "$flag_force" = 'no' ]; then
-			newindent.die "Dependency '${dependency%@*}' is not installed. Skipping"
+			bprint.die "Dependency '${dependency%@*}' is not installed. Skipping"
 		fi
 	fi
 

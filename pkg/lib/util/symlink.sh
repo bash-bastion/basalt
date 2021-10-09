@@ -15,7 +15,7 @@ symlink.package() {
 
 	mkdir -p "${link_name%/*}"
 	if ! ln -sf "$target" "$link_name"; then
-		print.indent-die "Could not symlink directory '${target##*/}' for package $package_id"
+		bprint.die "Could not symlink directory '${target##*/}' for package $package_id"
 	fi
 }
 
@@ -44,7 +44,7 @@ symlink.bin_strict() {
 						symlink.bin_util_create_symlink "$install_dir" "$file"
 					done; unset file
 				else
-					newindent.warn "Package '$package_id' improperly listed '$dir' as a directory in 'binDirs'"
+					bprint.warn "Package '$package_id' improperly listed '$dir' as a directory in 'binDirs'"
 				fi
 			done; unset dir
 		fi

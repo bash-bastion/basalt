@@ -6,7 +6,7 @@ do-remove() {
 	local -a pkgs=()
 	for arg; do case "$arg" in
 	-*)
-		print.die "Flag '$arg' not recognized"
+		bprint.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -14,7 +14,7 @@ do-remove() {
 	esac done
 
 	if ((${#pkgs[@]} == 0)); then
-		print.indent-yellow 'Warning' "No packages were specified"
+		bprint.warn "No packages were specified"
 	fi
 
 	for pkg in "${pkgs[@]}"; do

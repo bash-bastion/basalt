@@ -4,11 +4,11 @@ do-global-install() {
 	util.init_global
 
 	if (($# != 0)); then
-		newindent.die "No arguments or flags must be specified"
+		bprint.die "No arguments or flags must be specified"
 	fi
 
 	if ! rm -rf "$BASALT_GLOBAL_DATA_DIR/global/.basalt"; then
-		print.indent-die "Could not remove global '.basalt' directory"
+		bprint.die "Could not remove global '.basalt' directory"
 	fi
 
 	local -a dependencies=()

@@ -61,7 +61,7 @@ pkg.phase_download_tarball() {
 
 	# Use cache if it already exists
 	if [ -e "$download_dest" ]; then
-		print.indent-green "Downloaded" "$package_id (cached)"
+		bprint.green "Downloaded" "$package_id (cached)"
 		return
 	fi
 
@@ -73,10 +73,10 @@ pkg.phase_download_tarball() {
 		if curl -fLso "$download_dest" "$download_url"; then
 			if ! util.file_is_targz "$download_dest"; then
 				rm -rf "$download_dest"
-				print.indent-die "File '$download_dest' is not actually a tarball"
+				bprint.die "File '$download_dest' is not actually a tarball"
 			fi
 
-			print.indent-green "Downloaded" "$package_id"
+			bprint.green "Downloaded" "$package_id"
 			return
 		fi
 
@@ -87,26 +87,26 @@ pkg.phase_download_tarball() {
 	# TODO Print warning if a local dependency has a dirty index
 	if [ "$repo_type" = 'local' ]; then
 		:
-		# print.indent-yellow 'Warning' "Local dependency at '$url' has a dirty index"
+		# bprint.warn "Local dependency at '$url' has a dirty index"
 	fi
 
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id"; then
-		print.indent-die "Could not clone repository for $package_id"
+		bprint.die "Could not clone repository for $package_id"
 	fi
 
 	if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
 		rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch" "$download_dest"
-		print.indent-die "Could not download archive or extract archive from temporary Git repository of $package_id"
+		bprint.die "Could not download archive or extract archive from temporary Git repository of $package_id"
 	fi
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 
 	if ! util.file_is_targz "$download_dest"; then
 		rm -rf "$download_dest"
-		print.indent-die "File '$download_dest' is not actually a tarball"
+		bprint.die "File '$download_dest' is not actually a tarball"
 	fi
 
-	print.indent-green "Downloaded" "$package_id"
+	bprint.green "Downloaded" "$package_id"
 }
 
 # @description Extracts the tarballs in the global store to a directory
@@ -119,21 +119,21 @@ pkg.phase_extract_tarball() {
 
 	# Use cache if it already exists
 	if [ -d "$tarball_dest" ]; then
-		print.indent-green "Extracted" "$package_id (cached)"
+		bprint.green "Extracted" "$package_id (cached)"
 		return
 	fi
 
 	# Actually extract
 	mkdir -p "$tarball_dest"
 	if ! tar xf "$tarball_src" -C "$tarball_dest" --strip-components 1 2>/dev/null; then
-		print.indent-die "Error" "Could not extract package $package_id"
+		bprint.die "Error" "Could not extract package $package_id"
 	else
-		print.indent-green "Extracted" "$package_id"
+		bprint.green "Extracted" "$package_id"
 	fi
 
 	# Ensure extraction actually worked
 	if [ ! -d "$tarball_dest" ]; then
-		print.indent-die "Extracted tarball is not a directory at '$tarball_dest'"
+		bprint.die "Extracted tarball is not a directory at '$tarball_dest'"
 	fi
 }
 
@@ -154,7 +154,7 @@ pkg.phase_global_integration() {
 		fi
 	fi
 
-	print.indent-green "Transformed" "$package_id"
+	bprint.green "Transformed" "$package_id"
 }
 
 # Create a './.basalt' directory for a particular project directory

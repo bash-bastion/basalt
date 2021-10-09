@@ -10,7 +10,7 @@ do-global-remove() {
 		flag_force='yes'
 		;;
 	-*)
-		print.die "Flag '$arg' not recognized"
+		bprint.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -18,7 +18,7 @@ do-global-remove() {
 	esac done
 
 	if ((${#pkgs[@]} == 0)); then
-		newindent.die "Must specify at least one package"
+		bprint.die "Must specify at least one package"
 	fi
 
 	for pkg in "${pkgs[@]}"; do
@@ -26,7 +26,7 @@ do-global-remove() {
 		local url="$REPLY2" version="$REPLY5"
 
 		if [ -n "$version" ]; then
-			newindent.die "Must not specify ref when removing packages"
+			bprint.die "Must not specify ref when removing packages"
 		fi
 
 		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$flag_force"
