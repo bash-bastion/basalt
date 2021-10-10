@@ -276,7 +276,7 @@ util.get_package_info() {
 			site="github.com"
 			package="$input"
 		else
-			bprint.die "String '$pkg' does not look like a package"
+			bprint.die "String '$input' does not look like a package"
 		fi
 
 		if [[ "$package" == *@* ]]; then

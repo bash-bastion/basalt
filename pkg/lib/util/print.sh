@@ -15,6 +15,8 @@ bprint.fatal() {
 	else
 		printf "\033[0;31m%11s\033[0m %s\n" 'Fatal' "$1"
 	fi
+
+	exit 1
 }
 
 bprint.error() {

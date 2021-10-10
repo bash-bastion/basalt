@@ -15,7 +15,7 @@ teardown_file() {
 @test "Ensure locking works" {
 	skip
 
-	basalt init
+	basalt init --bare
 	XDG_RUNTIME_DIR="$BATS_SUITE_TMPDIR" BATS_TMPDIR= basalt add &
 
 	XDG_RUNTIME_DIR="$BATS_SUITE_TMPDIR" BATS_TMPDIR= run basalt add

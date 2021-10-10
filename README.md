@@ -30,7 +30,7 @@ To be able to access the binaries, completion files, and man pages in your shell
 ```sh
 # ~/.bashrc
 export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
-eval "$(basalt init bash)" # zsh and fish are also supported
+eval "$(basalt global init bash)" # zsh and fish are also supported
 ```
 
 See [Installation](./docs/tutorials/installation.md) and [Getting Started](./docs/tutorials/getting-started.md) for more details

@@ -12,7 +12,7 @@ setup() {
 }
 
 @test "Fails if dependency is bogus" {
-	basalt init
+	basalt init --bare
 	run basalt add 'UwU'
 
 	assert_failure
@@ -20,7 +20,7 @@ setup() {
 }
 
 @test "Fails if dependency does not exist 1" {
-	basalt init
+	basalt init --bare
 	run basalt add 'hyperupcall/basaltqq'
 
 	assert_failure
@@ -28,7 +28,7 @@ setup() {
 }
 
 @test "Fails if dependency does not exist 2" {
-	basalt init
+	basalt init --bare
 	run basalt add 'gitlab.com/hyperupcall/basaltqq'
 
 	assert_failure
@@ -36,7 +36,7 @@ setup() {
 }
 
 @test "Fails if dependency does not exist 3" {
-	basalt init
+	basalt init --bare
 	run basalt add 'https://github.com/hyperupcall/basaltqq'
 
 	assert_failure
@@ -44,7 +44,7 @@ setup() {
 }
 
 @test "Fails if dependency does not exist 4" {
-	basalt init
+	basalt init --bare
 	run basalt add 'file:///some/fake/directory'
 
 	assert_failure
@@ -55,7 +55,7 @@ setup() {
 # 	local dir=
 # 	test_util.create_fake_remote 'user/repo'; dir="$REPLY"
 
-# 	basalt init
+# 	basalt init --bare
 # 	basalt add "file://$dir"
 
 # 	run printf '%s' "$(<basalt.toml)"
@@ -67,7 +67,7 @@ setup() {
 # 	local dir=
 # 	test_util.create_fake_remote 'user/repo'; dir="$REPLY"
 
-# 	basalt init
+# 	basalt init --bare
 # 	basalt add "file://$dir@v0.0.1"
 
 # 	run printf '%s' "$(<basalt.toml)"
@@ -79,7 +79,7 @@ setup() {
 # 	local dir=
 # 	test_util.create_fake_remote 'user/repo'; dir="$REPLY"
 
-# 	basalt init
+# 	basalt init --bare
 # 	basalt add "file://$dir@1c6caee378cf31b30971e78f6b9d10273a340ca0"
 
 # 	run printf '%s' "$(<basalt.toml)"
@@ -92,7 +92,7 @@ setup() {
 # 	test_util.create_fake_remote 'user/repo1'; dir1="$REPLY"
 # 	test_util.create_fake_remote 'user/repo2'; dir2="$REPLY"
 
-# 	basalt init
+# 	basalt init --bare
 # 	basalt add "file://$dir1" "file://$dir2"
 
 # 	run printf '%s' "$(<basalt.toml)"

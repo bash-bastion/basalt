@@ -13,6 +13,10 @@ do-run() {
 		;;
 	esac done
 
+	if ((${#args[@]} == 0)); then
+		bprint.die "The name of an executable must be passed"
+	fi
+
 	if ((${#args[@]} > 1)); then
 		bprint.die "The only argument must be the executable name"
 	fi

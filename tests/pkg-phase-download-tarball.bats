@@ -9,7 +9,7 @@ load './util/init.sh'
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" "$REPLY5"
 
 	assert_success
-	assert_line -p "Downloaded $package_id"
+	assert_line -p "Downloaded: $package_id"
 	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
 }
 
@@ -20,11 +20,11 @@ load './util/init.sh'
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" "$REPLY5"
 
 	assert_success
-	assert_line -p "Downloaded $package_id"
+	assert_line -p "Downloaded: $package_id"
 	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
 
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" "$REPLY5"
-	assert_line -p "Downloaded $package_id (cached)"
+	assert_line -p "Downloaded: $package_id (cached)"
 	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
 
 	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"

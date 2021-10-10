@@ -30,10 +30,6 @@ echo_package_path_posix() {
 # - Setting basalt package PATH
 # - Sourcing basalt package completion
 do-global-init() {
-	if [ "$1" = '-' ]; then
-		shift
-	fi
-
 	local shell="$1"
 
 	if [ -z "$shell" ]; then

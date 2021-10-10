@@ -45,7 +45,7 @@ For `bash`, `zsh`, `sh`
 
 ```sh
 export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
-eval "$(basalt init bash)" # replace 'bash' with your shell
+eval "$(basalt global init bash)" # replace 'bash' with your shell
 ```
 
 For `fish`
