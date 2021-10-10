@@ -40,7 +40,7 @@ load './util/init.sh'
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" 'v0.0.1'
 
 	assert_success
-	assert_line -p "Downloaded local/fake_remote_user_repo@v0.0.1"
+	assert_line -p "Downloaded: local/fake_remote_user_repo@v0.0.1"
 	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/local/fake_remote_user_repo@v0.0.1.tar.gz"
 }
 
