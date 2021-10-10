@@ -14,56 +14,62 @@ basalt-package-init.main() {
 	local basalt_global_repo="${0%/*}"
 	basalt_global_repo="${basalt_global_repo%/*}"; basalt_global_repo="${basalt_global_repo%/*}"
 
-	cat <<-EOF
+	cat <<EOF
 basalt.package-init() {
-   # basalt variables
-   export BASALT_GLOBAL_REPO="$basalt_global_repo"
-	EOF
+	# basalt variables
+	export BASALT_GLOBAL_REPO="$basalt_global_repo"
+EOF
+	cat <<"EOF"
+	export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
 
-	cat <<-"EOF"
-   export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
+	# basalt global and internal functions
+	source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-load.sh"
+	source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-package.sh"
 
-   # basalt global and internal functions
-   source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-load.sh"
-   source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-package.sh"
+	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
+		local __old_cd="$PWD"
 
-   # TODO: this needs to be redone
-   if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
-      local __old_cd="$PWD"
-      if [ -L "$0" ]; then
-         local __file="$(readlink "$0")"
-         if ! cd "${__file%/*}"; then
-            printf '%s\n' "Error: basalt-package-init: Could not cd to target of '$0'"
-            return 1
-         fi
-      fi
+		# Do not use "$0", since it won't work in some environments, such as Bats
+		local __basalt_file="${BASH_SOURCE[0]}"
+		if [ -L "$__basalt_file" ]; then
+			local __basalt_target="$(readlink "$__basalt_file")"
+			if ! cd "${__basalt_target%/*}"; then
+				printf '%s\n' "Error: basalt-package-init: Could not cd to '${__basalt_target%/*}'"
+				return 1
+			fi
+		else
+			if ! cd "${__basalt_file%/*}"; then
+				printf '%s\n' "Error: basalt-package-init: Could not cd to '${__basalt_file%/*}'"
+				return 1
+			fi
+		fi
 
-      if ! BASALT_PACKAGE_DIR="$(
-         while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
-            if ! cd ..; then
-               return 1
-            fi
-         done
+		if ! BASALT_PACKAGE_DIR="$(
+			while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
+				if ! cd ..; then
+					return 1
+				fi
+			done
 
-         if [ "$PWD" = / ]; then
-            return 1
-         fi
+			if [ "$PWD" = / ]; then
+				return 1
+			fi
 
-         printf '%s' "$PWD"
-      )"; then
-         printf '%s\n' "Error: basalt-package-init: Could not find basalt.toml"
-         if ! cd "$__old_cd"; then
-            printf '%s\n' "Error: basalt-package-init: Could not cd back to '$__old_cd'"
-            return 1
-         fi
-         return 1
-      fi
+			printf '%s' "$PWD"
+		)"; then
+			printf '%s\n' "Error: basalt-package-init: Could not find basalt.toml"
+			if ! cd "$__old_cd"; then
+				printf '%s\n' "Error: basalt-package-init: Could not cd back to '$__old_cd'"
+				return 1
+			fi
+			return 1
+		fi
 
-      if ! cd "$__old_cd"; then
-         printf '%s\n' "Error: basalt-package-init: Could not cd back to '$__old_cd'"
-         return 1
-      fi
-   fi
+		if ! cd "$__old_cd"; then
+			printf '%s\n' "Error: basalt-package-init: Could not cd back to '$__old_cd'"
+			return 1
+		fi
+	fi
 }
-	EOF
+EOF
 }
