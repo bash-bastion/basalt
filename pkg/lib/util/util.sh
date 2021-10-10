@@ -220,6 +220,7 @@ util.get_latest_package_version() {
 }
 
 util.get_package_info() {
+	unset REPLY{1,2,3,4,5}
 	REPLY1=; REPLY2=; REPLY3=; REPLY4=; REPLY5=
 	local input="$1"
 	ensure.nonzero 'input'

@@ -3,6 +3,7 @@
 # Do NOT edit!
 
 # https://github.com/bashup/realpaths
+# TODO: get rid of this, and for 'basalt'
 realpath.location() {
 	realpath.follow "$1"
 	realpath.absolute "$REPLY" ".."

@@ -28,8 +28,8 @@ basalt.package-init() {
    source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-package.sh"
 
    # TODO: this needs to be redone
-   if [ -z "$BASALT_PACKAGE_PATH" ]; then
-   local __old_cd="$PWD"
+   if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
+      local __old_cd="$PWD"
       if [ -L "$0" ]; then
          local __file="$(readlink "$0")"
          if ! cd "${__file%/*}"; then
@@ -38,7 +38,7 @@ basalt.package-init() {
          fi
       fi
 
-      if ! BASALT_PACKAGE_PATH="$(
+      if ! BASALT_PACKAGE_DIR="$(
          while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
             if ! cd ..; then
                return 1

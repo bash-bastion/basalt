@@ -87,7 +87,7 @@ basalt.load() {
 				source "$__basalt_pkg_path/load.bash"
 
 				if declare -f basalt_load &>/dev/null; then
-					BASALT_PACKAGE_PATH="$__basalt_pkg_path" basalt_load
+					BASALT_PACKAGE_DIR="$__basalt_pkg_path" basalt_load
 					unset basalt_load
 				fi
 			fi
@@ -98,7 +98,7 @@ basalt.load() {
 		# Assume can only have one version of a particular package for direct dependencies
 		local __basalt_load_package_exists='no' __basalt_did_run_source='no'
 		local __basalt_actual_pkg_path=
-		for __basalt_actual_pkg_path in "$BASALT_PACKAGE_PATH/.basalt/packages/$__basalt_pkg_path"*; do
+		for __basalt_actual_pkg_path in "$BASALT_PACKAGE_DIR/.basalt/packages/$__basalt_pkg_path"*; do
 			if [ "$__basalt_load_package_exists" = yes ]; then
 				printf '%s\n' "Error: basalt.load There are multiple direct dependencies for package '$__basalt_pkg_path'. This should not happen"
 				return 1
@@ -108,7 +108,7 @@ basalt.load() {
 
 			if [ -n "$__basalt_file" ]; then
 				if [ -f "$__basalt_actual_pkg_path/$__basalt_file" ]; then
-					BASALT_PACKAGE_PATH="$__basalt_actual_pkg_path" source "$__basalt_actual_pkg_path/$__basalt_file"
+					BASALT_PACKAGE_DIR="$__basalt_actual_pkg_path" source "$__basalt_actual_pkg_path/$__basalt_file"
 					__basalt_did_run_source='yes'
 				else
 					printf '%s\n' "Error: basalt.load File '$__basalt_file' not found in package '$__basalt_pkg_path'"
@@ -120,7 +120,7 @@ basalt.load() {
 				source "$__basalt_actual_pkg_path/load.bash"
 
 				if declare -f basalt_load &>/dev/null; then
-					BASALT_PACKAGE_PATH="$__basalt_actual_pkg_path" basalt_load
+					BASALT_PACKAGE_DIR="$__basalt_actual_pkg_path" basalt_load
 					unset basalt_load
 				fi
 

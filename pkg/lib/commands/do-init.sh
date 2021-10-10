@@ -67,7 +67,7 @@ do-init() {
 		eval "$(basalt-package-init)"; basalt.package-init
 		basalt.package-load
 
-		source "$BASALT_PACKAGE_PATH/pkg/lib/cmd/file.sh"
+		source "$BASALT_PACKAGE_DIR/pkg/lib/cmd/file.sh"
 		file.main "$@"
 		EOF
 			bprint.die "Could not write to $file2"
@@ -78,6 +78,8 @@ do-init() {
 		mkdir -p 'pkg/lib/cmd'
 		local file3="./pkg/lib/cmd/file.sh"
 		if ! cat >| "$file3" <<"EOF"; then
+# shellcheck shell=bash
+
 file.main() {
 	printf '%s\n' "Woof!"
 }
@@ -86,6 +88,40 @@ EOF
 		fi
 		bprint.info "Created $file3"
 
+
+		mkdir -p 'tests/util'
+		local file4='./tests/util/init.sh'
+		if ! cat >| "$file4" <<"EOF"; then
+# shellcheck shell=bash
+
+eval "$(basalt-package-init)"; basalt.package-init
+basalt.package-load
+# basalt.load 'github.com/hyperupcall/bats-common-utils' 'load.bash'
+
+load './util/test_util.sh'
+
+export NO_COLOR=
+
+setup() {
+	ensure.cd "$BATS_TEST_TMPDIR"
+}
+
+teardown() {
+	ensure.cd "$BATS_SUITE_TMPDIR"
+}
+EOF
+			bprint.die "Could not write to $file4"
+		fi
+		bprint.info "Created $file4"
+
+		mkdir -p 'tests/util'
+		local file5='./tests/util/test_util.sh'
+		if ! cat >| "$file5" <<"EOF"; then
+# shellcheck shell=bash
+EOF
+			bprint.die "Could not write to $file5"
+		fi
+		bprint.info "Created $file5"
 		;;
 	full)
 		if ! git clone -q 'https://github.com/hyperupcall/template-bash' .; then

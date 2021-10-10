@@ -5,8 +5,8 @@
 basalt.package-load() {
 	local __basalt_shopt_nullglob=
 
-	if [ -z "${BASALT_PACKAGE_PATH:-}" ]; then
-		printf '%s\n' "Error: basalt.package-load: Variable 'BASALT_PACKAGE_PATH' is empty"
+	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
+		printf '%s\n' "Error: basalt.package-load: Variable 'BASALT_PACKAGE_DIR' is empty"
 		return 1
 	fi
 
@@ -17,9 +17,10 @@ basalt.package-load() {
 	fi
 	shopt -s nullglob
 
+	# TODO: Use array expand glob so no need to shopt -s nullglob at end to make this cleaner
 	local __basalt_site= __basalt_repository_owner=  __basalt_package=
-	if [ -d "$BASALT_PACKAGE_PATH"/.basalt/packages ]; then
-		for __basalt_site in "$BASALT_PACKAGE_PATH"/.basalt/packages/*/; do
+	if [ -d "$BASALT_PACKAGE_DIR"/.basalt/packages ]; then
+		for __basalt_site in "$BASALT_PACKAGE_DIR"/.basalt/packages/*/; do
 			for __basalt_repository_owner in "$__basalt_site"/*/; do
 				for __basalt_package in "$__basalt_repository_owner"/*/; do
 					if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
@@ -38,8 +39,8 @@ basalt.package-load() {
 		done; unset __basalt_site
 	fi
 
-	if [ -f "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh" ]; then
-		source "$BASALT_PACKAGE_PATH/.basalt/generated/source_package.sh"
+	if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_package.sh" ]; then
+		source "$BASALT_PACKAGE_DIR/.basalt/generated/source_package.sh"
 	fi
 
 	if [ "$__basalt_shopt_nullglob" = 'yes' ]; then

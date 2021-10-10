@@ -215,20 +215,42 @@ pkg.phase_local_integration_nonrecursive() {
 	if [ -f "$project_dir/basalt.toml" ]; then
 		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
 			if ((${#REPLIES[@]} > 0)); then
-				# TODO output to file descriptor with exec
+				# Convert the full '$project_dir' path into something that uses the environment variables
+				local project_dir_short=
+				if [ "$BASALT_LOCAL_PROJECT_DIR" = "${project_dir::${#BASALT_LOCAL_PROJECT_DIR}}" ]; then
+					project_dir_short='$BASALT_PACKAGE_DIR'
+				elif [ "$BASALT_GLOBAL_DATA_DIR" = "${project_dir::${#BASALT_GLOBAL_DATA_DIR}}" ]; then
+					project_dir_short="\$BASALT_GLOBAL_DATA_DIR${project_dir:${#BASALT_GLOBAL_DATA_DIR}}"
+				else
+					bprint.fatal "Unexpected path to project directory '$project_dir'"
+				fi
 
-				local source_dir=
+				# shellcheck disable=SC2016
+				printf -v content '%s%s\n' "$content" '# shellcheck shell=bash
+
+if [ -z "$BASALT_PACKAGE_DIR" ]; then
+	printf "%s\n" "Fatal: source_package.sh: $BASALT_PACKAGE_DIR is empty, but must exist"
+	exit 1
+fi
+
+if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
+	printf "%s\n" "Fatal: source_package.sh: $BASALT_GLOBAL_DATA_DIR is empty, but must exist"
+	exit 1
+fi'
+
 				for source_dir in "${REPLIES[@]}"; do
-					# TODO: use BASALT_GLOBAL_DATA_DIR
-					printf -v content '%s%s\n' "$content" "for __basalt_f in \"$project_dir/$source_dir\"/*; do
-  if [ -f \"\$__basalt_f\" ]; then
-    source \"\$__basalt_f\"
-  fi
-done
-"
+					printf -v content '%s%s\n' "$content" "
+# Silently skip if directory doesn't exist since a corresponding warning will print during package installation
+if [ -d \"$project_dir_short/$source_dir\" ]; then
+	# Works if nullglob is unset, given that there is no file called '*'
+	for __basalt_f in \"$project_dir_short/$source_dir\"/*; do
+		if [ -f \"\$__basalt_f\" ]; then
+			# shellcheck disable=SC1090
+			source \"\$__basalt_f\"
+		fi
+	done; unset __basalt_f
+fi"
 				done; unset source_dir
-
-				printf -v content '%s%s' "$content" 'unset __basalt_f'
 
 				if [ ! -d "$project_dir/.basalt/generated" ]; then
 					mkdir -p "$project_dir/.basalt/generated"
