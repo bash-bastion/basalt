@@ -18,8 +18,8 @@ done; unset f
 # allows us to actually mock functions
 load "$REPO_ROOT/pkg/lib/cmd/basalt-package-init.sh"
 load "$REPO_ROOT/pkg/lib/cmd/basalt.sh"
-basalt-package-init() { basalt-package-init.main "$@"; }
-basalt() { basalt.main "$@"; }
+basalt-package-init() { main.basalt-package-init "$@"; }
+basalt() { main.basalt "$@"; }
 
 # Testing variables
 export NO_COLOR=
