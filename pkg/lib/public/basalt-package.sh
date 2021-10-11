@@ -7,7 +7,7 @@ basalt.package-load() {
 	local __basalt_shopt_nullglob=
 
 	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
-		printf '%s\n' "Error: basalt.package-load: Variable 'BASALT_PACKAGE_DIR' is empty"
+		printf '%s\n' "Error: basalt.package-load: Variable '\$BASALT_PACKAGE_DIR' is empty"
 		return 1
 	fi
 
@@ -31,7 +31,11 @@ basalt.package-load() {
 					fi
 
 					if [ -f "$__basalt_package.basalt/generated/source_package.sh" ]; then
-						source "$__basalt_package.basalt/generated/source_package.sh"
+						if ! source "$__basalt_package.basalt/generated/source_package.sh"; then
+							:
+						else
+							return $?
+						fi
 					fi
 
 					shopt -s nullglob

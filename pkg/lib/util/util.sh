@@ -47,7 +47,7 @@ util.init_global() {
 		touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
 	fi
 
-	# Note that I would prefer to check the existence of the target directory as well, but that would mean if the user installs
+	# I would prefer to check the existence of the target directory as well, but that would mean if the user installs
 	# a package that creates for example a 'completion' directory, it would not show up until 'basalt' is executed again
 	if [ ! -L "$BASALT_GLOBAL_DATA_DIR/global/bin" ]; then
 		ln -sf "$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/bin" "$BASALT_GLOBAL_DATA_DIR/global/bin"
@@ -333,9 +333,6 @@ util.text_dependency_is_installed() {
 
 util.show_help() {
 	cat <<"EOF"
-Basalt:
-  The rock-solid Bash package manager
-
 Usage:
   basalt [--help|--version]
   basalt <local-subcommand> [args...]

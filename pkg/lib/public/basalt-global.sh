@@ -19,30 +19,23 @@ basalt.load() {
 		;;
 	--help|-h)
 		cat <<-"EOF"
-		basalt.load Load a particular file
-
 		Usage:
-		  basalt-load [flags] <package> [file]
+		  basalt.load [flags] <package> <file>
 
 		Flags:
-		  --global
-		    Use packages installed globally, rather than local packages
-
-		  --dry
-		    Only print what would have been sourced
-
-		  --help
-		    Print help menu
+		  --global  Use global packages rather than local packages
+		  --dry     Only print what would have been sourced
+		  --help    Print help
 
 		Example:
-		  basalt-load --global 'github.com/rupa/z' 'z.sh'
-		  basalt-load --dry 'github.com/hyperupcall/bats-common-utils' 'load.bash'
-		  basalt-load 'github.com/bats-core/bats-assert' 'load.bash'
+		  basalt.load --global 'github.com/rupa/z' 'z.sh'
+		  basalt.load --dry 'github.com/hyperupcall/bats-common-utils' 'load.bash'
+		  basalt.load 'github.com/bats-core/bats-assert' 'load.bash'
 		EOF
 		return
 		;;
 	-*)
-		printf '%s\n' "Error: basalt.load Flag '$arg' not recognized"
+		printf '%s\n' "Error: basalt.load: Flag '$arg' not recognized"
 		return 1
 		;;
 	esac done
@@ -51,7 +44,7 @@ basalt.load() {
 	local __basalt_file="${2:-}"
 
 	if [ -z "$__basalt_pkg_path" ]; then
-		printf '%s\n' "Error: basalt.load Missing package as first parameter"
+		printf '%s\n' "Error: basalt.load: Missing package as first parameter"
 		return 1
 	fi
 
@@ -86,9 +79,9 @@ basalt.load() {
 	if [ -z "$__basalt_pkg_path_full" ] || [ ! -d "$__basalt_pkg_path_full" ]; then
 		local __basalt_str='locally'
 		if [ "$__basalt_flag_global" = 'yes' ]; then
-			__basalt_str=" globally"
+			__basalt_str="globally"
 		fi
-		printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not installed$__basalt_str"
+		printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not installed $__basalt_str"
 
 		return 1
 	fi
