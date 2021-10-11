@@ -2,10 +2,7 @@
 
 load './util/init.sh'
 
-# TODO: setup file
-setup() {
-	ensure.cd "$BATS_TEST_TMPDIR"
-
+setup_file() {
 	# this affects lines=($output) # TODO Bats 1.5 remove
 	shopt -u nullglob
 	test_util.stub_command 'do-install'

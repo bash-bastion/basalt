@@ -18,7 +18,7 @@ basalt.package-load() {
 	fi
 	shopt -s nullglob
 
-	# TODO: Use array expand glob so no need to shopt -s nullglob at end to make this cleaner
+	# This can be made cleaner with glob expansion in arrays, but the code is fine as it is
 	local __basalt_site= __basalt_repository_owner=  __basalt_package=
 	if [ -d "$BASALT_PACKAGE_DIR"/.basalt/packages ]; then
 		for __basalt_site in "$BASALT_PACKAGE_DIR"/.basalt/packages/*/; do
