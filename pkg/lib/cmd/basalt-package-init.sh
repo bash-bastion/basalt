@@ -23,7 +23,7 @@ EOF
 	export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
 
 	# basalt global and internal functions
-	source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-load.sh"
+	source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-global.sh"
 	source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-package.sh"
 
 	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then

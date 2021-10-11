@@ -1,6 +1,7 @@
 # shellcheck shell=bash
 
-# This function is only usable by those who executed 'basalt-package-init'
+# @file basalt-global.sh
+# @brief Contains files only usable in Basalt packages (à la 'basalt-package-init')
 
 basalt.package-load() {
 	local __basalt_shopt_nullglob=

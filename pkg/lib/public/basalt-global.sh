@@ -1,13 +1,13 @@
 # shellcheck shell=bash
 
-# This function is usable by anyone to source some or all functions of a Bash
-# library
+# @file basalt-global.sh
+# @brief Contains functions to be used anywhere (shell initialization, Basalt
+# packages, etc.)
 
 __basalt_load_dosource() {
 	:
 }
 
-# TODO: rename this function to 'basalt-global.sh' or something and the other to 'basalt-local.sh'
 basalt.load() {
 	local __basalt_flag_global='no'
 	local __basalt_flag_dry='no'
