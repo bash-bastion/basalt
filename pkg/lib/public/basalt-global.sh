@@ -4,10 +4,6 @@
 # @brief Contains functions to be used anywhere (shell initialization, Basalt
 # packages, etc.)
 
-__basalt_load_dosource() {
-	:
-}
-
 basalt.load() {
 	local __basalt_flag_global='no'
 	local __basalt_flag_dry='no'
@@ -18,7 +14,6 @@ basalt.load() {
 		shift
 		;;
 	--dry)
-		# TODO: implement dry
 		__basalt_flag_dry='yes'
 		shift
 		;;
@@ -41,7 +36,8 @@ basalt.load() {
 
 		Example:
 		  basalt-load --global 'github.com/rupa/z' 'z.sh'
-		  basalt-load 'github.com/ztombol/bats-assert'
+		  basalt-load --dry 'github.com/hyperupcall/bats-common-utils' 'load.bash'
+		  basalt-load 'github.com/bats-core/bats-assert' 'load.bash'
 		EOF
 		return
 		;;
@@ -59,79 +55,56 @@ basalt.load() {
 		return 1
 	fi
 
-	if [ "$__basalt_flag_global" = 'yes' ]; then
-		# TODO: Possible bug if nullglob is not set
-		# TODO: should check to ensure first (zeroith) element is not empty
-		local -a __basalt_pkg_path_full_array=("$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/$__basalt_pkg_path"@*)
-		local __basalt_pkg_path_full="${__basalt_pkg_path_full_array[0]}"
-		unset __basalt_pkg_path_full_array
-
-		if [ ! -d "$__basalt_pkg_path_full" ]; then
-			printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' not installed globally"
-			return 1
-		fi
-
-		if [ ! -f "$__basalt_pkg_path_full/$__basalt_file" ]; then
-			printf '%s\n' "Error: basalt.load: File '$__basalt_file' not found in package '$__basalt_pkg_path'"
-			return 1
-		fi
-
-		source "$__basalt_pkg_path_full/$__basalt_file"
+	local __basalt_is_nullglob=
+	if shopt -q nullglob; then
+		__basalt_is_nullglob='yes'
 	else
-		# TODO: this should be removable
-		# If 'package' is an absoluate path, we can skip to executing the file
-		if [ "${__basalt_pkg_path::1}" = / ]; then
-			if [ -f "$__basalt_pkg_path/load.bash" ]; then
-				# Load package (WET)
-				unset basalt_load
-				source "$__basalt_pkg_path/load.bash"
+		__basalt_is_nullglob='no'
+	fi
+	shopt -s nullglob
 
-				if declare -f basalt_load &>/dev/null; then
-					BASALT_PACKAGE_DIR="$__basalt_pkg_path" basalt_load
-					unset basalt_load
-				fi
-			fi
+	local -a __basalt_pkg_path_full_array=()
+	if [ "$__basalt_flag_global" = 'yes' ]; then
+		__basalt_pkg_path_full_array=("$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/$__basalt_pkg_path@"*)
+	else
+		__basalt_pkg_path_full_array=("$BASALT_PACKAGE_DIR/.basalt/packages/$__basalt_pkg_path@"*)
+	fi
 
-			return
+	if ((${#__basalt_pkg_path_full_array[@]} > 1)); then
+		printf '%s\n' "Error: basalt.load: Multiple versions of the package '$__basalt_pkg_path' exists"
+		return 1
+	fi
+
+	if [ "$__basalt_is_nullglob" = 'yes' ]; then
+		shopt -s nullglob
+	else
+		shopt -u nullglob
+	fi
+
+	local __basalt_pkg_path_full="${__basalt_pkg_path_full_array[0]}"
+
+	if [ -z "$__basalt_pkg_path_full" ] || [ ! -d "$__basalt_pkg_path_full" ]; then
+		local __basalt_str='locally'
+		if [ "$__basalt_flag_global" = 'yes' ]; then
+			__basalt_str=" globally"
 		fi
+		printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not installed$__basalt_str"
 
-		# Assume can only have one version of a particular package for direct dependencies
-		local __basalt_load_package_exists='no' __basalt_did_run_source='no'
-		local __basalt_actual_pkg_path=
-		for __basalt_actual_pkg_path in "$BASALT_PACKAGE_DIR/.basalt/packages/$__basalt_pkg_path"*; do
-			if [ "$__basalt_load_package_exists" = yes ]; then
-				printf '%s\n' "Error: basalt.load There are multiple direct dependencies for package '$__basalt_pkg_path'. This should not happen"
-				return 1
-			else
-				__basalt_load_package_exists='yes'
-			fi
+		return 1
+	fi
 
-			if [ -n "$__basalt_file" ]; then
-				if [ -f "$__basalt_actual_pkg_path/$__basalt_file" ]; then
-					BASALT_PACKAGE_DIR="$__basalt_actual_pkg_path" source "$__basalt_actual_pkg_path/$__basalt_file"
-					__basalt_did_run_source='yes'
-				else
-					printf '%s\n' "Error: basalt.load File '$__basalt_file' not found in package '$__basalt_pkg_path'"
-					return 1
-				fi
-			elif [ -f "$__basalt_actual_pkg_path/load.bash" ]; then
-				# Load package (WET)
-				unset basalt_load
-				source "$__basalt_actual_pkg_path/load.bash"
+	if [ ! -f "$__basalt_pkg_path_full/$__basalt_file" ]; then
+		printf '%s\n' "Error: basalt.load: File '$__basalt_file' not found in package '$__basalt_pkg_path'"
+		return 1
+	fi
 
-				if declare -f basalt_load &>/dev/null; then
-					BASALT_PACKAGE_DIR="$__basalt_actual_pkg_path" basalt_load
-					unset basalt_load
-				fi
-
-				__basalt_did_run_source='yes'
-			fi
-		done
-
-		if [ "$__basalt_did_run_source" = 'no' ]; then
-			printf '%s\n' "Warning: basalt.load Nothing was sourced when calling 'basalt-load $*'. Does the package or file actually exist?"
+	if [ "$__basalt_flag_dry" = 'yes' ]; then
+		printf '%s\n' "Would have sourced file '$__basalt_pkg_path_full/$__basalt_file'"
+	else
+		if source "$__basalt_pkg_path_full/$__basalt_file"; then
+			:
+		else
+			return $?
 		fi
-
-		unset __basalt_actual_pkg_path
 	fi
 }

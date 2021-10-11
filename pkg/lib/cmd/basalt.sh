@@ -5,11 +5,12 @@ shopt -s nullglob extglob
 export LANG="C" LANGUAGE="C" LC_ALL="C"
 export GIT_TERMINAL_PROMPT=0
 
-for f in "$PROGRAM_LIB_DIR"/{commands,plumbing,util}/?*.sh; do
+# shellcheck disable=SC2154
+for f in "$__basalt_dirname"/pkg/lib/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done
 
-basalt.main() {
+main.basalt() {
 	util.init_always
 
 	for arg; do case "$arg" in

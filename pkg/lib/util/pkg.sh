@@ -11,7 +11,6 @@ pkg.install_packages() {
 	ensure.nonzero 'project_dir'
 	ensure.nonzero 'symlink_mode'
 
-	# TODO: save the state and have rollback feature
 	local pkg=
 	for pkg; do
 		util.get_package_info "$pkg"

@@ -9,7 +9,7 @@
 # entry for the directory containing this file, which we execute to load the
 # aforementioned Basalt utility functions
 
-basalt-package-init.main() {
+main.basalt-package-init() {
 	# Set main variables (WET)
 	local basalt_global_repo="${0%/*}"
 	basalt_global_repo="${basalt_global_repo%/*}"; basalt_global_repo="${basalt_global_repo%/*}"
