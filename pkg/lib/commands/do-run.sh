@@ -5,11 +5,16 @@ do-run() {
 
 	local -a args=()
 	for arg; do case "$arg" in
+	--)
+		shift
+		break
+		;;
 	-*)
 		bprint.die "Flag '$arg' not recognized"
 		;;
 	*)
 		args+=("$arg")
+		shift
 		;;
 	esac done
 
@@ -28,7 +33,7 @@ do-run() {
 			for bin_file in "$bin_dir"/*; do
 				if [ -f "$bin_file" ] && [ -x "$bin_file" ]; then
 					util.deinit
-					exec "$bin_file"
+					exec "$bin_file" "$@"
 				elif [ -f "$bin_file" ]; then
 					bprint.die "File '$bin_name' is found, but the package providing it has not made it executable"
 				else
@@ -42,7 +47,7 @@ do-run() {
 	local bin_file="$BASALT_LOCAL_PROJECT_DIR/.basalt/bin/$bin_name"
 	if [ -f "$bin_file" ] && [ -x "$bin_file" ]; then
 		util.deinit
-		exec "$bin_file"
+		exec "$bin_file" "$@"
 	elif [ -f "$bin_file" ]; then
 		bprint.die "File '$bin_name' is found, but the package providing it has not made it executable"
 	else
