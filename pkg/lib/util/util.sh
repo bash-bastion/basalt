@@ -69,8 +69,8 @@ util.init_always() {
 		else
 			___basalt_lock_dir="$BASALT_GLOBAL_DATA_DIR/basalt.lock"
 		fi
-		if mkdir "$___basalt_lock_dir"; then
-			trap 'rm -rf "$___basalt_lock_dir"' INT TERM EXIT
+		if mkdir "$___basalt_lock_dir" 2>/dev/null; then
+			trap 'util.deinit' INT TERM EXIT
 		else
 			bprint.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
 		fi
@@ -79,6 +79,10 @@ util.init_always() {
 	if ! command -v curl &>/dev/null; then
 		bprint.die "Program 'curl' not installed. Please install curl"
 	fi
+}
+
+util.deinit() {
+	rm -rf "$___basalt_lock_dir"
 }
 
 # @description Ensure the downloaded file is really a .tar.gz file...
