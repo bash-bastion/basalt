@@ -30,7 +30,7 @@ do-run() {
 	local bin_name="${args[0]}"
 	if util.get_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'binDirs'; then
 		for bin_dir in "${REPLIES[@]}"; do
-			for bin_file in "$bin_dir"/*; do
+			for bin_file in "$BASALT_LOCAL_PROJECT_DIR/$bin_dir"/*; do
 				if [ -f "$bin_file" ] && [ -x "$bin_file" ]; then
 					util.deinit
 					exec "$bin_file" "$@"

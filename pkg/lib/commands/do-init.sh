@@ -124,9 +124,11 @@ EOF
 		bprint.info "Created $file5"
 		;;
 	full)
-		if ! git clone -q 'https://github.com/hyperupcall/template-bash' .; then
+		local repo='github.com/hyperupcall/template-bash'
+		if ! git clone -q "https://$repo" .; then
 			bprint.die "Could not clone the full bash template"
 		fi
+		bprint.info "Cloned $repo"
 		;;
 	esac
 }

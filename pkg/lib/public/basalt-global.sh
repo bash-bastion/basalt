@@ -40,6 +40,16 @@ basalt.load() {
 		;;
 	esac done
 
+	if (($# == 0)); then
+		printf '%s\n' "Error: basalt.load: Must specify arguments
+
+Usage:
+  basalt.load [flags] <package> <file>
+
+Pass '--help' for more info"
+		return 1
+	fi
+
 	local __basalt_pkg_path="${1:-}"
 	local __basalt_file="${2:-}"
 

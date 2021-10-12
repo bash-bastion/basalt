@@ -343,7 +343,7 @@ Usage:
   basalt global <global-subcommand> [args...]
 
 Local subcommands:
-  init
+  init <--bare|--full>
     Creates a new Basalt package in the current directory
 
   add <package>
