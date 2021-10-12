@@ -380,11 +380,11 @@ Global subcommands:
     List all installed packages or just the specified ones
 
 Examples:
-  basalt add tj/git-extras
-  basalt add github.com/tj/git-extras
-  basalt add https://github.com/tj/git-extras
-  basalt add git@github.com:tj/git-extras
-  basalt add hyperupcall/bash-args --branch=main
-  basalt add hyperupcall/bash-args@v0.6.1 # out of date
+  basalt global add tj/git-extras
+  basalt global add github.com/tj/git-extras
+  basalt global add https://github.com/tj/git-extras
+  basalt global add git@github.com:tj/git-extras
+  basalt global add hyperupcall/bash-args --branch=main
+  basalt global add hyperupcall/bash-args@v0.6.1 # out of date
 EOF
 }

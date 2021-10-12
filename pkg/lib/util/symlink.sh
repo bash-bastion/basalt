@@ -102,7 +102,7 @@ symlink.bin_util_create_symlink() {
 
 	local bin_name="${full_bin_file##*/}"
 	if [ -L "$install_dir/bin/$bin_name" ]; then
-		log.error "Skipping '$bin_name' since an existing symlink with the same name already exists"
+		bprint.warn "Skipping '$bin_name' since an existing symlink with the same name already exists"
 	else
 		ln -sf "$full_bin_file" "$install_dir/bin/$bin_name"
 		chmod +x "$install_dir/bin/$bin_name"
