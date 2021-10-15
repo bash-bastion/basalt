@@ -39,6 +39,7 @@ main.basalt() {
 		install) shift; do-install "$@" ;;
 		list) shift; do-list "$@" ;;
 		run) shift; do-run "$@" ;;
+		version) shift; do-version "$@" ;;
 		complete) shift; do-complete "$@" ;;
 		global) shift
 			case "$1" in
