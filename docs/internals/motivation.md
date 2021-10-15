@@ -2,11 +2,13 @@
 
 A mechanism to facilitate composability within the Bash ecosystem, á la a package manager
 
-The general idea isn't new; there exist two prominent package managers (`bpkg` and `Basher`) along with a slew of other highly prolific Bash/shell projects (`oh-my-zsh`, `bash-it`, `bash-oo-framework`) that aim to solve similar problems. How is Basalt different?
+The general idea isn't new; there are many similar projects, but Basalt fills a unique void
 
-1. `oh-my-zsh`, `bash-it`, and friends are more geared towards reusability (not composability) in the context of shell initialization
-2. `bash-oo-framework` contains a lot of useful functionality, but as the name implies, it must be used as a framework rather than a library; this doesn't mame it very composable. Furthermore, the project itself recommends directly copying and pasting code from the repository as a usage pattern, which is highly laborious and frictious
-3. `bpkg` and `Basher` are two projects that fit the criteria, but have some disadvantages in my opinion
+- It is not meant to be a replacement for `oh-my-zsh`, `bash-it`, etc. The aforementioned are used only in the context of shell initialization and are more geared towards reusability (not composability)
+
+- It is unlike `bash-oo-framework` in that it facilitates the creation of _packages like_ `bash-oo-framework`. That is, cool features that are a part of `bash-oo-framework` like stack traces can be installable as a library rather than a greater framework
+
+- The two existing prominent package managers (`bpkg` and `Basher`) are most similar, but fall short. Some gripes are listed below
 
 ### `bpkg` disadvantages
 
@@ -28,4 +30,5 @@ The general idea isn't new; there exist two prominent package managers (`bpkg` a
 - Cannot install local, per-project dependencies
 - Have subpar completion scripts
 
-These disadvantages gave me reason to create a new package manager that was significantly improved. I originally forked Basher because it had an excellent test suite and its behavior for installing packages made more sense to me. However, since a massive refactoring effort in addition to a near-complete rewrite took effect, there is almost no original Basher code that exists currently
+
+For each tool, the issues were systemic so I forked Basher and made heavy modifications, eventually doing a complete rewrite

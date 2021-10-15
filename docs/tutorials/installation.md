@@ -1,9 +1,5 @@
 # Installation
 
-***NOTE***: Warning: THIS TUTORIAL IS OUT OF DATE (TODO)
-
-***NOTE***: `basalt` is currently BETA quality. I would _highly_ recommend waiting to try out Basalt (TODO)
-
 ## Prerequisites
 
 - `bash >= 4.3`
@@ -16,30 +12,29 @@ If you are on macOS, you need to install the latest `Bash` and `coreutils`:
 brew install bash coreutils
 ```
 
-See the full list of supported operating systems in [Support](./support.md)
+See the full list of supported operating systems in [Support](./docs/support.md)
 
 ## Install
 
 ### Scripted
 
 ```sh
-curl -Lo- https://raw.githubusercontent.com/hyperupcall/basalt/main/scripts/install.sh | bash
+curl -Lo- https://raw.githubusercontent.com/hyperupcall/basalt/main/scripts/install.sh | sh
 ```
 
 ### Manual
 
-##### 1. Clone `basalt`
+##### 1. Clone repository
 
 ```sh
 git clone https://github.com/hyperupcall/basalt "${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"
 ```
 
-By default, this installs basalt to `$HOME/.local/share/basalt/source`. Note: do _NOT_ try to install the repository to a different location (like `~/.basalt`), or the program won't work
+By default, this installs basalt to `$HOME/.local/share/basalt/source`
 
 ##### 2. Add initialization script to shell profile
 
 This enables basalt to automatically setup your `PATH`, set completion variables, source completion files, and other things
-
 
 For `bash`, `zsh`, `sh`
 
@@ -60,4 +55,4 @@ end
 basalt init fish | source
 ```
 
-And now you're done! Move on to [Getting Started](./getting-started.md) to learn the basics
+And now you're done! Move on to [Getting Started](./docs/tutorials/getting-started.md) to learn the basics

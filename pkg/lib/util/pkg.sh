@@ -240,6 +240,7 @@ fi'
 				for source_dir in "${REPLIES[@]}"; do
 					printf -v content '%s%s\n' "$content" "
 # Silently skip if directory doesn't exist since a corresponding warning will print during package installation
+# TODO: only do the above for downloaded packages, but when sourcing current package a warning should show
 if [ -d \"$project_dir_short/$source_dir\" ]; then
 	# Works if nullglob is unset, given that there is no file called '*'
 	for __basalt_f in \"$project_dir_short/$source_dir\"/*; do

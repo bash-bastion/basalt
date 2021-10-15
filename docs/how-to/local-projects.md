@@ -1,84 +1,89 @@
 # Local Projects
 
-TODO: WARNING: This is out of date
+Similar to `cargo`, `yarn` etc., Basalt allows for the installation of packages on a per-project basis. This page details how to do it with Basalt
 
-Similar to `npm`, `carto`, etc. `basalt` allows for the installation of packages on a per-project basis. Use `basalt.toml` for this
+First, create a project directory
 
 ```sh
 mkdir 'my-project' && cd 'my-project'
-
-# Creating a 'basalt.toml' is required so basalt knows where
-# the root of the project is
-touch 'basalt.toml'
 ```
 
-Let's take a look at the installed packages
+Now, initialize a new project. We'll be passing in `--full`; if you want a more minimalist template, pass `--bare` instead
 
 ```sh
-$ basalt list
-Info: Operating in context of local basalt.toml
+$ basalt init --full
+       Info Cloned github.com/hyperupcall/template-bash
 ```
 
-So far, none are installed. Let's install [bash-args](https://github.com/hyperupcall/bash-args). To do this, modify `dependencies` in your `basalt.toml`
+Naturally, the most important part of Basalt packages is the `basalt.toml` file
 
 ```toml
-# basalt.toml
-dependencies = [ "hyperupcall/bash-args" ]
+[package]
+name = 'fox-track'
+slug = 'fox_track'
+version = '0.1.0'
+authors = ['Edwin Kofler <edwin@kofler.dev>']
+description = 'A template to get started writing Bash applications and projects'
+
+[run]
+dependencies = ['https://github.com/hyperupcall/bats-common-utils.git@v3.0.0']
+sourceDirs = ['pkg/lib/public', 'pkg/lib']
+builtinDirs = []
+binDirs = ['pkg/bin']
+completionDirs = ['completions']
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+
+[run.shoptOptions]
 ```
 
-Now, install it
+In short, `name` is the pretty name for the package. Often, it has the same name as the repository. `slug` is the string used to prefix *all of* your functions when you want your package to be consumed as a library. Lastly, `sourceDirs` are all the directories containing shell files you wish to source. Note that `pkg/lib/cmd` is *not* added since it contains files that are entrypoints for new Bash processes
+
+A detailed description for each key can be found at [`reference/basalt_toml`](./docs/reference/basalt_toml.md)
+
+To execute this program, simply run
 
 ```sh
-$ basalt add --all
-Info: Operating in context of local basalt.toml
-Info: Adding all dependencies
-Info: Adding 'hyperupcall/bash-args'
-  -> Cloning Git repository
-  -> Symlinking bin files
+$ basalt run fox-track --help
+fox-track: A fox tracking sample application
+
+Commands:
+  show
+    Shows the current fox count
+
+  set <number>
+    Sets the current fox count
+
+  add [number]
+    Adds a number to the current fox count. If number is not specified, it defaults to 1
+
+  remove [number]
+    Adds a number to the current fox count. If number is not specified, it defaults to 1
+
+Flags:
+  --help
+    Shows the help menu
 ```
 
-It now shows up in the `list` subcommand
+This is similar to running `./pkg/bin/fox-track` directly, but using `basalt run` has another benefit: Basalt will look for commands of the specified name not just for the current project, but for all subdependencies as well
+
+If you wish to add a dependency to the project, use the `add` subcommand
+
+```sh
+$ basalt add 'hyperupcall/bats-common-utils'
+ Downloaded github.com/hyperupcall/bats-common-utils@v3.0.0
+  Extracted github.com/hyperupcall/bats-common-utils@v3.0.0
+Transformed github.com/hyperupcall/bats-common-utils@v3.0.0
+```
+
+Basalt will automatically find and download the version corresponding to the _latest GitHub release_. If there are no GitHub releases, it will use the latest commit. In this case, `v3.0.0` was the latest GitHub release
+
+You can view the dependencies by looking in `basalt.toml` or running
 
 ```sh
 $ basalt list
-Info: Operating in context of local basalt.toml
-github.com/hyperupcall/bash-args
-  Branch: main
-  Revision: 2087e87
-  State: Up to date
-```
-
-You'll notice a `.basalt` directory has been created. Since the project is now installed, let's use it
-
-Create a `script.sh` file
-
-```sh
-#!/usr/bin/env bash
-
-# @file script.sh
-# @brief Demonstration of the bash-args library
-
-# Append to the PATH so we have access to `bash-args` in the PATH
-PATH="$PWD/.basalt/bin:$PATH"
-
-# Declare an associative array for storing the argument flags
-declare -A args=()
-
-# 'bash-args' requires that we use `source`, so it can
-# set fields in the 'args' associative array
-source bash-args parse "$@" <<-"EOF"
-@flag [port.p] {3000} - The port to open on
-EOF
-
-printf '%s\n' "Using port '${args[port]}'"
-```
-
-Cool, now let's try it
-
-```sh
-$ chmod +x './script.sh'
-$ ./script.sh
-Using port '3000'
-$ ./script.sh --port 4000
-Using port '4000'
+https://github.com/hyperupcall/bats-common-utils.git@v3.0.0
 ```
