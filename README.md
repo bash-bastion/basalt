@@ -1,6 +1,6 @@
 # basalt
 
-`basalt` is the ultimate Bash (and Zsh, Fish, etc.) Package Manager
+The rock-solid Bash package manager
 
 STATUS: BETA (expect breaking changes until a post-beta release)
 
@@ -18,14 +18,14 @@ This symlinks all executable scripts to a common directory. It does this for com
 
 ```sh
 $ exa -l --no-permissions --no-filesize --no-user ~/.local/share/basalt/global/bin/
-bash2048.sh -> /home/edwin/.local/share/basalt/store/packages/github.com/JosefZIla/bash2048/bash2048.sh
-bashtop -> /home/edwin/.local/share/basalt/store/packages/github.com/aristocratos/bashtop/bashtop
-git-alias -> /home/edwin/.local/share/basalt/store/packages/github.com/tj/git-extras/bin/git-alias
-git-archive-file -> /home/edwin/.local/share/basalt/store/packages/github.com/tj/git-extras/bin/git-archive-file
+bash2048.sh -> .../.local/share/basalt/store/packages/github.com/JosefZIla/bash2048@.../bash2048.sh
+bashtop -> .../.local/share/basalt/store/packages/github.com/aristocratos/bashtop@.../bashtop
+git-alias -> .../.local/share/basalt/store/packages/github.com/tj/git-extras@.../bin/git-alias
+git-archive-file -> .../.local/share/basalt/store/packages/github.com/tj/git-extras@.../bin/git-archive-file
 ...
 ```
 
-To be able to access the binaries, completion files, and man pages in your shell, simply add a two-liner in your shell configuration
+To be able to access the binaries, completion files, and man pages in your shell, simply add a two-liner in your shell configuration. The [installation script](./scripts/install.sh) already does this for you
 
 ```sh
 # ~/.bashrc
@@ -33,24 +33,22 @@ export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
 eval "$(basalt global init bash)" # zsh and fish are also supported
 ```
 
-See [Installation](./docs/tutorials/installation.md) and [Getting Started](./docs/tutorials/getting-started.md) for more details
+***NOTE***: Basalt is currently BETA. There are known bugs that will be fixed. I _highly_ recommended to wait until `v1.0.0` before trying anything out
 
+See [Installation](./docs/tutorials/installation.md) and [Getting Started](./docs/tutorials/getting-started.md) for more details
 
 ## Features
 
-Note that many of these features have been implemented before, but require a reimplementation since the major rewrite
-
-- [x] Lockfile usage
-- [ ] Transaction rollback
-- [ ] Works with essentially all popular Bash projects out of the box
-- [ ] Specifying specific man, completion, etc. directories
-- [x] Local package installation
-- [x] Global (user-wide) package installation
-- [ ] Custom builtins
+- Install most Bash/Zsh/Fish projects out of the box
+- Local Bash packages (Awk/Zsh/Fish/Ksh coming later)
+- Custom builtins for packages (not yet implemented)
+- Robust (lockfile usage, transaction rollback (not yet implemented), great error handling)
 
 ## Ecosystem
 
-There is a small, but growing number of packages installable with Basalt. See the list at [awesome-bash-packages](https://github.com/hyperupcall/awesome-bash-packages)
+Most of the "ecosystem" is just good utility libraries and somewhat useful Bash applications I've made
+
+See the list at [awesome-bash-packages](https://github.com/hyperupcall/awesome-bash-packages)
 
 ## License
 
