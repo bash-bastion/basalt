@@ -31,9 +31,8 @@ basalt.package-load() {
 					fi
 
 					if [ -f "$__basalt_package.basalt/generated/source_package.sh" ]; then
-						if ! source "$__basalt_package.basalt/generated/source_package.sh"; then
-							:
-						else
+						if source "$__basalt_package.basalt/generated/source_package.sh"; then :; else
+							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_package.sh'"
 							return $?
 						fi
 					fi
