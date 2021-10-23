@@ -3,7 +3,7 @@ name = 'basalt'
 slug = 'basalt'
 version = '0.10.0'
 authors = ['Edwin Kofler <edwin@kofler.dev>']
-description = ''
+description = 'The rock-solid Bash package manager'
 
 [run]
 dependencies = []

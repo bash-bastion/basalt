@@ -40,15 +40,20 @@ See [Installation](./docs/tutorials/installation.md) and [Getting Started](./doc
 ## Features
 
 - Install most Bash/Zsh/Fish projects out of the box
-- Local Bash packages (Awk/Zsh/Fish/Ksh coming later)
-- Custom builtins for packages (not yet implemented)
+- Local Bash packages (Awk/Zsh/Fish/Ksh,Powershell coming later)
+- Custom builtins for Bash packages (not yet implemented)
 - Robust (lockfile usage, transaction rollback (not yet implemented), great error handling)
+- Bundle (bundle a project and its dependencies into a single file) (not yet implemented)
 
 ## Ecosystem
 
-Most of the "ecosystem" is just good utility libraries and somewhat useful Bash applications I've made
+Because of Basalt, I've been able to make
 
-See the list at [awesome-bash-packages](https://github.com/hyperupcall/awesome-bash-packages)
+- [Woof](https://github.com/hyperupcall/woof) - The version manager to end all version managers (replaces pyenv, nvm, rbenv etc.)
+- [shtest](https://github.com/hyperupcall/shtest) - POSIX shell test runner (like Bats for POSIX shell)
+- [bash-object](https://github.com/hyperupcall/bash-object) - Primitives for object oriented Bash (manipulate heterogenous data hierarchies in Bash)
+
+See the full list [awesome-basalt](https://github.com/hyperupcall/awesome-basalt)
 
 ## License
 
