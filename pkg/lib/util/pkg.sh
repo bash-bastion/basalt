@@ -228,12 +228,12 @@ pkg.phase_local_integration_nonrecursive() {
 				printf -v content '%s%s\n' "$content" '# shellcheck shell=bash
 
 if [ -z "$BASALT_PACKAGE_DIR" ]; then
-	printf "%s\n" "Fatal: source_package.sh: $BASALT_PACKAGE_DIR is empty, but must exist"
+	printf "%s\n" "Fatal: source_package.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
 	exit 1
 fi
 
 if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-	printf "%s\n" "Fatal: source_package.sh: $BASALT_GLOBAL_DATA_DIR is empty, but must exist"
+	printf "%s\n" "Fatal: source_package.sh: \$BASALT_GLOBAL_DATA_DIR is empty, but must exist"
 	exit 1
 fi'
 

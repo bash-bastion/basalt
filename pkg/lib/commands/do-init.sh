@@ -68,7 +68,7 @@ do-init() {
 		basalt.package-load
 
 		source "$BASALT_PACKAGE_DIR/pkg/lib/cmd/file.sh"
-		file.main "$@"
+		main.file "$@"
 		EOF
 			bprint.die "Could not write to $file2"
 		fi
@@ -80,7 +80,7 @@ do-init() {
 		if ! cat >| "$file3" <<"EOF"; then
 # shellcheck shell=bash
 
-file.main() {
+main.file() {
 	printf '%s\n' "Woof!"
 }
 EOF
@@ -94,13 +94,12 @@ EOF
 		if ! cat >| "$file4" <<"EOF"; then
 # shellcheck shell=bash
 
-eval "$(basalt-package-init)"; basalt.package-init
+eval "$(basalt-package-init)"
+basalt.package-init
 basalt.package-load
 # basalt.load 'github.com/hyperupcall/bats-common-utils' 'load.bash'
 
 load './util/test_util.sh'
-
-export NO_COLOR=
 
 setup() {
 	ensure.cd "$BATS_TEST_TMPDIR"
