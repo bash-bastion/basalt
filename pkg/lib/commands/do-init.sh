@@ -64,7 +64,8 @@ do-init() {
 		if ! cat >| "$file2" <<-"EOF"; then
 		#!/usr/bin/env bash
 
-		eval "$(basalt-package-init)"; basalt.package-init
+		eval "$(basalt-package-init)"
+		basalt.package-init
 		basalt.package-load
 
 		source "$BASALT_PACKAGE_DIR/pkg/lib/cmd/file.sh"
@@ -97,16 +98,16 @@ EOF
 eval "$(basalt-package-init)"
 basalt.package-init
 basalt.package-load
-# basalt.load 'github.com/hyperupcall/bats-common-utils' 'load.bash'
+# basalt.load 'github.com/hyperupcall/bats-all' 'load.bash'
 
 load './util/test_util.sh'
 
 setup() {
-	ensure.cd "$BATS_TEST_TMPDIR"
+	cd "$BATS_TEST_TMPDIR"
 }
 
 teardown() {
-	ensure.cd "$BATS_SUITE_TMPDIR"
+	cd "$BATS_SUITE_TMPDIR"
 }
 EOF
 			bprint.die "Could not write to $file4"
