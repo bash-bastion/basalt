@@ -1,5 +1,10 @@
 # shellcheck shell=bash
 
+if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
+  printf '%s\n' 'Basalt requires at least Bash version 4.3'
+  exit 1
+fi
+
 set -ETeo pipefail
 shopt -s nullglob extglob
 export LANG="C" LANGUAGE="C" LC_ALL="C"
