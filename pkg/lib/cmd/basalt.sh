@@ -16,8 +16,6 @@ for f in "$__basalt_dirname"/pkg/lib/{commands,plumbing,util}/?*.sh; do
 done
 
 main.basalt() {
-	util.init_always
-
 	for arg; do case "$arg" in
 	--help|-h)
 		util.show_help
@@ -38,36 +36,74 @@ main.basalt() {
 	esac done
 
 	case "$1" in
-		init) shift; do-init "$@" ;;
-		add) shift; do-add "$@" ;;
-		remove) shift; do-remove "$@" ;;
-		install) shift; do-install "$@" ;;
-		list) shift; do-list "$@" ;;
-		run) shift; do-run "$@" ;;
-		version) shift; do-version "$@" ;;
-		complete) shift; do-complete "$@" ;;
-		global) shift
-			case "$1" in
-				init) shift; do-global-init "$@" ;;
-				add) shift; do-global-add "$@" ;;
-				remove) shift; do-global-remove "$@" ;;
-				install) shift; do-global-install "$@" ;;
-				list) shift; do-global-list "$@" ;;
-				*)
-					if [ -n "$1" ]; then
-						bprint.die "Global subcommand '$1' is not a valid"
-					else
-						util.show_help
-					fi
-					;;
-			esac
-			;;
+	init)
+		shift
+		do-init "$@" ;;
+	add)
+		shift
+		util.init_always
+		do-add "$@" ;;
+	remove)
+		shift
+		util.init_always
+		do-remove "$@" ;;
+	install)
+		shift
+		util.init_always
+		do-install "$@" ;;
+	list)
+		shift
+		util.init_always
+		do-list "$@" ;;
+	run)
+		shift
+		util.init_always
+		do-run "$@" ;;
+	version)
+		shift
+		util.init_always
+		do-version "$@" ;;
+	complete)
+		shift
+		util.init_always
+		do-complete "$@" ;;
+	global)
+		shift
+		case "$1" in
+		init)
+			shift
+			do-global-init "$@" ;;
+		add)
+			shift
+			util.init_always
+			do-global-add "$@" ;;
+		remove)
+			shift
+			util.init_always
+			do-global-remove "$@" ;;
+		install)
+			shift
+			util.init_always
+			do-global-install "$@" ;;
+		list)
+			shift
+			util.init_always
+			do-global-list "$@" ;;
 		*)
 			if [ -n "$1" ]; then
-				bprint.die "Subcommand '$1' is not valid"
+				bprint.die "Global subcommand '$1' is not a valid"
 			else
 				util.show_help
 			fi
 			;;
+		esac
+		;;
+	*)
+		if [ -n "$1" ]; then
+			bprint.die "Subcommand '$1' is not valid"
+		else
+			util.show_help
+		fi
+		;;
 	esac
 }
