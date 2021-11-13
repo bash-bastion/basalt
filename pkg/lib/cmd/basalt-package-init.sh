@@ -26,6 +26,11 @@ EOF
 	source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-global.sh"
 	source "$BASALT_GLOBAL_REPO/pkg/lib/public/basalt-package.sh"
 
+	if [ -t 0 ]; then
+		printf '%s\n' "Error: basalt.package-init: Executing this function from an interactive environment is invalid"
+		return 1
+	fi
+
 	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
 		local __old_cd="$PWD"
 

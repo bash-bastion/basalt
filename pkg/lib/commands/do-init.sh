@@ -114,6 +114,7 @@ EOF
 		fi
 		bprint.info "Created $file4"
 
+
 		mkdir -p 'tests/util'
 		local file5='./tests/util/test_util.sh'
 		if ! cat >| "$file5" <<"EOF"; then
@@ -122,6 +123,23 @@ EOF
 			bprint.die "Could not write to $file5"
 		fi
 		bprint.info "Created $file5"
+
+
+		mkdir -p 'tests'
+		local file6='./tests/main.sh'
+		if ! cat >| "$file6" <<"EOF"; then
+# shellcheck shell=bash
+
+source './util/init.sh'
+
+@test "Outputs 'Woof!'" {
+	run main.file
+	[ "$status" -eq 0 ]
+	[ "$output" = "Woof!" ]
+}
+EOF
+			bprint.die "Could not write to $file6"
+		fi
 		;;
 	full)
 		local repo='github.com/hyperupcall/template-bash'

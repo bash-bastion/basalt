@@ -4,7 +4,7 @@ do-global-install() {
 	util.init_global
 
 	if (($# != 0)); then
-		bprint.die "No arguments or flags must be specified"
+		bprint.die "No arguments or flags must be specified. Did you mean 'basalt global add'?"
 	fi
 
 	if ! rm -rf "$BASALT_GLOBAL_DATA_DIR/global/.basalt"; then
