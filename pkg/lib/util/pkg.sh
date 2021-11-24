@@ -228,12 +228,12 @@ pkg.phase_local_integration_nonrecursive() {
 				printf -v content '%s%s\n' "$content" '# shellcheck shell=bash
 
 if [ -z "$BASALT_PACKAGE_DIR" ]; then
-	printf "%s\n" "Fatal: source_package.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
+	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
 	exit 1
 fi
 
 if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-	printf "%s\n" "Fatal: source_package.sh: \$BASALT_GLOBAL_DATA_DIR is empty, but must exist"
+	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_GLOBAL_DATA_DIR is empty, but must exist"
 	exit 1
 fi'
 
@@ -255,8 +255,76 @@ fi"
 				if [ ! -d "$project_dir/.basalt/generated" ]; then
 					mkdir -p "$project_dir/.basalt/generated"
 				fi
-				cat <<< "$content" > "$project_dir/.basalt/generated/source_package.sh"
+				cat <<< "$content" > "$project_dir/.basalt/generated/source_packages.sh"
 			fi
 		fi
+		
+		# Set options
+		printf '%s\n\n' "# shellcheck shell=bash" > "$project_dir/.basalt/generated/source_setoptions.sh"
+		for option in allexport braceexpand emacs errexit errtrace functrace \
+			hashall histexpand history ignoreeof interactive-commants keyword monitor \
+			noclobber noexec noglob nolog notify nounset onecmd physical pipefail posix \
+			priviledged verbose vi xtrace; do
+			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
+				
+				if [ "$REPLY" = 'on' ]; then
+					printf '%s\n' "set -o $option" >> "$project_dir/.basalt/generated/source_setoptions.sh"
+				elif [ "$REPLY" = 'off' ]; then
+					printf '%s\n' "set +o $option" >> "$project_dir/.basalt/generated/source_setoptions.sh"
+				else
+					bprint.die "Value of '$option' be either 'on' or 'off'"
+				fi
+			fi
+		done; unset option
+
+		# Shopt options
+		printf '%s\n\n' "# shellcheck shell=bash" > "$project_dir/.basalt/generated/source_shoptoptions.sh"
+		for option in autocd assoc_expand_once cdable_vars cdspell checkhash checkjobs \
+			checkwinsize cmdhist compat31 compat32 compat40 compat41 compat42 compat43 compat44 \
+			complete_fullquote direxpand dirspell dotglob execfail expand_aliases extdebug extglob \
+			extquote failglob force_fignore globasciiranges globstar gnu_errfmt histappend \
+			histreedit histverify hostcomplete huponexit inherit_errexit interactive_comments \
+			lastpipe lithist localvar_inherit localvar_unset login_shell mailwarn \
+			no_empty_cmd_completion nocaseglob nocasematch nullglob progcomp progcomp_alias \
+			promptvars restricted_shell shift_verbose sourcepath xpg_echo; do
+			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
+				if [ "$REPLY" = 'on' ]; then
+					printf '%s\n' "shotp -s $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
+				elif [ "$REPLY" = 'off' ]; then
+					printf '%s\n' "shopt -u $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
+				else
+					bprint.die "Value of '$option' be either 'on' or 'off'"
+				fi
+			fi
+		done; unset option
+	else
+		# Okay if no 'basalt.toml' file
+		:
 	fi
+
+	# A 'source_all.sh' is generated for easy sourcing (and for debugging)
+	cat <<-"EOF" > "$project_dir/.basalt/generated/source_all.sh"
+	# shellcheck shell=bash
+
+	if [ -z "$BASALT_PACKAGE_DIR" ]; then
+		printf "%s\n" "Fatal: source_packages.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
+		exit 1
+	fi
+		
+	if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_packages.sh" ]; then
+		source "$BASALT_PACKAGE_DIR/.basalt/generated/source_packages.sh"
+	fi
+
+	if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_setoptions.sh" ]; then
+		source "$BASALT_PACKAGE_DIR/.basalt/generated/source_setoptions.sh"
+	fi
+
+	if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_shoptoptions.sh" ]; then
+		source "$BASALT_PACKAGE_DIR/.basalt/generated/source_shoptoptions.sh"
+	fi
+	EOF
+
+	# TODO: put version in here and if version is out of date, prompt to 'basalt install'
+	# Has successfully ran
+	printf '%s\n' '# shellcheck shell=sh' "# This file exists so it can be checked that 'basalt install' has been ran successfully" > "$project_dir/.basalt/generated/done.sh"
 }

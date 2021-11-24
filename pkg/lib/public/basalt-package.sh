@@ -10,6 +10,20 @@ basalt.package-load() {
 		printf '%s\n' "Error: basalt.package-load: Variable '\$BASALT_PACKAGE_DIR' is empty"
 		return 1
 	fi
+	
+	# These checks always ensure the generated files are in sync the 'basalt.toml'
+	if [ ! -f "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh" ]; then
+		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran"
+		return 1
+	fi
+	
+	# BSD `date(1)` does not have '-r'
+	basaltFileLastModifiedAt="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/basalt.toml")"
+	doneFileLastModifiedAt="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh")"
+	if ((basaltFileLastModifiedAt >= doneFileLastModifiedAt)); then # '>=' so automated 'basalt install' work on fast computers
+		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again"
+		return 1
+	fi
 
 	if shopt -q nullglob; then
 		__basalt_shopt_nullglob='yes'
@@ -30,9 +44,9 @@ basalt.package-load() {
 						shopt -u nullglob
 					fi
 
-					if [ -f "$__basalt_package.basalt/generated/source_package.sh" ]; then
-						if BASALT_PACKAGE_DIR="$__basalt_package" source "$__basalt_package.basalt/generated/source_package.sh"; then :; else
-							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_package.sh'"
+					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
+						if BASALT_PACKAGE_DIR="$__basalt_package" source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
+							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'"
 							return $?
 						fi
 					fi
@@ -43,14 +57,14 @@ basalt.package-load() {
 		done; unset __basalt_site
 	fi
 
-	if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_package.sh" ]; then
-		source "$BASALT_PACKAGE_DIR/.basalt/generated/source_package.sh"
-	fi
-
 	if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
 		shopt -s nullglob
 	else
 		shopt -u nullglob
+	fi
+
+	if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_all.sh" ]; then
+		source "$BASALT_PACKAGE_DIR/.basalt/generated/source_all.sh"
 	fi
 
 	unset __basalt_shopt_nullglob
