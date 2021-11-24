@@ -11,19 +11,27 @@ bprint.die() {
 # Fatal errors are internal errors here
 bprint.fatal() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "%11s: %s\n" "Fatal" "$1"
+		printf "%11s: %s\n" "Fatal" "$1" >&2
 	else
-		printf "\033[0;31m%11s\033[0m %s\n" 'Fatal' "$1"
+		printf "\033[0;31m%11s\033[0m %s\n" 'Fatal' "$1" >&2
 	fi
+
+	# Print stack trace
+	if (( ${#FUNCNAME[@]} >> 2 )); then
+		printf '%s\n' 'STACK TRACE'
+        for ((i=1;i<${#FUNCNAME[@]}-1;i++)); do
+			printf '%s\n' "  $i: ${BASH_SOURCE[$i+1]}:${BASH_LINENO[$i]} ${FUNCNAME[$i]}(...)"
+        done
+    fi
 
 	exit 1
 }
 
 bprint.error() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "%11s: %s\n" "Error" "$1"
+		printf "%11s: %s\n" "Error" "$1" >&2
 	else
-		printf "\033[0;31m%11s\033[0m %s\n" 'Error' "$1"
+		printf "\033[0;31m%11s\033[0m %s\n" 'Error' "$1" >&2
 	fi
 }
 
@@ -37,9 +45,9 @@ bprint.warn() {
 
 bprint.info() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
-		printf "%11s: %s\n" 'Info' "$1" >&2
+		printf "%11s: %s\n" 'Info' "$1"
 	else
-		printf "\033[0;32m%11s\033[0m %s\n" 'Info' "$1" >&2
+		printf "\033[0;32m%11s\033[0m %s\n" 'Info' "$1" 
 	fi
 }
 

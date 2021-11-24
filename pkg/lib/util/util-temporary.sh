@@ -15,9 +15,9 @@ util.get_toml_string() {
 	if [ ! -f "$toml_file" ]; then
 		bprint.fatal "File '$toml_file' not found"
 	fi
-
+	
 	local grep_line=
-	while IFS= read -r line; do
+	while IFS= read -r line || [ -n "$line" ]; do # TODO: lint for [ -n "$line" ]
 		if [[ $line == *"$key_name"*=* ]]; then
 			grep_line="$line"
 			break
@@ -57,7 +57,7 @@ util.get_toml_array() {
 	fi
 
 	local grep_line=
-	while IFS= read -r line; do
+	while IFS= read -r line || [ -n "$line" ]; do
 		if [[ $line == *"$key_name"*=* ]]; then
 			grep_line="$line"
 			break
@@ -136,7 +136,7 @@ util.toml_remove_dependency() {
 	local key_value="$2"
 
 	ensure.nonzero 'toml_file'
-	ensure.nonzero 'key_name'
+	ensure.nonzero 'key_value'
 
 	if [ ! -f "$toml_file" ]; then
 		bprint.fatal "File '$toml_file' does not exist"
@@ -160,7 +160,7 @@ util.toml_remove_dependency() {
 		fi
 
 		mv "$toml_file" "$toml_file.bak"
-		while IFS= read -r line; do
+		while IFS= read -r line || [ -n "$line" ]; do
 			if [[ "$line" == *dependencies*=* ]]; then
 				local new_line='dependencies = ['
 				local dep=
@@ -194,7 +194,11 @@ util.text_add_dependency() {
 	local url2="$REPLY2"
 
 	local line=
-	while IFS= read -r line; do
+	while IFS= read -r line || [ -n "$line" ]; do
+		if [ -z "$input" ]; then
+			continue
+		fi
+		
 		util.get_package_info "$line"
 		local url1="$REPLY2"
 
@@ -224,7 +228,7 @@ util.text_remove_dependency() {
 	local -a arr=()
 	if util.text_dependency_is_installed "$text_file" "$dependency"; then
 		local line=
-		while IFS= read -r line; do
+		while IFS= read -r line || [ -n "$line" ]; do
 			util.get_package_info "$line"
 			local url1="$REPLY2"
 
