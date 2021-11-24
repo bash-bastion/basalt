@@ -31,7 +31,7 @@ util.init_local() {
 # @description Check for the initialization of variables essential for global subcommands
 util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-		bprint.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt init <shell>' in your shell configuration?"
+		bprint.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt global init <shell>' in your shell configuration?"
 	fi
 
 	if [ ! -d "$BASALT_GLOBAL_REPO" ]; then

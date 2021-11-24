@@ -32,12 +32,13 @@ basalt.package-load() {
 	fi
 	shopt -s nullglob
 
-	# This can be made cleaner with glob expansion in arrays, but the code is fine as it is
+	# This can be made cleaner with glob expansion in arrays, but the code is fine as it is,
+	# especially for larger dependency hierarchies
 	local __basalt_site= __basalt_repository_owner=  __basalt_package=
 	if [ -d "$BASALT_PACKAGE_DIR"/.basalt/packages ]; then
 		for __basalt_site in "$BASALT_PACKAGE_DIR"/.basalt/packages/*/; do
-			for __basalt_repository_owner in "$__basalt_site"/*/; do
-				for __basalt_package in "$__basalt_repository_owner"/*/; do
+			for __basalt_repository_owner in "$__basalt_site"*/; do
+				for __basalt_package in "$__basalt_repository_owner"*/; do
 					if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
 						shopt -s nullglob
 					else
