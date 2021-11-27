@@ -362,6 +362,9 @@ Local subcommands:
   run <command>
     Runs a particular command from any particular locally installed package
 
+  release
+    Prepare and release a package
+
 Global subcommands:
   init <shell>
     Prints shell code that must be evaluated during shell

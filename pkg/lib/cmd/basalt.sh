@@ -59,10 +59,10 @@ main.basalt() {
 		shift
 		util.init_always
 		do-run "$@" ;;
-	version)
+	release)
 		shift
 		util.init_always
-		do-version "$@" ;;
+		do-release "$@" ;;
 	complete)
 		shift
 		util.init_always
