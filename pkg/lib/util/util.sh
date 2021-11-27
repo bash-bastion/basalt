@@ -34,6 +34,10 @@ util.init_global() {
 		bprint.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt global init <shell>' in your shell configuration?"
 	fi
 
+	if ! command -v curl &>/dev/null; then
+		bprint.die "Program 'curl' not installed. Please install curl"
+	fi
+
 	if [ ! -d "$BASALT_GLOBAL_REPO" ]; then
 		mkdir -p "$BASALT_GLOBAL_REPO"
 	fi
@@ -60,7 +64,7 @@ util.init_global() {
 	fi
 }
 
-util.init_always() {
+util.init_lock() {
 	# Use a lock directory for Basalt if not under testing
 	if [ -z "$BATS_TMPDIR" ]; then
 		___basalt_lock_dir=
@@ -76,9 +80,6 @@ util.init_always() {
 		fi
 	fi
 
-	if ! command -v curl &>/dev/null; then
-		bprint.die "Program 'curl' not installed. Please install curl"
-	fi
 }
 
 util.deinit() {

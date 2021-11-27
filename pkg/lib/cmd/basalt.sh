@@ -41,31 +41,31 @@ main.basalt() {
 		do-init "$@" ;;
 	add)
 		shift
-		util.init_always
+		util.init_lock
 		do-add "$@" ;;
 	remove)
 		shift
-		util.init_always
+		util.init_lock
 		do-remove "$@" ;;
 	install)
 		shift
-		util.init_always
+		util.init_lock
 		do-install "$@" ;;
 	list)
 		shift
-		util.init_always
+		util.init_lock
 		do-list "$@" ;;
 	run)
 		shift
-		util.init_always
+		util.init_lock
 		do-run "$@" ;;
 	release)
 		shift
-		util.init_always
+		util.init_lock
 		do-release "$@" ;;
 	complete)
 		shift
-		util.init_always
+		util.init_lock
 		do-complete "$@" ;;
 	global)
 		shift
@@ -75,19 +75,19 @@ main.basalt() {
 			do-global-init "$@" ;;
 		add)
 			shift
-			util.init_always
+			util.init_lock
 			do-global-add "$@" ;;
 		remove)
 			shift
-			util.init_always
+			util.init_lock
 			do-global-remove "$@" ;;
 		install)
 			shift
-			util.init_always
+			util.init_lock
 			do-global-install "$@" ;;
 		list)
 			shift
-			util.init_always
+			util.init_lock
 			do-global-list "$@" ;;
 		*)
 			if [ -n "$1" ]; then
