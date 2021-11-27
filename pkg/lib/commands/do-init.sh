@@ -126,11 +126,11 @@ EOF
 
 
 		mkdir -p 'tests'
-		local file6='./tests/main.sh'
+		local file6='./tests/main.bats'
 		if ! cat >| "$file6" <<"EOF"; then
 # shellcheck shell=bash
 
-source './util/init.sh'
+load './util/init.sh'
 
 @test "Outputs 'Woof!'" {
 	run main.file
