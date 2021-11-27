@@ -209,6 +209,10 @@ pkg.phase_local_integration_nonrecursive() {
 	local project_dir="$1"
 	ensure.nonzero 'project_dir'
 
+	if [ ! -d "$project_dir/.basalt/generated" ]; then
+		mkdir -p "$project_dir/.basalt/generated"
+	fi
+
 	# Create generated files
 	local content=
 	if [ -f "$project_dir/basalt.toml" ]; then
