@@ -1,8 +1,0 @@
-using = ['Bash']
-gitRepoName = 'basalt'
-
-name = 'Edwin Kofler'
-email = 'edwin@kofler.dev'
-project = 'basalt'
-description = 'A Bash package manager'
-license = 'Other'
