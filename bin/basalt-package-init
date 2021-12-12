@@ -40,7 +40,6 @@ fi
 __basalt_dirname="$(readlinkf_posix "${BASH_SOURCE[0]}")"
 __basalt_dirname="${__basalt_dirname%/*}"
 __basalt_dirname="${__basalt_dirname%/*}"
-__basalt_dirname="${__basalt_dirname%/*}"
 # shellcheck disable=SC1091
 source "$__basalt_dirname/pkg/lib/cmd/basalt-package-init.sh"
 unset __basalt_dirname
