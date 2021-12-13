@@ -9,15 +9,15 @@ test_util.get_repo_root
 REPO_ROOT="$REPLY"
 
 # Source Basalt
-for f in "$REPO_ROOT"/pkg/lib/{cmd,commands,public,util}/?*.sh; do
+for f in "$REPO_ROOT"/pkg/src/{cmd,commands,public,util}/?*.sh; do
 	source "$f"
 done; unset f
 
 # Rather than append '$REPO_ROOT/bin' to the path, create functions with
 # the same name. This way, the shell execution context remains the same, which
 # allows us to actually mock functions
-load "$REPO_ROOT/pkg/lib/cmd/basalt-package-init.sh"
-load "$REPO_ROOT/pkg/lib/cmd/basalt.sh"
+load "$REPO_ROOT/pkg/src/cmd/basalt-package-init.sh"
+load "$REPO_ROOT/pkg/src/cmd/basalt.sh"
 basalt-package-init() { main.basalt-package-init "$@"; }
 basalt() { main.basalt "$@"; }
 
