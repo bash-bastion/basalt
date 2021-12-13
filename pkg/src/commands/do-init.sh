@@ -33,26 +33,7 @@ do-init() {
 
 		local file1="./basalt.toml"
 		if ! cat >| "$file1" <<-"EOF"; then
-		[package]
-		name = ''
-		slug = ''
-		version = ''
-		authors = []
-		description = ''
 
-		[run]
-		dependencies = []
-		sourceDirs = []
-		builtinDirs = []
-		binDirs = []
-		completionDirs = []
-		manDirs = []
-
-		[run.shellEnvironment]
-
-		[run.setOptions]
-
-		[run.shoptOptions]
 		EOF
 			bprint.die "Could not write to $file1"
 		fi
@@ -64,12 +45,7 @@ do-init() {
 		if ! cat >| "$file2" <<-"EOF"; then
 		#!/usr/bin/env bash
 
-		eval "$(basalt-package-init)"
-		basalt.package-init
-		basalt.package-load
 
-		source "$BASALT_PACKAGE_DIR/pkg/lib/cmd/file.sh"
-		main.file "$@"
 		EOF
 			bprint.die "Could not write to $file2"
 		fi
@@ -90,56 +66,7 @@ EOF
 		bprint.info "Created $file3"
 
 
-		mkdir -p 'tests/util'
-		local file4='./tests/util/init.sh'
-		if ! cat >| "$file4" <<"EOF"; then
-# shellcheck shell=bash
 
-eval "$(basalt-package-init)"
-basalt.package-init
-basalt.package-load
-# basalt.load 'github.com/hyperupcall/bats-all' 'load.bash'
-
-load './util/test_util.sh'
-
-setup() {
-	cd "$BATS_TEST_TMPDIR"
-}
-
-teardown() {
-	cd "$BATS_SUITE_TMPDIR"
-}
-EOF
-			bprint.die "Could not write to $file4"
-		fi
-		bprint.info "Created $file4"
-
-
-		mkdir -p 'tests/util'
-		local file5='./tests/util/test_util.sh'
-		if ! cat >| "$file5" <<"EOF"; then
-# shellcheck shell=bash
-EOF
-			bprint.die "Could not write to $file5"
-		fi
-		bprint.info "Created $file5"
-
-
-		mkdir -p 'tests'
-		local file6='./tests/main.bats'
-		if ! cat >| "$file6" <<"EOF"; then
-# shellcheck shell=bash
-
-load './util/init.sh'
-
-@test "Outputs 'Woof!'" {
-	run main.file
-	[ "$status" -eq 0 ]
-	[ "$output" = "Woof!" ]
-}
-EOF
-			bprint.die "Could not write to $file6"
-		fi
 		;;
 	full)
 		local repo='github.com/hyperupcall/template-bash'

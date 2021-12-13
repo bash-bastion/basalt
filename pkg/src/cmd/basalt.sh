@@ -1,21 +1,25 @@
 # shellcheck shell=bash
 
-if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
-  printf '%s\n' 'Basalt requires at least Bash version 4.3'
-  exit 1
-fi
-
-set -ETeo pipefail
+# Usually, a Basalt package won't have calls to `set`, `shopt`, `source`,
+# etc., since that is specified declaritively in `basalt.toml`. But, since
+# that behavior is dependent on Basalt, and Basalt doesn't bootstrap itself,
+# we imperatively setup the environment here
+set -eo pipefail
 shopt -s nullglob extglob
 export LANG="C" LANGUAGE="C" LC_ALL="C"
 export GIT_TERMINAL_PROMPT=0
-
 # shellcheck disable=SC2154
-for f in "$__basalt_dirname"/pkg/lib/{commands,plumbing,util}/?*.sh; do
+for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done
 
+
 main.basalt() {
+	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
+		printf '%s\n' 'Error: Basalt requires at least Bash version 4.3' >&2
+		exit 1
+	fi
+
 	for arg; do case "$arg" in
 	--help|-h)
 		util.show_help
@@ -34,6 +38,7 @@ main.basalt() {
 		break
 		;;
 	esac done
+
 
 	case "$1" in
 	init)

@@ -1,0 +1,21 @@
+[package]
+type = 'bash'
+name = 'TEMPLATE_NAME'
+slug = 'TEMPLATE_SLUG'
+version = 'TEMPLATE_VERSION'
+authors = ['TEMPLATE_AUTHOR']
+description = 'TEMPLATE_DESCRIPTION'
+
+[run]
+dependencies = []
+binDirs = []
+sourceDirs = []
+builtinDirs = []
+completionDirs = []
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+
+[run.shoptOptions]

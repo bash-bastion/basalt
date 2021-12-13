@@ -79,7 +79,6 @@ util.init_lock() {
 			bprint.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
 		fi
 	fi
-
 }
 
 util.deinit() {
@@ -363,7 +362,7 @@ Local subcommands:
   run <command>
     Runs a particular command from any particular locally installed package
 
-  release
+  release [--yes] [new-version]
     Prepare and release a package
 
 Global subcommands:

@@ -8,6 +8,10 @@ Note that none of these options have any defaults, and arrays _**must**_ only sp
 
 Metadata that describes the package and its purpose
 
+### `type`
+
+Not yet used
+
 ### `name`
 
 Not yet used
@@ -40,12 +44,20 @@ Array of both development and production dependencies
 dependencies = ['ztombol/bats-support@v0.3.0', 'github.com/ztombol/bats-assert@v0.3.0']
 ```
 
+### `binDirs`
+
+Array of directories that contain executable files. These files will be symlinked under a `bin` directory in `.basalt`. If the package is installed globally or locally, executables in this directory are made available via the `PATH` variable
+
+```toml
+binDirs = ['bin']
+```
+
 ### `sourceDirs`
 
 Array of directories that contain shell files which are sourced during the initialization process. In other words, after a package calls `basalt.package-init`, `basher` will source _all_ files indirectly specified by `sourceDirs` for each of its dependencies. This field is not used when installing a package globally
 
 ```toml
-sourceDirs = ['./pkg/lib', './pkg/lib/source', './pkg/lib/util']
+sourceDirs = ['pkg/src', 'pkg/src/source', 'pkg/src/util']
 ```
 
 ### `builtinDirs`
@@ -53,15 +65,7 @@ sourceDirs = ['./pkg/lib', './pkg/lib/source', './pkg/lib/util']
 Array of directories that contain C source code for custom builtins. These files will automatically be loaded, somewhat analogous to `sourceDirs`
 
 ```toml
-builtinDirs = ['./builtins']
-```
-
-### `binDirs`
-
-Array of directories that contain executable files. These files will be symlinked under a `bin` directory in `.basalt`. If the package is installed globally or locally, executables in this directory are made available via the `PATH` variable
-
-```toml
-binDirs = ['./pkg/bin']
+builtinDirs = ['pkg/builtins']
 ```
 
 ### `completionDirs`
@@ -69,7 +73,7 @@ binDirs = ['./pkg/bin']
 Array of directories that contain completion scripts. These files will be symlinked under a `completion` directory in `.basalt`. If the package is installed globally, these files will automatically be made available to the shell after `basalt global init`
 
 ```toml
-completionDirs = ['./completions']
+completionDirs = ['pkg/completions']
 ```
 
 ### `manDirs`
@@ -77,7 +81,7 @@ completionDirs = ['./completions']
 Array of directories that contain numbered-man directories (`man1`, `man5`, etc.). These files will be symlinked under a `man` directory in `.basalt`. Currently, the `MANPATH` is not modified for global installations; they should be detected automatically
 
 ```toml
-manDirs = ['./man']
+manDirs = ['pkg/share/man']
 ```
 
 ### `[run.shellEnvironment]`

@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # Source testing dependencies
-load './vendor/bats-common-utils/load.bash'
+load './vendor/bats-all/load.bash'
 load './util/test_util.sh'
 
 # Get the current directory of the Basalt git repository
@@ -13,7 +13,7 @@ for f in "$REPO_ROOT"/pkg/lib/{cmd,commands,public,util}/?*.sh; do
 	source "$f"
 done; unset f
 
-# Rather than append '$REPO_ROOT/pkg/bin' to the path, create functions with
+# Rather than append '$REPO_ROOT/bin' to the path, create functions with
 # the same name. This way, the shell execution context remains the same, which
 # allows us to actually mock functions
 load "$REPO_ROOT/pkg/lib/cmd/basalt-package-init.sh"

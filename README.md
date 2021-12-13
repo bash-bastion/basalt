@@ -29,11 +29,11 @@ To be able to access the binaries, completion files, and man pages in your shell
 
 ```sh
 # ~/.bashrc
-export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
+export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/bin:$PATH"
 eval "$(basalt global init bash)" # zsh and fish are also supported
 ```
 
-***NOTE***: Basalt is currently BETA. There are known bugs that will be fixed. I _highly_ recommended to wait until `v1.0.0` before trying anything out
+**_NOTE_**: Basalt is currently BETA. There are known bugs that will be fixed. I _highly_ recommended to wait until `v1.0.0` before trying anything out
 
 See [Installation](./docs/tutorials/installation.md) and [Getting Started](./docs/tutorials/getting-started.md) for more details
 

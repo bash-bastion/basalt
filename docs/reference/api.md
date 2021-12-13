@@ -28,6 +28,8 @@ If you do not pass a file, it will automatically source a `load.bash` at the roo
 
 Local environment variables are only valid within a Bash package (after `eval "$(basalt-package-init)"; basalt.package-init`)
 
+Note that functions listed here are expected to be called from a Bash execution context
+
 ### `BASALT_PACKAGE_DIR`
 
 The full path to the current project. It is calculated by walking up the file tree from `$PWD`, only stopping after detecting a `./basalt.toml`. The directory that was stopped at is the new value of `BASALT_PACKAGE_DIR`

@@ -6,24 +6,30 @@ do-release() {
 	local flag_yes='no'
 	local -a args=()
 	for arg; do case "$arg" in
-		-y|--yes)
-			flag_yes='yes'
-			;;
-		-*)
-			bprint.die "Flag '$arg' not recognized"
-			;;
-		*)
-			args+=("$arg")
-			;;
+	-y|--yes)
+		flag_yes='yes'
+		;;
+	-*)
+		bprint.die "Flag '$arg' not recognized"
+		;;
+	*)
+		args+=("$arg")
+		;;
 	esac done
 
 	if ((${#args[@]} > 1)); then
 		bprint.die "The only argument must be the new version string"
 	fi
 
-	# if [ -n "$(git status --porcelain)" ]; then
-	# 	bprint.die "The working tree must be empty (including untracked files)"
-	# fi
+	# Exit if working tree is not empty
+	local git_output=
+	if ! git_output="$(git status --porcelain)"; then
+		bprint.die "Could not run 'git status --porcelain'"
+	fi
+	if [ -n "$git_output" ]; then
+		bprint.die "The working tree must be empty (including untracked files)"
+	fi
+	unset git_output
 
 	local previous_version_string=
 	local version_string="${args[0]}"
@@ -36,6 +42,7 @@ do-release() {
 
 	if [ -z "$version_string" ]; then
 		printf '%s\n' "Old version: $previous_version_string"
+		printf '%s' 'New version: '
 		read -rep "New version: " -i "$previous_version_string"
 		version_string="$REPLY"
 	else

@@ -33,14 +33,15 @@ readlinkf_posix() {
 }
 
 if [ "$0" != "${BASH_SOURCE[0]}" ]; then
-	printf '%s\n' "Error: basalt-package-init: Script must not be sourced"
+	printf '%s\n' "Error: basalt: Script must not be sourced"
 	return 1
 fi
 
 __basalt_dirname="$(readlinkf_posix "${BASH_SOURCE[0]}")"
 __basalt_dirname="${__basalt_dirname%/*}"
 __basalt_dirname="${__basalt_dirname%/*}"
+__basalt_dirname="${__basalt_dirname%/*}"
 # shellcheck disable=SC1091
-source "$__basalt_dirname/pkg/lib/cmd/basalt-package-init.sh"
+source "$__basalt_dirname/pkg/src/cmd/basalt.sh"
 unset __basalt_dirname
-main.basalt-package-init "$@"
+main.basalt "$@"

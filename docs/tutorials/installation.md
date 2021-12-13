@@ -39,7 +39,7 @@ This enables basalt to automatically setup your `PATH`, set completion variables
 For `bash`, `zsh`, `sh`
 
 ```sh
-export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
+export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/bin:$PATH"
 eval "$(basalt global init bash)" # replace 'bash' with your shell
 ```
 
@@ -47,9 +47,9 @@ For `fish`
 
 ```fish
 if test -n "$XDG_DATA_HOME"
-  set -gx PATH $XDG_DATA_HOME/basalt/source/pkg/bin $PATH
+  set -gx PATH $XDG_DATA_HOME/basalt/source/bin $PATH
 else
-  set -gx PATH $HOME/.local/share/basalt/source/pkg/bin $PATH
+  set -gx PATH $HOME/.local/share/basalt/source/bin $PATH
 end
 
 basalt init fish | source

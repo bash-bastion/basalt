@@ -27,9 +27,9 @@ description = 'A template to get started writing Bash applications and projects'
 
 [run]
 dependencies = ['https://github.com/hyperupcall/bats-common-utils.git@v3.0.0']
-sourceDirs = ['pkg/lib/public', 'pkg/lib']
+sourceDirs = ['pkg/src/public', 'pkg/lib']
 builtinDirs = []
-binDirs = ['pkg/bin']
+binDirs = ['bin']
 completionDirs = ['completions']
 manDirs = []
 
@@ -40,7 +40,7 @@ manDirs = []
 [run.shoptOptions]
 ```
 
-In short, `name` is the pretty name for the package. Often, it has the same name as the repository. `slug` is the string used to prefix *all of* your functions when you want your package to be consumed as a library. Lastly, `sourceDirs` are all the directories containing shell files you wish to source. Note that `pkg/lib/cmd` is *not* added since it contains files that are entrypoints for new Bash processes
+In short, `name` is the pretty name for the package. Often, it has the same name as the repository. `slug` is the string used to prefix _all of_ your functions when you want your package to be consumed as a library. Lastly, `sourceDirs` are all the directories containing shell files you wish to source. Note that `pkg/lib/cmd` is _not_ added since it contains files that are entrypoints for new Bash processes
 
 A detailed description for each key can be found at [`reference/basalt_toml`](./docs/reference/basalt_toml.md)
 
@@ -68,7 +68,7 @@ Flags:
     Shows the help menu
 ```
 
-This is similar to running `./pkg/bin/fox-track` directly, but using `basalt run` has another benefit: Basalt will look for commands of the specified name not just for the current project, but for all subdependencies as well
+This is similar to running `./bin/fox-track` directly, but using `basalt run` has another benefit: Basalt will look for commands of the specified name not just for the current project, but for all subdependencies as well
 
 If you wish to add a dependency to the project, use the `add` subcommand
 
