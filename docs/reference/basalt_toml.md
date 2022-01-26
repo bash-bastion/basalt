@@ -62,7 +62,7 @@ sourceDirs = ['pkg/src', 'pkg/src/source', 'pkg/src/util']
 
 ### `builtinDirs`
 
-Array of directories that contain C source code for custom builtins. These files will automatically be loaded, somewhat analogous to `sourceDirs`
+Array of directories that contain C source code for custom dynamic builtins. These files will automatically be loaded, somewhat analogous to `sourceDirs`
 
 ```toml
 builtinDirs = ['pkg/builtins']
@@ -78,7 +78,7 @@ completionDirs = ['pkg/completions']
 
 ### `manDirs`
 
-Array of directories that contain numbered-man directories (`man1`, `man5`, etc.). These files will be symlinked under a `man` directory in `.basalt`. Currently, the `MANPATH` is not modified for global installations; they should be detected automatically
+Array of directories that contain man pages. It does not traverse subdirectories, including `man1`, `man3`, etc. These files will be symlinked under a `man` directory in `.basalt`. Currently, the `MANPATH` is not modified for global installations; the manpages should be detected automatically
 
 ```toml
 manDirs = ['pkg/share/man']
@@ -98,8 +98,6 @@ LC_ALL = 'C'
 
 ### `[run.setOptions]`
 
-Not yet used
-
 Key value pairs of what shell options to enable or disable
 
 ```toml
@@ -109,8 +107,6 @@ pipefail = 'on'
 ```
 
 ### `[run.shoptOptions]`
-
-Not yet used
 
 Key value pairs of what shell options to enable or disable
 
