@@ -20,7 +20,7 @@ main.basalt() {
 		exit 1
 	fi
 
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	--help|-h)
 		util.show_help
 		exit
@@ -40,7 +40,7 @@ main.basalt() {
 	esac done
 
 
-	case "$1" in
+	case $1 in
 	init)
 		shift
 		do-init "$@" ;;
@@ -74,7 +74,7 @@ main.basalt() {
 		do-complete "$@" ;;
 	global)
 		shift
-		case "$1" in
+		case $1 in
 		init)
 			shift
 			do-global-init "$@" ;;

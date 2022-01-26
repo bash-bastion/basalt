@@ -127,7 +127,7 @@ util.die_unexpected_value() {
 # @description Get id of package we can use for printing
 util.get_package_id() {
 	local flag_allow_empty_version='no' # Allow for version to be empty
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 		--allow-empty-version) flag_allow_empty_version='yes'; shift ;;
 		-*) bprint.fatal "Flag '$arg' not recognized" ;;
 		*) break ;;

@@ -4,7 +4,7 @@ do-remove() {
 	util.init_local
 
 	local -a pkgs=()
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	-*)
 		bprint.die "Flag '$arg' not recognized"
 		;;

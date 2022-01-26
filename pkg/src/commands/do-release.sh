@@ -5,7 +5,7 @@ do-release() {
 
 	local flag_yes='no'
 	local -a args=()
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	-y|--yes)
 		flag_yes='yes'
 		;;

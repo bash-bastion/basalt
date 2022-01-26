@@ -8,7 +8,7 @@ basalt.load() {
 	local __basalt_flag_global='no'
 	local __basalt_flag_dry='no'
 
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	--global|-g)
 		__basalt_flag_global='yes'
 		shift

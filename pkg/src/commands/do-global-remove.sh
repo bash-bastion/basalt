@@ -5,7 +5,7 @@ do-global-remove() {
 
 	local flag_force='no'
 	local -a pkgs=()
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	--force)
 		flag_force='yes'
 		;;

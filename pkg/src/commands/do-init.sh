@@ -3,7 +3,7 @@
 do-init() {
 	local flag_type=
 	local -a args=()
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	--bare)
 		flag_type='bare'
 		;;
@@ -22,7 +22,7 @@ do-init() {
 		bprint.die "No arguments must be specified"
 	fi
 
-	case "$flag_type" in
+	case $flag_type in
 	'')
 		bprint.die "Must either specify '--bare' or '--full'. No default choice has been implemented"
 		;;

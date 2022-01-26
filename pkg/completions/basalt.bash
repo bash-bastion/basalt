@@ -11,7 +11,7 @@ _basalt() {
 	local subcommand=
 	local -i subcommandIndex=1
 	for word in "${COMP_WORDS[@]:1}"; do
-		case "$word" in
+		case $word in
 			-*) ;;
 			*)
 				subcommand="$word"
@@ -54,7 +54,7 @@ _basalt() {
 	# we are completion options for a particular subcommand
 	elif (( COMP_CWORD > subcommandIndex )); then
 		local -a subcommandOptions=()
-		case "$subcommand" in
+		case $subcommand in
 			add)
 				subcommandOptions=()
 				readarray -t COMPREPLY < <(IFS=' ' compgen -W "${subcommandOptions[*]}" -- "$currentWord")

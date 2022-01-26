@@ -49,7 +49,7 @@ batslib_is_caller() {
 
   # Handle options.
   while (( $# > 0 )); do
-    case "$1" in
+    case $1 in
       -i|--indirect) is_mode_direct=0; shift ;;
       --) shift; break ;;
       *) break ;;

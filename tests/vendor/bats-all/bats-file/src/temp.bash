@@ -76,7 +76,7 @@ temp_make() {
   local prefix=''
 
   while (( $# > 0 )); do
-    case "$1" in
+    case $1 in
       -p|--prefix)
         if (( $# < 2 )); then
           echo "\`--prefix' requires an argument" \

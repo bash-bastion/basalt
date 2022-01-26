@@ -134,7 +134,7 @@ assert_output() {
   fi
 
   while (( $# > 0 )); do
-    case "$1" in
+    case $1 in
     -p|--partial) is_mode_partial=1; shift ;;
     -e|--regexp) is_mode_regexp=1; shift ;;
     -|--stdin) use_stdin=1; shift ;;

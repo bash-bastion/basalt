@@ -4,7 +4,7 @@ do-global-add() {
 	util.init_global
 
 	local -a pkgs=()
-	for arg; do case "$arg" in
+	for arg; do case $arg in
 	-*)
 		bprint.die "Flag '$arg' not recognized"
 		;;

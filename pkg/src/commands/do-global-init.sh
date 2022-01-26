@@ -37,7 +37,7 @@ do-global-init() {
 	fi
 
 	# Set common basalt variables; add PATH
-	case "$shell" in
+	case $shell in
 	fish)
 		cat <<-EOF
 		# basalt variables
