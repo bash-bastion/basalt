@@ -291,7 +291,7 @@ fi"
 				progcomp_alias promptvars restricted_shell shift_verbose sourcepath xpg_echo; do
 			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
 				if [ "$REPLY" = 'on' ]; then
-					printf '%s\n' "shotp -s $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
+					printf '%s\n' "shopt -s $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
 				elif [ "$REPLY" = 'off' ]; then
 					printf '%s\n' "shopt -u $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
 				else
