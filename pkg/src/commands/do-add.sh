@@ -19,19 +19,31 @@ do-add() {
 
 	# Package parsing (WET)
 	for pkg in "${pkgs[@]}"; do
-		util.get_package_info "$pkg"
-		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
+		if [ "${pkg:0:1}" = '/' ] || [ "${pkg:0:2}" = './' ]; then
+			pkg="${pkg%/}"
 
-		if ! util.does_package_exist "$repo_type" "$url"; then
-			bprint.die "Package located at '$url' does not exist"
+			# Local packages
+			if [ ! -d "$pkg" ]; then # TODO: this is wrong
+				bprint.die "Failed to find package at path '$pkg'"
+			fi
+
+			util.toml_add_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "file://$pkg"
+		else
+			#  Remote packages
+			util.get_package_info "$pkg"
+			local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
+
+			if ! util.does_package_exist "$repo_type" "$url"; then
+				bprint.die "Package located at '$url' does not exist"
+			fi
+
+			if [ -z "$version" ]; then
+				util.get_latest_package_version "$repo_type" "$url" "$site" "$package"
+				version="$REPLY"
+			fi
+
+			util.toml_add_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$url@$version"
 		fi
-
-		if [ -z "$version" ]; then
-			util.get_latest_package_version "$repo_type" "$url" "$site" "$package"
-			version="$REPLY"
-		fi
-
-		util.toml_add_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$url@$version"
 	done
 
 	do-install

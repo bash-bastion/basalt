@@ -48,3 +48,20 @@ test_util.create_fake_remote() {
 test_util.stub_command() {
 	eval "$1() { echo \"$1 \$*\"; }"
 }
+
+# @description
+# test_util.get_local_pkgid() {
+# 	unset REPLY; REPLY=
+
+# 	local dir=$1
+# 	ensure.nonzero 'dir'
+
+# 	local absolute_path=
+# 	absolute_path=$(realpath "$dir")
+
+# 	local hash=
+# 	hash=$(printf '%s' "$absolute_path" | md5sum)
+# 	hash="${hash%% *}"
+
+# 	"local/${absolute_path##*/}_$hash"
+# }

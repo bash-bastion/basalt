@@ -6,7 +6,7 @@ load './util/test_util.sh'
 
 # Get the current directory of the Basalt git repository
 test_util.get_repo_root
-REPO_ROOT="$REPLY"
+REPO_ROOT=$REPLY
 
 # Source Basalt
 for f in "$REPO_ROOT"/pkg/src/{cmd,commands,public,util}/?*.sh; do

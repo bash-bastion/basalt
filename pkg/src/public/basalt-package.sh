@@ -10,17 +10,18 @@ basalt.package-load() {
 		printf '%s\n' "Error: basalt.package-load: Variable '\$BASALT_PACKAGE_DIR' is empty"
 		return 1
 	fi
-	
+
 	# These checks always ensure the generated files are in sync the 'basalt.toml'
 	if [ ! -f "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh" ]; then
 		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran"
 		return 1
 	fi
-	
+
 	# BSD `date(1)` does not have '-r'
-	basaltFileLastModifiedAt="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/basalt.toml")"
-	doneFileLastModifiedAt="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh")"
-	if ((basaltFileLastModifiedAt >= doneFileLastModifiedAt)); then # '>=' so automated 'basalt install' work on fast computers
+	local basalt_file_last_modified_at= done_file_last_modified_at=
+	basalt_file_last_modified_at="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/basalt.toml")"
+	done_file_last_modified_at="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh")"
+	if ((basalt_file_last_modified_at >= done_file_last_modified_at)); then # '>=' so automated 'basalt install' work on fast computers
 		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again"
 		return 1
 	fi
@@ -37,6 +38,30 @@ basalt.package-load() {
 	local __basalt_site= __basalt_repository_owner=  __basalt_package=
 	if [ -d "$BASALT_PACKAGE_DIR"/.basalt/packages ]; then
 		for __basalt_site in "$BASALT_PACKAGE_DIR"/.basalt/packages/*/; do
+			local __basalt_site_basename="${__basalt_site%/}"
+			__basalt_site_basename="${__basalt_site_basename##*/}"
+
+			if [ "$__basalt_site_basename" = 'local' ]; then
+				for __basalt_package in "$__basalt_site"*/; do
+					if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
+						shopt -s nullglob
+					else
+						shopt -u nullglob
+					fi
+
+					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
+						if BASALT_PACKAGE_DIR="$__basalt_package" source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
+							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'"
+							return $?
+						fi
+					fi
+
+					shopt -s nullglob # TODO:
+				done; unset __basalt_package
+				continue
+			fi
+			unset -v __basalt_site_basename
+
 			for __basalt_repository_owner in "$__basalt_site"*/; do
 				for __basalt_package in "$__basalt_repository_owner"*/; do
 					if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
@@ -52,7 +77,7 @@ basalt.package-load() {
 						fi
 					fi
 
-					shopt -s nullglob
+					shopt -s nullglob # TODO: unecessary and can put at bottom?
 				done; unset __basalt_package
 			done; unset __basalt_repository_owner
 		done; unset __basalt_site

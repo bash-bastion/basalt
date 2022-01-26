@@ -31,6 +31,7 @@ EOF
 
 		# Do not use "$0", since it won't work in some environments, such as Bats
 		local __basalt_file="${BASH_SOURCE[0]}"
+		echo jj "${BASH_SOURCE[*]}"
 		if [ -L "$__basalt_file" ]; then
 			local __basalt_target="$(readlink "$__basalt_file")"
 			if ! cd "${__basalt_target%/*}"; then

@@ -16,12 +16,38 @@ pkg.install_packages() {
 		util.get_package_info "$pkg"
 		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
-		util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
-		local package_id="$REPLY"
+		local package_id=
+		if [[ $pkg == file://* ]]; then
+			pkgutil.get_localpkg_info "$pkg"
+			local pkg_path="$REPLY1"
+			local pkg_name="$REPLY2"
+			local pkg_id="$REPLY3"
 
-		# Download, extract
-		pkg.phase_download_tarball "$repo_type" "$url" "$site" "$package" "$version"
-		pkg.phase_extract_tarball "$package_id"
+			package_id=$pkg_id
+
+			local target=
+			if [ "${pkg_path:0:1}" = '/' ]; then
+				target="$pkg_path"
+			elif [ "${pkg_path:0:2}" = './' ]; then
+				target="$BASALT_LOCAL_PROJECT_DIR/$pkg_path"
+			else
+				bprint.fatal "Specified local path '$pkg_path' not recognized"
+			fi
+
+			# TODO: rsync?
+			rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
+			cp -r "$target" "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
+			bprint.green 'Copied' "$pkg_id"
+		elif [[ $pkg == https://* ]]; then
+			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+			local package_id="$REPLY"
+
+			# Download, extract
+			pkg.phase_download_tarball "$repo_type" "$url" "$site" "$package" "$version"
+			pkg.phase_extract_tarball "$package_id"
+		else
+			bprint.die "Protocol not recognized. Only 'file://' and 'https://' are supported"
+		fi
 
 		# Install transitive dependencies if they exist
 		local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
@@ -162,7 +188,9 @@ pkg.phase_local_integration_recursive() {
 	local original_package_dir="$1"
 	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 	local symlink_mode="$3"
-	shift 3
+	if ! shift 3; then
+		bprint.fatal "Failed to shift"
+	fi
 
 	ensure.nonzero 'original_package_dir'
 	ensure.nonzero 'is_direct'
@@ -181,8 +209,18 @@ pkg.phase_local_integration_recursive() {
 		local package="$REPLY4"
 		local version="$REPLY5"
 
-		util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
-		local package_id="$REPLY"
+		local package_id=
+		if [[ $pkg == file://* ]]; then
+			pkgutil.get_localpkg_info "$pkg"
+			local pkg_path="$REPLY1"
+			local pkg_name="$REPLY2"
+			local pkg_id="$REPLY3"
+
+			package_id=$pkg_id
+		elif [[ $pkg == https://* ]]; then
+			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+			package_id="$REPLY"
+		fi
 
 		# Perform symlinking
 		if [ "$is_direct" = yes ]; then

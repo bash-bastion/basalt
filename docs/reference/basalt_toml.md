@@ -41,7 +41,7 @@ Metadata that affects how the package is ran (either as a library or executable)
 Array of both development and production dependencies
 
 ```toml
-dependencies = ['ztombol/bats-support@v0.3.0', 'github.com/ztombol/bats-assert@v0.3.0']
+dependencies = ['bats-core/bats-support@v0.3.0', 'github.com/bats-core/bats-assert@v0.3.0']
 ```
 
 ### `binDirs`
@@ -70,7 +70,7 @@ builtinDirs = ['pkg/builtins']
 
 ### `completionDirs`
 
-Array of directories that contain completion scripts. These files will be symlinked under a `completion` directory in `.basalt`. If the package is installed globally, these files will automatically be made available to the shell after `basalt global init`
+Array of directories that contain completion scripts. These files will be symlinked under a `completion` directory in `.basalt`. If the package is installed globally, these files will automatically be made available to the shell after `basalt global init <shell>`
 
 ```toml
 completionDirs = ['pkg/completions']

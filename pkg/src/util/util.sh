@@ -37,6 +37,9 @@ util.init_global() {
 	if ! command -v curl &>/dev/null; then
 		bprint.die "Program 'curl' not installed. Please install curl"
 	fi
+	if ! command -v md5sum &>/dev/null; then
+		bprint.die "Program 'md5sum' not installed. Please install md5sum"
+	fi
 
 	if [ ! -d "$BASALT_GLOBAL_REPO" ]; then
 		mkdir -p "$BASALT_GLOBAL_REPO"
@@ -49,6 +52,9 @@ util.init_global() {
 	fi
 	if [ ! -f "$BASALT_GLOBAL_DATA_DIR/global/dependencies" ]; then
 		touch "$BASALT_GLOBAL_DATA_DIR/global/dependencies"
+	fi
+	if [ ! -d "$BASALT_GLOBAL_DATA_DIR/store/packages/local" ]; then
+		mkdir -p "$BASALT_GLOBAL_DATA_DIR/store/packages/local"
 	fi
 
 	# I would prefer to check the existence of the target directory as well, but that would mean if the user installs
@@ -83,6 +89,13 @@ util.init_lock() {
 
 util.deinit() {
 	rm -rf "$___basalt_lock_dir"
+}
+
+# TODO
+util.get_full_path() {
+	if ! REPLY=$(realpath "$1"); then
+		bprint.fatal "Failed to execute 'realpath' successfully"
+	fi
 }
 
 # @description Ensure the downloaded file is really a .tar.gz file...
