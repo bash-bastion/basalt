@@ -49,9 +49,9 @@ See [Installation](./docs/tutorials/installation.md) and [Getting Started](./doc
 
 Because of Basalt, I've been able to make
 
-- [Woof](https://github.com/hyperupcall/woof) - The version manager to end all version managers (replaces pyenv, nvm, rbenv etc.)
-- [shtest](https://github.com/hyperupcall/shtest) - POSIX shell test runner (like Bats for POSIX shell)
-- [bash-object](https://github.com/hyperupcall/bash-object) - Primitives for object oriented Bash (manipulate heterogenous data hierarchies in Bash)
+- [bash-object](https://github.com/hyperupcall/bash-object) - Manipulate heterogenous data hierarchies in Bash
+- [bake](https://github.com/hyperupcall/bake) - A Bash-based Make alternative
+- [shelltest](https://github.com/hyperupcall/shelltest) - A test runner for POSIX shells
 
 See the full list [awesome-basalt](https://github.com/hyperupcall/awesome-basalt)
 
