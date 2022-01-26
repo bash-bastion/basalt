@@ -1,0 +1,25 @@
+[package]
+type = 'bash'
+name = 'TEMPLATE_NAME'
+slug = 'TEMPLATE_SLUG'
+version = 'TEMPLATE_VERSION'
+authors = ['TEMPLATE_AUTHOR']
+description = 'TEMPLATE_DESCRIPTION'
+
+[run]
+dependencies = []
+binDirs = []
+sourceDirs = ['pkg/src/public']
+builtinDirs = []
+completionDirs = []
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+errexit = 'on'
+pipefail = 'on'
+
+[run.shoptOptions]
+nullglob = 'on'
+shift_verbose = 'on'

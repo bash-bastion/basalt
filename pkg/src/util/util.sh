@@ -356,7 +356,7 @@ Usage:
   basalt global <global-subcommand> [args...]
 
 Local subcommands:
-  init <--bare|--full>
+  init --type=<app|lib>
     Creates a new Basalt package in the current directory
 
   add <package>

@@ -17,5 +17,9 @@ manDirs = []
 [run.shellEnvironment]
 
 [run.setOptions]
+errexit = 'on'
+pipefail = 'on'
 
 [run.shoptOptions]
+nullglob = 'on'
+shift_verbose = 'on'

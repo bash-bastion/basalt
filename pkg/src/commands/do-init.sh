@@ -4,11 +4,8 @@ do-init() {
 	local flag_type=
 	local -a args=()
 	for arg; do case $arg in
-	--bare)
-		flag_type='bare'
-		;;
-	--full)
-		flag_type='full'
+	--type*)
+		IFS='=' read -r _ flag_type <<< "$arg"
 		;;
 	-*)
 		bprint.die "Flag '$arg' not recognized"
@@ -16,64 +13,85 @@ do-init() {
 	*)
 		args+=("$arg")
 		;;
-	esac done
+	esac; done
 
-	if ((${#args[@]} > 0)); then
-		bprint.die "No arguments must be specified"
+	if ((${#args[@]} == 0)); then
+		bprint.die "An initialization directory must be specified"
 	fi
 
+	if ((${#args[@]} > 1)); then
+		bprint.die "Only one initialization directory may be specified"
+	fi
+
+	local dir="${args[0]}"
 	case $flag_type in
 	'')
-		bprint.die "Must either specify '--bare' or '--full'. No default choice has been implemented"
+		bprint.die "Must specify the '--type' flag"
 		;;
-	bare)
-		if [ -f 'basalt.toml' ]; then
-			bprint.die "File 'basalt.toml' already exists"
+	app)
+		ensure.cd "$dir"
+
+		if [ -f './basalt.toml' ]; then
+			bprint.die "A package already exists at '$dir'"
 		fi
 
-		local file1="./basalt.toml"
-		if ! cat >| "$file1" <<-"EOF"; then
-
-		EOF
-			bprint.die "Could not write to $file1"
+		if ! cp -r "$BASALT_GLOBAL_REPO/pkg/share/templates/bare-app/." .; then
+			bprint.die "Failed 'cp' command"
 		fi
-		bprint.info "Created $file1"
 
+		printf '%s' 'New Project Slug: '
+		local template_slug=
+		read -re template_slug
 
-		mkdir -p 'pkg/bin'
-		local file2="./pkg/bin/file"
-		if ! cat >| "$file2" <<-"EOF"; then
-		#!/usr/bin/env bash
-
-
-		EOF
-			bprint.die "Could not write to $file2"
+		if ! mv './bin/TEMPLATE_SLUG' "./bin/$template_slug"; then
+			bprint.die "Failed 'mv' command"
 		fi
-		bprint.info "Created $file2"
-
-
-		mkdir -p 'pkg/lib/cmd'
-		local file3="./pkg/lib/cmd/file.sh"
-		if ! cat >| "$file3" <<"EOF"; then
-# shellcheck shell=bash
-
-main.file() {
-	printf '%s\n' "Woof!"
-}
-EOF
-			bprint.die "Could not write to $file3"
+		if ! mv './pkg/src/cmd/TEMPLATE_SLUG.sh' "./pkg/src/cmd/$template_slug.sh"; then
+			bprint.die "Failed 'mv' command"
 		fi
-		bprint.info "Created $file3"
 
+		if ! sed -i -e "s/TEMPLATE_SLUG/$template_slug/g" \
+			'./basalt.toml' \
+			"./bin/$template_slug" \
+			"./pkg/src/cmd/$template_slug.sh" \
+			'./tests/util/init.sh' \
+			'./tests/test_alfa.bats'; then
+			bprint.die "Failed 'sed' command"
+		fi
 
-
+		sleep 2 # Timestamps are (usually) second-accurate
+		basalt install
 		;;
-	full)
-		local repo='github.com/hyperupcall/template-bash'
-		if ! git clone -q "https://$repo" .; then
-			bprint.die "Could not clone the full bash template"
+	lib)
+		ensure.cd "$dir"
+
+		if [ -f './basalt.toml' ]; then
+			bprint.die "A package already exists at '$dir'"
 		fi
-		bprint.info "Cloned $repo"
+
+		if ! cp -r "$BASALT_GLOBAL_REPO/pkg/share/templates/bare-lib/." .; then
+			bprint.die "Failed 'cp' command"
+		fi
+
+		printf '%s' 'New Project Slug: '
+		local template_slug=
+		read -re template_slug
+
+		if ! mv './pkg/src/public/TEMPLATE_SLUG.sh' "./pkg/src/public/$template_slug.sh"; then
+			bprint.die "Failed 'mv' command"
+		fi
+
+		if ! sed -i -e "s/TEMPLATE_SLUG/$template_slug/g" \
+			'./basalt.toml' \
+			"./pkg/src/public/$template_slug.sh" \
+			'./tests/test_alfa.bats'; then
+			bprint.die "Failed 'sed' command"
+		fi
+
+		sleep 2 # Timestamps are (usually) second-accurate
+		basalt install
 		;;
+	*)
+		bprint.die "Type '$flag_type' not recognized. Only 'app' and 'lib' are supported"
 	esac
 }

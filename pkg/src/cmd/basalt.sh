@@ -5,10 +5,11 @@
 # that behavior is dependent on Basalt, and Basalt doesn't bootstrap itself,
 # we imperatively setup the environment here
 set -eo pipefail
-shopt -s nullglob extglob
-export LANG="C" LANGUAGE="C" LC_ALL="C"
+shopt -s extglob globasciiranges nullglob shift_verbose
+export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
+	LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
+	LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
 export GIT_TERMINAL_PROMPT=0
-# shellcheck disable=SC2154
 for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
 	source "$f"
 done

@@ -16,8 +16,8 @@ done; unset f
 # Rather than append '$REPO_ROOT/bin' to the path, create functions with
 # the same name. This way, the shell execution context remains the same, which
 # allows us to actually mock functions
-load "$REPO_ROOT/pkg/src/cmd/basalt-package-init.sh"
-load "$REPO_ROOT/pkg/src/cmd/basalt.sh"
+source "$REPO_ROOT/pkg/src/cmd/basalt-package-init.sh"
+source "$REPO_ROOT/pkg/src/cmd/basalt.sh"
 basalt-package-init() { main.basalt-package-init "$@"; }
 basalt() { main.basalt "$@"; }
 

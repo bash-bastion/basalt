@@ -1,8 +1,7 @@
 root = true
 
-# TODO:
-[*.{sh,bash,bats},bin/*]
-indent_size = tab
+[*.{sh,bash,bats},bin/*] # TODO: not clean enough
+indent_style = tab
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
