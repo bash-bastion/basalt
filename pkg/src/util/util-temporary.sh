@@ -15,10 +15,12 @@ util.get_toml_string() {
 	if [ ! -f "$toml_file" ]; then
 		bprint.fatal "File '$toml_file' not found"
 	fi
-	
+
+	local regex="^[ \t]*${key_name}[ \t]*=[ \t]*['\"](.*)['\"]"
+
 	local grep_line=
-	while IFS= read -r line || [ -n "$line" ]; do # TODO: lint for [ -n "$line" ]
-		if [[ $line == *"$key_name"*=* ]]; then
+	while IFS= read -r line || [ -n "$line" ]; do
+		if [[ $line =~ $regex ]]; then
 			grep_line="$line"
 			break
 		fi
@@ -34,7 +36,7 @@ util.get_toml_string() {
 		return 1
 	fi
 
-	local regex="[ \t]*${key_name}[ \t]*=[ \t]*['\"](.*)['\"]"
+	BASH_REMATCH=()
 	if [[ $grep_line =~ $regex ]]; then
 		REPLY="${BASH_REMATCH[1]}"
 	else
@@ -198,7 +200,7 @@ util.text_add_dependency() {
 		if [ -z "$input" ]; then
 			continue
 		fi
-		
+
 		util.get_package_info "$line"
 		local url1="$REPLY2"
 

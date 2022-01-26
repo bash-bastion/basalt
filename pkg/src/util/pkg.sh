@@ -269,7 +269,6 @@ fi"
 				history ignoreeof interactive-commants keyword monitor noclobber noexec noglob nolog \
 				notify nounset onecmd physical pipefail posix priviledged verbose vi xtrace; do
 			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
-
 				if [ "$REPLY" = 'on' ]; then
 					printf '%s\n' "set -o $option" >> "$project_dir/.basalt/generated/source_setoptions.sh"
 				elif [ "$REPLY" = 'off' ]; then
