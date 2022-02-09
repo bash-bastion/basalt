@@ -1,6 +1,6 @@
 # This file is a bit of a special case as basalt isn't bootstrapped to use
 # itself for installation. As a result, `shopt` options, env vars etc. are
-# set in `./pkg/src/cmd/basalt.sh` rather than this file. This file is
+# set in `./pkg/src/bin/basalt.sh` rather than this file. This file is
 # still useful, though, since external tools can still parse this file
 # to get meaningful information about the project
 
@@ -15,7 +15,7 @@ description = 'The rock-solid Bash package manager'
 [run]
 dependencies = []
 binDirs = ['bin']
-sourceDirs = ['pkg/src/cmd', 'pkg/src/commands', 'pkg/src/public', 'pkg/src/util']
+sourceDirs = ['pkg/src/bin', 'pkg/src/commands', 'pkg/src/public', 'pkg/src/util']
 builtinDirs = []
 completionDirs = ['pkg/completions']
 manDirs = ['pkg/share/man']

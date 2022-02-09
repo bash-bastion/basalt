@@ -7,7 +7,7 @@ basalt.package-load
 
 load './util/test_util.sh'
 
-load "$BASALT_PACKAGE_DIR/pkg/src/cmd/TEMPLATE_SLUG.sh"
+load "$BASALT_PACKAGE_DIR/pkg/src/bin/TEMPLATE_SLUG.sh"
 TEMPLATE_SLUG() { main.TEMPLATE_SLUG "$@"; }
 
 export NO_COLOR=
