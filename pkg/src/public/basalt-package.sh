@@ -8,13 +8,13 @@ basalt.package-load() {
 
 	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
 		printf '%s\n' "Error: basalt.package-load: Variable '\$BASALT_PACKAGE_DIR' is empty"
-		return 1
+		exit 1
 	fi
 
 	# These checks always ensure the generated files are in sync the 'basalt.toml'
 	if [ ! -f "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh" ]; then
 		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran"
-		return 1
+		exit 1
 	fi
 
 	# BSD `date(1)` does not have '-r'
@@ -23,7 +23,7 @@ basalt.package-load() {
 	done_file_last_modified_at="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh")"
 	if ((basalt_file_last_modified_at >= done_file_last_modified_at)); then # '>=' so automated 'basalt install' work on fast computers
 		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again"
-		return 1
+		exit 1
 	fi
 
 	if shopt -q nullglob; then

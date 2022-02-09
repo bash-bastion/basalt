@@ -35,24 +35,24 @@ EOF
 			local __basalt_target="$(readlink "$__basalt_file")"
 			if ! cd "${__basalt_target%/*}"; then
 				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_target%/*}'"
-				return 1
+				exit 1
 			fi
 		else
 			if ! cd "${__basalt_file%/*}"; then
 				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_file%/*}'"
-				return 1
+				exit 1
 			fi
 		fi
 
 		if ! BASALT_PACKAGE_DIR="$(
 			while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
 				if ! cd ..; then
-					return 1
+					exit 1
 				fi
 			done
 
 			if [ "$PWD" = / ]; then
-				return 1
+				exit 1
 			fi
 
 			printf '%s' "$PWD"
@@ -60,14 +60,14 @@ EOF
 			printf '%s\n' "Error: basalt.package-init: Could not find basalt.toml"
 			if ! cd "$__old_cd"; then
 				printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'"
-				return 1
+				exit 1
 			fi
-			return 1
+			exit 1
 		fi
 
 		if ! cd "$__old_cd"; then
 			printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'"
-			return 1
+			exit 1
 		fi
 	fi
 }

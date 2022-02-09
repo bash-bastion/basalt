@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 eval "$(basalt-package-init)" || exit
-basalt.package-init || exit
-basalt.package-load || exit
+basalt.package-init
+basalt.package-load
 
 source "$BASALT_PACKAGE_DIR/pkg/lib/cmd/TEMPLATE_SLUG.sh"
 main.TEMPLATE_SLUG "$@"
