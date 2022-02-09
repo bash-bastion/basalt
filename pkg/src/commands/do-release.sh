@@ -5,6 +5,7 @@ do-release() {
 
 	local flag_yes='no'
 	local -a args=()
+	local arg=
 	for arg; do case $arg in
 	-y|--yes)
 		flag_yes='yes'
@@ -15,7 +16,7 @@ do-release() {
 	*)
 		args+=("$arg")
 		;;
-	esac done
+	esac done; unset -v arg
 
 	if ((${#args[@]} > 1)); then
 		bprint.die "The only argument must be the new version string"

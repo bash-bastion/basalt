@@ -5,6 +5,7 @@ do-global-remove() {
 
 	local flag_force='no'
 	local -a pkgs=()
+	local arg=
 	for arg; do case $arg in
 	--force)
 		flag_force='yes'
@@ -15,7 +16,7 @@ do-global-remove() {
 	*)
 		pkgs+=("$arg")
 		;;
-	esac done
+	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
 		bprint.die "Must specify at least one package"

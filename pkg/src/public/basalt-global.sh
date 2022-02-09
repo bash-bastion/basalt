@@ -1,8 +1,9 @@
 # shellcheck shell=bash
 
-# @file basalt-global.sh
-# @brief Contains functions to be used anywhere (shell initialization, Basalt
-# packages, etc.)
+# Contains functions to be used anywhere where Basalt is installed. This is soured by both
+# 'basalt global init' and 'basalt-package-init', so it can be used in shell startup
+# initialization scripts. Because this can be used in shell startup, we must do 'return 1'
+# on failure, as to not exit the interactive terminal
 
 basalt.load() {
 	local __basalt_flag_global='no'
@@ -105,10 +106,6 @@ Pass '--help' for more info"
 	if [ "$__basalt_flag_dry" = 'yes' ]; then
 		printf '%s\n' "Would have sourced file '$__basalt_pkg_path_full/$__basalt_file'"
 	else
-		if source "$__basalt_pkg_path_full/$__basalt_file"; then
-			:
-		else
-			return $?
-		fi
+		source "$__basalt_pkg_path_full/$__basalt_file"
 	fi
 }

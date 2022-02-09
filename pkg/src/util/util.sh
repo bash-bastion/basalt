@@ -128,7 +128,7 @@ util.die_unexpected_value() {
 util.get_package_id() {
 	local flag_allow_empty_version='no' # Allow for version to be empty
 	for arg; do case $arg in
-		--allow-empty-version) flag_allow_empty_version='yes'; shift ;;
+		--allow-empty-version) flag_allow_empty_version='yes'; util.shift ;;
 		-*) bprint.fatal "Flag '$arg' not recognized" ;;
 		*) break ;;
 	esac done
@@ -346,6 +346,12 @@ util.text_dependency_is_installed() {
 	done < "$text_file"
 
 	return 1
+}
+
+util.shift() {
+	if ! shift; then
+		bprint.die 'Failed shift'
+	fi
 }
 
 util.show_help() {

@@ -4,6 +4,7 @@ do-add() {
 	util.init_local
 
 	local -a pkgs=()
+	local arg=
 	for arg; do case $arg in
 	-*)
 		bprint.die "Flag '$arg' not recognized"
@@ -11,7 +12,7 @@ do-add() {
 	*)
 		pkgs+=("$arg")
 		;;
-	esac done
+	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
 		bprint.warn "No packages were specified"

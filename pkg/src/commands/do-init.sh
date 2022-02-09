@@ -3,6 +3,7 @@
 do-init() {
 	local flag_type=
 	local -a args=()
+	local arg=
 	for arg; do case $arg in
 	--type*)
 		IFS='=' read -r _ flag_type <<< "$arg"
@@ -13,7 +14,7 @@ do-init() {
 	*)
 		args+=("$arg")
 		;;
-	esac; done
+	esac; done; unset -v arg
 
 	if ((${#args[@]} == 0)); then
 		bprint.die "An initialization directory must be specified"

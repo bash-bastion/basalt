@@ -4,6 +4,7 @@ do-global-add() {
 	util.init_global
 
 	local -a pkgs=()
+	local arg=
 	for arg; do case $arg in
 	-*)
 		bprint.die "Flag '$arg' not recognized"
@@ -11,7 +12,7 @@ do-global-add() {
 	*)
 		pkgs+=("$arg")
 		;;
-	esac done
+	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
 		bprint.die "Must specify at least one package"

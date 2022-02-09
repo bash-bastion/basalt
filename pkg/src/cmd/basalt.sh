@@ -1,23 +1,21 @@
 # shellcheck shell=bash
 
-# Usually, a Basalt package won't have calls to `set`, `shopt`, `source`,
-# etc., since that is specified declaritively in `basalt.toml`. But, since
-# that behavior is dependent on Basalt, and Basalt doesn't bootstrap itself,
-# we imperatively setup the environment here
-set -eo pipefail
-shopt -s extglob globasciiranges nullglob shift_verbose
-export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
-	LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
-	LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
-export GIT_TERMINAL_PROMPT=0
-for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
-	source "$f"
-done
-
-
 main.basalt() {
+	# Usually, a Basalt package won't have calls to `set`, `shopt`, `source`, etc., since
+	# that is specified declaritively in `basalt.toml`. But, since that behavior is dependent
+	# on Basalt, and Basalt doesn't bootstrap itself, we must setup the environment here.
+	set -eo pipefail
+	shopt -s extglob globasciiranges nullglob shift_verbose
+	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
+		LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
+		LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
+	export GIT_TERMINAL_PROMPT=0
+	for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
+		source "$f"
+	done
+
 	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
-		printf '%s\n' 'Error: Basalt requires at least Bash version 4.3' >&2
+		printf '%s\n' 'Error: main.basalt: Basalt requires at least Bash version 4.3' >&2
 		exit 1
 	fi
 
@@ -33,7 +31,7 @@ main.basalt() {
 		exit
 		;;
 	-*)
-		bprint.die "Top level flag '$arg' is not recognized"
+		bprint.die "Top-level flag '$arg' is not recognized"
 		;;
 	*)
 		break
@@ -43,56 +41,56 @@ main.basalt() {
 
 	case $1 in
 	init)
-		shift
+		util.shift
 		do-init "$@" ;;
 	add)
-		shift
+		util.shift
 		util.init_lock
 		do-add "$@" ;;
 	remove)
-		shift
+		util.shift
 		util.init_lock
 		do-remove "$@" ;;
 	install)
-		shift
+		util.shift
 		util.init_lock
 		do-install "$@" ;;
 	list)
-		shift
+		util.shift
 		util.init_lock
 		do-list "$@" ;;
 	run)
-		shift
+		util.shift
 		util.init_lock
 		do-run "$@" ;;
 	release)
-		shift
+		util.shift
 		util.init_lock
 		do-release "$@" ;;
 	complete)
-		shift
+		util.shift
 		util.init_lock
 		do-complete "$@" ;;
 	global)
-		shift
+		util.shift
 		case $1 in
 		init)
-			shift
+			util.shift
 			do-global-init "$@" ;;
 		add)
-			shift
+			util.shift
 			util.init_lock
 			do-global-add "$@" ;;
 		remove)
-			shift
+			util.shift
 			util.init_lock
 			do-global-remove "$@" ;;
 		install)
-			shift
+			util.shift
 			util.init_lock
 			do-global-install "$@" ;;
 		list)
-			shift
+			util.shift
 			util.init_lock
 			do-global-list "$@" ;;
 		*)
