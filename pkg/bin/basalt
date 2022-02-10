@@ -43,6 +43,5 @@ __basalt_dirname=${__basalt_dirname%/*}
 __basalt_dirname=${__basalt_dirname%/*}
 __basalt_dirname=${__basalt_dirname%/*}
 source "$__basalt_dirname/pkg/src/bin/basalt.sh"
-unset __basalt_dirname
 
 main.basalt "$@"

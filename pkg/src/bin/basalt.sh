@@ -10,6 +10,9 @@ main.basalt() {
 		LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
 		LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
 	export GIT_TERMINAL_PROMPT=0
+	if [ -z "$__basalt_dirname" ]; then
+		printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
+	fi
 	for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
 		source "$f"
 	done
@@ -41,56 +44,56 @@ main.basalt() {
 
 	case $1 in
 	init)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		do-init "$@" ;;
 	add)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
 		do-add "$@" ;;
 	remove)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
 		do-remove "$@" ;;
 	install)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
 		do-install "$@" ;;
 	list)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
 		do-list "$@" ;;
 	run)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
 		do-run "$@" ;;
 	release)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
 		do-release "$@" ;;
 	complete)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
 		do-complete "$@" ;;
 	global)
-		util.shift
+		if ! shift; then bprint.die 'Failed shift'; fi
 		case $1 in
 		init)
-			util.shift
+			if ! shift; then bprint.die 'Failed shift'; fi
 			do-global-init "$@" ;;
 		add)
-			util.shift
+			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
 			do-global-add "$@" ;;
 		remove)
-			util.shift
+			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
 			do-global-remove "$@" ;;
 		install)
-			util.shift
+			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
 			do-global-install "$@" ;;
 		list)
-			util.shift
+			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
 			do-global-list "$@" ;;
 		*)
