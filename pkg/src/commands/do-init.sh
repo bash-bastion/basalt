@@ -44,16 +44,21 @@ do-init() {
 		local template_slug=
 		read -re template_slug
 
-		if ! mv './bin/TEMPLATE_SLUG' "./bin/$template_slug"; then
+		if ! mv './pkg/bin/TEMPLATE_SLUG' "./pkg/bin/$template_slug"; then
 			bprint.die "Failed 'mv' command"
 		fi
+
+		if ! chmod +x "./pkg/bin/$template_slug"; then
+			bprint.die "Failed 'chmod' command"
+		fi
+
 		if ! mv './pkg/src/bin/TEMPLATE_SLUG.sh' "./pkg/src/bin/$template_slug.sh"; then
 			bprint.die "Failed 'mv' command"
 		fi
 
 		if ! sed -i -e "s/TEMPLATE_SLUG/$template_slug/g" \
 			'./basalt.toml' \
-			"./bin/$template_slug" \
+			"./pkg/bin/$template_slug" \
 			"./pkg/src/bin/$template_slug.sh" \
 			'./tests/util/init.sh' \
 			'./tests/test_alfa.bats'; then

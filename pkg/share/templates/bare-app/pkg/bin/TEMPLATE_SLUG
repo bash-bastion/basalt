@@ -4,5 +4,5 @@ eval "$(basalt-package-init)" || exit
 basalt.package-init
 basalt.package-load
 
-source "$BASALT_PACKAGE_DIR/pkg/lib/cmd/TEMPLATE_SLUG.sh"
+source "$BASALT_PACKAGE_DIR/pkg/src/bin/TEMPLATE_SLUG.sh"
 main.TEMPLATE_SLUG "$@"
