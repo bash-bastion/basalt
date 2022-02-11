@@ -1,5 +1,11 @@
 # shellcheck shell=bash
 
+test_util.fatal() {
+	local msg="$1"
+
+	printf '%s\n' "FATAL: ${FUNCNAME[1]}: $msg" >&2
+}
+
 test_util.get_repo_root() {
 	unset REPLY; REPLY=
 
@@ -19,6 +25,26 @@ test_util.get_repo_root() {
 		printf '%s\n' "Error: test_util.get_repo_root failed"
 		exit 1
 	fi
+}
+
+test_util.init_app() {
+	local name="$1"
+	local dir="${2:-.}"
+
+	if [ -z "$name" ]; then
+		test_util.fatal "Parameter 'name' must not be empty"
+	fi
+
+	if [ -f './basalt.toml' ]; then
+		test_util.fatal "A package already exists at '$dir'"
+	fi
+
+
+	mkdir -p "./$dir/pkg/bin/$name"
+}
+
+test_util.init_lib() {
+	local dir="$1"
 }
 
 test_util.create_fake_remote() {
