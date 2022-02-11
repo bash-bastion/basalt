@@ -53,6 +53,8 @@ test_util.init_app() {
 	EOF
 
 	if [ -z "$appContent" ]; then
+		cat <<< '_' > "./$dir/pkg/src/bin/$name.sh"
+	elif [ "$appContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/pkg/src/bin/$name.sh"
 		main.TEMPLATE_SLUG() {
 		   printf '%s\n' 'woofers!'
@@ -63,6 +65,8 @@ test_util.init_app() {
 	fi
 
 	if [ -z "$basaltTomlContent" ]; then
+		cat <<< "_" > "./$dir/basalt.toml"
+	elif [ "$appContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/basalt.toml"
 		[package]
 		type = 'bash'
@@ -109,6 +113,8 @@ test_util.init_lib() {
 	mkdir -p "./$dir/pkg/src/public"
 
 	if [ -z "$libContent" ]; then
+		cat <<< "$libContent" > "./$dir/pkg/src/public/$name.sh"
+	elif [ "$libContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/pkg/src/public/$name.sh"
 		$name.fn() {
 		   printf '%s\n' 'foxxy!'
@@ -119,6 +125,8 @@ test_util.init_lib() {
 	fi
 
 	if [ -z "$basaltTomlContent" ]; then
+		cat <<< "_" > "./$dir/basalt.toml"
+	elif [ "$appContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/basalt.toml"
 		[package]
 		type = 'bash'
@@ -130,8 +138,8 @@ test_util.init_lib() {
 
 		[run]
 		dependencies = []
-		binDirs = []
-		sourceDirs = ['./$dir/pkg/public']
+		binDirs = ['./$dir/pkg/bin']
+		sourceDirs = []
 
 		[run.shellEnvironment]
 
@@ -143,8 +151,6 @@ test_util.init_lib() {
 		nullglob = 'on'
 		shift_verbose = 'on'
 		EOF
-	else
-		cat <<< "$basaltTomlContent" > "./$dir/basalt.toml"
 	fi
 }
 

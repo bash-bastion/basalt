@@ -10,12 +10,15 @@ main.basalt() {
 		LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
 		LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
 	export GIT_TERMINAL_PROMPT=0
-	if [ -z "$__basalt_dirname" ]; then
-		printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
+	if [ "$BASALT_IS_TESTING" != 'yes' ]; then # All files already sourced when testing. This ensures stubs are not overriden
+		if [ -z "$__basalt_dirname" ]; then
+			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
+			exit 1
+		fi
+		for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
+			source "$f"
+		done
 	fi
-	for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
-		source "$f"
-	done
 
 	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
 		printf '%s\n' 'Error: main.basalt: Basalt requires at least Bash version 4.3' >&2

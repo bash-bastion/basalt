@@ -3,13 +3,12 @@
 load './util/init.sh'
 
 setup_file() {
-	# this affects lines=($output) # TODO Bats 1.5 remove
-	shopt -u nullglob
 	test_util.stub_command 'do-install'
 }
 
 @test "Fails if dependency is bogus" {
-	basalt init --bare
+	test_util.init_app 'project-echo' '.'
+
 	run basalt add 'UwU'
 
 	assert_failure
@@ -17,7 +16,8 @@ setup_file() {
 }
 
 @test "Fails if dependency does not exist 1" {
-	basalt init --bare
+	test_util.init_app 'project-echo' '.'
+
 	run basalt add 'hyperupcall/basaltqq'
 
 	assert_failure
@@ -25,7 +25,8 @@ setup_file() {
 }
 
 @test "Fails if dependency does not exist 2" {
-	basalt init --bare
+	test_util.init_app 'project-echo' '.'
+
 	run basalt add 'gitlab.com/hyperupcall/basaltqq'
 
 	assert_failure
@@ -33,7 +34,8 @@ setup_file() {
 }
 
 @test "Fails if dependency does not exist 3" {
-	basalt init --bare
+	test_util.init_app 'project-echo' '.'
+
 	run basalt add 'https://github.com/hyperupcall/basaltqq'
 
 	assert_failure
@@ -41,7 +43,8 @@ setup_file() {
 }
 
 @test "Fails if dependency does not exist 4" {
-	basalt init --bare
+	test_util.init_app 'project-echo' '.'
+
 	run basalt add 'file:///some/fake/directory'
 
 	assert_failure
