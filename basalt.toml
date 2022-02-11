@@ -1,0 +1,6 @@
+[package]
+name = 'bats-all'
+slug = 'bats_all'
+version = '4.3.0'
+authors = ['Edwin Kofler <edwin@kofler.dev>']
+description = 'An aggregation of the three most popular Bats libraries'
