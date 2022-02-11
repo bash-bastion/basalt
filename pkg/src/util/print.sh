@@ -47,7 +47,7 @@ bprint.info() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s: %s\n" 'Info' "$1"
 	else
-		printf "\033[0;32m%11s\033[0m %s\n" 'Info' "$1" 
+		printf "\033[0;32m%11s\033[0m %s\n" 'Info' "$1"
 	fi
 }
 
