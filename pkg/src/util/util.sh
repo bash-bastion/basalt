@@ -257,7 +257,7 @@ util.get_package_info() {
 		IFS='/' read -r site package <<< "$input"
 
 		REPLY1='remote'
-		REPLY2="https://$input.git"
+		REPLY2="https://$input"
 		REPLY3="$site"
 		REPLY4="$package"
 		REPLY5="$ref"
@@ -303,7 +303,7 @@ util.get_package_info() {
 		fi
 
 		REPLY1='remote'
-		REPLY2="https://$site/$package.git"
+		REPLY2="https://$site/$package"
 		REPLY3="$site"
 		REPLY4="$package"
 		REPLY5="$ref"
