@@ -3,10 +3,13 @@
 load './util/init.sh'
 
 @test "Installs one dependency" {
+	skip
+
 	local dir=
 	test_util.create_fake_remote 'user/repo'; dir="$REPLY"
 
 	basalt init --bare
+
 	run basalt add "file://$dir"
 
 	assert_success
@@ -15,6 +18,8 @@ load './util/init.sh'
 }
 
 @test "Installs two dependencies" {
+	skip
+
 	local dir1= dir2=
 	test_util.create_fake_remote 'user/repo1'; dir1="$REPLY"
 	test_util.create_fake_remote 'user/repo2'; dir2="$REPLY"
@@ -28,6 +33,8 @@ load './util/init.sh'
 }
 
 @test "Installs transitive dependencies" {
+	skip
+
 	local dir1= dir2=
 	test_util.create_fake_remote 'user/repo1'; dir1="$REPLY"
 	test_util.create_fake_remote 'user/repo2'; dir2="$REPLY"

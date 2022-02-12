@@ -16,6 +16,7 @@ bprint.fatal() {
 		printf "\033[0;31m%11s\033[0m %s\n" 'Fatal' "$1" >&2
 	fi
 
+	# TODO
 	# Print stack trace
 	if (( ${#FUNCNAME[@]} >> 2 )); then
 		printf '%s\n' 'STACK TRACE'

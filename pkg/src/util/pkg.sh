@@ -17,7 +17,7 @@ pkg.install_packages() {
 		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 		local package_id=
-		if [[ $pkg == file://* ]]; then
+		if [[ $url == file://* ]]; then
 			pkgutil.get_localpkg_info "$pkg"
 			local pkg_path="$REPLY1"
 			local pkg_name="$REPLY2"
@@ -38,7 +38,7 @@ pkg.install_packages() {
 			rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
 			cp -r "$target" "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
 			bprint.green 'Copied' "$pkg_id"
-		elif [[ $pkg == https://* ]]; then
+		elif [[ $url == https://* ]]; then
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			local package_id="$REPLY"
 
@@ -210,14 +210,15 @@ pkg.phase_local_integration_recursive() {
 		local version="$REPLY5"
 
 		local package_id=
-		if [[ $pkg == file://* ]]; then
+		if [[ $url == file://* ]]; then
 			pkgutil.get_localpkg_info "$pkg"
 			local pkg_path="$REPLY1"
 			local pkg_name="$REPLY2"
 			local pkg_id="$REPLY3"
 
+			echo v "$pkg_id"
 			package_id=$pkg_id
-		elif [[ $pkg == https://* ]]; then
+		elif [[ $url == https://* ]]; then
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			package_id="$REPLY"
 		fi

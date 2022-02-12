@@ -3,6 +3,8 @@
 load './util/init.sh'
 
 @test "Calling 'basalt.package-load' works" {
+	skip
+
 	test_util.init_lib 'project-echo' 'subpkg' \
 		'default' \
 		'default'
