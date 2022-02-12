@@ -51,13 +51,14 @@ test_util.init_app() {
 	source "\$BASALT_PACKAGE_DIR/pkg/src/bin/$name.sh"
 	main.$name "\$@"
 	EOF
+	chmod +x "./$dir/pkg/bin/$name"
 
 	if [ -z "$appContent" ]; then
 		cat <<< '_' > "./$dir/pkg/src/bin/$name.sh"
 	elif [ "$appContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/pkg/src/bin/$name.sh"
-		main.TEMPLATE_SLUG() {
-		   printf '%s\n' 'woofers!'
+		main.$name() {
+		   printf '%s\n' '$name basalt app'
 		}
 		EOF
 	else
@@ -65,8 +66,8 @@ test_util.init_app() {
 	fi
 
 	if [ -z "$basaltTomlContent" ]; then
-		cat <<< "_" > "./$dir/basalt.toml"
-	elif [ "$appContent" = 'default' ]; then
+		cat <<< '_' > "./$dir/basalt.toml"
+	elif [ "$basaltTomlContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/basalt.toml"
 		[package]
 		type = 'bash'
@@ -117,7 +118,7 @@ test_util.init_lib() {
 	elif [ "$libContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/pkg/src/public/$name.sh"
 		$name.fn() {
-		   printf '%s\n' 'foxxy!'
+		   printf '%s\n' '$name basalt lib'
 		}
 		EOF
 	else
@@ -125,8 +126,8 @@ test_util.init_lib() {
 	fi
 
 	if [ -z "$basaltTomlContent" ]; then
-		cat <<< "_" > "./$dir/basalt.toml"
-	elif [ "$appContent" = 'default' ]; then
+		cat <<< '_' > "./$dir/basalt.toml"
+	elif [ "$basaltTomlContent" = 'default' ]; then
 		cat <<-EOF > "./$dir/basalt.toml"
 		[package]
 		type = 'bash'
@@ -138,8 +139,8 @@ test_util.init_lib() {
 
 		[run]
 		dependencies = []
-		binDirs = ['./$dir/pkg/bin']
-		sourceDirs = []
+		binDirs = []
+		sourceDirs = ['./$dir/pkg/src/public']
 
 		[run.shellEnvironment]
 
@@ -151,7 +152,25 @@ test_util.init_lib() {
 		nullglob = 'on'
 		shift_verbose = 'on'
 		EOF
+	else
+		cat <<< "$basaltTomlContent" > "./$dir/basalt.toml"
 	fi
+}
+
+# Run various commands in the current Basalt context
+test_util.run_commands() {
+	local commands="$1"
+
+	cat <<-EOF > adhoc.sh
+		#!/usr/bin/env bash
+		eval "\$(basalt-package-init)" || exit
+		basalt.package-init
+		basalt.package-load
+
+		$commands
+	EOF
+	chmod +x ./adhoc.sh
+	./adhoc.sh
 }
 
 test_util.create_fake_remote() {

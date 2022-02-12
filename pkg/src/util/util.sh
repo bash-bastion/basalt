@@ -247,6 +247,7 @@ util.get_package_info() {
 	local regex3="^git@"
 	if [[ "$input" =~ $regex1 ]]; then
 		local site= package=
+
 		input="${input#http?(s)://}"
 		ref="${input##*@}"
 		if [ "$ref" = "$input" ]; then ref=; fi

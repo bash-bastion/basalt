@@ -278,7 +278,7 @@ if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
 	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_GLOBAL_DATA_DIR is empty, but must exist"
 	exit 1
 fi'
-
+				local source_dir=
 				for source_dir in "${REPLIES[@]}"; do
 					printf -v content '%s%s\n' "$content" "
 # Silently skip if directory doesn't exist since a corresponding warning will print during package installation
