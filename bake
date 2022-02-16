@@ -23,17 +23,19 @@ fi
 # @description Prints stacktrace
 # @internal
 __bake_print_stacktrace() {
-	if __bake_is_color; then
-		printf '\033[4m%s\033[0m\n' 'Stacktrace:'
-	else
-		printf '%s\n' 'Stacktrace:'
-	fi
+	if [ "$__bake_cfg_stacktrace" = 'yes' ]; then
+		if __bake_is_color; then
+			printf '\033[4m%s\033[0m\n' 'Stacktrace:'
+		else
+			printf '%s\n' 'Stacktrace:'
+		fi
 
-	local i=
-	for ((i=0; i<${#FUNCNAME[@]}-1; i++)); do
-		local bash_source=${BASH_SOURCE[$i]}; bash_source="${bash_source##*/}"
-		printf '%s\n' "  -> $bash_source:${BASH_LINENO[$i-1]} ${FUNCNAME[$i]}()"
-	done; unset -v i
+		local i=
+		for ((i=0;i<${#FUNCNAME[@]}-1;i++)); do
+			local __bash_source=${BASH_SOURCE[$i]}; __bash_source="${__bash_source##*/}"
+			printf '%s\n' "  in ${FUNCNAME[$i]} ($__bash_source:${BASH_LINENO[$i-1]})"
+		done; unset -v i __bash_source
+	fi
 } >&2
 
 # @description Function 'trap' calls on 'ERR'
@@ -53,7 +55,11 @@ __bake_trap_err() {
 # @exitcode 1 if should not print color
 # @internal
 __bake_is_color() {
-	! [[ -v NO_COLOR || $TERM == dumb ]]
+	if [[ -v NO_COLOR || $TERM == dumb ]]; then
+		return 1
+	else
+		return 0
+	fi
 }
 
 # @description Prints `$1` formatted as an internal Bake error to standard error
@@ -64,6 +70,17 @@ __bake_internal_error() {
 		printf "\033[0;31m%s:\033[0m %s\n" "Error (bake)" "$1"
 	else
 		printf '%s: %s\n' 'Error (bake)' "$1"
+	fi
+} >&2
+
+# @description Prints `$1` formatted as an internal Bake warning to standard error
+# @arg $1 Text to print
+# @internal
+__bake_internal_warn() {
+	if __bake_is_color; then
+		printf "\033[0;33m%s:\033[0m %s\n" "Warn (bake)" "$1"
+	else
+		printf '%s: %s\n' 'Warn (bake)' "$1"
 	fi
 } >&2
 
@@ -131,12 +148,17 @@ __bake_set_vars() {
 	unset REPLY; REPLY=
 	local -i total_shifts=0
 
-	if [ "$1" = '-f' ]; then
+	local __bake_arg=
+	for arg; do case $arg in
+	-f)
 		BAKE_FILE=$2
 		if [ -z "$BAKE_FILE" ]; then
 			__bake_internal_die 'File must not be empty. Exiting'
 		fi
-		total_shifts=$((total_shifts + 2))
+		((total_shifts += 2))
+		if ! shift 2; then
+			__bake_internal_die 'Failed to shift'
+		fi
 
 		if [ ! -e "$BAKE_FILE" ]; then
 			__bake_internal_die "Specified file '$BAKE_FILE' does not exist"
@@ -144,7 +166,13 @@ __bake_set_vars() {
 		if [ ! -f "$BAKE_FILE" ]; then
 			__bake_internal_die "Specified path '$BAKE_FILE' is not actually a file"
 		fi
-	fi
+		;;
+	-h)
+		local flag_help='yes'
+		if ! shift; then
+			__bake_internal_die 'Failed to shift'
+		fi
+	esac done
 
 	if [ -n "$BAKE_FILE" ]; then
 		BAKE_ROOT=$(
@@ -170,6 +198,14 @@ __bake_set_vars() {
 			__bake_internal_die "Could not find 'Bakefile.sh'"
 		fi
 		BAKE_FILE="$BAKE_ROOT/Bakefile.sh"
+	fi
+
+	if [ "$flag_help" = 'yes' ]; then
+		cat <<-EOF
+		Usage: bake [-h] [-f <Bakefile>] [var=value ...] <task> [args ...]
+		EOF
+		__bake_print_tasks
+		exit
 	fi
 
 	REPLY=$total_shifts
@@ -211,9 +247,17 @@ bake.info() {
 	fi
 }
 
+# @description Dies if any of the supplied variables are empty. Deprecated in favor of 'bake.assert_not_empty'
+# @arg $@ string Variable names to print
+# @see bake.assert_not_empty
+bake.assert_nonempty() {
+	__bake_internal_warn "Function 'bake.assert_nonempty' is deprecated. Please use 'bake.assert_not_empty' instead"
+	bake.assert_not_empty
+}
+
 # @description Dies if any of the supplied variables are empty
 # @arg $@ string Variable names to print
-bake.assert_nonempty() {
+bake.assert_not_empty() {
 	local variable_name=
 	for variable_name; do
 		local -n variable="$variable_name"
@@ -238,7 +282,22 @@ bake.assert_cmd() {
 	fi
 }
 
+# @description Edit configuration that affects the behavior of Bake
+# @arg $1 string Configuration option to change
+# @arg $2 string Value of configuration property
+bake.cfg() {
+	local cfg=$1
+	local value=$2
+
+	case $cfg in
+		stacktrace)
+			__bake_cfg_stacktrace=$value
+	esac
+}
+
 __bake_main() {
+	__bake_cfg_stacktrace='yes'
+
 	set -Eeo pipefail
 	shopt -s dotglob extglob globasciiranges globstar lastpipe shift_verbose
 	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' LC_MESSAGES='C' \
@@ -252,8 +311,27 @@ __bake_main() {
 		__bake_internal_die 'Failed to shift'
 	fi
 
-	local task=$1
-	if [ -z "$task" ]; then
+	local __bake_key= __bake_value=
+	local __bake_arg=
+	for __bake_arg; do case $__bake_arg in
+		*=*)
+			IFS='=' read -r __bake_key __bake_value <<< "$__bake_arg"
+
+			declare -g "$__bake_key"
+			local -n __bake_variable="$__bake_key"
+			__bake_variable="$__bake_value"
+
+			if ! shift; then
+				__bake_internal_die 'Failed to shift'
+			fi
+			;;
+		*) break
+	esac done; unset -v __bake_arg
+	# Note: Don't unset '__bake_variable' or none of the variables will stay set
+	unset -v __bake_key __bake_value
+
+	local __bake_task="$1"
+	if [ -z "$__bake_task" ]; then
 		__bake_internal_error "No valid task supplied"
 		__bake_print_tasks
 		exit 1
@@ -267,17 +345,17 @@ __bake_main() {
 	fi
 
 	# shellcheck disable=SC2097,SC1007,SC1090
-	task= source "$BAKE_FILE"
+	__bake_task= source "$BAKE_FILE"
 
-	if declare -f task."$task" >/dev/null 2>&1; then
-		__bake_print_big "-> RUNNING TASK '$task'"
+	if declare -f task."$__bake_task" >/dev/null 2>&1; then
+		__bake_print_big "-> RUNNING TASK '$__bake_task'"
 		if declare -f init >/dev/null 2>&1; then
-			init "$task"
+			init "$__bake_task"
 		fi
-		task."$task" "$@"
+		task."$__bake_task" "$@"
 		__bake_print_big "<- DONE"
 	else
-		__bake_internal_error "Task '$task' not found"
+		__bake_internal_error "Task '$__bake_task' not found"
 		__bake_print_tasks
 		exit 1
 	fi

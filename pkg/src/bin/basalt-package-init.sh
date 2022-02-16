@@ -43,6 +43,9 @@ EOF
 			fi
 		fi
 
+		# Note that this variable should not be exported. It can cause weird things to occur. For example,
+		# if a Basalt local package called a command from a global package, things won't work since
+		# 'BASALT_PACKAGE_DIR' would already be defined and won't be properly set for the global package
 		if ! BASALT_PACKAGE_DIR="$(
 			while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
 				if ! cd ..; then

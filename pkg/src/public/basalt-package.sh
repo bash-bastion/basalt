@@ -19,8 +19,8 @@ basalt.package-load() {
 
 	# BSD `date(1)` does not have '-r'
 	local basalt_file_last_modified_at= done_file_last_modified_at=
-	basalt_file_last_modified_at="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/basalt.toml")"
-	done_file_last_modified_at="$(stat --format '%Y' "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh")"
+	basalt_file_last_modified_at=$(stat --format '%Y' "$BASALT_PACKAGE_DIR/basalt.toml")
+	done_file_last_modified_at=$(stat --format '%Y' "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh")
 	if ((basalt_file_last_modified_at >= done_file_last_modified_at)); then # '>=' so automated 'basalt install' work on fast computers
 		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again"
 		exit 1
@@ -50,7 +50,7 @@ basalt.package-load() {
 					fi
 
 					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
-						if BASALT_PACKAGE_DIR="$__basalt_package" source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
+						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
 							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'"
 							return $?
 						fi
@@ -71,7 +71,7 @@ basalt.package-load() {
 					fi
 
 					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
-						if BASALT_PACKAGE_DIR="$__basalt_package" source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
+						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
 							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'"
 							return $?
 						fi

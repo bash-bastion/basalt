@@ -3,7 +3,7 @@
 echo_variables_posix() {
 	# Set main variables (WET)
 	local basalt_global_repo="${0%/*}"
-	basalt_global_repo="${basalt_global_repo%/*}"; basalt_global_repo="${basalt_global_repo%/*}"
+	basalt_global_repo=${basalt_global_repo%/*}; basalt_global_repo=${basalt_global_repo%/*}
 
 	cat <<-EOF
 	# basalt variables
