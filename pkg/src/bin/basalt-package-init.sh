@@ -10,7 +10,16 @@
 
 main.basalt-package-init() {
 	# Set main variables (WET)
-	local basalt_global_repo="${0%/*}"
+	local basalt_global_repo=
+	if [ -L "$0" ]; then # Only subshell when necessary
+		if ! basalt_global_repo=$(readlink -f "$0"); then
+			printf '%s\n' "printf '%s\n' \"Error: basalt-package-init: Invocation of readlink failed\" >&2"
+			printf '%s\n' 'exit 1'
+		fi
+		basalt_global_repo=${basalt_global_repo%/*}
+	else
+		basalt_global_repo=${0%/*}
+	fi
 	basalt_global_repo=${basalt_global_repo%/*}; basalt_global_repo=${basalt_global_repo%/*}
 
 	cat <<EOF
@@ -21,8 +30,22 @@ EOF
 	cat <<"EOF"
 	export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
 
+	if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
+		printf '%s\n' "Error: basalt.package-init: Variable '\$BASALT_GLOBAL_DATA_DIR' is empty" >&2
+		exit 1
+	fi
+
 	# basalt global and internal functions
+	if [ ! -f "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh" ]; then
+		printf '%s\n' "Error: basalt.package-init: Failed to find file 'basalt-global.sh' in '\$BASALT_GLOBAL_REPO'" >&2
+		exit 1
+	fi
 	source "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh"
+
+	if [ ! -f "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-package.sh" ]; then
+		printf '%s\n' "Error: basalt.package-init: Failed to find file 'basalt-package.sh' in '\$BASALT_GLOBAL_REPO'" >&2
+		exit 1
+	fi
 	source "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-package.sh"
 
 	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
@@ -33,12 +56,12 @@ EOF
 		if [ -L "$__basalt_file" ]; then
 			local __basalt_target="$(readlink "$__basalt_file")"
 			if ! cd "${__basalt_target%/*}"; then
-				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_target%/*}'"
+				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_target%/*}'" >&2
 				exit 1
 			fi
 		else
 			if ! cd "${__basalt_file%/*}"; then
-				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_file%/*}'"
+				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_file%/*}'" >&2
 				exit 1
 			fi
 		fi
@@ -59,16 +82,16 @@ EOF
 
 			printf '%s' "$PWD"
 		)"; then
-			printf '%s\n' "Error: basalt.package-init: Could not find basalt.toml"
+			printf '%s\n' "Error: basalt.package-init: Could not find basalt.toml" >&2
 			if ! cd "$__old_cd"; then
-				printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'"
+				printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'" >&2
 				exit 1
 			fi
 			exit 1
 		fi
 
 		if ! cd "$__old_cd"; then
-			printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'"
+			printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'" >&2
 			exit 1
 		fi
 	fi

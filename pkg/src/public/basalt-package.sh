@@ -7,13 +7,13 @@ basalt.package-load() {
 	local __basalt_shopt_nullglob=
 
 	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
-		printf '%s\n' "Error: basalt.package-load: Variable '\$BASALT_PACKAGE_DIR' is empty"
+		printf '%s\n' "Error: basalt.package-load: Variable '\$BASALT_PACKAGE_DIR' is empty" >&2
 		exit 1
 	fi
 
 	# These checks always ensure the generated files are in sync the 'basalt.toml'
 	if [ ! -f "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh" ]; then
-		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran"
+		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again in '$BASALT_PACKAGE_DIR'" >&2
 		exit 1
 	fi
 
@@ -22,7 +22,7 @@ basalt.package-load() {
 	basalt_file_last_modified_at=$(stat --format '%Y' "$BASALT_PACKAGE_DIR/basalt.toml")
 	done_file_last_modified_at=$(stat --format '%Y' "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh")
 	if ((basalt_file_last_modified_at >= done_file_last_modified_at)); then # '>=' so automated 'basalt install' work on fast computers
-		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again"
+		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again in '$BASALT_PACKAGE_DIR'" >&2
 		exit 1
 	fi
 
@@ -51,7 +51,7 @@ basalt.package-load() {
 
 					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
 						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
-							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'"
+							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'" >&2
 							return $?
 						fi
 					fi
@@ -72,7 +72,7 @@ basalt.package-load() {
 
 					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
 						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
-							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'"
+							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'" >&2
 							return $?
 						fi
 					fi
@@ -90,6 +90,7 @@ basalt.package-load() {
 	fi
 
 	if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_all.sh" ]; then
+		# shellcheck disable=SC1091
 		source "$BASALT_PACKAGE_DIR/.basalt/generated/source_all.sh"
 	fi
 

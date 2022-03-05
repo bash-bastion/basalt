@@ -1,34 +1,6 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2016
 
-echo_variables_posix() {
-	# Set main variables (WET)
-	local basalt_global_repo="${0%/*}"
-	basalt_global_repo=${basalt_global_repo%/*}; basalt_global_repo=${basalt_global_repo%/*}
-
-	cat <<-EOF
-	# basalt variables
-	export BASALT_GLOBAL_REPO="$basalt_global_repo"
-	export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
-
-	EOF
-}
-
-echo_package_path_posix() {
-	cat <<-"EOF"
-	# basalt path
-	if [ "${PATH#*$BASALT_GLOBAL_DATA_DIR/global/bin}" = "$PATH" ]; then
-	  export PATH="$BASALT_GLOBAL_DATA_DIR/global/bin:$PATH"
-	fi
-
-	EOF
-}
-
-# For each shell, items are printed in order
-# - Setting basalt variables
-# - Sourcing basalt completion
-# - Sourcing basalt 'include' function
-# - Setting basalt package PATH
-# - Sourcing basalt package completion
 do-global-init() {
 	local shell="$1"
 
@@ -36,82 +8,154 @@ do-global-init() {
 		bprint.die "Shell not specified"
 	fi
 
-	# Set common basalt variables; add PATH
+	if [[ $shell != @(fish|zsh|ksh|bash|sh) ]]; then
+		bprint.die "Shell not supported"
+	fi
+
+	# Get actual location of source code; only symlink when required
+	local basalt_global_repo=
+	if [ -L "$0" ]; then
+		if ! basalt_global_repo=$(readlink -f "$0"); then
+			printf '%s\n' "printf '%s\n' \"Error: basalt-package-init: Invocation of readlink failed\""
+			printf '%s\n' 'exit 1'
+		fi
+		basalt_global_repo=${basalt_global_repo%/*}
+	else
+		basalt_global_repo=${0%/*}
+	fi
+	basalt_global_repo=${basalt_global_repo%/*}; basalt_global_repo=${basalt_global_repo%/*}
+
+	# Variables
+	printf '%s\n' '# Set variables'
+	shell.variable_assignment 'BASALT_GLOBAL_REPO' "$basalt_global_repo"
+	shell.variable_assignment 'BASALT_GLOBAL_DATA_DIR' "${BASALT_GLOBAL_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/basalt}"
+	shell.variable_export 'BASALT_GLOBAL_REPO'
+	shell.variable_export 'BASALT_GLOBAL_DATA_DIR'
+	printf '\n'
+
+	# Basalt
+	printf '%s\n' '# For Basalt'
+	shell.source '$BASALT_GLOBAL_REPO/pkg/src/public' 'basalt-global'
+	shell.register_completion '$BASALT_GLOBAL_REPO/completions' 'basalt'
+	printf '\n'
+
+	# Basalt packages
+	printf '%s\n' "# For Basalt packages"
+	shell.path_prepend '$BASALT_GLOBAL_DATA_DIR/global/bin'
+	shell.register_completions '$BASALT_GLOBAL_DATA_DIR/global/completion'
+	printf '\n'
+}
+
+shell.variable_assignment() {
+	local variable="$1"
+	local value="$2"
+
 	case $shell in
 	fish)
-		cat <<-EOF
-		# basalt variables
-		set -gx BASALT_GLOBAL_REPO "${BASALT_GLOBAL_REPO:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"}"
-		set -gx "${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
-
-		# basalt path
-		if not contains \$BASALT_GLOBAL_DATA_DIR/global/bin \$PATH
-		  set -gx PATH \$BASALT_GLOBAL_DATA_DIR/global/bin \$PATH
-		end
-
-		# basalt completion
-		source \$BASALT_GLOBAL_REPO/completions/basalt.fish
-
-		# basalt packages completions
-		# set -gx fish_complete_path \$fish_complete_path
-		if [ -d \$BASALT_GLOBAL_DATA_DIR/completions/fish ]
-		  for f in \$BASALT_GLOBAL_DATA_DIR/completions/fish/?*.fish
-		    source \$f
-		  end
-		end
-		EOF
-		;;
-	bash)
-		echo_variables_posix
-		echo_package_path_posix
-
-		cat <<-"EOF"
-		# basalt global functions
-		source "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh"
-
-		# basalt completions
-		if [ -f "$BASALT_GLOBAL_REPO/completions/basalt.bash" ]; then
-		  . "$BASALT_GLOBAL_REPO/completions/basalt.bash"
-		fi
-
-		# basalt packages completions
-		if [ -d "$BASALT_GLOBAL_DATA_DIR/completions/bash" ]; then
-		  for f in "$BASALT_GLOBAL_DATA_DIR"/completions/bash/*; do
-		    source "$f"
-		  done; unset f
-		fi
-
-		EOF
-		;;
-	zsh)
-		echo_variables_posix
-		echo_package_path_posix
-
-		cat <<-"EOF"
-		# basalt global functions
-		source "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh"
-
-		# basalt completions
-		fpath=("$BASALT_GLOBAL_REPO/completions" $fpath)
-
-		# basalt packages completions
-		fpath=("$BASALT_GLOBAL_DATA_DIR/completions/zsh/compsys" $fpath)
-		if [ -d "$BASALT_GLOBAL_DATA_DIR/completions/zsh/compctl" ]; then
-		  for f in "$BASALT_GLOBAL_DATA_DIR"/completions/zsh/compctl/*; do
-		    source "$f"
-		  done; unset f
-		fi
-
-		EOF
-		;;
-	sh)
-		echo_variables_posix
-		echo_package_path_posix
+		printf '%s\n' "set $variable $value"
 		;;
 	*)
-		cat <<-EOF
-		echo "Error: Shell '$shell' is not a valid shell"
-		EOF
-		exit 1
+		printf '%s\n' "$variable=$value"
+		;;
+	esac
+}
+
+shell.variable_export() {
+	local variable="$1"
+
+	case $shell in
+	fish)
+		printf '%s\n' "set -gx $variable"
+		;;
+	zsh|ksh|bash|sh)
+		printf '%s\n' "export $variable"
+		;;
+	esac
+}
+
+shell.path_prepend() {
+	local value="$1"
+
+	case $shell in
+	fish)
+		printf '%s\n' "if not contains $value \$PATH
+   set PATH $value
+end"
+		;;
+	zsh|ksh|bash|sh)
+		printf '%s\n' "case :\$PATH: in
+   *:\"$value\":*) :;;
+   *) PATH=$value\${PATH:+:\$PATH}
+esac"
+		;;
+	esac
+}
+
+shell.register_completion() {
+	local dir="$1"
+	local name="$2"
+
+	case $shell in
+	fish)
+		printf '%s\n' "source $dir/$name.fish"
+		;;
+	zsh)
+		printf '%s\n' "fpath=(\"$dir\" \$fpath)"
+		;;
+	ksh)
+		;;
+	bash)
+		printf '%s\n' "source \"$dir/$name.bash\""
+		;;
+	sh)
+		;;
+	esac
+}
+
+shell.register_completions() {
+	local dir="$1"
+
+	case $shell in
+	fish)
+
+		;;
+	zsh)
+		printf '%s\n' "fpath=(\"$dir/zsh/compsys\" \$fpath)
+   if [ -d \"$dir/zsh/compctl\" ]; then
+      for __f in \"$dir/zsh/compctl/*; do
+         source \"\$__f\"
+      done; unset -v __f
+   fi"
+		;;
+	ksh)
+		;;
+	bash)
+		printf '%s\n' "if [ -d \"$dir/bash/\" ]; then
+   for __f in \"$dir/bash\"/*; do
+      if [ -f \"\$__f\" ]; then
+         source \"\$__f\"
+      fi
+   done; unset -v __f
+fi"
+		;;
+	sh)
+		;;
+	esac
+}
+
+shell.source() {
+	local dir="$1"
+	local file="$2"
+
+	case $shell in
+	fish)
+		printf '%s\n' "source \"$dir/$file\".fish"
+		;;
+	zsh|ksh|bash)
+		printf '%s\n' "source \"$dir/$file.sh\""
+		;;
+	sh)
+		printf '%s\n' ". \"$dir/$file.sh\""
+		;;
 	esac
 }
