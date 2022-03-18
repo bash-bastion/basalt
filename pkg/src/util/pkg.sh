@@ -34,7 +34,6 @@ pkg.install_packages() {
 				bprint.fatal "Specified local path '$pkg_path' not recognized"
 			fi
 
-			# TODO: rsync?
 			rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
 			cp -r "$target" "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
 			bprint.green 'Copied' "$pkg_id"
@@ -283,13 +282,14 @@ fi'
 				for source_dir in "${REPLIES[@]}"; do
 					printf -v content '%s%s\n' "$content" "
 # Silently skip if directory doesn't exist since a corresponding warning will print during package installation
-# TODO: only do the above for downloaded packages, but when sourcing current package a warning should show
 if [ -d \"$project_dir_short/$source_dir\" ]; then
 	# Works if nullglob is unset, given that there is no file called '*'
 	for __basalt_f in \"$project_dir_short/$source_dir\"/*; do
 		if [ -f \"\$__basalt_f\" ]; then
 			# shellcheck disable=SC1090
 			source \"\$__basalt_f\"
+		else
+			printf '%s\n' \"Warning: source_packages.sh: Source directory '$source_dir' does not exist in the project\" >&2
 		fi
 	done; unset __basalt_f
 fi"
@@ -364,7 +364,6 @@ if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_shoptoptions.sh" ]; then
 fi
 EOF
 
-	# TODO: put version in here and if version is out of date, prompt to 'basalt install'
 	# Has successfully ran
 	printf '%s\n' '# shellcheck shell=sh' "# This file exists so it can be checked that 'basalt install' has been ran successfully" > "$project_dir/.basalt/generated/done.sh"
 }

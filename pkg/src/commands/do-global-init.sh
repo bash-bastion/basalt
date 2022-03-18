@@ -52,10 +52,10 @@ shell.variable_assignment() {
 
 	case $shell in
 	fish)
-		printf '%s\n' "set $variable $value"
+		printf '%s\n' "set $variable \"$value\""
 		;;
 	*)
-		printf '%s\n' "$variable=$value"
+		printf '%s\n' "$variable=\"$value\""
 		;;
 	esac
 }
