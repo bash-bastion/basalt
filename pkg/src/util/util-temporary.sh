@@ -36,7 +36,6 @@ util.get_toml_string() {
 		return 1
 	fi
 
-	BASH_REMATCH=()
 	if [[ $grep_line =~ $regex ]]; then
 		REPLY="${BASH_REMATCH[1]}"
 	else
