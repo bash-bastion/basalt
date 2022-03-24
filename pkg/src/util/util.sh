@@ -105,8 +105,8 @@ util.file_is_targz() {
 	ensure.nonzero 'file'
 
 	local magic_byte=
-	if magic_byte="$(xxd -p -l 2 "$file")"; then
-		if [ "$magic_byte" != '1f8b' ]; then
+	if magic_byte="$(od -An -N2 -x "$file")"; then
+		if [ "${magic_byte#* }" != '8b1f' ]; then
 			return 1
 		fi
 	else
