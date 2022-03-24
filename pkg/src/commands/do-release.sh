@@ -92,7 +92,7 @@ do-release() {
 	fi
 
 	bprint.info "running: git commit -m v$version_string"
-	if ! git commit -qm "v$version_string"; then
+	if ! git commit --no-verify -qm "v$version_string"; then
 		bprint.die "Failed to 'git commit'"
 	fi
 
