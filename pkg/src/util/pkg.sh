@@ -283,15 +283,20 @@ fi'
 					printf -v content '%s%s\n' "$content" "
 # Silently skip if directory doesn't exist since a corresponding warning will print during package installation
 if [ -d \"$project_dir_short/$source_dir\" ]; then
+	__basalt_found_file='no'
 	# Works if nullglob is unset, given that there is no file called '*'
 	for __basalt_f in \"$project_dir_short/$source_dir\"/*; do
 		if [ -f \"\$__basalt_f\" ]; then
+			__basalt_found_file='yes'
 			# shellcheck disable=SC1090
 			source \"\$__basalt_f\"
-		else
-			printf '%s\n' \"Warning: source_packages.sh: Source directory '$source_dir' does not exist in the project\" >&2
 		fi
-	done; unset __basalt_f
+	done; unset -v __basalt_f
+
+	if [ \"\$__basalt_found_file\" = 'no' ]; then
+		printf '%s\n' \"Warning: source_packages.sh: Specified source directory '$source_dir' at project '$project_dir_short' does not contain any files\" >&2
+	fi
+	unset -v __basalt_found_file
 fi"
 				done; unset source_dir
 
