@@ -259,6 +259,7 @@ pkg.phase_local_integration_nonrecursive() {
 				# Convert the full '$project_dir' path into something that uses the environment variables
 				local project_dir_short=
 				if [ "$BASALT_LOCAL_PROJECT_DIR" = "${project_dir::${#BASALT_LOCAL_PROJECT_DIR}}" ]; then
+					# shellcheck disable=SC2016
 					project_dir_short='$BASALT_PACKAGE_DIR'
 				elif [ "$BASALT_GLOBAL_DATA_DIR" = "${project_dir::${#BASALT_GLOBAL_DATA_DIR}}" ]; then
 					project_dir_short="\$BASALT_GLOBAL_DATA_DIR${project_dir:${#BASALT_GLOBAL_DATA_DIR}}"
@@ -280,6 +281,10 @@ if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
 fi'
 				local source_dir=
 				for source_dir in "${REPLIES[@]}"; do
+					if [ ! -d "$project_dir/$source_dir" ]; then
+						bprint.warn "Directory does not exist at '$project_dir_short/$source_dir'"
+					fi
+
 					printf -v content '%s%s\n' "$content" "
 # Silently skip if directory doesn't exist since a corresponding warning will print during package installation
 if [ -d \"$project_dir_short/$source_dir\" ]; then
