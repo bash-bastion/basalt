@@ -1,0 +1,25 @@
+[package]
+type = 'bash'
+name = 'bash-term'
+description = 'Bash library for terminal escape sequences'
+slug = ['term', 'btput']
+version = '0.3.1'
+authors = ['Edwin Kofler <edwin@kofler.dev>']
+
+[run]
+dependencies = []
+binDirs = []
+sourceDirs = ['pkg/src/public']
+builtinDirs = []
+completionDirs = []
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+errexit = 'on'
+pipefail = 'on'
+
+[run.shoptOptions]
+nullglob = 'on'
+shift_verbose = 'on'

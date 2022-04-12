@@ -1,0 +1,4 @@
+# foxomate start
+* text=auto eol=lf
+bake linguist-generated
+# foxomate end
