@@ -15,7 +15,7 @@ fi
 bashrc="$HOME/.bashrc"
 if [ -f "$bashrc" ]; then
 	cat >> "$bashrc" <<-"EOF"
-	# basalt
+	# Basalt
 	export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
 	eval "$(basalt global init bash)"
 	EOF
@@ -24,7 +24,7 @@ fi
 zshrc="${ZDOTDIR:-$HOME}/.zshrc"
 if [ -f "$zshrc" ]; then
 	cat >> "$zshrc" <<-"EOF"
-	# basalt
+	# Basalt
 	export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
 	eval "$(basalt global init zsh)"
 	EOF
@@ -33,7 +33,7 @@ fi
 fishrc="${XDG_CONFIG_HOME:-$HOME/.config}/fish/config.fish"
 if [ -f "$fishrc" ]; then
 	cat >> "$fishrc" <<-"EOF"
-	# basalt
+	# Basalt
 	set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin" $PATH
 	source (basalt global init fish | psub)
 	EOF
