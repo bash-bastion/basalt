@@ -106,7 +106,7 @@ util.file_is_targz() {
 
 	local magic_byte=
 	if magic_byte="$(od -An -N2 -x "$file")"; then
-		if [ "${magic_byte#* }" != '8b1f' ]; then
+		if [[ ${magic_byte#* } != *'8b1f'* ]]; then
 			return 1
 		fi
 	else
