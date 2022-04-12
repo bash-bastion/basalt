@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+source "${0%/*}/.hookah/lib.sh"
+hookah.init
+
+hookah.run ./bake test
+hookah.run ./bake docs
+git add ./docs/*

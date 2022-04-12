@@ -1,0 +1,24 @@
+[package]
+type = 'bash'
+name = 'bash-core'
+slug = 'core'
+version = '0.6.0'
+authors = ['Edwin Kofler <edwin@kofler.dev>']
+description = 'Core functions for any Bash program'
+
+[run]
+dependencies = ['https://github.com/hyperupcall/bats-all.git@v4.1.0']
+sourceDirs = ['pkg/src/public', 'pkg/src/util']
+builtinDirs = []
+binDirs = []
+completionDirs = []
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+errexit = 'on'
+pipefail = 'on'
+
+[run.shoptOptions]
+shift_verbose = 'on'
