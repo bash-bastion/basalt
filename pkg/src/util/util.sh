@@ -71,6 +71,10 @@ util.init_global() {
 }
 
 util.init_lock() {
+	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
+		bprint.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt global init <shell>' in your shell configuration?"
+	fi
+
 	# Use a lock directory for Basalt if not under testing
 	if [ -z "$BATS_TMPDIR" ]; then
 		___basalt_lock_dir=
