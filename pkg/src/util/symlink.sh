@@ -32,12 +32,12 @@ symlink.bin_strict() {
 		if util.get_toml_array "$package_dir/basalt.toml" 'binDirs'; then
 			REPLY='yes'
 
-			if ((${#REPLIES[@]} > 0)); then
+			if ((${#REPLY[@]} > 0)); then
 				mkdir -p "$install_dir/bin"
 			fi
 
 			local dir=
-			for dir in "${REPLIES[@]}"; do
+			for dir in "${REPLY[@]}"; do
 				if [ -d "$package_dir/$dir" ]; then
 					local file=
 					for file in "$package_dir/$dir"/*; do

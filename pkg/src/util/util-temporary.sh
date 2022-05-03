@@ -46,7 +46,7 @@ util.get_toml_string() {
 
 # @description Retrieve an array key from a Toml file
 util.get_toml_array() {
-	unset REPLIES; declare -ga REPLIES=()
+	unset REPLY; declare -ga REPLY=()
 	local toml_file="$1"
 	local key_name="$2"
 
@@ -79,13 +79,13 @@ util.get_toml_array() {
 	if [[ "$grep_line" =~ $regex ]]; then
 		local -r arrayString="${BASH_REMATCH[1]}"
 
-		IFS=',' read -ra REPLIES <<< "$arrayString"
-		for i in "${!REPLIES[@]}"; do
+		IFS=',' read -ra REPLY <<< "$arrayString"
+		for i in "${!REPLY[@]}"; do
 			# Treat all Toml strings the same; there shouldn't be
 			# any escape characters anyways
 			local regex="[ \t]*['\"](.*)['\"]"
-			if [[ ${REPLIES[$i]} =~ $regex ]]; then
-				REPLIES[$i]="${BASH_REMATCH[1]}"
+			if [[ ${REPLY[$i]} =~ $regex ]]; then
+				REPLY[$i]="${BASH_REMATCH[1]}"
 			else
 				bprint.die "Key '$key_name' in file '$toml_file' is not valid"
 				return 2
@@ -111,14 +111,14 @@ util.toml_add_dependency() {
 
 	if util.get_toml_array "$toml_file" 'dependencies'; then
 		local name=
-		for name in "${REPLIES[@]}"; do
+		for name in "${REPLY[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
 				bprint.warn "A version of '${name%@*}' is already installed. Skipping"
 				return
 			fi
 		done; unset name
 
-		if ((${#REPLIES[@]} == 0)); then
+		if ((${#REPLY[@]} == 0)); then
 			mv "$toml_file" "$toml_file.bak"
 			sed -e "s,\([ \t]*dependencies[ \t]*=[ \t]*.*\)\],\1'${key_value}']," "$toml_file.bak" > "$toml_file"
 			rm "$toml_file.bak"
@@ -147,7 +147,7 @@ util.toml_remove_dependency() {
 		local dependency_array=()
 		local does_exist='no'
 		local name=
-		for name in "${REPLIES[@]}"; do
+		for name in "${REPLY[@]}"; do
 			if [ "${name%@*}" = "${key_value%@*}" ]; then
 				does_exist='yes'
 			else

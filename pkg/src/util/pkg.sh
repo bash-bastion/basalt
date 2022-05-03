@@ -52,7 +52,7 @@ pkg.install_packages() {
 		local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 		if [ -f "$package_dir/basalt.toml" ]; then
 			if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
-				pkg.install_packages "$package_dir" 'strict' "${REPLIES[@]}"
+				pkg.install_packages "$package_dir" 'strict' "${REPLY[@]}"
 			fi
 		fi
 
@@ -173,7 +173,7 @@ pkg.phase_global_integration() {
 	if [ -f "$project_dir/basalt.toml" ]; then
 		# Install dependencies
 		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
-			pkg.phase_local_integration_recursive "$project_dir" 'yes' 'lenient' "${REPLIES[@]}"
+			pkg.phase_local_integration_recursive "$project_dir" 'yes' 'lenient' "${REPLY[@]}"
 			pkg.phase_local_integration_nonrecursive "$project_dir"
 		fi
 	fi
@@ -236,7 +236,7 @@ pkg.phase_local_integration_recursive() {
 		ensure.dir "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
 			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
-				pkg.phase_local_integration_recursive "$original_package_dir" 'no' 'strict' "${REPLIES[@]}"
+				pkg.phase_local_integration_recursive "$original_package_dir" 'no' 'strict' "${REPLY[@]}"
 			fi
 		fi
 	done; unset pkg
@@ -255,7 +255,7 @@ pkg.phase_local_integration_nonrecursive() {
 	local content=
 	if [ -f "$project_dir/basalt.toml" ]; then
 		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
-			if ((${#REPLIES[@]} > 0)); then
+			if ((${#REPLY[@]} > 0)); then
 				# Convert the full '$project_dir' path into something that uses the environment variables
 				local project_dir_short=
 				if [ "$BASALT_LOCAL_PROJECT_DIR" = "${project_dir::${#BASALT_LOCAL_PROJECT_DIR}}" ]; then
@@ -280,7 +280,7 @@ if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
 	exit 1
 fi'
 				local source_dir=
-				for source_dir in "${REPLIES[@]}"; do
+				for source_dir in "${REPLY[@]}"; do
 					if [ ! -d "$project_dir/$source_dir" ]; then
 						bprint.warn "Directory does not exist at '$project_dir_short/$source_dir'"
 					fi
