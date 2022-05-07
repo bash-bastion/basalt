@@ -1,8 +1,9 @@
 # shellcheck shell=bash
 
+# Source testing dependencies
 export BASALT_IS_TESTING='yes'
-
-# Get the current directory of the Basalt git repository
+load './util/test_util.sh'
+load './vendor/bats-all/load.bash'
 test_util.get_repo_root
 REPO_ROOT=$REPLY
 
@@ -12,10 +13,6 @@ BASALT_PACKAGE_DIR="$REPO_ROOT/pkg/vendor/bash-term" source "$REPO_ROOT/pkg/vend
 for f in "$REPO_ROOT"/pkg/src/{bin,commands,public,util}/?*.sh; do
 	source "$f"
 done; unset f
-
-# Source testing dependencies
-load './vendor/bats-all/load.bash'
-load './util/test_util.sh'
 
 # Rather than append '$REPO_ROOT/bin' to the path, create functions with
 # the same name. This way, the shell execution context remains the same, which
