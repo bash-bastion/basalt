@@ -18,34 +18,29 @@ core.trap_add() {
 	fi
 	local function="$1"
 
-	# validation
+	# Validation
 	if [ -z "$function" ]; then
-		core.print_error 'First argument must not be empty'
-		return 1
+		core.panic 'First argument must not be empty'
 	fi
 
 	if (($# <= 1)); then
-		core.print_error 'Must specify at least one signal'
-		return 1
+		core.panic 'Must specify at least one signal'
 	fi
 	for signal_spec in "${@:2}"; do
 		if [ -z "$signal_spec" ]; then
-			core.print_error 'Signal must not be an empty string'
-			return 1
+			core.panic 'Signal must not be an empty string'
 		fi
 
 		local regex='^[0-9]+$'
 		if [[ "$signal_spec" =~ $regex ]]; then
-			core.print_error 'Passing numbers for the signal specs is prohibited'
-			return 1
+			core.panic 'Passing numbers for the signal specs is prohibited'
 		fi; unset regex
 		signal_spec=${signal_spec#SIG}
 		if ! declare -f "$function" &>/dev/null; then
-			core.print_error "Function '$function' is not defined"
-			return 1
+			core.panic "Function '$function' is not defined"
 		fi
 
-		# start
+		# Start
 		___global_trap_table___["$signal_spec"]="${___global_trap_table___[$signal_spec]}"$'\x1C'"$function"
 
 		# rho (WET)
@@ -55,8 +50,7 @@ core.trap_add() {
 		if ! eval "$global_trap_handler_name() {
 		core.util.trap_handler_common '$signal_spec'
 	}"; then
-			core.print_error 'Could not eval function'
-			return 1
+			core.panic 'Could not eval function'
 		fi
 		# shellcheck disable=SC2064
 		trap "$global_trap_handler_name" "$signal_spec"
@@ -78,34 +72,29 @@ core.trap_remove() {
 	fi
 	local function="$1"
 
-	# validation
+	# Validation
 	if [ -z "$function" ]; then
-		core.print_error 'First argument must not be empty'
-		return 1
+		core.panic 'First argument must not be empty'
 	fi
 
 	if (($# <= 1)); then
-		core.print_error 'Must specify at least one signal'
-		return 1
+		core.panic 'Must specify at least one signal'
 	fi
 	for signal_spec in "${@:2}"; do
 		if [ -z "$signal_spec" ]; then
-			core.print_error 'Signal must not be an empty string'
-			return 1
+			core.panic 'Signal must not be an empty string'
 		fi
 
 		local regex='^[0-9]+$'
 		if [[ "$signal_spec" =~ $regex ]]; then
-			core.print_error 'Passing numbers for the signal specs is prohibited'
-			return 1
+			core.panic 'Passing numbers for the signal specs is prohibited'
 		fi; unset regex
 		signal_spec="${signal_spec#SIG}"
 		if ! declare -f "$function" &>/dev/null; then
-			core.print_error "Function '$function' is not defined"
-			return 1
+			core.panic "Function '$function' is not defined"
 		fi
 
-		# start
+		# Start
 		local -a trap_handlers=()
 		local new_trap_handlers=
 		IFS=$'\x1C' read -ra trap_handlers <<< "${___global_trap_table___[$signal_spec]}"
@@ -147,13 +136,11 @@ core.shopt_push() {
 	local shopt_name="$2"
 
 	if [ -z "$shopt_action" ]; then
-		core.print_error 'First argument cannot be empty'
-		return 1
+		core.panic 'First argument cannot be empty'
 	fi
 
 	if [ -z "$shopt_name" ]; then
-		core.print_error 'Second argument cannot be empty'
-		return 1
+		core.panic 'Second argument cannot be empty'
 	fi
 
 	local -i previous_shopt_errcode=
@@ -165,17 +152,14 @@ core.shopt_push() {
 
 	if [ "$shopt_action" = '-s' ]; then
 		if shopt -s "$shopt_name"; then :; else
-			# on error, option will not be set
-			return $?
+			core.panic "Could not set shopt option" $?
 		fi
 	elif [ "$shopt_action" = '-u' ]; then
 		if shopt -u "$shopt_name"; then :; else
-			# on error, option will not be set
-			return $?
+			core.panic "Could not unset shopt option" $?
 		fi
 	else
-		core.print_error "Accepted actions are either '-s' or '-u'"
-		return 1
+		core.panic "Accepted actions are either '-s' or '-u'"
 	fi
 
 	if (( previous_shopt_errcode == 0)); then
@@ -197,13 +181,11 @@ core.shopt_pop() {
 	fi
 
 	if (( ${#___global_shopt_stack___[@]} == 0 )); then
-		core.print_error 'Unable to pop as nothing is in the shopt stack'
-		return 1
+		core.panic 'Unable to pop as nothing is in the shopt stack'
 	fi
 
 	if (( ${#___global_shopt_stack___[@]} & 1 )); then
-		core.print_error 'Shopt stack is malformed'
-		return 1
+		core.panic 'Shopt stack is malformed'
 	fi
 
 	# Stack now guaranteed to have at least 2 elements (so the following accessors won't error)
@@ -211,9 +193,7 @@ core.shopt_pop() {
 	local shopt_name="${___global_shopt_stack___[-1]}"
 
 	if shopt -u "$shopt_name"; then :; else
-		local errcode=$?
-		core.print_error 'Could not restore previous shopt option'
-		return $errcode
+		core.panic 'Could not restore previous shopt option' $?
 	fi
 
 	___global_shopt_stack___=("${___global_shopt_stack___[@]::${#___global_shopt_stack___[@]}-2}")
@@ -232,13 +212,11 @@ core.err_set() {
 		ERRCODE=$1
 		ERR=$2
 	else
-		core.print_error 'Incorrect function arguments'
-		return 1
+		core.panic 'Incorrect function arguments'
 	fi
 
 	if [ -z "$ERR" ]; then
-		core.print_error "Argument for 'ERR' cannot be empty"
-		return 1
+		core.panic "Argument for 'ERR' cannot be empty"
 	fi
 }
 
@@ -293,12 +271,14 @@ core.print_stacktrace() {
 
 		printf '%s\n' "  in ${FUNCNAME[$i]} ($file:${BASH_LINENO[$i-1]})"
 
+		# shellcheck disable=SC1007
 		if ! CDPATH= cd -- "$old_cd"; then
 			cd_failed='yes'
 		fi
 	done; unset -v i
 
 	if [ "$cd_failed" = 'yes' ]; then
+		# Do NOT 'core.panic'
 		core.print_error "A 'cd' failed, so the stacktrace may include relative paths"
 	fi
 } >&2
@@ -325,6 +305,26 @@ core.print_info() {
 	local msg="$1"
 
 	printf '%s\n' "Info: ${FUNCNAME[1]}${msg:+": "}$msg"
+}
+
+# @description Use when a serious fault occurs. It will print the current ERR (if it exists)
+core.panic() {
+	local code='1'
+
+	if [[ $1 =~ [0-9]+ ]]; then
+		code=$1
+	elif [ -n "$1" ]; then
+		if [ -n "$2" ]; then
+			code=$2
+		fi
+		core.print_error "$1"
+	fi
+
+	if core.err_exists; then
+		core.util.err_print
+	fi
+	core.print_stacktrace
+	exit "$code"
 }
 
 # @description Determine if color should be printed. Note that this doesn't
@@ -362,7 +362,7 @@ core.should_output_color() {
 # @description Gets information from a particular package. If the key does not exist, then the value
 # is an empty string
 # @arg $1 string The `$BASALT_PACKAGE_DIR` of the caller
-# @set REPLY string The full path to the directory
+# @set directory string The full path to the directory
 core.get_package_info() {
 	unset REPLY; REPLY=
 	local basalt_package_dir="$1"
@@ -371,10 +371,10 @@ core.get_package_info() {
 	local toml_file="$basalt_package_dir/basalt.toml"
 
 	if [ ! -f "$toml_file" ]; then
-		core.print_error "File '$toml_file' could not be found"
+		core.panic "File '$toml_file' could not be found"
 	fi
 
-	local regex="^[ \t]*${key_name}[ \t]*=[ \t]*['\"](.*)['\"]"
+	local regex=$'^[ \t]*'"${key_name}"$'[ \t]*=[ \t]*[\'"](.*)[\'"]'
 	while IFS= read -r line || [ -n "$line" ]; do
 		if [[ $line =~ $regex ]]; then
 			REPLY=${BASH_REMATCH[1]}
