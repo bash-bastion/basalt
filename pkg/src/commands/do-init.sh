@@ -65,8 +65,6 @@ do-init() {
 			bprint.die "Failed 'sed' command"
 		fi
 
-		sleep 2 # Timestamps are (usually) second-accurate
-		basalt install
 		;;
 	lib)
 		ensure.cd "$dir"
@@ -94,10 +92,12 @@ do-init() {
 			bprint.die "Failed 'sed' command"
 		fi
 
-		sleep 2 # Timestamps are (usually) second-accurate
-		basalt install
+
 		;;
 	*)
 		bprint.die "Type '$flag_type' not recognized. Only 'app' and 'lib' are supported"
 	esac
+
+	sleep 2 # Timestamps are (usually) second-accurate
+	basalt install
 }
