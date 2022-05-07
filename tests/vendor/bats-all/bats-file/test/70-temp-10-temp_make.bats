@@ -31,6 +31,10 @@ fixtures 'temp'
   bats "${TEST_FIXTURE_ROOT}/temp_make-setup.bats"
 }
 
+@test "temp_make() <var>: works when called from \`setup_file'" {
+  bats "${TEST_FIXTURE_ROOT}/temp_make-setup_file.bats"
+}
+
 @test "temp_make() <var>: works when called from \`@test'" {
   bats "${TEST_FIXTURE_ROOT}/temp_make-test.bats"
 }
@@ -39,14 +43,18 @@ fixtures 'temp'
   bats "${TEST_FIXTURE_ROOT}/temp_make-teardown.bats"
 }
 
+@test "temp_make() <var>: works when called from \`teardown_file'" {
+  bats "${TEST_FIXTURE_ROOT}/temp_make-teardown_file.bats"
+}
+
 @test "temp_make() <var>: does not work when called from \`main'" {
   run bats "${TEST_FIXTURE_ROOT}/temp_make-main.bats"
 
   [ "$status" -eq 1 ]
-  [ "${#lines[@]}" -eq 3 ]
-  [ "${lines[0]}" == '-- ERROR: temp_make --' ]
-  [ "${lines[1]}" == "Must be called from \`setup', \`@test' or \`teardown'" ]
-  [ "${lines[2]}" == '--' ]
+  [ "${#lines[@]}" -eq 9 ]
+  [ "${lines[5]}" == '# -- ERROR: temp_make --' ]
+  [ "${lines[6]}" == "# Must be called from \`setup', \`@test' or \`teardown'" ]
+  [ "${lines[7]}" == '# --' ]
 }
 
 # Options

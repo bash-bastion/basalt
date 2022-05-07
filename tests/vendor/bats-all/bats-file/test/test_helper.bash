@@ -16,6 +16,9 @@ fixtures() {
 export TEST_MAIN_DIR="${BATS_TEST_DIRNAME}/.."
 export TEST_DEPS_DIR="${TEST_DEPS_DIR-${TEST_MAIN_DIR}/..}"
 
+# validate that bats-file is safe to use under -u
+set -u
+
 # Load dependencies.
 load "${TEST_DEPS_DIR}/bats-support/load.bash"
 # Load library.
