@@ -4,10 +4,28 @@ load 'test_helper'
 fixtures 'exist'
 
 setup () {
- touch ${TEST_FIXTURE_ROOT}/dir/owner ${TEST_FIXTURE_ROOT}/dir/notowner
+  touch ${TEST_FIXTURE_ROOT}/dir/owner ${TEST_FIXTURE_ROOT}/dir/notowner
+  sudo_path=$(command -v sudo 2>/dev/null)
+  # There is PATH addition to /usr/sbin which won't come by default on bash3
+  # on macOS
+  chown_path=$(PATH="$PATH:/usr/sbin" command -v chown 2>/dev/null)
+  if [[ "$(whoami)" != 'root' ]] && [ -x "$sudo_path" ]; then
+    __cmd="$sudo_path $chown_path"
+  else
+    __cmd="$chown_path"
+  fi
+  $__cmd root ${TEST_FIXTURE_ROOT}/dir/owner
+  $__cmd daemon ${TEST_FIXTURE_ROOT}/dir/notowner
 }
+
 teardown () {
-    rm -f ${TEST_FIXTURE_ROOT}/dir/owner ${TEST_FIXTURE_ROOT}/dir/notowner
+  sudo_path=$(command -v sudo 2>/dev/null)
+  if [[ "$(whoami)" != 'root' ]] && [ -x "$sudo_path" ]; then
+    __cmd="$sudo_path rm -f"
+  else
+    __cmd="rm -f"
+  fi
+  $__cmd ${TEST_FIXTURE_ROOT}/dir/owner ${TEST_FIXTURE_ROOT}/dir/notowner
 }
 
 # Correctness

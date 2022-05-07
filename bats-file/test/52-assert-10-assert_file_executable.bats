@@ -43,7 +43,7 @@ teardown () {
 }
 
 @test 'assert_file_executable() <file>: replace suffix of displayed path' {
-  local -r BATSLIB_FILE_PATH_REM='%file.does_not_exist'
+  local -r BATSLIB_FILE_PATH_REM='%file.does_not_exists'
   local -r BATSLIB_FILE_PATH_ADD='..'
   run assert_file_executable "${TEST_FIXTURE_ROOT}/nodir"
   [ "$status" -eq 1 ]

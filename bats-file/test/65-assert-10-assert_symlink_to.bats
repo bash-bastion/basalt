@@ -20,7 +20,7 @@ teardown () {
   [ "${#lines[@]}" -eq 0 ]
 }
 @test 'assert_symlink_to() <file> <link>: returns 1 and displays path if <link> is not a symbolic link to <file>' {
-  local -r file="${TEST_FIXTURE_ROOT}/dir/file.does_not_exist"
+  local -r file="${TEST_FIXTURE_ROOT}/dir/file.does_not_exists"
   local -r link="${TEST_FIXTURE_ROOT}/symlink"
   run assert_symlink_to $file $link
   [ "$status" -eq 1 ]

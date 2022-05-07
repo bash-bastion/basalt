@@ -11,16 +11,16 @@ teardown () {
 }
 
 # Correctness
-@test 'assert_not_exist() <file>: returns 0 if <file> does not exist' {
-  local -r file="${TEST_FIXTURE_ROOT}/dir/file.does_not_exist"
-  run assert_not_exist "$file"
+@test 'assert_not_exists() <file>: returns 0 if <file> does not exist' {
+  local -r file="${TEST_FIXTURE_ROOT}/dir/file.does_not_exists"
+  run assert_not_exists "$file"
   [ "$status" -eq 0 ]
   [ "${#lines[@]}" -eq 0 ]
 }
 
-@test 'assert_not_exist() <file>: returns 1 and displays path if <file> exists' {
+@test 'assert_not_exists() <file>: returns 1 and displays path if <file> exists' {
   local -r file="${TEST_FIXTURE_ROOT}/dir/file"
-  run assert_not_exist "$file"
+  run assert_not_exists "$file"
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[0]}" == '-- file or directory exists, but it was expected to be absent --' ]
@@ -29,10 +29,10 @@ teardown () {
 }
 
 # Transforming path
-@test 'assert_not_exist() <file>: replace prefix of displayed path' {
+@test 'assert_not_exists() <file>: replace prefix of displayed path' {
   local -r BATSLIB_FILE_PATH_REM="#${TEST_FIXTURE_ROOT}"
   local -r BATSLIB_FILE_PATH_ADD='..'
-  run assert_not_exist "${TEST_FIXTURE_ROOT}/dir/file"
+  run assert_not_exists "${TEST_FIXTURE_ROOT}/dir/file"
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[0]}" == '-- file or directory exists, but it was expected to be absent --' ]
@@ -40,10 +40,10 @@ teardown () {
   [ "${lines[2]}" == '--' ]
 }
 
-@test 'assert_not_exist() <file>: replace suffix of displayed path' {
+@test 'assert_not_exists() <file>: replace suffix of displayed path' {
   local -r BATSLIB_FILE_PATH_REM='%file'
   local -r BATSLIB_FILE_PATH_ADD='..'
-  run assert_not_exist "${TEST_FIXTURE_ROOT}/dir/file"
+  run assert_not_exists "${TEST_FIXTURE_ROOT}/dir/file"
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[0]}" == '-- file or directory exists, but it was expected to be absent --' ]
@@ -51,10 +51,10 @@ teardown () {
   [ "${lines[2]}" == '--' ]
 }
 
-@test 'assert_not_exist() <file>: replace infix of displayed path' {
+@test 'assert_not_exists() <file>: replace infix of displayed path' {
   local -r BATSLIB_FILE_PATH_REM='dir'
   local -r BATSLIB_FILE_PATH_ADD='..'
-  run assert_not_exist "${TEST_FIXTURE_ROOT}/dir/file"
+  run assert_not_exists "${TEST_FIXTURE_ROOT}/dir/file"
   [ "$status" -eq 1 ]
   [ "${#lines[@]}" -eq 3 ]
   [ "${lines[0]}" == '-- file or directory exists, but it was expected to be absent --' ]
