@@ -68,6 +68,10 @@ do-release() {
 		return
 	fi
 
+	if [ "$version_string" = '0.0.0' ]; then
+		bprint.info "Unnable to publish a '0.0.0' version"
+	fi
+
 	# TODO: after self-bootstrap, add additional validation checks
 	if [[ $version_string =~ [,\'\"\\] ]]; then
 		bprint.die "Version string cannot have commas, backslashes, single quotes, or double quotes"

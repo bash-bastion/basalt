@@ -2,7 +2,7 @@
 type = 'bash'
 name = 'TEMPLATE_NAME'
 slug = 'TEMPLATE_SLUG'
-version = 'TEMPLATE_VERSION'
+version = '0.0.0'
 authors = ['TEMPLATE_AUTHOR']
 description = 'TEMPLATE_DESCRIPTION'
 
