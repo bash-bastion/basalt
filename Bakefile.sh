@@ -3,7 +3,7 @@
 task.init() {
 	local basalt="$BAKE_ROOT/pkg/bin/basalt"
 	for dir in ./tests/vendor/bats-all ./pkg/vendor/bash-{core,term}; do
-		( cd "$dir" && "$basalt" install )
+		( cd "$dir" && rm -f '.gitignore' && "$basalt" install )
 	done
 }
 
