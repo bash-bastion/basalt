@@ -3,7 +3,7 @@
 basalt-complete() {
 	case $1 in
 	list)
-		do-list
+		basalt-list
 		;;
 	esac
 }

@@ -22,5 +22,5 @@ basalt-remove() {
 		util.toml_remove_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$pkg"
 	done
 
-	do-install
+	basalt-install
 }

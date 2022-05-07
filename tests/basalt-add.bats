@@ -3,7 +3,7 @@
 load './util/init.sh'
 
 setup_file() {
-	test_util.stub_command 'do-install'
+	test_util.stub_command 'basalt-install'
 }
 
 @test "Fails if dependency is bogus" {

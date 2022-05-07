@@ -34,5 +34,5 @@ basalt-global-add() {
 		util.text_add_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url@$version"
 	done
 
-	do-global-install
+	basalt-global-install
 }

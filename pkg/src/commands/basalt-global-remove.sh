@@ -33,5 +33,5 @@ basalt-global-remove() {
 		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$flag_force"
 	done
 
-	do-global-install
+	basalt-global-install
 }

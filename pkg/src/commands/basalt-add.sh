@@ -47,5 +47,5 @@ basalt-add() {
 		fi
 	done
 
-	do-install
+	basalt-install
 }
