@@ -14,7 +14,7 @@ pkgutil.get_localpkg_info() {
 	local pkg_name="${url##*/}"
 	local pkg_id=
 	if ! pkg_id=$(printf '%s' "$pkg_path" | md5sum); then
-		bprint.fatal "Failed to execute md5sum successfully"
+		print.fatal "Failed to execute md5sum successfully"
 	fi
 	pkg_id="${pkg_id%% *}"
 	pkg_id="local/${pkg_name}_$pkg_id"

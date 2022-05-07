@@ -7,7 +7,7 @@ basalt-remove() {
 	local arg=
 	for arg; do case $arg in
 	-*)
-		bprint.die "Flag '$arg' not recognized"
+		print.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -15,7 +15,7 @@ basalt-remove() {
 	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
-		bprint.warn "No packages were specified"
+		print.warn "No packages were specified"
 	fi
 
 	for pkg in "${pkgs[@]}"; do

@@ -3,13 +3,13 @@
 # @file print.sh
 # @brief Prints statements that are not indented
 
-bprint.die() {
-	bprint.error "$1"
+print.die() {
+	print.error "$1"
 	exit 1
 }
 
 # Fatal errors are internal errors here
-bprint.fatal() {
+print.fatal() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s: %s\n" "Fatal" "$1" >&2
 	else
@@ -28,7 +28,7 @@ bprint.fatal() {
 	exit 1
 }
 
-bprint.error() {
+print.error() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s: %s\n" "Error" "$1" >&2
 	else
@@ -36,7 +36,7 @@ bprint.error() {
 	fi
 }
 
-bprint.warn() {
+print.warn() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s: %s\n" 'Warning' "$1" >&2
 	else
@@ -44,7 +44,7 @@ bprint.warn() {
 	fi
 }
 
-bprint.info() {
+print.info() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s: %s\n" 'Info' "$1"
 	else
@@ -52,7 +52,7 @@ bprint.info() {
 	fi
 }
 
-bprint.green() {
+print.green() {
 	if [ -n "${NO_COLOR+x}" ] || [ "$TERM" = dumb ]; then
 		printf "%11s: %s\n" "$1" "$2"
 	else

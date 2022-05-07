@@ -24,21 +24,21 @@ util.init_local() {
 		# shellcheck disable=SC2034
 		BASALT_LOCAL_PROJECT_DIR="$local_project_root_dir"
 	else
-		bprint.die "Could not find a 'basalt.toml' file"
+		print.die "Could not find a 'basalt.toml' file"
 	fi
 }
 
 # @description Check for the initialization of variables essential for global subcommands
 util.init_global() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-		bprint.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt global init <shell>' in your shell configuration?"
+		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt global init <shell>' in your shell configuration?"
 	fi
 
 	if ! command -v curl &>/dev/null; then
-		bprint.die "Program 'curl' not installed. Please install curl"
+		print.die "Program 'curl' not installed. Please install curl"
 	fi
 	if ! command -v md5sum &>/dev/null; then
-		bprint.die "Program 'md5sum' not installed. Please install md5sum"
+		print.die "Program 'md5sum' not installed. Please install md5sum"
 	fi
 
 	if [ ! -d "$BASALT_GLOBAL_REPO" ]; then
@@ -72,7 +72,7 @@ util.init_global() {
 
 util.init_lock() {
 	if [ -z "$BASALT_GLOBAL_REPO" ] || [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-		bprint.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt global init <shell>' in your shell configuration?"
+		print.die "Either 'BASALT_GLOBAL_REPO' or 'BASALT_GLOBAL_DATA_DIR' is empty. Did you forget to run add 'basalt global init <shell>' in your shell configuration?"
 	fi
 
 	# Use a lock directory for Basalt if not under testing
@@ -86,7 +86,7 @@ util.init_lock() {
 		if mkdir "$___basalt_lock_dir" 2>/dev/null; then
 			trap 'util.deinit' INT TERM EXIT
 		else
-			bprint.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
+			print.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
 		fi
 	fi
 }
@@ -98,7 +98,7 @@ util.deinit() {
 # TODO
 util.get_full_path() {
 	if ! REPLY=$(realpath "$1"); then
-		bprint.fatal "Failed to execute 'realpath' successfully"
+		print.fatal "Failed to execute 'realpath' successfully"
 	fi
 }
 
@@ -125,15 +125,15 @@ util.die_unexpected_value() {
 	ensure.nonzero 'variable'
 
 	local -n value="$variable"
-	bprint.fatal "Variable '$variable' has unexpected value of '$value'"
+	print.fatal "Variable '$variable' has unexpected value of '$value'"
 }
 
 # @description Get id of package we can use for printing
 util.get_package_id() {
 	local flag_allow_empty_version='no' # Allow for version to be empty
 	for arg; do case $arg in
-		--allow-empty-version) flag_allow_empty_version='yes'; if ! shift; then bprint.die 'Failed shift'; fi ;;
-		-*) bprint.fatal "Flag '$arg' not recognized" ;;
+		--allow-empty-version) flag_allow_empty_version='yes'; if ! shift; then print.die 'Failed shift'; fi ;;
+		-*) print.fatal "Flag '$arg' not recognized" ;;
 		*) break ;;
 	esac done
 	local repo_type="$1"
@@ -224,7 +224,7 @@ util.get_latest_package_version() {
 				return
 			fi
 		else
-			bprint.warn "Could not automatically retrieve latest release for '$package' since '$site' is not supported. Falling back to retrieving latest commit"
+			print.warn "Could not automatically retrieve latest release for '$package' since '$site' is not supported. Falling back to retrieving latest commit"
 		fi
 	fi
 
@@ -237,7 +237,7 @@ util.get_latest_package_version() {
 		return
 	fi
 
-	bprint.die "Could not get latest release or commit for package '$package'"
+	print.die "Could not get latest release or commit for package '$package'"
 }
 
 util.get_package_info() {
@@ -299,7 +299,7 @@ util.get_package_info() {
 			site="github.com"
 			package="$input"
 		else
-			bprint.die "String '$input' does not look like a package"
+			print.die "String '$input' does not look like a package"
 		fi
 
 		if [[ "$package" == *@* ]]; then
@@ -329,7 +329,7 @@ util.get_tarball_url() {
 	elif [ "$site" = 'gitlab.com' ]; then
 		REPLY="https://gitlab.com/$package/-/archive/$ref/${package#*/}-$ref.tar.gz"
 	else
-		bprint.die "Could not construct the location of the package tarball since '$site' is not supported"
+		print.die "Could not construct the location of the package tarball since '$site' is not supported"
 	fi
 }
 

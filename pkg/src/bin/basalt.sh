@@ -43,7 +43,7 @@ main.basalt() {
 		exit
 		;;
 	-*)
-		bprint.die "Top-level flag '$arg' is not recognized"
+		print.die "Top-level flag '$arg' is not recognized"
 		;;
 	*)
 		break
@@ -53,61 +53,61 @@ main.basalt() {
 
 	case $1 in
 	init)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		basalt-init "$@" ;;
 	add)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		util.init_lock
 		basalt-add "$@" ;;
 	remove)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		util.init_lock
 		basalt-remove "$@" ;;
 	install)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		util.init_lock
 		basalt-install "$@" ;;
 	list)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		util.init_lock
 		basalt-list "$@" ;;
 	run)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		util.init_lock
 		basalt-run "$@" ;;
 	release)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		util.init_lock
 		basalt-release "$@" ;;
 	complete)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		util.init_lock
 		basalt-complete "$@" ;;
 	global)
-		if ! shift; then bprint.die 'Failed shift'; fi
+		if ! shift; then print.die 'Failed shift'; fi
 		case $1 in
 		init)
-			if ! shift; then bprint.die 'Failed shift'; fi
+			if ! shift; then print.die 'Failed shift'; fi
 			basalt-global-init "$@" ;;
 		add)
-			if ! shift; then bprint.die 'Failed shift'; fi
+			if ! shift; then print.die 'Failed shift'; fi
 			util.init_lock
 			basalt-global-add "$@" ;;
 		remove)
-			if ! shift; then bprint.die 'Failed shift'; fi
+			if ! shift; then print.die 'Failed shift'; fi
 			util.init_lock
 			basalt-global-remove "$@" ;;
 		install)
-			if ! shift; then bprint.die 'Failed shift'; fi
+			if ! shift; then print.die 'Failed shift'; fi
 			util.init_lock
 			basalt-global-install "$@" ;;
 		list)
-			if ! shift; then bprint.die 'Failed shift'; fi
+			if ! shift; then print.die 'Failed shift'; fi
 			util.init_lock
 			basalt-global-list "$@" ;;
 		*)
 			if [ -n "$1" ]; then
-				bprint.die "Global subcommand '$1' is not a valid"
+				print.die "Global subcommand '$1' is not a valid"
 			else
 				util.show_help
 			fi
@@ -116,7 +116,7 @@ main.basalt() {
 		;;
 	*)
 		if [ -n "$1" ]; then
-			bprint.die "Subcommand '$1' is not valid"
+			print.die "Subcommand '$1' is not valid"
 		else
 			util.show_help
 		fi

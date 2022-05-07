@@ -11,7 +11,7 @@ basalt-global-remove() {
 		flag_force='yes'
 		;;
 	-*)
-		bprint.die "Flag '$arg' not recognized"
+		print.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -19,7 +19,7 @@ basalt-global-remove() {
 	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
-		bprint.die "Must specify at least one package"
+		print.die "Must specify at least one package"
 	fi
 
 	for pkg in "${pkgs[@]}"; do
@@ -27,7 +27,7 @@ basalt-global-remove() {
 		local url="$REPLY2" version="$REPLY5"
 
 		if [ -n "$version" ]; then
-			bprint.die "Must not specify ref when removing packages"
+			print.die "Must not specify ref when removing packages"
 		fi
 
 		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$flag_force"

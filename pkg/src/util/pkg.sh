@@ -31,12 +31,12 @@ pkg.install_packages() {
 			elif [ "${pkg_path:0:2}" = './' ]; then
 				target="$BASALT_LOCAL_PROJECT_DIR/$pkg_path"
 			else
-				bprint.fatal "Specified local path '$pkg_path' not recognized"
+				print.fatal "Specified local path '$pkg_path' not recognized"
 			fi
 
 			rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
 			cp -r "$target" "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
-			bprint.green 'Copied' "$pkg_id"
+			print.green 'Copied' "$pkg_id"
 		elif [[ $url == https://* ]]; then
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			local package_id="$REPLY"
@@ -45,7 +45,7 @@ pkg.install_packages() {
 			pkg.phase_download_tarball "$repo_type" "$url" "$site" "$package" "$version"
 			pkg.phase_extract_tarball "$package_id"
 		else
-			bprint.die "Protocol not recognized. Only 'file://' and 'https://' are supported"
+			print.die "Protocol not recognized. Only 'file://' and 'https://' are supported"
 		fi
 
 		# Install transitive dependencies if they exist
@@ -85,7 +85,7 @@ pkg.phase_download_tarball() {
 
 	# Use cache if it already exists
 	if [ -e "$download_dest" ]; then
-		bprint.green "Downloaded" "$package_id (cached)"
+		print.green "Downloaded" "$package_id (cached)"
 		return
 	fi
 
@@ -97,10 +97,10 @@ pkg.phase_download_tarball() {
 		if curl -fLso "$download_dest" "$download_url"; then
 			if ! util.file_is_targz "$download_dest"; then
 				rm -rf "$download_dest"
-				bprint.die "File '$download_dest' is not actually a tarball"
+				print.die "File '$download_dest' is not actually a tarball"
 			fi
 
-			bprint.green "Downloaded" "$package_id"
+			print.green "Downloaded" "$package_id"
 			return
 		fi
 
@@ -111,26 +111,26 @@ pkg.phase_download_tarball() {
 	# TODO Print warning if a local dependency has a dirty index
 	if [ "$repo_type" = 'local' ]; then
 		:
-		# bprint.warn "Local dependency at '$url' has a dirty index"
+		# print.warn "Local dependency at '$url' has a dirty index"
 	fi
 
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id"; then
-		bprint.die "Could not clone repository for $package_id"
+		print.die "Could not clone repository for $package_id"
 	fi
 
 	if ! git -C "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id" archive --prefix="prefix/" -o "$download_dest" "$version" 2>/dev/null; then
 		rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch" "$download_dest"
-		bprint.die "Could not download archive or extract archive from temporary Git repository of $package_id"
+		print.die "Could not download archive or extract archive from temporary Git repository of $package_id"
 	fi
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 
 	if ! util.file_is_targz "$download_dest"; then
 		rm -rf "$download_dest"
-		bprint.die "File '$download_dest' is not actually a tarball"
+		print.die "File '$download_dest' is not actually a tarball"
 	fi
 
-	bprint.green "Downloaded" "$package_id"
+	print.green "Downloaded" "$package_id"
 }
 
 # @description Extracts the tarballs in the global store to a directory
@@ -143,21 +143,21 @@ pkg.phase_extract_tarball() {
 
 	# Use cache if it already exists
 	if [ -d "$tarball_dest" ]; then
-		bprint.green "Extracted" "$package_id (cached)"
+		print.green "Extracted" "$package_id (cached)"
 		return
 	fi
 
 	# Actually extract
 	mkdir -p "$tarball_dest"
 	if ! tar xf "$tarball_src" -C "$tarball_dest" --strip-components 1 2>/dev/null; then
-		bprint.die "Error" "Could not extract package $package_id"
+		print.die "Error" "Could not extract package $package_id"
 	else
-		bprint.green "Extracted" "$package_id"
+		print.green "Extracted" "$package_id"
 	fi
 
 	# Ensure extraction actually worked
 	if [ ! -d "$tarball_dest" ]; then
-		bprint.die "Extracted tarball is not a directory at '$tarball_dest'"
+		print.die "Extracted tarball is not a directory at '$tarball_dest'"
 	fi
 }
 
@@ -178,7 +178,7 @@ pkg.phase_global_integration() {
 		fi
 	fi
 
-	bprint.green "Transformed" "$package_id"
+	print.green "Transformed" "$package_id"
 }
 
 # Create a './.basalt' directory for a particular project directory
@@ -188,7 +188,7 @@ pkg.phase_local_integration_recursive() {
 	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 	local symlink_mode="$3"
 	if ! shift 3; then
-		bprint.fatal "Failed to shift"
+		print.fatal "Failed to shift"
 	fi
 
 	ensure.nonzero 'original_package_dir'
@@ -264,7 +264,7 @@ pkg.phase_local_integration_nonrecursive() {
 				elif [ "$BASALT_GLOBAL_DATA_DIR" = "${project_dir::${#BASALT_GLOBAL_DATA_DIR}}" ]; then
 					project_dir_short="\$BASALT_GLOBAL_DATA_DIR${project_dir:${#BASALT_GLOBAL_DATA_DIR}}"
 				else
-					bprint.fatal "Unexpected path to project directory '$project_dir'"
+					print.fatal "Unexpected path to project directory '$project_dir'"
 				fi
 
 				# shellcheck disable=SC2016
@@ -282,7 +282,7 @@ fi'
 				local source_dir=
 				for source_dir in "${REPLY[@]}"; do
 					if [ ! -d "$project_dir/$source_dir" ]; then
-						bprint.warn "Directory does not exist at '$project_dir_short/$source_dir'"
+						print.warn "Directory does not exist at '$project_dir_short/$source_dir'"
 					fi
 
 					printf -v content '%s%s\n' "$content" "
@@ -323,7 +323,7 @@ fi"
 				elif [ "$REPLY" = 'off' ]; then
 					printf '%s\n' "set +o $option" >> "$project_dir/.basalt/generated/source_setoptions.sh"
 				else
-					bprint.die "Value of '$option' be either 'on' or 'off'"
+					print.die "Value of '$option' be either 'on' or 'off'"
 				fi
 			fi
 		done; unset option
@@ -343,7 +343,7 @@ fi"
 				elif [ "$REPLY" = 'off' ]; then
 					printf '%s\n' "shopt -u $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
 				else
-					bprint.die "Value of '$option' be either 'on' or 'off'"
+					print.die "Value of '$option' be either 'on' or 'off'"
 				fi
 			fi
 		done; unset option

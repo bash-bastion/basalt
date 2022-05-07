@@ -7,7 +7,7 @@ basalt-global-add() {
 	local arg=
 	for arg; do case $arg in
 	-*)
-		bprint.die "Flag '$arg' not recognized"
+		print.die "Flag '$arg' not recognized"
 		;;
 	*)
 		pkgs+=("$arg")
@@ -15,7 +15,7 @@ basalt-global-add() {
 	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
-		bprint.die "Must specify at least one package"
+		print.die "Must specify at least one package"
 	fi
 
 	for pkg in "${pkgs[@]}"; do
@@ -23,7 +23,7 @@ basalt-global-add() {
 		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 		if ! util.does_package_exist "$repo_type" "$url"; then
-			bprint.die "Package located at '$url' does not exist"
+			print.die "Package located at '$url' does not exist"
 		fi
 
 		if [ -z "$version" ]; then

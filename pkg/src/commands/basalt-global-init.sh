@@ -5,11 +5,11 @@ basalt-global-init() {
 	local shell="$1"
 
 	if [ -z "$shell" ]; then
-		bprint.die "Shell not specified"
+		print.die "Shell not specified"
 	fi
 
 	if [[ $shell != @(fish|zsh|ksh|bash|sh) ]]; then
-		bprint.die "Shell not supported"
+		print.die "Shell not supported"
 	fi
 
 	# Get actual location of source code; only symlink when required

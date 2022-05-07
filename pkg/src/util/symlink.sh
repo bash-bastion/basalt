@@ -15,7 +15,7 @@ symlink.package() {
 
 	mkdir -p "${link_name%/*}"
 	if ! ln -sf "$target" "$link_name"; then
-		bprint.die "Could not symlink directory '${target##*/}' for package $package_id"
+		print.die "Could not symlink directory '${target##*/}' for package $package_id"
 	fi
 }
 
@@ -44,7 +44,7 @@ symlink.bin_strict() {
 						symlink.bin_util_create_symlink "$install_dir" "$file"
 					done; unset file
 				else
-					bprint.warn "Package '$package_id' improperly listed '$dir' as a directory in 'binDirs'"
+					print.warn "Package '$package_id' improperly listed '$dir' as a directory in 'binDirs'"
 				fi
 			done; unset dir
 		fi
@@ -102,7 +102,7 @@ symlink.bin_util_create_symlink() {
 
 	local bin_name="${full_bin_file##*/}"
 	if [ -L "$install_dir/bin/$bin_name" ]; then
-		bprint.warn "Skipping '$bin_name' since an existing symlink with the same name already exists"
+		print.warn "Skipping '$bin_name' since an existing symlink with the same name already exists"
 	else
 		ln -sf "$full_bin_file" "$install_dir/bin/$bin_name"
 		chmod +x "$install_dir/bin/$bin_name"
