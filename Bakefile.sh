@@ -5,5 +5,5 @@ task.test() {
 }
 
 task.update-subtree() {
-	git subtree --squash -P tests/vendor/bats-all update 'https://github.com/hyperupcall/bats-all'
+	git subtree --squash -P tests/vendor/bats-all pull 'https://github.com/hyperupcall/bats-all' "$1"
 }
