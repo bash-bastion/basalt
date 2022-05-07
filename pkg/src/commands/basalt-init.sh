@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-init() {
+basalt-init() {
 	local flag_type=
 	local -a args=()
 	local arg=

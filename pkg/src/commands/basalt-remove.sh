@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-remove() {
+basalt-remove() {
 	util.init_local
 
 	local -a pkgs=()

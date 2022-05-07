@@ -54,57 +54,57 @@ main.basalt() {
 	case $1 in
 	init)
 		if ! shift; then bprint.die 'Failed shift'; fi
-		do-init "$@" ;;
+		basalt-init "$@" ;;
 	add)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
-		do-add "$@" ;;
+		basalt-add "$@" ;;
 	remove)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
-		do-remove "$@" ;;
+		basalt-remove "$@" ;;
 	install)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
-		do-install "$@" ;;
+		basalt-install "$@" ;;
 	list)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
-		do-list "$@" ;;
+		basalt-list "$@" ;;
 	run)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
-		do-run "$@" ;;
+		basalt-run "$@" ;;
 	release)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
-		do-release "$@" ;;
+		basalt-release "$@" ;;
 	complete)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		util.init_lock
-		do-complete "$@" ;;
+		basalt-complete "$@" ;;
 	global)
 		if ! shift; then bprint.die 'Failed shift'; fi
 		case $1 in
 		init)
 			if ! shift; then bprint.die 'Failed shift'; fi
-			do-global-init "$@" ;;
+			basalt-global-init "$@" ;;
 		add)
 			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
-			do-global-add "$@" ;;
+			basalt-global-add "$@" ;;
 		remove)
 			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
-			do-global-remove "$@" ;;
+			basalt-global-remove "$@" ;;
 		install)
 			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
-			do-global-install "$@" ;;
+			basalt-global-install "$@" ;;
 		list)
 			if ! shift; then bprint.die 'Failed shift'; fi
 			util.init_lock
-			do-global-list "$@" ;;
+			basalt-global-list "$@" ;;
 		*)
 			if [ -n "$1" ]; then
 				bprint.die "Global subcommand '$1' is not a valid"

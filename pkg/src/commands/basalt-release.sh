@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-release() {
+basalt-release() {
 	util.init_local
 
 	local flag_yes='no'

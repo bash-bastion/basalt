@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-global-install() {
+basalt-global-install() {
 	util.init_global
 
 	if (($# != 0)); then

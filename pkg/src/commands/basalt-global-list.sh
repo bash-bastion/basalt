@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-global-list() {
+basalt-global-list() {
 	util.init_global
 
 	if (($# != 0)); then

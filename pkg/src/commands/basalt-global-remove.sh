@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-global-remove() {
+basalt-global-remove() {
 	util.init_global
 
 	local flag_force='no'

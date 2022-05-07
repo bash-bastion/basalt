@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2016
 
-do-global-init() {
+basalt-global-init() {
 	local shell="$1"
 
 	if [ -z "$shell" ]; then

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-add() {
+basalt-add() {
 	util.init_local
 
 	local -a pkgs=()

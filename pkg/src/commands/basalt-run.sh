@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-run() {
+basalt-run() {
 	util.init_local
 
 	if (($# == 0)); then

@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-global-add() {
+basalt-global-add() {
 	util.init_global
 
 	local -a pkgs=()

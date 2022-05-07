@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-complete() {
+basalt-complete() {
 	case $1 in
 	list)
 		do-list

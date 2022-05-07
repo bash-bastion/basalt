@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-list() {
+basalt-list() {
 	util.init_local
 
 	if (($# != 0)); then

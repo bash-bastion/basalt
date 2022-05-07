@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 
-do-install() {
+basalt-install() {
 	util.init_local
 
 	if (($# != 0)); then
