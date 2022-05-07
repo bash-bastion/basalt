@@ -4,7 +4,7 @@ basalt-install() {
 	util.init_local
 
 	if (($# != 0)); then
-		print.die "No arguments or flags must be specified"
+		print.die 'No arguments or flags must be specified'
 	fi
 
 	if ! rm -rf "$BASALT_LOCAL_PROJECT_DIR/.basalt"; then

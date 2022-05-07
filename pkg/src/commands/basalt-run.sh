@@ -4,7 +4,7 @@ basalt-run() {
 	util.init_local
 
 	if (($# == 0)); then
-		print.die "The name of an executable must be passed"
+		print.die 'The name of an executable must be passed'
 	fi
 
 	local bin_name="$0"

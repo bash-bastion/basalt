@@ -53,56 +53,56 @@ main.basalt() {
 
 	case $1 in
 	init)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		basalt-init "$@" ;;
 	add)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-add "$@" ;;
 	remove)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-remove "$@" ;;
 	install)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-install "$@" ;;
 	list)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-list "$@" ;;
 	run)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-run "$@" ;;
 	release)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-release "$@" ;;
 	complete)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-complete "$@" ;;
 	global)
-		if ! shift; then print.die 'Failed shift'; fi
+		if ! shift; then core.panic 'Failed to shift'; fi
 		case $1 in
 		init)
-			if ! shift; then print.die 'Failed shift'; fi
+			if ! shift; then core.panic 'Failed to shift'; fi
 			basalt-global-init "$@" ;;
 		add)
-			if ! shift; then print.die 'Failed shift'; fi
+			if ! shift; then core.panic 'Failed to shift'; fi
 			util.init_lock
 			basalt-global-add "$@" ;;
 		remove)
-			if ! shift; then print.die 'Failed shift'; fi
+			if ! shift; then core.panic 'Failed to shift'; fi
 			util.init_lock
 			basalt-global-remove "$@" ;;
 		install)
-			if ! shift; then print.die 'Failed shift'; fi
+			if ! shift; then core.panic 'Failed to shift'; fi
 			util.init_lock
 			basalt-global-install "$@" ;;
 		list)
-			if ! shift; then print.die 'Failed shift'; fi
+			if ! shift; then core.panic 'Failed to shift'; fi
 			util.init_lock
 			basalt-global-list "$@" ;;
 		*)

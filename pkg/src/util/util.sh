@@ -132,7 +132,7 @@ util.die_unexpected_value() {
 util.get_package_id() {
 	local flag_allow_empty_version='no' # Allow for version to be empty
 	for arg; do case $arg in
-		--allow-empty-version) flag_allow_empty_version='yes'; if ! shift; then print.die 'Failed shift'; fi ;;
+		--allow-empty-version) flag_allow_empty_version='yes'; if ! shift; then core.panic 'Failed to shift'; fi ;;
 		-*) print.fatal "Flag '$arg' not recognized" ;;
 		*) break ;;
 	esac done

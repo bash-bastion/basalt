@@ -15,7 +15,7 @@ basalt-add() {
 	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
-		print.warn "No packages were specified"
+		print.warn 'No packages were specified'
 	fi
 
 	# Package parsing (WET)

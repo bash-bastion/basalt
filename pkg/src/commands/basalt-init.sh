@@ -17,11 +17,11 @@ basalt-init() {
 	esac; done; unset -v arg
 
 	if ((${#args[@]} == 0)); then
-		print.die "An initialization directory must be specified"
+		print.die 'An initialization directory must be specified'
 	fi
 
 	if ((${#args[@]} > 1)); then
-		print.die "Only one initialization directory may be specified"
+		print.die 'Only one initialization directory may be specified'
 	fi
 
 	local dir="${args[0]}"

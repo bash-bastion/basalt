@@ -6,7 +6,9 @@
 pkg.install_packages() {
 	local project_dir="$1"
 	local symlink_mode="$2"
-	shift 2
+	if ! shift 2; then
+		core.panic 'Failed to shift'
+	fi
 
 	ensure.nonzero 'project_dir'
 	ensure.nonzero 'symlink_mode'
@@ -188,7 +190,7 @@ pkg.phase_local_integration_recursive() {
 	local is_direct="$2" # Whether the "$package_dir" dependency is a direct or transitive dependency of "$original_package_dir"
 	local symlink_mode="$3"
 	if ! shift 3; then
-		print.fatal "Failed to shift"
+		core.panic 'Failed to shift'
 	fi
 
 	ensure.nonzero 'original_package_dir'

@@ -15,7 +15,7 @@ basalt-global-add() {
 	esac done; unset -v arg
 
 	if ((${#pkgs[@]} == 0)); then
-		print.die "Must specify at least one package"
+		print.die 'Must specify at least one package'
 	fi
 
 	for pkg in "${pkgs[@]}"; do
