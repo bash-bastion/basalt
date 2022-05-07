@@ -31,3 +31,10 @@ core.util.trap_handler_common() {
 		fi
 	done; unset trap_func
 }
+
+# @description Prints the current error stored
+core.util.err_print() {
+	printf '%s\n' 'Error found:'
+	printf '%s\n' "  ERRCODE: $ERRCODE" >&2
+	printf '%s\n' "  ERR: $ERR" >&2
+}

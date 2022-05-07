@@ -17,6 +17,7 @@ Core functions for any Bash program
 * [core.print_error()](#coreprint_error)
 * [core.print_warn()](#coreprint_warn)
 * [core.print_info()](#coreprint_info)
+* [core.panic()](#corepanic)
 * [core.should_output_color()](#coreshould_output_color)
 * [core.get_package_info()](#coreget_package_info)
 * [core.init()](#coreinit)
@@ -167,6 +168,10 @@ Print an informative message to standard output
 
 * **$1** (string): message
 
+### core.panic()
+
+Use when a serious fault occurs. It will print the current ERR (if it exists)
+
 ### core.should_output_color()
 
 Determine if color should be printed. Note that this doesn't
@@ -183,7 +188,7 @@ is an empty string
 
 #### Variables set
 
-* **REPLY** (string): The full path to the directory
+* **directory** (string): The full path to the directory
 
 ### core.init()
 
