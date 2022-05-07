@@ -24,8 +24,8 @@ basalt-package-init() { main.basalt-package-init "$@"; }
 basalt() { main.basalt "$@"; }
 
 # Testing variables
-export NO_COLOR=
 export XDG_DATA_HOME=
+export NO_COLOR= GIT_ASKPASS=
 export BASALT_GLOBAL_REPO="$BATS_TEST_TMPDIR/source"
 export BASALT_GLOBAL_DATA_DIR="$BATS_TEST_TMPDIR/localshare"
 
