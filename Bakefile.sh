@@ -1,5 +1,12 @@
 # shellcheck shell=bash
 
+task.init() {
+	local basalt="$BAKE_ROOT/pkg/bin/basalt"
+	for dir in ./tests/vendor/bats-all ./pkg/vendor/bash-{core,term}; do
+		( cd "$dir" && "$basalt" install )
+	done
+}
+
 task.test() {
 	bats ./tests
 }

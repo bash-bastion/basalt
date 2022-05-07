@@ -8,7 +8,9 @@ basalt-run() {
 	fi
 
 	local bin_name="$0"
-	shift
+	if ! shift; then
+		core.panic 'Failed to shift'
+	fi
 
 	# Look in current package
 	if util.get_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'binDirs'; then

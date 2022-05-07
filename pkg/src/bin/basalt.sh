@@ -5,7 +5,7 @@
 # on Basalt, and Basalt doesn't bootstrap itself, we must setup the environment here.
 # TODO: Currently a bug that the following declaration is needed top-level. This is to
 # ensure the same options are set in the testing environment, _but_ it leaks into
-# the call to 'basalt-package-init' (which is a separate Bash context)
+# the call to 'basalt-package-init' (which is normally a separate Bash context)
 set -eo pipefail
 shopt -s extglob globasciiranges nullglob shift_verbose
 export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
@@ -20,6 +20,9 @@ main.basalt() {
 			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
 			exit 1
 		fi
+		# Specify 'BASALT_PACKAGE_DIR' as a quick hack so the vendored packages work
+		BASALT_PACKAGE_DIR="$__basalt_dirname/pkg/vendor/bash-core" source "$__basalt_dirname/pkg/vendor/bash-core/.basalt/generated/source_all.sh"
+		BASALT_PACKAGE_DIR="$__basalt_dirname/pkg/vendor/bash-core" source "$__basalt_dirname/pkg/vendor/bash-term/.basalt/generated/source_all.sh"
 		for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
 			source "$f"
 		done
