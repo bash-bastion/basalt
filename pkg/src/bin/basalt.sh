@@ -20,12 +20,12 @@ main.basalt() {
 			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
 			exit 1
 		fi
-		# Specify 'BASALT_PACKAGE_DIR' as a quick hack so the vendored packages work
-		BASALT_PACKAGE_DIR="$__basalt_dirname/pkg/vendor/bash-core" source "$__basalt_dirname/pkg/vendor/bash-core/.basalt/generated/source_all.sh"
-		BASALT_PACKAGE_DIR="$__basalt_dirname/pkg/vendor/bash-core" source "$__basalt_dirname/pkg/vendor/bash-term/.basalt/generated/source_all.sh"
+		for f in "$REPO_ROOT"/pkg/vendor/bash-{core,term}/pkg/src/**/?*.sh; do
+			source "$f"
+		done; unset -v f
 		for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
 			source "$f"
-		done
+		done; unset -v f
 	fi
 
 	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
