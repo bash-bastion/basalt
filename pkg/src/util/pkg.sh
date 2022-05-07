@@ -254,8 +254,21 @@ pkg.phase_local_integration_nonrecursive() {
 	fi
 
 	# Create generated files
-	local content=
+	# shellcheck disable=SC2016
+	local content_all='# shellcheck shell=bash
+
+if [ -z "$BASALT_PACKAGE_DIR" ]; then
+	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
+	exit 1
+fi
+
+if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
+	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_GLOBAL_DATA_DIR is empty, but must exist"
+	exit 1
+fi'$'\n'
+
 	if [ -f "$project_dir/basalt.toml" ]; then
+		# Source directories
 		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
 			if ((${#REPLY[@]} > 0)); then
 				# Convert the full '$project_dir' path into something that uses the environment variables
@@ -269,25 +282,13 @@ pkg.phase_local_integration_nonrecursive() {
 					print.fatal "Unexpected path to project directory '$project_dir'"
 				fi
 
-				# shellcheck disable=SC2016
-				printf -v content '%s%s\n' "$content" '# shellcheck shell=bash
-
-if [ -z "$BASALT_PACKAGE_DIR" ]; then
-	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
-	exit 1
-fi
-
-if [ -z "$BASALT_GLOBAL_DATA_DIR" ]; then
-	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_GLOBAL_DATA_DIR is empty, but must exist"
-	exit 1
-fi'
 				local source_dir=
 				for source_dir in "${REPLY[@]}"; do
 					if [ ! -d "$project_dir/$source_dir" ]; then
 						print.warn "Directory does not exist at '$project_dir_short/$source_dir'"
 					fi
 
-					printf -v content '%s%s\n' "$content" "
+					printf -v content_all '%s%s\n' "$content_all" "
 # Silently skip if directory doesn't exist since a corresponding warning will print during package installation
 if [ -d \"$project_dir_short/$source_dir\" ]; then
 	__basalt_found_file='no'
@@ -305,33 +306,30 @@ if [ -d \"$project_dir_short/$source_dir\" ]; then
 	fi
 	unset -v __basalt_found_file
 fi"
-				done; unset source_dir
-
-				if [ ! -d "$project_dir/.basalt/generated" ]; then
-					mkdir -p "$project_dir/.basalt/generated"
-				fi
-				cat <<< "$content" > "$project_dir/.basalt/generated/source_packages.sh"
+				done; unset -v source_dir
 			fi
 		fi
+		content_all+=$'\n'
 
 		# Set options
-		printf '%s\n\n' "# shellcheck shell=bash" > "$project_dir/.basalt/generated/source_setoptions.sh"
+		local str=
 		for option in allexport braceexpand emacs errexit errtrace functrace hashall histexpand \
 				history ignoreeof interactive-commants keyword monitor noclobber noexec noglob nolog \
 				notify nounset onecmd physical pipefail posix priviledged verbose vi xtrace; do
 			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
 				if [ "$REPLY" = 'on' ]; then
-					printf '%s\n' "set -o $option" >> "$project_dir/.basalt/generated/source_setoptions.sh"
+					str+="set -o $option"$'\n'
 				elif [ "$REPLY" = 'off' ]; then
-					printf '%s\n' "set +o $option" >> "$project_dir/.basalt/generated/source_setoptions.sh"
+					str+="set +o $option"$'\n'
 				else
-					print.die "Value of '$option' be either 'on' or 'off'"
+					print.die "Value of '$option' must be either 'on' or 'off'"
 				fi
 			fi
-		done; unset option
+		done; unset -v option
+		printf -v content_all '%s%s\n' "$content_all" "$str"
 
 		# Shopt options
-		printf '%s\n\n' "# shellcheck shell=bash" > "$project_dir/.basalt/generated/source_shoptoptions.sh"
+		local str=
 		for option in autocd assoc_expand_once cdable_vars cdspell checkhash checkjobs checkwinsize \
 				cmdhist compat31 compat32 compat40 compat41 compat42 compat43 compat44 complete_fullquote \
 				direxpand dirspell dotglob execfail expand_aliases extdebug extglob extquote failglob \
@@ -341,41 +339,23 @@ fi"
 				progcomp_alias promptvars restricted_shell shift_verbose sourcepath xpg_echo; do
 			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
 				if [ "$REPLY" = 'on' ]; then
-					printf '%s\n' "shopt -s $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
+					str+="shopt -s $option"$'\n'
 				elif [ "$REPLY" = 'off' ]; then
-					printf '%s\n' "shopt -u $option" >> "$project_dir/.basalt/generated/source_shoptoptions.sh"
+					str+="shopt -u $option"$'\n'
 				else
-					print.die "Value of '$option' be either 'on' or 'off'"
+					print.die "Value of '$option' must be either 'on' or 'off'"
 				fi
 			fi
-		done; unset option
+		done; unset -v option
+		printf -v content_all '%s%s\n' "$content_all" "$str"
 	else
 		# Okay if no 'basalt.toml' file
 		:
 	fi
 
-	# A 'source_all.sh' is generated for easy sourcing (and for debugging)
-	cat <<"EOF" > "$project_dir/.basalt/generated/source_all.sh"
-# shellcheck shell=bash
-
-if [ -z "$BASALT_PACKAGE_DIR" ]; then
-	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
-	exit 1
-fi
-
-if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_packages.sh" ]; then
-	source "$BASALT_PACKAGE_DIR/.basalt/generated/source_packages.sh"
-fi
-
-if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_setoptions.sh" ]; then
-	source "$BASALT_PACKAGE_DIR/.basalt/generated/source_setoptions.sh"
-fi
-
-if [ -f "$BASALT_PACKAGE_DIR/.basalt/generated/source_shoptoptions.sh" ]; then
-	source "$BASALT_PACKAGE_DIR/.basalt/generated/source_shoptoptions.sh"
-fi
-EOF
+	# A 'source_all.sh' is generated for easy sourcing (and debugging)
+	cat <<< "$content_all" > "$project_dir/.basalt/generated/source_all.sh"
 
 	# Has successfully ran
-	printf '%s\n' '# shellcheck shell=sh' "# This file exists so it can be checked that 'basalt install' has been ran successfully" > "$project_dir/.basalt/generated/done.sh"
+	printf '%s\n' '# shellcheck shell=sh' "# This file exists for checking the success of 'basalt install'" > "$project_dir/.basalt/generated/done.sh"
 }
