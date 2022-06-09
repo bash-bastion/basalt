@@ -50,9 +50,9 @@ basalt.package-load() {
 						shopt -u nullglob
 					fi
 
-					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
-						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
-							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'" >&2
+					if [ -f "$__basalt_package.basalt/generated/source_all.sh" ]; then
+						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_all.sh"; then :; else
+							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_all.sh'" >&2
 							return $?
 						fi
 					fi
@@ -72,9 +72,9 @@ basalt.package-load() {
 						shopt -u nullglob
 					fi
 
-					if [ -f "$__basalt_package.basalt/generated/source_packages.sh" ]; then
-						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_packages.sh"; then :; else
-							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_packages.sh'" >&2
+					if [ -f "$__basalt_package.basalt/generated/source_all.sh" ]; then
+						if BASALT_PACKAGE_DIR=$__basalt_package source "$__basalt_package.basalt/generated/source_all.sh"; then :; else
+							printf '%s\n' "Error: basalt.package-load: Could not successfully source 'source_all.sh'" >&2
 							return $?
 						fi
 					fi
