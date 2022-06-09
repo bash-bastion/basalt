@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
-# Contains functions only usable in Basalt packages (i.e. this file is sourced by 'basalt-package-init')
-# Since calling these functions are only valid in a fresh bash context, we can use 'exit 1'
+# Contains functions only usable in Basalt packages (i.e. this file is sourced by 'basalt.package-init')
+# Since calling these functions are only valid in a fresh Bash context, we can use 'exit 1'
 
 basalt.package-load() {
 	local __basalt_shopt_nullglob=
@@ -41,6 +41,7 @@ basalt.package-load() {
 			local __basalt_site_basename="${__basalt_site%/}"
 			__basalt_site_basename="${__basalt_site_basename##*/}"
 
+			# Source local packages
 			if [ "$__basalt_site_basename" = 'local' ]; then
 				for __basalt_package in "$__basalt_site"*/; do
 					if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
@@ -57,11 +58,12 @@ basalt.package-load() {
 					fi
 
 					shopt -s nullglob # TODO:
-				done; unset __basalt_package
+				done; unset -v __basalt_package
 				continue
 			fi
 			unset -v __basalt_site_basename
 
+			# Source regular packages
 			for __basalt_repository_owner in "$__basalt_site"*/; do
 				for __basalt_package in "$__basalt_repository_owner"*/; do
 					if [ "$__basalt_shopt_nullglob" = 'yes' ]; then
@@ -78,9 +80,9 @@ basalt.package-load() {
 					fi
 
 					shopt -s nullglob # TODO: unecessary and can put at bottom?
-				done; unset __basalt_package
-			done; unset __basalt_repository_owner
-		done; unset __basalt_site
+				done; unset -v __basalt_package
+			done; unset -v __basalt_repository_owner
+		done; unset -v __basalt_site
 	fi
 
 	if [ "$__basalt_shopt_nullglob" = 'yes' ]; then

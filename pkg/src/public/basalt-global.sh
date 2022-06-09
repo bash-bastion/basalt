@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # Contains functions to be used anywhere where Basalt is installed. This is soured by both
-# 'basalt global init' and 'basalt-package-init', so it can be used in shell startup
+# 'basalt global init' and 'basalt.package-init', so it can be used in shell startup
 # initialization scripts. Because this can be used in shell startup, we must do 'return 1'
 # on failure, as to not exit the interactive terminal
 
