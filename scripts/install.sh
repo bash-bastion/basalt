@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+info() {
+	printf '%s\n' "Info: $1"
+}
+
 clone_dir="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"
 
 if [ -d "$clone_dir" ]; then
@@ -14,6 +18,7 @@ fi
 
 bashrc="$HOME/.bashrc"
 if [ -f "$bashrc" ]; then
+	info "Appending to $bashrc"
 	cat >> "$bashrc" <<-"EOF"
 	# Basalt
 	export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
@@ -23,6 +28,7 @@ fi
 
 zshrc="${ZDOTDIR:-$HOME}/.zshrc"
 if [ -f "$zshrc" ]; then
+	info "Appending to $zshrc"
 	cat >> "$zshrc" <<-"EOF"
 	# Basalt
 	export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin:$PATH"
@@ -32,6 +38,7 @@ fi
 
 fishrc="${XDG_CONFIG_HOME:-$HOME/.config}/fish/config.fish"
 if [ -f "$fishrc" ]; then
+	info "Appending to $fishrc"
 	cat >> "$fishrc" <<-"EOF"
 	# Basalt
 	set -gx PATH "${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source/pkg/bin" $PATH
