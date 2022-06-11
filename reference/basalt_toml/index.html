@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Edwin Kofler">
+        <link rel="canonical" href="https://hyperupcall.github.io/basalt/reference/basalt_toml/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>`basalt.toml` - dotfox</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">dotfox</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../support/" class="nav-link">Support</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Architecture <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../architecture/ADR-1/" class="dropdown-item">ADR 1: Restructure per-project dependencies</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">How to <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../how-to/local-projects/" class="dropdown-item">Local Projects</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Internals <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../internals/history/" class="dropdown-item">History</a>
+</li>
+                                    
+<li>
+    <a href="../../internals/motivation/" class="dropdown-item">Motivation</a>
+</li>
+                                    
+<li>
+    <a href="../../internals/package-installation/" class="dropdown-item">Package Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../internals/testing/" class="dropdown-item">Testing</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../api/" class="dropdown-item">Environment</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active">`basalt.toml`</a>
+</li>
+                                    
+<li>
+    <a href="../commands/" class="dropdown-item">Commands</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../tutorials/getting-started/" class="dropdown-item">Getting Started</a>
+</li>
+                                    
+<li>
+    <a href="../../tutorials/installation/" class="dropdown-item">Installation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../api/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../commands/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/hyperupcall/basalt/edit/master/docs/reference/basalt_toml.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#basalttoml" class="nav-link">basalt.toml</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#package" class="nav-link">[package]</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#slug" class="nav-link">slug</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#run" class="nav-link">[run]</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="basalttoml"><code>basalt.toml</code></h1>
+<p>This is a complete reference to the <code>basalt.toml</code> file, found in Bash packages. There are currently two top-level objects: <code>package</code> and <code>run</code></p>
+<p>Note that none of these options have any defaults, and arrays <em><strong>must</strong></em> only span single lines</p>
+<h2 id="package"><code>[package]</code></h2>
+<p>Metadata that describes the package and its purpose</p>
+<h3 id="type"><code>type</code></h3>
+<p>Not yet used</p>
+<h3 id="name"><code>name</code></h3>
+<p>Not yet used</p>
+<h2 id="slug"><code>slug</code></h2>
+<p>Not yet used</p>
+<h3 id="version"><code>version</code></h3>
+<p>Not yet used</p>
+<h3 id="authors"><code>authors</code></h3>
+<p>Not yet used</p>
+<h3 id="description"><code>description</code></h3>
+<p>Not yet used</p>
+<h2 id="run"><code>[run]</code></h2>
+<p>Metadata that affects how the package is ran (either as a library or executable)</p>
+<h3 id="dependencies"><code>dependencies</code></h3>
+<p>Array of both development and production dependencies</p>
+<pre><code class="language-toml">dependencies = ['bats-core/bats-support@v0.3.0', 'github.com/bats-core/bats-assert@v0.3.0']
+</code></pre>
+<h3 id="bindirs"><code>binDirs</code></h3>
+<p>Array of directories that contain executable files. These files will be symlinked under a <code>bin</code> directory in <code>.basalt</code>. If the package is installed globally or locally, executables in this directory are made available via the <code>PATH</code> variable</p>
+<pre><code class="language-toml">binDirs = ['bin']
+</code></pre>
+<h3 id="sourcedirs"><code>sourceDirs</code></h3>
+<p>Array of directories that contain shell files which are sourced during the initialization process. In other words, after a package calls <code>basalt.package-init</code>, <code>basher</code> will source <em>all</em> files indirectly specified by <code>sourceDirs</code> for each of its dependencies. This field is not used when installing a package globally</p>
+<pre><code class="language-toml">sourceDirs = ['pkg/src', 'pkg/src/source', 'pkg/src/util']
+</code></pre>
+<h3 id="builtindirs"><code>builtinDirs</code></h3>
+<p>Array of directories that contain C source code for custom dynamic builtins. These files will automatically be loaded, somewhat analogous to <code>sourceDirs</code></p>
+<pre><code class="language-toml">builtinDirs = ['pkg/builtins']
+</code></pre>
+<h3 id="completiondirs"><code>completionDirs</code></h3>
+<p>Array of directories that contain completion scripts. These files will be symlinked under a <code>completion</code> directory in <code>.basalt</code>. If the package is installed globally, these files will automatically be made available to the shell after <code>basalt global init &lt;shell&gt;</code></p>
+<pre><code class="language-toml">completionDirs = ['pkg/completions']
+</code></pre>
+<h3 id="mandirs"><code>manDirs</code></h3>
+<p>Array of directories that contain man pages. It does not traverse subdirectories, including <code>man1</code>, <code>man3</code>, etc. These files will be symlinked under a <code>man</code> directory in <code>.basalt</code>. Currently, the <code>MANPATH</code> is not modified for global installations; the manpages should be detected automatically</p>
+<pre><code class="language-toml">manDirs = ['pkg/share/man']
+</code></pre>
+<h3 id="runshellenvironment"><code>[run.shellEnvironment]</code></h3>
+<p>Not yet used</p>
+<p>Key value pairs of what environment variables to inject into your application</p>
+<pre><code class="language-toml">[run.shellEnvironment]
+LANG = 'C'
+LC_ALL = 'C'
+</code></pre>
+<h3 id="runsetoptions"><code>[run.setOptions]</code></h3>
+<p>Key value pairs of what shell options to enable or disable</p>
+<pre><code class="language-toml">[run.setOptions]
+errexit = 'on'
+pipefail = 'on'
+</code></pre>
+<h3 id="runshoptoptions"><code>[run.shoptOptions]</code></h3>
+<p>Key value pairs of what shell options to enable or disable</p>
+<pre><code class="language-toml">[run.shoptOptions]
+extglob = 'on'
+nullglob = 'on'
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>© Edwin Kofler</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

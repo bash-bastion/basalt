@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Edwin Kofler">
+        <link rel="canonical" href="https://hyperupcall.github.io/basalt/how-to/local-projects/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Local Projects - dotfox</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">dotfox</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../../support/" class="nav-link">Support</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Architecture <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../architecture/ADR-1/" class="dropdown-item">ADR 1: Restructure per-project dependencies</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">How to <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Local Projects</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Internals <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../internals/history/" class="dropdown-item">History</a>
+</li>
+                                    
+<li>
+    <a href="../../internals/motivation/" class="dropdown-item">Motivation</a>
+</li>
+                                    
+<li>
+    <a href="../../internals/package-installation/" class="dropdown-item">Package Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../internals/testing/" class="dropdown-item">Testing</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../reference/api/" class="dropdown-item">Environment</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/basalt_toml/" class="dropdown-item">`basalt.toml`</a>
+</li>
+                                    
+<li>
+    <a href="../../reference/commands/" class="dropdown-item">Commands</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../tutorials/getting-started/" class="dropdown-item">Getting Started</a>
+</li>
+                                    
+<li>
+    <a href="../../tutorials/installation/" class="dropdown-item">Installation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../../architecture/ADR-1/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../../internals/history/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/hyperupcall/basalt/edit/master/docs/how-to/local-projects.md" class="nav-link"><i class="fa fa-github"></i> Edit on GitHub</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#local-projects" class="nav-link">Local Projects</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="local-projects">Local Projects</h1>
+<p>Similar to <code>cargo</code>, <code>yarn</code> etc., Basalt allows for the installation of packages on a per-project basis. This page details how to do it with Basalt</p>
+<p>First, create a project directory</p>
+<pre><code class="language-sh">mkdir 'my-project' &amp;&amp; cd 'my-project'
+</code></pre>
+<p>Now, initialize a new project. We'll be passing in <code>--full</code>; if you want a more minimalist template, pass <code>--bare</code> instead</p>
+<pre><code class="language-sh">$ basalt init --full
+       Info Cloned github.com/hyperupcall/template-bash
+</code></pre>
+<p>Naturally, the most important part of Basalt packages is the <code>basalt.toml</code> file</p>
+<pre><code class="language-toml">[package]
+name = 'fox-track'
+slug = 'fox_track'
+version = '0.1.0'
+authors = ['Edwin Kofler &lt;edwin@kofler.dev&gt;']
+description = 'A template to get started writing Bash applications and projects'
+
+[run]
+dependencies = ['https://github.com/hyperupcall/bats-common-utils.git@v3.0.0']
+sourceDirs = ['pkg/src/public', 'pkg/lib']
+builtinDirs = []
+binDirs = ['bin']
+completionDirs = ['completions']
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+
+[run.shoptOptions]
+</code></pre>
+<p>In short, <code>name</code> is the pretty name for the package. Often, it has the same name as the repository. <code>slug</code> is the string used to prefix <em>all of</em> your functions when you want your package to be consumed as a library. Lastly, <code>sourceDirs</code> are all the directories containing shell files you wish to source. Note that <code>pkg/lib/cmd</code> is <em>not</em> added since it contains files that are entrypoints for new Bash processes</p>
+<p>A detailed description for each key can be found at <a href="./docs/reference/basalt_toml.md"><code>reference/basalt_toml</code></a></p>
+<p>To execute this program, simply run</p>
+<pre><code class="language-sh">$ basalt run fox-track --help
+fox-track: A fox tracking sample application
+
+Commands:
+  show
+    Shows the current fox count
+
+  set &lt;number&gt;
+    Sets the current fox count
+
+  add [number]
+    Adds a number to the current fox count. If number is not specified, it defaults to 1
+
+  remove [number]
+    Adds a number to the current fox count. If number is not specified, it defaults to 1
+
+Flags:
+  --help
+    Shows the help menu
+</code></pre>
+<p>This is similar to running <code>./bin/fox-track</code> directly, but using <code>basalt run</code> has another benefit: Basalt will look for commands of the specified name not just for the current project, but for all subdependencies as well</p>
+<p>If you wish to add a dependency to the project, use the <code>add</code> subcommand</p>
+<pre><code class="language-sh">$ basalt add 'hyperupcall/bats-common-utils'
+ Downloaded github.com/hyperupcall/bats-common-utils@v3.0.0
+  Extracted github.com/hyperupcall/bats-common-utils@v3.0.0
+Transformed github.com/hyperupcall/bats-common-utils@v3.0.0
+</code></pre>
+<p>Basalt will automatically find and download the version corresponding to the <em>latest GitHub release</em>. If there are no GitHub releases, it will use the latest commit. In this case, <code>v3.0.0</code> was the latest GitHub release</p>
+<p>You can view the dependencies by looking in <code>basalt.toml</code> or running</p>
+<pre><code class="language-sh">$ basalt list
+https://github.com/hyperupcall/bats-common-utils.git@v3.0.0
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+                <p>© Edwin Kofler</p>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
