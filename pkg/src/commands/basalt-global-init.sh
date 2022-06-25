@@ -27,21 +27,21 @@ basalt-global-init() {
 
 	# Variables
 	printf '%s\n' '# Set variables'
-	shell.variable_assignment 'BASALT_GLOBAL_REPO' "$basalt_global_repo"
-	shell.variable_assignment 'BASALT_GLOBAL_DATA_DIR' "${BASALT_GLOBAL_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/basalt}"
-	shell.variable_export 'BASALT_GLOBAL_REPO'
-	shell.variable_export 'BASALT_GLOBAL_DATA_DIR'
+	std.shell_variable_assignment 'BASALT_GLOBAL_REPO' "$basalt_global_repo"
+	std.shell_variable_assignment 'BASALT_GLOBAL_DATA_DIR' "${BASALT_GLOBAL_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/basalt}"
+	std.shell_variable_export 'BASALT_GLOBAL_REPO'
+	std.shell_variable_export 'BASALT_GLOBAL_DATA_DIR'
 	printf '\n'
 
 	# Basalt
 	printf '%s\n' '# For Basalt'
-	shell.source '$BASALT_GLOBAL_REPO/pkg/src/public' 'basalt-global'
-	shell.register_completion '$BASALT_GLOBAL_REPO/completions' 'basalt'
+	std.shell_source '$BASALT_GLOBAL_REPO/pkg/src/public' 'basalt-global'
+	std.shell_register_completion '$BASALT_GLOBAL_REPO/completions' 'basalt'
 	printf '\n'
 
 	# Basalt packages
 	printf '%s\n' "# For Basalt packages"
-	shell.path_prepend '$BASALT_GLOBAL_DATA_DIR/global/bin'
-	shell.register_completions '$BASALT_GLOBAL_DATA_DIR/global/completion'
+	std.shell_path_prepend '$BASALT_GLOBAL_DATA_DIR/global/bin'
+	std.shell_register_completions '$BASALT_GLOBAL_DATA_DIR/global/completion'
 	printf '\n'
 }

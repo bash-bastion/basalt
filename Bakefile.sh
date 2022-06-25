@@ -2,7 +2,7 @@
 
 task.init() {
 	local basalt="$BAKE_ROOT/pkg/bin/basalt"
-	for dir in ./tests/vendor/bats-all ./pkg/vendor/bash-{core,term}; do
+	for dir in ./tests/vendor/bats-all ./pkg/vendor/bash-{core,std,term}; do
 		( cd "$dir" && "$basalt" install )
 	done
 }

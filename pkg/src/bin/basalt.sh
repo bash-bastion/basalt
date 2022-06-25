@@ -14,23 +14,23 @@ export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETA
 export GIT_TERMINAL_PROMPT=0
 
 main.basalt() {
+	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
+		printf '%s\n' 'Fatal: main.basalt: Basalt requires at least Bash version 4.3' >&2
+		exit 1
+	fi
+
 	# All files are already sourced when testing. This ensures stubs are not overriden
 	if [ "$BASALT_IS_TESTING" != 'yes' ]; then
 		if [ -z "$__basalt_dirname" ]; then
 			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
 			exit 1
 		fi
-		for f in "$REPO_ROOT"/pkg/vendor/bash-{core,term}/pkg/src/**/?*.sh; do
+		for f in "$__basalt_dirname"/pkg/vendor/bash-{core,std,term}/pkg/src/**/?*.sh; do
 			source "$f"
 		done; unset -v f
 		for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
 			source "$f"
 		done; unset -v f
-	fi
-
-	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
-		printf '%s\n' 'Fatal: main.basalt: Basalt requires at least Bash version 4.3' >&2
-		exit 1
 	fi
 
 	local arg=
@@ -41,7 +41,7 @@ main.basalt() {
 		;;
 	--version|-v)
 		cat <<-EOF
-		Version: v0.9.0
+		Version: v0.10.0
 		EOF
 		exit
 		;;

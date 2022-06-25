@@ -8,7 +8,7 @@ test_util.get_repo_root
 REPO_ROOT=$REPLY
 
 # Source Basalt and its dependencies
-for f in "$REPO_ROOT"/pkg/vendor/bash-{core,term}/pkg/src/**/?*.sh; do
+for f in "$REPO_ROOT"/pkg/vendor/bash-{core,std,term}/pkg/src/**/?*.sh; do
 	source "$f"
 done; unset -v f
 for f in "$REPO_ROOT"/pkg/src/{bin,commands,public,util}/?*.sh; do
