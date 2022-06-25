@@ -1,0 +1,25 @@
+[package]
+type = 'bash'
+name = 'bash-std'
+slug = 'std'
+version = '0.2.1'
+authors = ['Edwin Kofler <edwin@kofler.dev>']
+description = 'Standard Bash functions'
+
+[run]
+dependencies = []
+binDirs = []
+sourceDirs = ['pkg/src/public', 'pkg/src/util' ]
+builtinDirs = []
+completionDirs = []
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+errexit = 'on'
+pipefail = 'on'
+
+[run.shoptOptions]
+nullglob = 'on'
+shift_verbose = 'on'
