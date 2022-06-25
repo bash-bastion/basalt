@@ -21,7 +21,7 @@ setup_file() {
 	run basalt add 'hyperupcall/basaltqq'
 
 	assert_failure
-	assert_line -p "Package located at 'https://github.com/hyperupcall/basaltqq.git' does not exist"
+	assert_line -p "Package located at 'https://github.com/hyperupcall/basaltqq' does not exist"
 }
 
 @test "Fails if dependency does not exist 2" {
@@ -30,7 +30,7 @@ setup_file() {
 	run basalt add 'gitlab.com/hyperupcall/basaltqq'
 
 	assert_failure
-	assert_line -p "Package located at 'https://gitlab.com/hyperupcall/basaltqq.git' does not exist"
+	assert_line -p "Package located at 'https://gitlab.com/hyperupcall/basaltqq' does not exist"
 }
 
 @test "Fails if dependency does not exist 3" {
@@ -39,7 +39,7 @@ setup_file() {
 	run basalt add 'https://github.com/hyperupcall/basaltqq'
 
 	assert_failure
-	assert_line -p "Package located at 'https://github.com/hyperupcall/basaltqq.git' does not exist"
+	assert_line -p "Package located at 'https://github.com/hyperupcall/basaltqq' does not exist"
 }
 
 @test "Fails if dependency does not exist 4" {

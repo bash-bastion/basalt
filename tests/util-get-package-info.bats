@@ -13,7 +13,7 @@ load './util/init.sh'
 	util.get_package_info 'https://gitlab.com/hyperupcall/proj'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'gitlab.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = '' ]
@@ -23,7 +23,7 @@ load './util/init.sh'
 	util.get_package_info 'https://gitlab.com/hyperupcall/proj'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'gitlab.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = '' ]
@@ -33,7 +33,7 @@ load './util/init.sh'
 	util.get_package_info 'https://gitlab.com/hyperupcall/proj@v0.0.1'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'gitlab.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = 'v0.0.1' ]
@@ -43,7 +43,7 @@ load './util/init.sh'
 	util.get_package_info 'https://gitlab.com/hyperupcall/proj@v0.0.1'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'gitlab.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = 'v0.0.1' ]
@@ -60,7 +60,7 @@ load './util/init.sh'
 }
 
 @test "parses with full ssh url with .git ending" {
-	util.get_package_info 'git@gitlab.com:hyperupcall/proj.git'
+	util.get_package_info 'git@gitlab.com:hyperupcall/proj'
 
 	assert [ "$REPLY1" = 'remote' ]
 	assert [ "$REPLY2" = 'git@gitlab.com:hyperupcall/proj' ]
@@ -73,7 +73,7 @@ load './util/init.sh'
 	util.get_package_info 'gitlab.com/hyperupcall/proj'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'gitlab.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = '' ]
@@ -83,7 +83,7 @@ load './util/init.sh'
 	util.get_package_info 'gitlab.com/hyperupcall/proj@v0.1.0'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://gitlab.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'gitlab.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = 'v0.1.0' ]
@@ -93,7 +93,7 @@ load './util/init.sh'
 	util.get_package_info 'hyperupcall/proj'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://github.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://github.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'github.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = '' ]
@@ -103,7 +103,7 @@ load './util/init.sh'
 	util.get_package_info 'hyperupcall/proj@v0.2.0'
 
 	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'https://github.com/hyperupcall/proj.git' ]
+	assert [ "$REPLY2" = 'https://github.com/hyperupcall/proj' ]
 	assert [ "$REPLY3" = 'github.com' ]
 	assert [ "$REPLY4" = 'hyperupcall/proj' ]
 	assert [ "$REPLY5" = 'v0.2.0' ]

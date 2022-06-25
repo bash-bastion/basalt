@@ -1,0 +1,4 @@
+ecosystem = 'basalt'
+form = 'app'
+for = 'anyone'
+status = 'dogfooding'

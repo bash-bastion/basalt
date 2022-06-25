@@ -46,6 +46,7 @@ basalt-global-init() {
 	printf '\n'
 }
 
+# TODO: use bash-std
 shell.variable_assignment() {
 	local variable="$1"
 	local value="$2"
