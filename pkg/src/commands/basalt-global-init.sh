@@ -122,7 +122,7 @@ shell.register_completions() {
 	zsh)
 		printf '%s\n' "fpath=(\"$dir/zsh/compsys\" \$fpath)
    if [ -d \"$dir/zsh/compctl\" ]; then
-      for __f in \"$dir/zsh/compctl/*; do
+      for __f in \"$dir/zsh/compctl\"/*; do
          source \"\$__f\"
       done; unset -v __f
    fi"
