@@ -19,6 +19,14 @@ pkgutil.get_localpkg_info() {
 	pkg_id="${pkg_id%% *}"
 	pkg_id="local/${pkg_name}_$pkg_id"
 
+	if [ "${pkg_path:0:1}" = '/' ]; then
+		pkg_path="$pkg_path"
+	elif [ "${pkg_path:0:2}" = './' ]; then
+		pkg_path="$BASALT_LOCAL_PROJECT_DIR/$pkg_path"
+	else
+		print.fatal "Specified local path '$pkg_path' not recognized"
+	fi
+
 	REPLY1=$pkg_path
 	REPLY2=$pkg_name
 	REPLY3=$pkg_id

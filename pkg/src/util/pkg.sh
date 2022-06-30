@@ -1,5 +1,36 @@
 # shellcheck shell=bash
 
+pkg.list_packages() {
+	local project_dir="$1"
+	if ! shift 1; then
+		core.panic 'Failed to shift'
+	fi
+
+	ensure.nonzero 'project_dir'
+
+	for pkg do
+		util.get_package_info "$pkg"
+		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
+
+		local package_id=
+		if [[ $url == file://* ]]; then
+			pkgutil.get_localpkg_info "$pkg"
+			local pkg_path="$REPLY1"
+			local pkg_name="$REPLY2"
+			local pkg_id="$REPLY3"
+
+			printf '%s\n' "pkg: $pkg_path"
+		elif [[ $url == https://* ]]; then
+			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+			local package_id="$REPLY"
+
+			printf '%s\n' "pkg: $package_id"
+		else
+			print.die "Protocol not recognized. Only 'file://' and 'https://' are supported"
+		fi
+	done; unset -v pkg
+}
+
 # @description Installs a pacakge and all its dependencies, relative to a
 # particular project_dir. symlink_mode changes how components of its direct
 # dependencies are synced
@@ -27,17 +58,8 @@ pkg.install_packages() {
 
 			package_id=$pkg_id
 
-			local target=
-			if [ "${pkg_path:0:1}" = '/' ]; then
-				target="$pkg_path"
-			elif [ "${pkg_path:0:2}" = './' ]; then
-				target="$BASALT_LOCAL_PROJECT_DIR/$pkg_path"
-			else
-				print.fatal "Specified local path '$pkg_path' not recognized"
-			fi
-
 			rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
-			cp -r "$target" "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
+			cp -r "$pkg_path" "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
 			print.green 'Copied' "$pkg_id"
 		elif [[ $url == https://* ]]; then
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
@@ -61,7 +83,7 @@ pkg.install_packages() {
 		# Only after all the transitive dependencies _for a particular direct dependency_ are installed do we
 		# muck with the direct dependency itself
 		pkg.phase_global_integration "$package_id"
-	done; unset pkg
+	done; unset -v pkg
 }
 
 # @description Downloads package tarballs from the internet to the global store. If a git revision is specified, it
@@ -217,7 +239,6 @@ pkg.phase_local_integration_recursive() {
 			local pkg_name="$REPLY2"
 			local pkg_id="$REPLY3"
 
-			echo v "$pkg_id"
 			package_id=$pkg_id
 		elif [[ $url == https://* ]]; then
 			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"

@@ -248,7 +248,6 @@ util.get_package_info() {
 
 	local regex1="^https?://"
 	local regex2="^file://"
-	local regex3="^git@"
 	if [[ "$input" =~ $regex1 ]]; then
 		local site= package=
 
@@ -276,19 +275,6 @@ util.get_package_info() {
 		REPLY3=
 		REPLY4="${dir##*/}"
 		REPLY5="$ref"
-	elif [[ "$input" =~ $regex3 ]]; then
-		local site= package=
-
-		input="${input#git@}"
-		input="${input%.git}"
-
-		IFS=':' read -r site package <<< "$input"
-
-		REPLY1='remote'
-		REPLY2="git@$input"
-		REPLY3="$site"
-		REPLY4="$package"
-		REPLY5=
 	else
 		local site= package= ref=
 		input="${input%.git}"

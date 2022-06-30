@@ -49,26 +49,6 @@ load './util/init.sh'
 	assert [ "$REPLY5" = 'v0.0.1' ]
 }
 
-@test "parses with full ssh url" {
-	util.get_package_info 'git@gitlab.com:hyperupcall/proj'
-
-	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'git@gitlab.com:hyperupcall/proj' ]
-	assert [ "$REPLY3" = 'gitlab.com' ]
-	assert [ "$REPLY4" = 'hyperupcall/proj' ]
-	assert [ "$REPLY5" = '' ]
-}
-
-@test "parses with full ssh url with .git ending" {
-	util.get_package_info 'git@gitlab.com:hyperupcall/proj'
-
-	assert [ "$REPLY1" = 'remote' ]
-	assert [ "$REPLY2" = 'git@gitlab.com:hyperupcall/proj' ]
-	assert [ "$REPLY3" = 'gitlab.com' ]
-	assert [ "$REPLY4" = 'hyperupcall/proj' ]
-	assert [ "$REPLY5" = '' ]
-}
-
 @test "parses with package and domain" {
 	util.get_package_info 'gitlab.com/hyperupcall/proj'
 
