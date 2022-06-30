@@ -52,7 +52,7 @@ jobs:
         env:
           GITHUB_TOKEN: '${{ github.token }}'
         run: |
-          time docker run basalt:bash-${{ matrix.bash-version }} \
+          time docker run -e 'GITHUB_TOKEN' basalt:bash-${{ matrix.bash-version }} \
             --tap tests
 
   test-mac:
