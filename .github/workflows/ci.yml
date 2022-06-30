@@ -50,7 +50,7 @@ jobs:
 
       - name: Run tests
         run: |
-          time docker run basalt:bash-${{ matrix.bash-version }} \
+          GITHUB_TOKEN="${{ github.token }}" time docker run basalt:bash-${{ matrix.bash-version }} \
             --tap tests
 
   test-mac:
