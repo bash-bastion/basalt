@@ -53,6 +53,13 @@ main.basalt() {
 		;;
 	esac done; unset -v arg
 
+	local github_token_file="${XDG_CONFIG_HOME}/basalt/token" # TODO: XDG library
+	if [ -f "$github_token_file" ]; then
+		GITHUB_TOKEN=$(<"$github_token_file")
+		export GITHUB_TOKEN
+	else
+		core.print_die "No GitHub token file found in '$github_token_file'"
+	fi
 
 	case $1 in
 	init)
