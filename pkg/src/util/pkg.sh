@@ -256,6 +256,8 @@ pkg.phase_local_integration_nonrecursive() {
 	# Create generated files
 	# shellcheck disable=SC2016
 	local content_all='# shellcheck shell=bash
+set -ETeo pipefail
+shopt -s shift_verbose
 
 if [ -z "$BASALT_PACKAGE_DIR" ]; then
 	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
