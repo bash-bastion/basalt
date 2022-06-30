@@ -217,7 +217,7 @@ util.get_latest_package_version() {
 		if [ "$site" = 'github.com' ]; then
 			local latest_package_version=
 			if latest_package_version="$(
-				curl -LsS "https://api.github.com/repos/$package/releases/latest" \
+				curl -LsS -H "authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/$package/releases/latest" \
 					| awk -F '"' '{ if($2 == "tag_name") print $4 }'
 			)" && [[ "$latest_package_version" == v* ]]; then
 				REPLY="$latest_package_version"
