@@ -4,7 +4,8 @@
 # @description Core functions for any Bash program
 
 # @description Adds a handler for a particular `trap` signal or event. Noticably,
-# unlike the 'builtin' trap, this does not override any other existing handlers
+# unlike the 'builtin' trap, this does not override any other existing handlers. The first argument
+# to the handler is the exit code of the last command that ran before the particular 'trap'
 # @arg $1 string Function to execute on an event. Integers are forbiden
 # @arg $2 string Event signal
 # @example
@@ -14,47 +15,35 @@
 #   core.trap_remove 'some_handler' 'USR1'
 core.trap_add() {
 	if ! [ ${___global_bash_core_has_init__+x} ]; then
-		core.util.init
+		core.private.util.init
 	fi
 	local function="$1"
 
-	# Validation
-	if [ -z "$function" ]; then
-		core.panic 'First argument must not be empty'
-	fi
-
-	if (($# <= 1)); then
-		core.panic 'Must specify at least one signal'
-	fi
+	core.private.util.validate_args "$function" $#
 	for signal_spec in "${@:2}"; do
-		if [ -z "$signal_spec" ]; then
-			core.panic 'Signal must not be an empty string'
-		fi
+		core.private.util.validate_signal "$function" "$signal_spec"
 
-		local regex='^[0-9]+$'
-		if [[ "$signal_spec" =~ $regex ]]; then
-			core.panic 'Passing numbers for the signal specs is prohibited'
-		fi; unset regex
-		signal_spec=${signal_spec#SIG}
-		if ! declare -f "$function" &>/dev/null; then
-			core.panic "Function '$function' is not defined"
-		fi
-
-		# Start
 		___global_trap_table___["$signal_spec"]="${___global_trap_table___[$signal_spec]}"$'\x1C'"$function"
 
 		# rho (WET)
 		local global_trap_handler_name=
-		printf -v global_trap_handler_name '%q' "core.trap_handler_${signal_spec}"
+		printf -v global_trap_handler_name '%q' "core.private.trap_handler_${signal_spec}"
 
 		if ! eval "$global_trap_handler_name() {
-		core.util.trap_handler_common '$signal_spec'
+		local ___exit_code_original=\$?
+		if core.private.util.trap_handler_common '$signal_spec' \"\$___exit_code_original\"; then
+			return \$___exit_code_original
+		else
+			local ___exit_code_user=\$?
+			core.print_error_fn \"User-provided trap handler spectacularly failed with exit code \$___exit_code_user\"
+			return \$___exit_code_user
+		fi
 	}"; then
-			core.panic 'Could not eval function'
+			core.panic 'Failed to eval function'
 		fi
 		# shellcheck disable=SC2064
 		trap "$global_trap_handler_name" "$signal_spec"
-	done
+	done; unset -v signal_spec
 }
 
 # @description Removes a handler for a particular `trap` signal or event. Currently,
@@ -68,33 +57,14 @@ core.trap_add() {
 #   core.trap_remove 'some_handler' 'USR1'
 core.trap_remove() {
 	if ! [ ${___global_bash_core_has_init__+x} ]; then
-		core.util.init
+		core.private.util.init
 	fi
 	local function="$1"
 
-	# Validation
-	if [ -z "$function" ]; then
-		core.panic 'First argument must not be empty'
-	fi
-
-	if (($# <= 1)); then
-		core.panic 'Must specify at least one signal'
-	fi
+	core.private.util.validate_args "$function" $#
 	for signal_spec in "${@:2}"; do
-		if [ -z "$signal_spec" ]; then
-			core.panic 'Signal must not be an empty string'
-		fi
+		core.private.util.validate_signal "$function" "$signal_spec"
 
-		local regex='^[0-9]+$'
-		if [[ "$signal_spec" =~ $regex ]]; then
-			core.panic 'Passing numbers for the signal specs is prohibited'
-		fi; unset regex
-		signal_spec="${signal_spec#SIG}"
-		if ! declare -f "$function" &>/dev/null; then
-			core.panic "Function '$function' is not defined"
-		fi
-
-		# Start
 		local -a trap_handlers=()
 		local new_trap_handlers=
 		IFS=$'\x1C' read -ra trap_handlers <<< "${___global_trap_table___[$signal_spec]}"
@@ -108,15 +78,20 @@ core.trap_remove() {
 			fi
 
 			new_trap_handlers+=$'\x1C'"$trap_handler"
-		done; unset trap_handler
+		done; unset -v trap_handler
 
 		___global_trap_table___["$signal_spec"]="$new_trap_handlers"
 
-		# rho (WET)
-		local global_trap_handler_name=
-		printf -v global_trap_handler_name '%q' "___global_trap_${signal_spec}_handler___"
-		unset -f "$global_trap_handler_name"
-	done
+		# If there are no more user-provided trap-handlers (for the particular signal spec in the global trap table),
+		# then remove our handler from 'trap'
+		if [ -z "$new_trap_handlers" ]; then
+			# rho (WET)
+			local global_trap_handler_name=
+			printf -v global_trap_handler_name '%q' "core.private.trap_handler_${signal_spec}"
+			trap -- "$signal_spec"
+			unset -f "$global_trap_handler_name"
+		fi
+	done; unset -v signal_spec
 }
 
 # @description Modifies current shell options and pushes information to stack, so
@@ -130,7 +105,7 @@ core.trap_remove() {
 #   core.shopt_pop
 core.shopt_push() {
 	if ! [ ${___global_bash_core_has_init__+x} ]; then
-		core.util.init
+		core.private.util.init
 	fi
 	local shopt_action="$1"
 	local shopt_name="$2"
@@ -177,7 +152,7 @@ core.shopt_push() {
 #   core.shopt_pop
 core.shopt_pop() {
 	if ! [ ${___global_bash_core_has_init__+x} ]; then
-		core.util.init
+		core.private.util.init
 	fi
 
 	if (( ${#___global_shopt_stack___[@]} == 0 )); then
@@ -241,13 +216,38 @@ core.err_exists() {
 	fi
 }
 
+# @description Use when a serious fault occurs. It will print the current ERR (if it exists)
+core.panic() {
+	local code='1'
+	if [[ $1 =~ [0-9]+ ]]; then
+		code=$1
+	elif [ -n "$1" ]; then
+		if [ -n "$2" ]; then
+			code=$2
+		fi
+		if core.private.should_print_color 2; then
+			printf "\033[1;31m\033[4m%s:\033[0m %s\n" 'Panic' "$1" >&2
+		else
+			printf "%s: %s\n" 'Panic' "$1" >&2
+		fi
+	fi
+
+	if core.err_exists; then
+		core.private.util.err_print
+	fi
+	core.print_stacktrace
+	exit "$code"
+}
+
 # @description Prints stacktrace
 # @noargs
 # @example
 #  err_handler() {
-#    local exit_code=$?
+#    local exit_code=$1 # Note that this isn't `$?`
 #    core.print_stacktrace
-#    exit $exit_code
+#    
+#    # Note that we're not doing `exit $exit_code` because
+#    # that is handled automatically
 #  }
 #  core.trap_add 'err_handler' ERR
 core.print_stacktrace() {
@@ -283,12 +283,79 @@ core.print_stacktrace() {
 	fi
 } >&2
 
+# @description Print a fatal error message including the function name of the callee
+# to standard error
+# @arg $1 string message
+core.print_fatal_fn() {
+	local msg="$1"
+
+	core.print_fatal "${FUNCNAME[1]}()${msg:+": "}$msg"
+}
+
+# @description Print an error message including the function name of the callee
+# to standard error
+# @arg $1 string message
+core.print_error_fn() {
+	local msg="$1"
+
+	core.print_error "${FUNCNAME[1]}()${msg:+": "}$msg"
+}
+
+# @description Print a warning message including the function name of the callee
+# to standard error
+# @arg $1 string message
+core.print_warn_fn() {
+	local msg="$1"
+
+	core.print_warn "${FUNCNAME[1]}()${msg:+": "}$msg"
+}
+
+# @description Print an informative message including the function name of the callee
+# to standard output
+# @arg $1 string message
+core.print_info_fn() {
+	local msg="$1"
+
+	core.print_info "${FUNCNAME[1]}()${msg:+": "}$msg"
+}
+# @description Print a debug message including the function name of the callee
+# to standard output
+# @arg $1 string message
+core.print_debug_fn() {
+	local msg="$1"
+
+	core.print_debug "${FUNCNAME[1]}()${msg:+": "}$msg"
+}
+
+# @description Print a error message to standard error and die
+# @arg $1 string message
+core.print_die() {
+	core.print_fatal "$1"
+	exit 1
+}
+
+# @description Print a fatal error message to standard error
+# @arg $1 string message
+core.print_fatal() {
+	local msg="$1"
+
+	if core.private.should_print_color 2; then
+		printf "\033[1;35m%s:\033[0m %s\n" 'Fatal' "$msg" >&2
+	else
+		printf "%s: %s\n" 'Fatal' "$msg" >&2
+	fi
+}
+
 # @description Print an error message to standard error
 # @arg $1 string message
 core.print_error() {
 	local msg="$1"
 
-	printf '%s\n' "Error: ${FUNCNAME[1]}${msg:+": "}$msg" >&2
+	if core.private.should_print_color 2; then
+		printf "\033[1;31m%s:\033[0m %s\n" 'Error' "$msg" >&2
+	else
+		printf "%s: %s\n" 'Error' "$msg" >&2
+	fi
 }
 
 # @description Print a warning message to standard error
@@ -296,7 +363,11 @@ core.print_error() {
 core.print_warn() {
 	local msg="$1"
 
-	printf '%s\n' "Warn: ${FUNCNAME[1]}${msg:+": "}$msg" >&2
+	if core.private.should_print_color 2; then
+		printf "\033[1;33m%s:\033[0m %s\n" 'Warn' "$msg" >&2
+	else
+		printf "%s: %s\n" 'Warn' "$msg" >&2
+	fi
 }
 
 # @description Print an informative message to standard output
@@ -304,63 +375,40 @@ core.print_warn() {
 core.print_info() {
 	local msg="$1"
 
-	printf '%s\n' "Info: ${FUNCNAME[1]}${msg:+": "}$msg"
+	if core.private.should_print_color 1; then
+		printf "\033[1;32m%s:\033[0m %s\n" 'Info' "$msg" >&2
+	else
+		printf "%s: %s\n" 'Info' "$msg" >&2
+	fi
 }
 
-# @description Use when a serious fault occurs. It will print the current ERR (if it exists)
-core.panic() {
-	local code='1'
-
-	if [[ $1 =~ [0-9]+ ]]; then
-		code=$1
-	elif [ -n "$1" ]; then
-		if [ -n "$2" ]; then
-			code=$2
-		fi
-		core.print_error "$1"
+# @description Print a debug message to standard output if the environment variable "DEBUG" is present
+# @arg $1 string message
+core.print_debug() {
+	if [[ -v DEBUG ]]; then
+		printf "%s: %s\n" 'Debug' "$msg"
 	fi
-
-	if core.err_exists; then
-		core.util.err_print
-	fi
-	core.print_stacktrace
-	exit "$code"
 }
 
-# @description Determine if color should be printed. Note that this doesn't
-# use tput because simple environment variable checking heuristics suffice
+# @description (DEPRECATED). Determine if color should be printed. Note that this doesn't
+# use tput because simple environment variable checking heuristics suffice. Deprecated because this code
+# has been moved to bash-std
 core.should_output_color() {
-	# https://no-color.org
-	if [ ${NO_COLOR+x} ]; then
+	local fd="$1"
+
+	if [[ ${NO_COLOR+x} || "$TERM" = 'dumb' ]]; then
 		return 1
 	fi
 
-	# FIXME
-	# # 0 => 2 colors
-	# # 1 => 16 colors
-	# # 2 => 256 colors
-	# # 3 => 16,777,216 colors
-	# if [[ -v FORCE_COLOR ]]; then
-	# 	return 0
-	# fi
-
-	if [ "$COLORTERM" = "truecolor" ] || [ "$COLORTERM" = "24bit" ]; then
-		return 0
-	fi
-
-	if [ "$TERM" = 'dumb' ]; then
-		return 1
-	fi
-
-	if [ -t 0 ]; then
+	if [ -t "$fd" ]; then
 		return 0
 	fi
 
 	return 1
 }
 
-# @description Gets information from a particular package. If the key does not exist, then the value
-# is an empty string
+# @description (DEPRECATED) Gets information from a particular package. If the key does not exist, then the value
+# is an empty string. Deprecated as this code has been moved to bash-std
 # @arg $1 string The `$BASALT_PACKAGE_DIR` of the caller
 # @set directory string The full path to the directory
 core.get_package_info() {
@@ -387,7 +435,7 @@ core.get_package_info() {
 # this function is called automatically by functions that use global variables
 # @noargs
 core.init() {
-	core.util.init
+	core.private.util.init
 }
 
 # @description (DEPRECATED) Prints stacktrace

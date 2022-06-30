@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
+task.init() {
+	hookah refresh
+}
+
 task.test() {
 	bats tests
 }
