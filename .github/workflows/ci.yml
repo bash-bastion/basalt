@@ -87,6 +87,8 @@ jobs:
           gtar --extract --transform "s,bats-core-$bats_version,bats-core," -C "$subdir" -f "$subdir/bats-core.tar.gz"
 
       - name: Run tests
+        env:
+          GITHUB_TOKEN: '${{ github.token }}'
         run: |
           subdir='.workflow-data'
 
