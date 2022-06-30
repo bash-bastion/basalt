@@ -5,7 +5,7 @@
 # @brief Hookah: An elegantly minimal solution for Git hooks
 # @description Hookah streamlines the process of managing Git hooks. This file is a
 # library of functions that can easily be used by hooks written in Bash. Use it by
-# prepending your script with the following
+# prepending your hook script with the following
 #
 # ```bash
 # #!/usr/bin/env bash
@@ -27,42 +27,66 @@ fi
 hookah.init() {
 	set -Eeo pipefail
 	shopt -s dotglob extglob globasciiranges globstar lastpipe shift_verbose
-	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
-		LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
-		LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
+	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' \
+		LC_MONETARY='C' LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' \
+		LC_TELEPHONE='C' LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
 	trap '__hookah_trap_err' 'ERR'
 
 	while [ ! -d '.git' ] && [ "$PWD" != / ]; do
 		if ! cd ..; then
-			__hookah_die "Failed to cd to nearest Git repository"
+			__hookah_internal_die "Failed to cd to nearest Git repository"
 		fi
 	done
 	if [ "$PWD" = / ]; then
-		__hookah_die "Failed to cd to nearest Git repository"
+		__hookah_internal_die "Failed to cd to nearest Git repository"
 	fi
 
 	# Prevent any possibilities of 'stdin in is not a tty'
 	if ! exec </dev/tty; then
-		__hookah_die "Failed to redirect tty to standard input"
+		__hookah_internal_warn "Failed to redirect tty to standard input"
 	fi
 
-	__hookah_print "Running ${BASH_SOURCE[1]##*/}"
-
+	__hookah_internal_info "Running ${BASH_SOURCE[1]##*/}"
 }
 
 # @description Prints a command before running it
-# #args $@ Command to execute
+# @arg $@ Command to execute
 hookah.run() {
-	printf '%s\n' "Hookah: Running command: '$*'"
+	__hookah_exec "$*"
 	"$@"
 }
 
 # @description Prints a command before running it. But, if the command fails, do not abort execution
-# @args $@ Command to execute
+# @arg $@ Command to execute
 hookah.run_allow_fail() {
 	if ! hookah.run "$@"; then
-		printf '%s\n' "Hookah: Command failed"
+		hookah.die 'Command failed'
 	fi
+}
+
+# @description Prints `$1` formatted as an error and the stacktrace to standard error,
+# then exits with code 1
+# @arg $1 string Text to print
+hookah.die() {
+	if [ -n "$1" ]; then
+		__hookah_internal_error "$1. Exiting" 'Hookah'
+	else
+		__hookah_internal_error 'Exiting' 'Hookah'
+	fi
+
+	exit 1
+}
+
+# @description Prints `$1` formatted as a warning to standard error
+# @arg $1 string Text to print
+hookah.warn() {
+	__hookah_internal_warn "$1" 'Hookah'
+}
+
+# @description Prints `$1` formatted as information to standard output
+# @arg $1 string Text to print
+hookah.info() {
+	__hookah_internal_info "$1" 'Hookah'
 }
 
 # @description Scans environment variables to determine if script is in a CI environment
@@ -72,6 +96,7 @@ hookah.run_allow_fail() {
 hookah.is_ci() {
 	unset -v REPLY; REPLY=
 
+	# List from 'https://github.com/watson/ci-info/blob/master/vendors.json'
 	if [[ -v 'APPVEYOR' ]]; then
 		REPLY='AppVeyor'
 	elif [[ -v 'SYSTEM_TEAMFOUNDATIONCOLLECTIONURI' ]]; then
@@ -164,48 +189,58 @@ __hookah_is_color() {
 }
 
 # @internal
+__hookah_exec() {
+	if __hookah_is_color; then
+		printf "\033[1mHookah \033[1m[exec]:\033[0m %s\n" "$*"
+	else
+		printf "Hookah [exec]: %s\n" "$*"
+	fi
+}
+
+# @internal
+__hookah_internal_die() {
+	__hookah_internal_error "$1"
+	exit 1
+}
+
+# @internal
 __hookah_internal_error() {
-	printf '%s\n' "Internal Error: $1" >&2
-}
+	local str="${2:-"Hookah (internal)"}"
+
+	if __hookah_is_color; then
+		printf "\033[1;31m\033[1m$str \033[1m[error]:\033[0m %s\n" "$1"
+	else
+		printf "$str [error]: %s\n" "$1"
+	fi
+} >&2
 
 # @internal
-__hookah_die() {
-	__hookah_error "$1"
-	exit 1
-}
+__hookah_internal_warn() {
+	local str="${2:-"Hookah (internal)"}"
+
+	if __hookah_is_color; then
+		printf "\033[1;33m\033[1m$str \033[1m[warn]:\033[0m %s\n" "$1"
+	else
+		printf "$str [warn]: %s\n" "$1"
+	fi
+} >&2
 
 # @internal
-__hookah_error() {
-	printf '%s\n' "Hookah: lib.sh: Error: $1. Exiting"
-	exit 1
-}
+__hookah_internal_info() {
+	local str="${2:-"Hookah (internal)"}"
 
-# @internal
-__hookah_print() {
-	printf '%s\n' "Hookah: $1"
+	if __hookah_is_color; then
+		printf "\033[0;36m\033[1m$str \033[1m[info]:\033[0m %s\n" "$1"
+	else
+		printf "$str [info]: %s\n" "$1"
+	fi
 }
 
 # @internal
 __hookah_trap_err() {
 	local error_code=$?
 
-	__hookah_internal_error "Your hook did not exit successfully"
-	__hookah_print_stacktrace
+	__hookah_internal_error "Your hook did not exit successfully (exit code $error_code)"
 
 	exit $error_code
-} >&2
-
-# @internal
-__hookah_print_stacktrace() {
-	if __hookah_is_color; then
-		printf '\033[4m%s\033[0m\n' 'Stacktrace:'
-	else
-		printf '%s\n' 'Stacktrace:'
-	fi
-
-	local i=
-	for ((i=0; i<${#FUNCNAME[@]}-1; ++i)); do
-		local __bash_source="${BASH_SOURCE[$i]}"; __bash_source=${__bash_source##*/}
-		printf '%s\n' "  in ${FUNCNAME[$i]} ($__bash_source:${BASH_LINENO[$i-1]})"
-	done; unset -v i __bash_source
-} >&2
+}

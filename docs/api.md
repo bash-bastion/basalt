@@ -13,11 +13,19 @@ Core functions for any Bash program
 * [core.err_set()](#coreerr_set)
 * [core.err_clear()](#coreerr_clear)
 * [core.err_exists()](#coreerr_exists)
+* [core.panic()](#corepanic)
 * [core.print_stacktrace()](#coreprint_stacktrace)
+* [core.print_fatal_fn()](#coreprint_fatal_fn)
+* [core.print_error_fn()](#coreprint_error_fn)
+* [core.print_warn_fn()](#coreprint_warn_fn)
+* [core.print_info_fn()](#coreprint_info_fn)
+* [core.print_debug_fn()](#coreprint_debug_fn)
+* [core.print_die()](#coreprint_die)
+* [core.print_fatal()](#coreprint_fatal)
 * [core.print_error()](#coreprint_error)
 * [core.print_warn()](#coreprint_warn)
 * [core.print_info()](#coreprint_info)
-* [core.panic()](#corepanic)
+* [core.print_debug()](#coreprint_debug)
 * [core.should_output_color()](#coreshould_output_color)
 * [core.get_package_info()](#coreget_package_info)
 * [core.init()](#coreinit)
@@ -26,7 +34,8 @@ Core functions for any Bash program
 ### core.trap_add()
 
 Adds a handler for a particular `trap` signal or event. Noticably,
-unlike the 'builtin' trap, this does not override any other existing handlers
+unlike the 'builtin' trap, this does not override any other existing handlers. The first argument
+to the handler is the exit code of the last command that ran before the particular 'trap'
 
 #### Example
 
@@ -127,6 +136,10 @@ _does_ exist
 
 _Function has no arguments._
 
+### core.panic()
+
+Use when a serious fault occurs. It will print the current ERR (if it exists)
+
 ### core.print_stacktrace()
 
 Prints stacktrace
@@ -135,14 +148,77 @@ Prints stacktrace
 
 ```bash
 err_handler() {
-  local exit_code=$?
+  local exit_code=$1 # Note that this isn't `$?`
   core.print_stacktrace
-  exit $exit_code
+  
+  # Note that we're not doing `exit $exit_code` because
+  # that is handled automatically
 }
 core.trap_add 'err_handler' ERR
 ```
 
 _Function has no arguments._
+
+### core.print_fatal_fn()
+
+Print a fatal error message including the function name of the callee
+to standard error
+
+#### Arguments
+
+* **$1** (string): message
+
+### core.print_error_fn()
+
+Print an error message including the function name of the callee
+to standard error
+
+#### Arguments
+
+* **$1** (string): message
+
+### core.print_warn_fn()
+
+Print a warning message including the function name of the callee
+to standard error
+
+#### Arguments
+
+* **$1** (string): message
+
+### core.print_info_fn()
+
+Print an informative message including the function name of the callee
+to standard output
+
+#### Arguments
+
+* **$1** (string): message
+
+### core.print_debug_fn()
+
+Print a debug message including the function name of the callee
+to standard output
+
+#### Arguments
+
+* **$1** (string): message
+
+### core.print_die()
+
+Print a error message to standard error and die
+
+#### Arguments
+
+* **$1** (string): message
+
+### core.print_fatal()
+
+Print a fatal error message to standard error
+
+#### Arguments
+
+* **$1** (string): message
 
 ### core.print_error()
 
@@ -168,19 +244,24 @@ Print an informative message to standard output
 
 * **$1** (string): message
 
-### core.panic()
+### core.print_debug()
 
-Use when a serious fault occurs. It will print the current ERR (if it exists)
+Print a debug message to standard output if the environment variable "DEBUG" is present
+
+#### Arguments
+
+* **$1** (string): message
 
 ### core.should_output_color()
 
-Determine if color should be printed. Note that this doesn't
-use tput because simple environment variable checking heuristics suffice
+(DEPRECATED). Determine if color should be printed. Note that this doesn't
+use tput because simple environment variable checking heuristics suffice. Deprecated because this code
+has been moved to bash-std
 
 ### core.get_package_info()
 
-Gets information from a particular package. If the key does not exist, then the value
-is an empty string
+(DEPRECATED) Gets information from a particular package. If the key does not exist, then the value
+is an empty string. Deprecated as this code has been moved to bash-std
 
 #### Arguments
 

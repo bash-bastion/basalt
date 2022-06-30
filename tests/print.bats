@@ -9,32 +9,62 @@ errorfn() { "$@"; }
 warnfn() { "$@"; }
 infofn() { "$@"; }
 
+@test "core.print_error_fn works" {
+	run errorfn core.print_error_fn
+	assert_success
+	assert_output 'Error: errorfn()'
+
+	run errorfn core.print_error_fn 'Something'
+	assert_success
+	assert_output 'Error: errorfn(): Something'
+}
+
+@test "core.print_warn_fn works" {
+	run warnfn core.print_warn_fn
+	assert_success
+	assert_output 'Warn: warnfn()'
+
+	run warnfn core.print_warn_fn 'Something'
+	assert_success
+	assert_output 'Warn: warnfn(): Something'
+}
+
+@test "core.print_info_fn works" {
+	run infofn core.print_info_fn
+	assert_success
+	assert_output 'Info: infofn()'
+
+	run infofn core.print_info_fn 'Something'
+	assert_success
+	assert_output 'Info: infofn(): Something'
+}
+
 @test "core.print_error works" {
 	run errorfn core.print_error
 	assert_success
-	assert_output 'Error: errorfn'
+	assert_output 'Error: '
 
 	run errorfn core.print_error 'Something'
 	assert_success
-	assert_output 'Error: errorfn: Something'
+	assert_output 'Error: Something'
 }
 
 @test "core.print_warn works" {
 	run warnfn core.print_warn
 	assert_success
-	assert_output 'Warn: warnfn'
+	assert_output 'Warn: '
 
 	run warnfn core.print_warn 'Something'
 	assert_success
-	assert_output 'Warn: warnfn: Something'
+	assert_output 'Warn: Something'
 }
 
 @test "core.print_info works" {
 	run infofn core.print_info
 	assert_success
-	assert_output 'Info: infofn'
+	assert_output 'Info: '
 
 	run infofn core.print_info 'Something'
 	assert_success
-	assert_output 'Info: infofn: Something'
+	assert_output 'Info: Something'
 }

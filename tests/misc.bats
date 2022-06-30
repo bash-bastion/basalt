@@ -20,9 +20,6 @@ load './util/init.sh'
 	NO_COLOR= run core.should_output_color
 	assert_failure
 
-	COLORTERM='truecolor' run core.should_output_color
-	assert_success
-
 	TERM='dumb' run core.should_output_color
 	assert_failure
 }
