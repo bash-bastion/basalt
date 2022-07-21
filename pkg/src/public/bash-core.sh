@@ -376,9 +376,9 @@ core.print_info() {
 	local msg="$1"
 
 	if core.private.should_print_color 1; then
-		printf "\033[1;32m%s:\033[0m %s\n" 'Info' "$msg" >&2
+		printf "\033[1;32m%s:\033[0m %s\n" 'Info' "$msg"
 	else
-		printf "%s: %s\n" 'Info' "$msg" >&2
+		printf "%s: %s\n" 'Info' "$msg"
 	fi
 }
 
@@ -394,17 +394,9 @@ core.print_debug() {
 # use tput because simple environment variable checking heuristics suffice. Deprecated because this code
 # has been moved to bash-std
 core.should_output_color() {
-	local fd="$1"
-
-	if [[ ${NO_COLOR+x} || "$TERM" = 'dumb' ]]; then
-		return 1
+	if core.private.should_print_color "$@"; then :; else
+		return $?
 	fi
-
-	if [ -t "$fd" ]; then
-		return 0
-	fi
-
-	return 1
 }
 
 # @description (DEPRECATED) Gets information from a particular package. If the key does not exist, then the value
