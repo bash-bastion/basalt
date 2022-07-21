@@ -1,11 +1,7 @@
 # shellcheck shell=bash
 
-# TODO
-# https://wiki.bash-hackers.org/scripting/terminalcodes
-# https://stackoverflow.com/a/20983251
-
 btput() {
-	unset REPLY
+	unset -v REPLY
 
 	case $1 in
 		# controlling cursor

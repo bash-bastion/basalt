@@ -16,7 +16,7 @@
 # Learn more about it [on GitHub](https://github.com/hyperupcall/bake)
 
 if [ "$0" != "${BASH_SOURCE[0]}" ] && [ "$BAKE_INTERNAL_CAN_SOURCE" != 'yes' ]; then
-	printf '%s\n' "Error: This file should not be sourced" >&2
+	printf '%s\n' 'Error: This file should not be sourced' >&2
 	return 1
 fi
 
@@ -91,7 +91,7 @@ bake.assert_cmd() {
 	fi
 }
 
-# @description Change the behavior of Bake
+# @description Change the behavior of Bake. See [guide.md](./docs/guide.md) for details
 # @arg $1 string Name of config property to change
 # @arg $2 string New value of config property
 bake.cfg() {
@@ -230,15 +230,27 @@ __bake_error() {
 # @description Nicely prints all 'Bakefile.sh' tasks to standard output
 # @internal
 __bake_print_tasks() {
+	printf '%s\n' 'Tasks:'
+	local str=
+
 	# shellcheck disable=SC1007,SC2034
 	local regex="^(([[:space:]]*function[[:space:]]*)?task\.(.*?)\(\)).*"
 	local line=
-	printf '%s\n' 'Tasks:'
 	while IFS= read -r line || [ -n "$line" ]; do
 		if [[ "$line" =~ $regex ]]; then
-			printf '%s\n' "  -> ${BASH_REMATCH[3]}"
+			str+="  -> ${BASH_REMATCH[3]}"$'\n'
 		fi
 	done < "$BAKE_FILE"; unset -v line
+
+	if [ -z "$str" ]; then
+		if __bake_is_color; then
+			str=$'  \033[3mNo tasks\033[0m\n'
+		else
+			str=$'  No tasks\n'
+		fi
+	fi
+
+	printf '%s' "$str"
 } >&2
 
 # @description Prints text that takes up the whole terminal width
@@ -276,6 +288,7 @@ __bake_parse_args() {
 	unset REPLY; REPLY=
 	local -i total_shifts=0
 
+	# FIXME: bug for when passing -v to child task argument
 	local __bake_arg=
 	for arg; do case $arg in
 	-f)
@@ -295,6 +308,10 @@ __bake_parse_args() {
 			__bake_internal_die "Specified file '$BAKE_FILE' is not actually a file"
 		fi
 		;;
+	-v)
+		local bake_version='1.7.0'
+		printf '%s\n' "Version: $bake_version"
+		;;
 	-h)
 		local flag_help='yes'
 		if ! shift; then
@@ -311,7 +328,7 @@ __bake_parse_args() {
 		BAKE_FILE="$BAKE_ROOT/${BAKE_FILE##*/}"
 	else
 		if ! BAKE_ROOT=$(
-			while [ ! -f 'Bakefile.sh' ] && [ "$PWD" != / ]; do
+			while [ ! -f './Bakefile.sh' ] && [ "$PWD" != / ]; do
 				if ! cd ..; then
 					exit 1
 				fi
@@ -329,8 +346,8 @@ __bake_parse_args() {
 	fi
 
 	if [ "$flag_help" = 'yes' ]; then
-		cat <<-EOF
-		Usage: bake [-h] [-f <Bakefile>] [var=value ...] <task> [args ...]
+		cat <<-"EOF"
+		Usage: bake [-h|-v] [-f <Bakefile>] [var=value ...] <task> [args ...]
 		EOF
 		__bake_print_tasks
 		exit

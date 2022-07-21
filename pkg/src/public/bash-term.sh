@@ -4,7 +4,7 @@
 #                          Cursor                          #
 # -------------------------------------------------------- #
 
-# Move the cursor position to a supplied row and column. Both default to `0` if not supplied
+# @description Move the cursor position to a supplied row and column. Both default to `0` if not supplied
 # @arg $1 int row
 # @arg $1 int column
 term.cursor_to() {
@@ -14,6 +14,13 @@ term.cursor_to() {
 
 	# Note that 'f' instead of 'H' is the 'force' variant
 	printf -v REPLY '\033[%s;%sH' "$row" "$column"
+}
+
+# @description Moves cursor position to a supplied _relative_ row and column. Both default to `0` if not supplied (FIXME: implement)
+# @arg $1 int row
+# @arg $1 int column
+term.cursor_moveto() {
+	:
 }
 
 # @description Moves the cursor up. Defaults to `1` if not supplied
@@ -70,29 +77,42 @@ term.cursor_line_prev() {
 	printf -v REPLY '\033[%sF' "$count"
 }
 
-# TODO: name, default?
+# FIXME: docs
+# @description Moves the cursor ?
 # @arg $1 int count
-term.cursor_tocolumn() {
+term.cursor_horizontal() {
 	unset -v REPLY
 	local count="${1:-1}"
 
 	printf -v REPLY '\033[%sG' "$count"
 }
 
+# @description Saves the current cursor position
 # @noargs
 term.cursor_savepos() {
 	unset -v REPLY
 
-	REPLY=$'\e[s'
+	if [ "$TERM_PROGRAM" = 'Apple_Terminal' ]; then
+		REPLY=$'\u001B7'
+	else
+		REPLY=$'\e[s'
+	fi
 }
 
+# @description Restores cursor to the last saved position
 # @noargs
 term.cursor_restorepos() {
 	unset -v REPLY
 
-	REPLY=$'\e[u'
+	if [ "$TERM_PROGRAM" = 'Apple_Terminal' ]; then
+		REPLY=$'\u001B8'
+	else
+		REPLY=$'\e[u'
+	fi
 }
 
+# FIXME: docs
+# @description Saves
 # @noargs
 term.cursor_save() {
 	unset -v REPLY
@@ -100,6 +120,8 @@ term.cursor_save() {
 	REPLY=$'\e[7'
 }
 
+# FIXME: docs
+# @description Restores
 # @noargs
 term.cursor_restore() {
 	unset -v REPLY
@@ -107,6 +129,7 @@ term.cursor_restore() {
 	REPLY=$'\e[8'
 }
 
+# @description Hides the cursor
 # @noargs
 term.cursor_hide() {
 	unset -v REPLY
@@ -114,12 +137,85 @@ term.cursor_hide() {
 	REPLY=$'\e[?25l'
 }
 
+# @description Shows the cursor
 # @noargs
 term.cursor_show() {
 	unset -v REPLY
 
 	REPLY=$'\e[?25h'
 }
+
+# @description Reports the cursor position to the application as (as though typed at the keyboard)
+# @noargs
+term.cursor_getpos() {
+	unset -v REPLY
+
+	REPLY=$'\e[6n'
+}
+
+
+
+# -------------------------------------------------------- #
+#                           Erase                          #
+# -------------------------------------------------------- #
+
+# @description Erase from the current cursor position to the end of the current line
+# @noargs
+term.erase_line_end() {
+	unset -v REPLY
+
+	# Same as '\e[0K'
+	REPLY=$'\e[K'
+}
+
+# @description Erase from the current cursor position to the start of the current line
+# @noargs
+term.erase_line_start() {
+	unset -v REPLY
+
+	REPLY=$'\e[1K'
+}
+
+# @description Erase the entire current line
+# @noargs
+term.erase_line() {
+	unset -v REPLY
+
+	REPLY=$'\e[2K'
+}
+
+# @description Erase the screen from the current line down to the bottom of the screen
+# @noargs
+term.erase_screen_end() {
+	unset -v REPLY
+
+	# Same as '\e[0J'
+	REPLY=$'\e[J'
+}
+
+# @description Erase the screen from the current line up to the top of the screen
+# @noargs
+term.erase_screen_start() {
+	unset -v REPLY
+
+	REPLY=$'\e[1J'
+}
+
+# @description Erase the screen and move the cursor the top left position
+# @noargs
+term.erase_screen() {
+	unset -v REPLY
+
+	REPLY=$'\e[2J'
+}
+
+# @noargs
+term.erase_saved_lines() { # TODO: better name?
+	unset -v REPLY
+
+	REPLY=$'\e[3J'
+}
+
 
 
 # -------------------------------------------------------- #
@@ -130,6 +226,7 @@ term.cursor_show() {
 term.scroll_down() {
 	unset -v REPLY
 
+	# REPLY=$'\e[T'
 	REPLY=$'\e[D'
 }
 
@@ -137,8 +234,10 @@ term.scroll_down() {
 term.scroll_up() {
 	unset -v REPLY
 
+	# REPLY=$'\e[S'
 	REPLY=$'\e[M'
 }
+
 
 
 # -------------------------------------------------------- #
@@ -167,61 +266,6 @@ term.tab_clearall() {
 }
 
 
-# -------------------------------------------------------- #
-#                           Erase                          #
-# -------------------------------------------------------- #
-
-# @noargs
-term.erase_line_end() {
-	unset -v REPLY
-
-	# Same as '\e[0K'
-	REPLY=$'\e[K'
-}
-
-# @noargs
-term.erase_line_start() {
-	unset -v REPLY
-
-	REPLY=$'\e[1K'
-}
-
-# @noargs
-term.erase_line() {
-	unset -v REPLY
-
-	REPLY=$'\e[2K'
-}
-
-# @noargs
-term.erase_screen_end() {
-	unset -v REPLY
-
-	# Same as '\e[0J'
-	REPLY=$'\e[J'
-}
-
-# @noargs
-term.erase_screen_start() {
-	unset -v REPLY
-
-	REPLY=$'\e[1J'
-}
-
-# @noargs
-term.erase_screen() {
-	unset -v REPLY
-
-	REPLY=$'\e[2J'
-}
-
-# @noargs
-term.erase_saved_lines() { # TODO: better name?
-	unset -v REPLY
-
-	REPLY=$'\e[3J'
-}
-
 
 # -------------------------------------------------------- #
 #                          Screen                          #
@@ -237,6 +281,7 @@ term.screen_restore() {
 
 	REPLY=$'\e[?1049l'
 }
+
 
 
 # -------------------------------------------------------- #
@@ -259,5 +304,42 @@ term.hyperlink() {
 	local text="$1"
 	local url="$2"
 
-	printf -v REPLY '\e]8;;%s\e\\%s\e]8;;\e\\' "$url" "$text"
+	printf -v REPLY '\e]8;;%s\a%s\e]8;;\a' "$url" "$text"
 }
+
+# @description Construct bold
+# @arg $1 string text
+term.bold() {
+	unset -v REPLY
+	local text="$1"
+
+	printf -v REPLY '\e[1m%s\e[0m' "$text"
+}
+
+# @description Construct italic
+# @arg $1 string text
+term.italic() {
+	unset -v REPLY
+	local text="$1"
+
+	printf -v REPLY '\e[3m%s\e[0m' "$text"
+}
+
+# @description Construct underline
+# @arg $1 string text
+term.underline() {
+	unset -v REPLY
+	local text="$1"
+
+	printf -v REPLY '\e[4m%s\e[0m' "$text"
+}
+
+# @description Construct strikethrough
+# @arg $1 string text
+term.strikethrough() {
+	unset -v REPLY
+	local text="$1"
+
+	printf -v REPLY '\e[9m%s\e[0m' "$text"
+}
+
