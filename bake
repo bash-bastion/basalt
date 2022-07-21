@@ -16,7 +16,7 @@
 # Learn more about it [on GitHub](https://github.com/hyperupcall/bake)
 
 if [ "$0" != "${BASH_SOURCE[0]}" ] && [ "$BAKE_INTERNAL_CAN_SOURCE" != 'yes' ]; then
-	printf '%s\n' 'Error: This file should not be sourced' >&2
+	printf '%s\n' "Error: This file should not be sourced" >&2
 	return 1
 fi
 
@@ -91,12 +91,12 @@ bake.assert_cmd() {
 	fi
 }
 
-# @description Change the behavior of Bake. See [guide.md](./docs/guide.md) for details
+# @description Change the behavior of Bake
 # @arg $1 string Name of config property to change
 # @arg $2 string New value of config property
 bake.cfg() {
-	local cfg="$1"
-	local value="$2"
+	local cfg=$1
+	local value=$2
 
 	case $cfg in
 	stacktrace)
@@ -109,12 +109,6 @@ bake.cfg() {
 		case $value in
 			yes) trap '__bake_trap_debug' 'DEBUG' ;;
 			no) trap - 'DEBUG' ;;
-			*) __bake_internal_die2 "Config property '$cfg' accepts only either 'yes' or 'no'" ;;
-		esac
-		;;
-	big-print)
-		case $value in
-			yes|no) ;;
 			*) __bake_internal_die2 "Config property '$cfg' accepts only either 'yes' or 'no'" ;;
 		esac
 		;;
@@ -236,27 +230,15 @@ __bake_error() {
 # @description Nicely prints all 'Bakefile.sh' tasks to standard output
 # @internal
 __bake_print_tasks() {
-	printf '%s\n' 'Tasks:'
-	local str=
-
 	# shellcheck disable=SC1007,SC2034
 	local regex="^(([[:space:]]*function[[:space:]]*)?task\.(.*?)\(\)).*"
 	local line=
+	printf '%s\n' 'Tasks:'
 	while IFS= read -r line || [ -n "$line" ]; do
 		if [[ "$line" =~ $regex ]]; then
-			str+="  -> ${BASH_REMATCH[3]}"$'\n'
+			printf '%s\n' "  -> ${BASH_REMATCH[3]}"
 		fi
 	done < "$BAKE_FILE"; unset -v line
-
-	if [ -z "$str" ]; then
-		if __bake_is_color; then
-			str=$'  \033[3mNo tasks\033[0m\n'
-		else
-			str=$'  No tasks\n'
-		fi
-	fi
-
-	printf '%s' "$str"
 } >&2
 
 # @description Prints text that takes up the whole terminal width
@@ -265,21 +247,13 @@ __bake_print_tasks() {
 __bake_print_big() {
 	local print_text="$1"
 
-	if [ "$__bake_cfg_big_print" = 'no' ]; then
-		return
-	fi
-
 	# shellcheck disable=SC1007
 	local _stty_height= _stty_width=
 	read -r _stty_height _stty_width < <(
-		if stty size &>/dev/null; then
+		if command -v stty &>/dev/null; then
 			stty size
 		else
-			if [ -n "$COLUMNS" ]; then
-				printf '%s\n' "20 $COLUMNS"
-			else
-				printf '%s\n' '20 80'
-			fi
+			printf '%s\n' '20 80'
 		fi
 	)
 
@@ -302,7 +276,6 @@ __bake_parse_args() {
 	unset REPLY; REPLY=
 	local -i total_shifts=0
 
-	# FIXME: bug for when passing -v to child task argument
 	local __bake_arg=
 	for arg; do case $arg in
 	-f)
@@ -322,10 +295,6 @@ __bake_parse_args() {
 			__bake_internal_die "Specified file '$BAKE_FILE' is not actually a file"
 		fi
 		;;
-	-v)
-		local bake_version='1.8.2'
-		printf '%s\n' "Version: $bake_version"
-		;;
 	-h)
 		local flag_help='yes'
 		if ! shift; then
@@ -342,7 +311,7 @@ __bake_parse_args() {
 		BAKE_FILE="$BAKE_ROOT/${BAKE_FILE##*/}"
 	else
 		if ! BAKE_ROOT=$(
-			while [ ! -f './Bakefile.sh' ] && [ "$PWD" != / ]; do
+			while [ ! -f 'Bakefile.sh' ] && [ "$PWD" != / ]; do
 				if ! cd ..; then
 					exit 1
 				fi
@@ -360,8 +329,8 @@ __bake_parse_args() {
 	fi
 
 	if [ "$flag_help" = 'yes' ]; then
-		cat <<-"EOF"
-		Usage: bake [-h|-v] [-f <Bakefile>] [var=value ...] <task> [args ...]
+		cat <<-EOF
+		Usage: bake [-h] [-f <Bakefile>] [var=value ...] <task> [args ...]
 		EOF
 		__bake_print_tasks
 		exit
@@ -374,19 +343,15 @@ __bake_parse_args() {
 # @internal
 __bake_main() {
 	__bake_cfg_stacktrace='no'
-	__bake_cfg_big_print='yes'
 
-	# Environment boilerplate
 	set -ETeo pipefail
 	shopt -s dotglob extglob globasciiranges globstar lastpipe shift_verbose
-	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' \
-		LC_MONETARY='C' LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' \
-		LC_TELEPHONE='C' LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
+	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
+		LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
+		LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
 	trap '__bake_trap_err' 'ERR'
-	trap ':' 'INT' # Ensure Ctrl-C ends up printing <- ERROR ==== etc.
 	bake.cfg pedantic-task-cd 'no'
 
-	# Parse arguments
 	# Set `BAKE_{ROOT,FILE}`
 	BAKE_ROOT=; BAKE_FILE=
 	__bake_parse_args "$@"
@@ -394,7 +359,6 @@ __bake_main() {
 		__bake_internal_die 'Failed to shift'
 	fi
 
-	# Set variables à la Make
 	# shellcheck disable=SC1007
 	local __bake_key= __bake_value=
 	local __bake_arg=
@@ -412,8 +376,8 @@ __bake_main() {
 			;;
 		*) break
 	esac done; unset -v __bake_arg
+	# Note: Don't unset '__bake_variable' or none of the variables will stay set
 	unset -v __bake_key __bake_value
-	unset -vn __bake_variable
 
 	local __bake_task="$1"
 	if [ -z "$__bake_task" ]; then
@@ -433,21 +397,6 @@ __bake_main() {
 	__bake_task= source "$BAKE_FILE"
 
 	if declare -f task."$__bake_task" >/dev/null 2>&1; then
-		local line=
-		local shouldTestNextLine='no'
-		while IFS= read -r line; do
-			if [ "$shouldTestNextLine" = 'yes' ]; then
-				if [[ $line == *'bake.cfg'*big-print*no* ]]; then
-					__bake_cfg_big_print='no'
-				fi
-				shouldTestNextLine='no'
-			fi
-
-			if [[ $line == @(task."$__bake_task"|init)*'('*')'*'{' ]]; then
-				shouldTestNextLine='yes'
-			fi
-		done < "$BAKE_FILE"; unset -v line shouldTestNextLine
-
 		__bake_print_big "-> RUNNING TASK '$__bake_task'"
 		if declare -f init >/dev/null 2>&1; then
 			init "$__bake_task"
