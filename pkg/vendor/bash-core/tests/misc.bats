@@ -15,9 +15,25 @@ load './util/init.sh'
 }
 
 @test "core.should_output_color works" {
-	unset NO_COLOR COLORTERM TERM
+	unset -v NO_COLOR FORCE_COLOR TERM
 
 	NO_COLOR= run core.should_output_color
+	assert_failure
+
+	FORCE_COLOR=0 run core.should_output_color
+	assert_failure
+
+	FORCE_COLOR=1 run core.should_output_color
+	assert_success
+
+	FORCE_COLOR=2 run core.should_output_color
+	assert_success
+
+	FORCE_COLOR=3 run core.should_output_color
+	assert_success
+
+	# NO_COLOR has precedent over FORCE_COLOR
+	NO_COLOR= FORCE_COLOR=1 run core.should_output_color
 	assert_failure
 
 	TERM='dumb' run core.should_output_color

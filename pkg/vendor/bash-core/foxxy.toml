@@ -1,4 +1,9 @@
+[project]
 ecosystem = 'basalt'
 form = 'unknown'
-for = 'me'
+for = 'anyone'
 status = 'experimental'
+
+[discovery]
+categories = []
+tags = []

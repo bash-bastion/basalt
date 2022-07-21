@@ -2,7 +2,7 @@
 type = 'bash'
 name = 'bash-core'
 slug = 'core'
-version = '0.10.1'
+version = '0.10.2'
 authors = ['Edwin Kofler <edwin@kofler.dev>']
 description = 'Core functions for any Bash program'
 

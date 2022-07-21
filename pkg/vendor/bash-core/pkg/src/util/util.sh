@@ -79,8 +79,18 @@ core.private.util.err_print() {
 # @internal
 core.private.should_print_color() {
 	local fd="$1"
+	
+	if [ ${NO_COLOR+x} ]; then
+		return 1
+	fi
 
-	if [[ ${NO_COLOR+x} || "$TERM" = 'dumb' ]]; then
+	if [[ $FORCE_COLOR == @(1|2|3) ]]; then
+		return 0
+	elif [[ $FORCE_COLOR == '0' ]]; then
+		return 1
+	fi
+
+	if [ "$TERM" = 'dumb' ]; then
 		return 1
 	fi
 
