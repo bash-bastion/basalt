@@ -1,0 +1,32 @@
+[package]
+lang = 'bash'
+type = 'lib'
+name = 'bash-toml'
+slug = 'bash_toml'
+version = '0.3.0'
+authors = ['Edwin Kofler" <edwin@kofler.dev>']
+description = 'A kickass Toml parser written in pure Bash'
+
+[run]
+dependencies = [
+	'hyperupcall/bash-object@v0.8.0',
+	'https://github.com/hyperupcall/bats-all@v4.3.0',
+	'https://github.com/hyperupcall/bash-core@v0.6.0',
+]
+sourceDirs = ['pkg/src/public', 'pkg/src/util']
+builtinDirs = []
+binDirs = []
+completionDirs = []
+manDirs = []
+
+[run.shellEnvironment]
+
+[run.setOptions]
+errexit = 'on'
+pipefail = 'on'
+
+[run.shoptOptions]
+extglob = 'on'
+globasciiranges = 'on'
+nullglob = 'on'
+shift_verbose = 'on'
