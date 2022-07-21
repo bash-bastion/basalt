@@ -35,7 +35,7 @@ basalt-release() {
 	local previous_version_string=
 	local version_string="${args[0]}"
 
-	if util.get_toml_string "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'version'; then
+	if bash_toml.quick_string_get "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'package.version'; then
 		previous_version_string="$REPLY"
 	else
 		print.die "To use 'basalt version', a you must have a 'version' field set to at least an empty string"
@@ -82,7 +82,7 @@ basalt-release() {
 	sed -e "s,\([ \t]*version[ \t]*=[ \t]*['\"]\)\(.*\)\(['\"].*\),\1${version_string}\3," "$toml_file.bak" > "$toml_file"
 	rm "$toml_file.bak"
 
-	if util.get_toml_string "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'version'; then
+	if bash_toml.quick_string_get "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'package.version'; then
 		if [ "$REPLY" != "$version_string" ]; then
 			print.die "Failed to properly substitute version with sed"
 		fi

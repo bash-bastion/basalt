@@ -12,7 +12,7 @@ basalt-install() {
 	fi
 
 	# 'basalt.toml' is guaranteed to exist due to 'util.init_local'
-	if util.get_toml_array "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'dependencies'; then
+	if bash_toml.quick_array_get "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'run.dependencies'; then
 		local -a dependencies=("${REPLY[@]}")
 		pkg.list_packages "$BASALT_LOCAL_PROJECT_DIR" "${dependencies[@]}"
 		pkg.install_packages "$BASALT_LOCAL_PROJECT_DIR" 'strict' "${dependencies[@]}"

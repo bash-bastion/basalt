@@ -29,7 +29,7 @@ symlink.bin_strict() {
 
 	local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 	if [ -f "$package_dir/basalt.toml" ]; then
-		if util.get_toml_array "$package_dir/basalt.toml" 'binDirs'; then
+		if bash_toml.quick_array_get "$package_dir/basalt.toml" 'run.binDirs'; then
 			if ((${#REPLY[@]} > 0)); then
 				mkdir -p "$install_dir/bin"
 			fi

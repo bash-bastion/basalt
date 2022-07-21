@@ -75,7 +75,7 @@ pkg.install_packages() {
 		# Install transitive dependencies if they exist
 		local package_dir="$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 		if [ -f "$package_dir/basalt.toml" ]; then
-			if util.get_toml_array "$package_dir/basalt.toml" 'dependencies'; then
+			if bash_toml.quick_array_get "$package_dir/basalt.toml" 'run.dependencies'; then
 				pkg.install_packages "$package_dir" 'strict' "${REPLY[@]}"
 			fi
 		fi
@@ -196,7 +196,7 @@ pkg.phase_global_integration() {
 	ensure.dir "$project_dir"
 	if [ -f "$project_dir/basalt.toml" ]; then
 		# Install dependencies
-		if util.get_toml_array "$project_dir/basalt.toml" 'dependencies'; then
+		if bash_toml.quick_array_get "$project_dir/basalt.toml" 'run.dependencies'; then
 			pkg.phase_local_integration_recursive "$project_dir" 'yes' 'lenient' "${REPLY[@]}"
 			pkg.phase_local_integration_nonrecursive "$project_dir"
 		fi
@@ -258,7 +258,7 @@ pkg.phase_local_integration_recursive() {
 
 		ensure.dir "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"
 		if [ -f "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" ]; then
-			if util.get_toml_array "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'dependencies'; then
+			if bash_toml.quick_array_get "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id/basalt.toml" 'run.dependencies'; then
 				pkg.phase_local_integration_recursive "$original_package_dir" 'no' 'strict' "${REPLY[@]}"
 			fi
 		fi
@@ -292,7 +292,7 @@ fi'$'\n'
 
 	if [ -f "$project_dir/basalt.toml" ]; then
 		# Source directories
-		if util.get_toml_array "$project_dir/basalt.toml" 'sourceDirs'; then
+		if bash_toml.quick_array_get "$project_dir/basalt.toml" 'run.sourceDirs'; then
 			if ((${#REPLY[@]} > 0)); then
 				# Convert the full '$project_dir' path into something that uses the environment variables
 				local project_dir_short=
@@ -339,7 +339,7 @@ fi"
 		for option in allexport braceexpand emacs errexit errtrace functrace hashall histexpand \
 				history ignoreeof interactive-commants keyword monitor noclobber noexec noglob nolog \
 				notify nounset onecmd physical pipefail posix priviledged verbose vi xtrace; do
-			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
+			if bash_toml.quick_string_get "$project_dir/basalt.toml" "run.setOptions.$option"; then
 				if [ "$REPLY" = 'on' ]; then
 					str+="set -o $option"$'\n'
 				elif [ "$REPLY" = 'off' ]; then
@@ -360,7 +360,7 @@ fi"
 				huponexit inherit_errexit interactive_comments lastpipe lithist localvar_inherit localvar_unset \
 				login_shell mailwarn no_empty_cmd_completion nocaseglob nocasematch nullglob progcomp \
 				progcomp_alias promptvars restricted_shell shift_verbose sourcepath xpg_echo; do
-			if util.get_toml_string "$project_dir/basalt.toml" "$option"; then
+			if bash_toml.quick_string_get "$project_dir/basalt.toml" "run.shoptOptions.$option"; then
 				if [ "$REPLY" = 'on' ]; then
 					str+="shopt -s $option"$'\n'
 				elif [ "$REPLY" = 'off' ]; then
