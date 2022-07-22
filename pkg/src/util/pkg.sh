@@ -9,7 +9,7 @@ pkg.list_packages() {
 	ensure.nonzero 'project_dir'
 
 	for pkg do
-		util.get_package_info "$pkg"
+		pkgutil.get_package_info "$pkg"
 		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 		local package_id=
@@ -21,7 +21,7 @@ pkg.list_packages() {
 
 			printf '%s\n' "pkg: $pkg_path"
 		elif [[ $url == https://* ]]; then
-			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+			pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			local package_id="$REPLY"
 
 			printf '%s\n' "pkg: $package_id"
@@ -46,7 +46,7 @@ pkg.install_packages() {
 
 	local pkg=
 	for pkg; do
-		util.get_package_info "$pkg"
+		pkgutil.get_package_info "$pkg"
 		local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 		local package_id=
@@ -62,7 +62,7 @@ pkg.install_packages() {
 			cp -r "$pkg_path" "$BASALT_GLOBAL_DATA_DIR/store/packages/$pkg_id"
 			print.green 'Copied' "$pkg_id"
 		elif [[ $url == https://* ]]; then
-			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+			pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			local package_id="$REPLY"
 
 			# Download, extract
@@ -101,7 +101,7 @@ pkg.phase_download_tarball() {
 	ensure.nonzero 'package'
 	ensure.nonzero 'version'
 
-	util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+	pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
 
 	local download_dest="$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
@@ -225,7 +225,7 @@ pkg.phase_local_integration_recursive() {
 
 	local pkg=
 	for pkg; do
-		util.get_package_info "$pkg"
+		pkgutil.get_package_info "$pkg"
 		local repo_type="$REPLY1"
 		local url="$REPLY2"
 		local site="$REPLY3"
@@ -241,7 +241,7 @@ pkg.phase_local_integration_recursive() {
 
 			package_id=$pkg_id
 		elif [[ $url == https://* ]]; then
-			util.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
+			pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 			package_id="$REPLY"
 		fi
 

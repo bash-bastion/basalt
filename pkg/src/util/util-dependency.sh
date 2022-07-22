@@ -38,7 +38,7 @@ util.text_add_dependency() {
 	mkdir -p "${text_file%/*}"
 	touch "$text_file"
 
-	util.get_package_info "$dependency"
+	pkgutil.get_package_info "$dependency"
 	local url2="$REPLY2"
 
 	local line=
@@ -47,7 +47,7 @@ util.text_add_dependency() {
 			continue
 		fi
 
-		util.get_package_info "$line"
+		pkgutil.get_package_info "$line"
 		local url1="$REPLY2"
 
 		if [ "$url1" = "$url2" ]; then
@@ -67,20 +67,20 @@ util.text_remove_dependency() {
 	ensure.nonzero 'dependency'
 	ensure.nonzero 'flag_force'
 
-	util.get_package_info "$dependency"
+	pkgutil.get_package_info "$dependency"
 	local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
-	util.get_package_id --allow-empty-version "$repo_type" "$url" "$site" "$package" "$version"
+	pkgutil.get_package_id --allow-empty-version "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
 
 	local -a arr=()
 	if util.text_dependency_is_installed "$text_file" "$dependency"; then
 		local line=
 		while IFS= read -r line || [ -n "$line" ]; do
-			util.get_package_info "$line"
+			pkgutil.get_package_info "$line"
 			local url1="$REPLY2"
 
-			util.get_package_info "$dependency"
+			pkgutil.get_package_info "$dependency"
 			local url2="$REPLY2"
 
 			if [ "$url1" != "$url2" ]; then

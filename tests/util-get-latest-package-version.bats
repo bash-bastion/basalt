@@ -8,13 +8,13 @@ load './util/init.sh'
 	}
 
 	# Test warning
-	run util.get_latest_package_version 'remote' '_whatever_' 'gitlab.com' '_whatever_'
+	run pkgutil.get_latest_package_version 'remote' '_whatever_' 'gitlab.com' '_whatever_'
 
 	assert_success
 	assert_line -p "Could not automatically retrieve latest release for '_whatever_' since 'gitlab.com' is not supported. Falling back to retrieving latest commit"
 
 	# Test output
-	util.get_latest_package_version 'remote' '_whatever_' 'gitlab.com' '_whatever_'
+	pkgutil.get_latest_package_version 'remote' '_whatever_' 'gitlab.com' '_whatever_'
 
 	assert [ "$REPLY" = 'acc5e0a847e25b59ce2999340fdad51d50a896a5' ]
 }
@@ -25,7 +25,7 @@ load './util/init.sh'
 		  "tag_name": "v0.0.1"
 		}'
 	}
-	util.get_latest_package_version 'remote' '_whatever_' 'github.com' '_whatever_'
+	pkgutil.get_latest_package_version 'remote' '_whatever_' 'github.com' '_whatever_'
 
 	assert [ "$REPLY" = 'v0.0.1' ]
 }
@@ -41,7 +41,7 @@ load './util/init.sh'
 		printf '%s\n' 'ccc5e0a847e25b59ce2999340fdad51d50a896a5	HEAD'
 	}
 
-	util.get_latest_package_version 'remote' '_whatever_' 'github.com' '_whatever_'
+	pkgutil.get_latest_package_version 'remote' '_whatever_' 'github.com' '_whatever_'
 
 	assert [ "$REPLY" = 'ccc5e0a847e25b59ce2999340fdad51d50a896a5' ]
 }

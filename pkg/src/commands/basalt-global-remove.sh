@@ -23,7 +23,7 @@ basalt-global-remove() {
 	fi
 
 	for pkg in "${pkgs[@]}"; do
-		util.get_package_info "$pkg"
+		pkgutil.get_package_info "$pkg"
 		local url="$REPLY2" version="$REPLY5"
 
 		if [ -n "$version" ]; then

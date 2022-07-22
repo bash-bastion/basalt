@@ -4,7 +4,7 @@ load './util/init.sh'
 
 @test "Succeeds for valid repository" {
 	local package_id="github.com/hyperupcall/bash-object@v0.6.3"
-	util.get_package_info "https://$package_id"
+	pkgutil.get_package_info "https://$package_id"
 
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" "$REPLY5"
 
@@ -15,7 +15,7 @@ load './util/init.sh'
 
 @test "Succeeds with caching" {
 	local package_id="github.com/hyperupcall/bash-object@v0.6.3"
-	util.get_package_info "https://$package_id"
+	pkgutil.get_package_info "https://$package_id"
 
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" "$REPLY5"
 
@@ -30,12 +30,12 @@ load './util/init.sh'
 	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id.tar.gz"
 }
 
-# Note that by the time we get to 'util.get_package_info', we expect the version (REPLY5)
+# Note that by the time we get to 'pkgutil.get_package_info', we expect the version (REPLY5)
 # to properly be calculated in the code via checking the version with -z, and calling
-# `util.get_latest_package_version`
+# `pkgutil.get_latest_package_version`
 @test "Succeeds with local file" {
 	test_util.create_fake_remote 'user/repo' 'v0.0.1'; dir="$REPLY"
-	util.get_package_info "file://$dir"
+	pkgutil.get_package_info "file://$dir"
 
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" 'v0.0.1'
 
@@ -46,7 +46,7 @@ load './util/init.sh'
 
 @test "Fails for invalid repository" {
 	local package_id="github.com/hyperupcall/bash-object-nonexist@v0.6.3"
-	util.get_package_info "https://$package_id"
+	pkgutil.get_package_info "https://$package_id"
 
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" "$REPLY5"
 
@@ -59,7 +59,7 @@ load './util/init.sh'
 	skip
 
 	local package_id="github.com/hyperupcall/bash-object@v0.0.0"
-	util.get_package_info "https://$package_id"
+	pkgutil.get_package_info "https://$package_id"
 
 	run pkg.phase_download_tarball "$REPLY1" "$REPLY2" "$REPLY3" "$REPLY4" "$REPLY5"
 
