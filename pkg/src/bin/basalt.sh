@@ -25,7 +25,7 @@ main.basalt() {
 			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
 			exit 1
 		fi
-		for f in "$__basalt_dirname"/pkg/vendor/bash-{core,std,term}/pkg/src/**/?*.sh; do
+		for f in "$__basalt_dirname"/pkg/vendor/bash-{core,std,term,toml}/pkg/src/**/?*.sh; do
 			source "$f"
 		done; unset -v f
 		for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do

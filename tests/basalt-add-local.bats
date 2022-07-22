@@ -6,7 +6,7 @@ load './util/init.sh'
 	test_util.init_app 'project-echo' 'subpkg'
 
 	test_util.init_app 'project-foxtrot' '.' \
-		"dependencies = ['file://./subpkg']"
+		$'[run]\ndependencies = [\'file://./subpkg\']'
 
 	basalt install
 
@@ -22,7 +22,7 @@ load './util/init.sh'
 	test_util.init_app 'project-echo' 'subpkg'
 
 	test_util.init_app 'project-foxtrot' '.' \
-		"dependencies = ['file://$PWD/subpkg']"
+		$'[run]\ndependencies = [\'file://'"$PWD/subpkg']"
 
 	basalt install
 
