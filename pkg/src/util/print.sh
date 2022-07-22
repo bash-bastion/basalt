@@ -11,7 +11,7 @@ print.die() {
 # @description Print a _fatal_ error. Use this for internal error (like asserts)
 print.fatal() {
 	if std.should_print_color_stderr; then
-		printf "\033[0;35m%11s\033[0m %s\n" 'Fatal' "$1" >&2
+		printf "\033[0;35m%11s:\033[0m %s\n" 'Fatal' "$1" >&2
 	else
 		printf "%11s: %s\n" "Fatal" "$1" >&2
 	fi
@@ -22,7 +22,7 @@ print.fatal() {
 
 print.error() {
 	if std.should_print_color_stderr; then
-		printf "\033[0;31m%11s\033[0m %s\n" 'Error' "$1" >&2
+		printf "\033[0;31m%11s:\033[0m %s\n" 'Error' "$1" >&2
 	else
 			printf "%11s: %s\n" "Error" "$1" >&2
 	fi
@@ -30,7 +30,7 @@ print.error() {
 
 print.warn() {
 	if std.should_print_color_stderr; then
-		printf "\033[0;33m%11s\033[0m %s\n" 'Warning' "$1" >&2
+		printf "\033[0;33m%11s:\033[0m %s\n" 'Warning' "$1" >&2
 	else
 		printf "%11s: %s\n" 'Warning' "$1" >&2
 	fi
@@ -38,7 +38,7 @@ print.warn() {
 
 print.info() {
 	if std.should_print_color_stdout; then
-		printf "\033[0;32m%11s\033[0m %s\n" 'Info' "$1"
+		printf "\033[0;32m%11s:\033[0m %s\n" 'Info' "$1"
 	else
 		printf "%11s: %s\n" 'Info' "$1"
 	fi
@@ -46,7 +46,7 @@ print.info() {
 
 print.green() {
 	if std.should_print_color_stdout; then
-		printf "\033[0;32m%11s\033[0m %s\n" "$1" "$2"
+		printf "\033[0;32m%11s:\033[0m %s\n" "$1" "$2"
 	else
 		printf "%11s: %s\n" "$1" "$2"
 	fi
