@@ -298,6 +298,11 @@ util.get_package_info() {
 		REPLY4="$package"
 		REPLY5="$ref"
 	fi
+
+	if [ -z "$ref" ]; then
+		# TODO: print name of package this is originating from
+		print.die "Specified packages must have a version. For example, change 'https://github.com/hyperupcall/bash-toml' to 'https://github.com/hyperupcall/bash-object@v0.10.21'"
+	fi
 }
 
 # @description Get path to download tarball of particular package revision
