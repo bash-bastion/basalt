@@ -17,7 +17,7 @@ basalt-run() {
 		for bin_dir in "${REPLY[@]}"; do
 			for bin_file in "$BASALT_LOCAL_PROJECT_DIR/$bin_dir"/*; do
 				if [ -f "$bin_file" ] && [ -x "$bin_file" ]; then
-					util.deinit
+					util.init_deinit
 					print.info "Running $bin_file"
 					exec "$bin_file" "$@"
 				elif [ -f "$bin_file" ]; then
@@ -32,7 +32,7 @@ basalt-run() {
 	# Look in subdependencies
 	local bin_file="$BASALT_LOCAL_PROJECT_DIR/.basalt/bin/$bin_name"
 	if [ -f "$bin_file" ] && [ -x "$bin_file" ]; then
-		util.deinit
+		util.init_deinit
 		print.info "Running $bin_file"
 		exec "$bin_file" "$@"
 	elif [ -f "$bin_file" ]; then
