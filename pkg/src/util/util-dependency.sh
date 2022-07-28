@@ -67,11 +67,8 @@ util.text_remove_dependency() {
 	ensure.nonzero 'dependency'
 	ensure.nonzero 'flag_force'
 
-	pkgutil.get_package_info "$dependency"
-	local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
-
-	pkgutil.get_package_id --allow-empty-version "$repo_type" "$url" "$site" "$package" "$version"
-	local package_id="$REPLY"
+	pkgutil.get_allinfo "$dependency"
+	local _pkg_fsslug="$REPLY5"
 
 	local -a arr=()
 	if util.text_dependency_is_installed "$text_file" "$dependency"; then
@@ -95,9 +92,9 @@ util.text_remove_dependency() {
 		fi
 	fi
 
-	rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$package_id"*
+	rm -rf "$BASALT_GLOBAL_DATA_DIR/store/packages/$_pkg_fsslug"*
 	if [ "$flag_force" = 'yes' ]; then
-		rm -rf "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$package_id"*
+		rm -rf "$BASALT_GLOBAL_DATA_DIR/store/tarballs/$_pkg_fsslug"*
 	fi
 }
 

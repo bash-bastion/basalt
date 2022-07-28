@@ -30,20 +30,27 @@ basalt-add() {
 
 			util.toml_add_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "file://$pkg"
 		else
-			#  Remote packages
-			pkgutil.get_package_info "$pkg"
-			local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
+			pkgutil.get_allinfo "$pkg"
+			local _pkg_type="$REPLY1"
+			local _pkg_rawtext="$REPLY2"
+			local _pkg_location="$REPLY3"
+			local _pkg_fqlocation="$REPLY4"
+			local _pkg_fsslug="$REPLY5"
+			local _pkg_site="$REPLY6"
+			local _pkg_fullname="$REPLY7"
+			local _pkg_version="$REPLY8"
 
-			if ! util.does_package_exist "$repo_type" "$url"; then
-				print.die "Package located at '$url' does not exist"
+			# Remote packages
+			if ! util.does_package_exist "$_pkg_type" "$_pkg_fqlocation"; then
+				print.die "Package located at '$_pkg_fqlocation' does not exist"
 			fi
 
-			if [ -z "$version" ]; then
-				pkgutil.get_latest_package_version "$repo_type" "$url" "$site" "$package"
-				version="$REPLY"
+			if [ -z "$_pkg_version" ]; then
+				pkgutil.get_latest_package_version "$_pkg_type" "$_pkg_fqlocation" "$_pkg_site" "$_pkg_fullname"
+				_pkg_version="$REPLY"
 			fi
 
-			util.toml_add_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$url@$version"
+			util.toml_add_dependency "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" "$_pkg_fqlocation@$_pkg_version"
 		fi
 	done
 

@@ -9,9 +9,11 @@ basalt-list() {
 
 	if bash_toml.quick_array_get "$BASALT_LOCAL_PROJECT_DIR/basalt.toml" 'run.dependencies'; then
 		for dependency in "${REPLY[@]}"; do
-			pkgutil.get_package_info "$dependency"
-			local url="$REPLY2" version="$REPLY5"
-			printf '%s\n' "$url@$version"
+			pkgutil.get_allinfo "$dependency"
+			local _pkg_fqlocation="$REPLY4"
+			local _pkg_version="$REPLY8"
+
+			printf '%s\n' "$_pkg_fqlocation${_pkg_version:+@$_pkg_version}"
 		done
 	fi
 }

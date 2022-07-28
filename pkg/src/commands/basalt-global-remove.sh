@@ -23,14 +23,15 @@ basalt-global-remove() {
 	fi
 
 	for pkg in "${pkgs[@]}"; do
-		pkgutil.get_package_info "$pkg"
-		local url="$REPLY2" version="$REPLY5"
+		pkgutil.get_allinfo "$pkg"
+		local _pkg_fqlocation="$REPLY4"
+		local _pkg_version="$REPLY8"
 
-		if [ -n "$version" ]; then
+		if [ -n "$_pkg_version" ]; then
 			print.die "Must not specify ref when removing packages"
 		fi
 
-		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$url" "$flag_force"
+		util.text_remove_dependency "$BASALT_GLOBAL_DATA_DIR/global/dependencies" "$_pkg_fqlocation" "$flag_force"
 	done
 
 	basalt-global-install

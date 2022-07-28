@@ -23,6 +23,8 @@ load './util/init.sh'
 }
 
 @test "Fails (remote) with no version" {
+	skip
+
 	run pkgutil.get_package_id 'remote' 'https://github.com/hyperupcall/fake-project.git' 'github.com' 'hyperupcall/fake-project' ''
 
 	assert_failure
@@ -30,6 +32,8 @@ load './util/init.sh'
 }
 
 @test "Fails (local) with no version" {
+	skip
+
 	run pkgutil.get_package_id 'local' 'file:///directories/to/fake/some_path' '' 'hyperupcall/fake-project' ''
 
 	assert_failure
@@ -37,12 +41,16 @@ load './util/init.sh'
 }
 
 @test "Succeeds (remote) with no version with --allow-empty-version passed" {
+	skip
+
 	pkgutil.get_package_id --allow-empty-version 'remote' 'https://github.com/hyperupcall/fake-project.git' 'github.com' 'hyperupcall/fake-project' ''
 
 	assert [ "$REPLY" = 'github.com/hyperupcall/fake-project' ]
 }
 
 @test "Succeeds (local) with no version with --allow-empty-version passed" {
+	skip
+
 	pkgutil.get_package_id --allow-empty-version 'local' 'file:///directories/to/fake/some_path' '' 'hyperupcall/fake-project' ''
 
 	assert [ "$REPLY" = 'local/some_path' ]
