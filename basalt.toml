@@ -5,7 +5,8 @@
 # to get meaningful information about the project
 
 [package]
-type = 'bash'
+lang = "bash"
+type = 'app'
 name = 'basalt'
 slug = 'basalt'
 version = '0.10.0'
@@ -15,7 +16,18 @@ description = 'The rock-solid Bash package manager'
 [run]
 dependencies = []
 binDirs = ['bin']
-sourceDirs = ['pkg/src/bin', 'pkg/src/commands', 'pkg/src/public', 'pkg/src/util']
+sourceDirs = [
+	'pkg/src/bin',
+	'pkg/src/commands',
+	'pkg/src/public',
+	'pkg/src/util',
+]
 builtinDirs = []
 completionDirs = ['pkg/completions']
 manDirs = ['pkg/share/man']
+
+[run.shellEnvironment]
+
+[run.setOptions]
+
+[run.shoptOptions]
