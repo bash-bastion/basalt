@@ -98,12 +98,6 @@ pkg.phase_download_tarball() {
 		# download the package as below. It does this automatically for 'local' packages
 	fi
 
-	# TODO Print warning if a local dependency has a dirty index
-	if [ "$repo_type" = 'local' ]; then
-		:
-		# print.warn "Local dependency at '$url' has a dirty index"
-	fi
-
 	rm -rf "$BASALT_GLOBAL_DATA_DIR/scratch"
 	if ! git clone --quiet "$url" "$BASALT_GLOBAL_DATA_DIR/scratch/$package_id"; then
 		print.die "Could not clone repository for $package_id"

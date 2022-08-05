@@ -20,6 +20,7 @@ load './util/init.sh'
 @test "Succeeds with caching" {
 	local package_id="github.com/hyperupcall/bash-object@v0.6.3"
 	pkgutil.get_package_info "https://$package_id"
+	local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 	pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
@@ -43,20 +44,23 @@ load './util/init.sh'
 @test "Succeeds with local file" {
 	test_util.create_fake_remote 'user/repo' 'v0.0.1'; dir="$REPLY"
 	pkgutil.get_package_info "file://$dir"
+	local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 	pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
+	echo jj "$package_id"
 
 	run pkg.phase_download_tarball "$repo_type" "$url" "$site" "$package" "v0.0.1" "$package_id"
 
 	assert_success
-	assert_line -p "Downloaded: local/fake_remote_user_repo@v0.0.1"
+	assert_line -p "Downloaded: local/fake_remote_user_repo"
 	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/local/fake_remote_user_repo@v0.0.1.tar.gz"
 }
 
 @test "Fails for invalid repository" {
 	local package_id="github.com/hyperupcall/bash-object-nonexist@v0.6.3"
 	pkgutil.get_package_info "https://$package_id"
+	local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 	pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
@@ -73,6 +77,7 @@ load './util/init.sh'
 
 	local package_id="github.com/hyperupcall/bash-object@v0.0.0"
 	pkgutil.get_package_info "https://$package_id"
+	local repo_type="$REPLY1" url="$REPLY2" site="$REPLY3" package="$REPLY4" version="$REPLY5"
 
 	pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
