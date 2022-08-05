@@ -49,13 +49,15 @@ bash_toml.util_line_is_part_of_object() {
 		return 1
 	fi
 
-	local regex1=$'^[ \t]*'"\[$key_location\]"
-	local regex2=$'^\[run.shoptOptions\]'
+	local regex1=$'^[ \t]*'"\\[$key_location\\]"
+	local regex2=$'^\[.*?\]'
 	if [[ $line =~ $regex1 ]]; then
 		__mode='matched-objhier'
 		return 1
 	elif [[ $line =~ $regex2 ]]; then
-		__mode='--'
+		if [ "$__mode" = 'matched-objhier' ]; then
+			__mode='--'
+		fi
 	fi
 
 	if [ "$__mode" = 'matched-objhier' ]; then
