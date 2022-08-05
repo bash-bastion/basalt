@@ -112,13 +112,18 @@ Pass '--help' for more info"
 
 	local __basalt_pkg_path_full="${__basalt_pkg_path_full_array[0]}"
 
-	# TODO: better diagnostic if user passes in 'rupa/z' (instead of prepending github.com)
 	if [ -z "$__basalt_pkg_path_full" ] || [ ! -d "$__basalt_pkg_path_full" ]; then
 		local __basalt_str='locally'
 		if [ "$__basalt_flag_global" = 'yes' ]; then
 			local __basalt_str="globally"
 		fi
-		printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not installed $__basalt_str"
+
+		local regex="^[^/]+/[^/]+$"
+		if [[ "$__basalt_pkg_path" =~ $regex ]]; then
+			printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not a valid. It must include the website domain"
+		else
+			printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not installed $__basalt_str"
+		fi
 
 		if [ "$__basalt_flag_global" = 'yes' ]; then
 			return 1
