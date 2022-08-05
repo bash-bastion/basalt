@@ -2,8 +2,8 @@
 
 # Contains functions to be used anywhere where Basalt is installed. This is soured by both
 # 'basalt global init' and 'basalt.package-init', so it can be used in shell startup
-# initialization scripts. Because this can be used in shell startup, we must do 'return 1'
-# on failure, as to not exit the interactive terminal
+# initialization scripts. Because this can be used in shell startup, we only `exit 1` for local
+# invocations, as to not exit the interactive terminal
 
 basalt.load() {
 	local __basalt_flag_global='no'
@@ -19,6 +19,7 @@ basalt.load() {
 		shift
 		;;
 	--help|-h)
+		# WET (gamma)
 		cat <<-"EOF"
 		Usage:
 		  basalt.load [flags] <package> <file>
@@ -42,13 +43,28 @@ basalt.load() {
 	esac done
 
 	if (($# == 0)); then
+		# WET (gamma)
 		printf '%s\n' "Error: basalt.load: Must specify arguments
 
 Usage:
   basalt.load [flags] <package> <file>
 
+Flags:
+  --global  Use global packages rather than local packages
+  --dry     Only print what would have been sourced
+  --help    Print help
+
+Example:
+  basalt.load --global 'github.com/rupa/z' 'z.sh'
+  basalt.load --dry 'github.com/hyperupcall/bats-common-utils' 'load.bash'
+  basalt.load 'github.com/bats-core/bats-assert' 'load.bash'
+
 Pass '--help' for more info"
-		return 1
+		if [ "$__basalt_flag_global" = 'yes' ]; then
+			return 1
+		else
+			exit 1
+		fi
 	fi
 
 	local __basalt_pkg_path="${1:-}"
@@ -56,7 +72,11 @@ Pass '--help' for more info"
 
 	if [ -z "$__basalt_pkg_path" ]; then
 		printf '%s\n' "Error: basalt.load: Missing package as first parameter"
-		return 1
+		if [ "$__basalt_flag_global" = 'yes' ]; then
+			return 1
+		else
+			exit 1
+		fi
 	fi
 
 	local __basalt_is_nullglob=
@@ -76,7 +96,12 @@ Pass '--help' for more info"
 
 	if ((${#__basalt_pkg_path_full_array[@]} > 1)); then
 		printf '%s\n' "Error: basalt.load: Multiple versions of the package '$__basalt_pkg_path' exists"
-		return 1
+
+		if [ "$__basalt_flag_global" = 'yes' ]; then
+			return 1
+		else
+			exit 1
+		fi
 	fi
 
 	if [ "$__basalt_is_nullglob" = 'yes' ]; then
@@ -91,16 +116,24 @@ Pass '--help' for more info"
 	if [ -z "$__basalt_pkg_path_full" ] || [ ! -d "$__basalt_pkg_path_full" ]; then
 		local __basalt_str='locally'
 		if [ "$__basalt_flag_global" = 'yes' ]; then
-			__basalt_str="globally"
+			local __basalt_str="globally"
 		fi
 		printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not installed $__basalt_str"
 
-		return 1
+		if [ "$__basalt_flag_global" = 'yes' ]; then
+			return 1
+		else
+			exit 1
+		fi
 	fi
 
 	if [ ! -f "$__basalt_pkg_path_full/$__basalt_file" ]; then
 		printf '%s\n' "Error: basalt.load: File '$__basalt_file' not found in package '$__basalt_pkg_path'"
-		return 1
+		if [ "$__basalt_flag_global" = 'yes' ]; then
+			return 1
+		else
+			exit 1
+		fi
 	fi
 
 	if [ "$__basalt_flag_dry" = 'yes' ]; then
