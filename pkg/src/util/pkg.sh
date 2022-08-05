@@ -307,7 +307,9 @@ fi"
 				fi
 			fi
 		done; unset -v option
-		printf -v content_all '%s%s\n' "$content_all" "$str"
+		if [ -n "$str" ]; then
+			printf -v content_all '%s%s\n' "$content_all" "$str"
+		fi
 
 		# Shopt options
 		local str=
@@ -328,7 +330,21 @@ fi"
 				fi
 			fi
 		done; unset -v option
-		printf -v content_all '%s%s\n' "$content_all" "$str"
+		if [ -n "$str" ]; then
+			printf -v content_all '%s%s\n' "$content_all" "$str"
+		fi
+
+		# Environment variables
+		local str=
+		if bash_toml.quick_object_get "$project_dir/basalt.toml" 'run.shellEnvironment'; then
+			local var=
+			for var in "${!REPLY[@]}"; do
+				str+="export $var=\"${REPLY[$var]}\""$'\n'
+			done; unset -v var
+		fi
+		if [ -n "$str" ]; then
+			printf -v content_all '%s%s\n' "$content_all" "$str"
+		fi
 	else
 		# Okay if no 'basalt.toml' file
 		:
