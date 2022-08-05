@@ -3,7 +3,7 @@ lang = 'bash'
 type = 'lib'
 name = 'bash-toml'
 slug = 'bash_toml'
-version = '0.3.0'
+version = '0.3.1'
 authors = ['Edwin Kofler" <edwin@kofler.dev>']
 description = 'A kickass Toml parser written in pure Bash'
 
