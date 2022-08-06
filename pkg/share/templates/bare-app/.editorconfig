@@ -1,6 +1,6 @@
 root = true
 
-[*.{sh,bash,bats},bin/*] # TODO: not clean enough
+[*]
 indent_style = tab
 end_of_line = lf
 charset = utf-8
