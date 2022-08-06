@@ -48,7 +48,7 @@ setup_file() {
 	run basalt add 'file:///some/fake/directory'
 
 	assert_failure
-	assert_line -p "Package located at 'file:///some/fake/directory' does not exist"
+	assert_line -p "Package located at '/some/fake/directory' does not exist"
 }
 
 # @test "Adds one dependency" {

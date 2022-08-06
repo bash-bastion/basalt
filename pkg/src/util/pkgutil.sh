@@ -104,10 +104,20 @@
 		url="${url#file://}"
 		url="${url%/}"
 
+
+		if [ ! -d "$url" ]; then
+			print.fatal "Package located at '$url' does not exist"
+		fi
+		if ! REPLY=$(realpath "$url"); then
+			print.fatal "Failed to execute 'realpath' successfully"
+		fi
 		util.get_full_path "$url" # Prevent collisions on relative paths
 		local pkg_path="$REPLY"
 		local pkg_name="${url##*/}"
 		local pkg_id=
+		if [ ! -d "$pkg_path" ]; then
+			print.fatal "Package located at '$pkg_path' does not exist"
+		fi
 		if ! pkg_id=$(printf '%s' "$pkg_path" | md5sum); then
 			print.fatal "Failed to execute md5sum successfully"
 		fi

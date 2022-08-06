@@ -48,13 +48,12 @@ load './util/init.sh'
 
 	pkgutil.get_package_id "$repo_type" "$url" "$site" "$package" "$version"
 	local package_id="$REPLY"
-	echo jj "$package_id"
 
 	run pkg.phase_download_tarball "$repo_type" "$url" "$site" "$package" "v0.0.1" "$package_id"
 
 	assert_success
 	assert_line -p "Downloaded: local/fake_remote_user_repo"
-	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/local/fake_remote_user_repo@v0.0.1.tar.gz"
+	assert_file_exist "$BASALT_GLOBAL_DATA_DIR/store/tarballs/local/fake_remote_user_repo.tar.gz"
 }
 
 @test "Fails for invalid repository" {

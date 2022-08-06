@@ -1,7 +1,9 @@
 # shellcheck shell=bash
 
-# TODO
 util.get_full_path() {
+	if [ ! -d "$1" ]; then
+			print.fatal "Package located at '$1' does not exist"
+		fi
 	if ! REPLY=$(realpath "$1"); then
 		print.fatal "Failed to execute 'realpath' successfully"
 	fi
