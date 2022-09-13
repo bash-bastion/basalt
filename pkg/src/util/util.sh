@@ -110,9 +110,6 @@ Local subcommands:
   release [--yes] [new-version]
     Prepare and release a package
 
-  bundle
-    Bundle a package into a 'self-hosted' shell executable
-
 Global subcommands:
   init <shell>
     Prints shell code that must be evaluated during shell

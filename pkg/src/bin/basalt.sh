@@ -91,10 +91,6 @@ main.basalt() {
 		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
 		basalt-release "$@" ;;
-	bundle)
-		if ! shift; then core.panic 'Failed to shift'; fi
-		util.init_lock
-		basalt-bundle "$@" ;;
 	complete)
 		if ! shift; then core.panic 'Failed to shift'; fi
 		util.init_lock
