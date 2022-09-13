@@ -108,6 +108,8 @@ util.init_package_print() {
 
 	cat <<EOF
 basalt.package-init() {
+	echo \$BASALT_BUNDLED
+
 	# basalt variables
 	export BASALT_GLOBAL_REPO="$basalt_global_repo"
 EOF
@@ -133,50 +135,64 @@ EOF
 	source "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-package.sh"
 
 	if [ -z "${BASALT_PACKAGE_DIR:-}" ]; then
-		local __old_cd="$PWD"
+		if [ "$BASALT_BUNDLED" = 'yes' ]; then
+			local __basalt_file="${BASH_SOURCE[0]}"
 
-		# Do not use "$0", since it won't work in some environments, such as Bats
-		local __basalt_file="${BASH_SOURCE[0]}"
-		if [ -L "$__basalt_file" ]; then
-			local __basalt_target="$(readlink "$__basalt_file")"
-			if ! cd "${__basalt_target%/*}"; then
-				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_target%/*}'" >&2
-				exit 1
+			if [ -L "$__basalt_file" ]; then
+				local __basalt_target="$(readlink "$__basalt_file")"
+				BASALT_PACKAGE_DIR=${__basalt_target%/*}
+			else
+				BASALT_PACKAGE_DIR=${__basalt_file%/*}
 			fi
+
+			BASALT_PACKAGE_DIR=${BASALT_PACKAGE_DIR%/*}
+			echo $BASALT_PACKAGE_DIR
 		else
-			if ! cd "${__basalt_file%/*}"; then
-				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_file%/*}'" >&2
-				exit 1
-			fi
-		fi
+			local __old_cd="$PWD"
 
-		# Note that this variable should not be exported. It can cause weird things to occur. For example,
-		# if a Basalt local package called a command from a global package, things won't work since
-		# 'BASALT_PACKAGE_DIR' would already be defined and won't be properly set for the global package
-		if ! BASALT_PACKAGE_DIR="$(
-			while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
-				if ! cd ..; then
+			# Do not use "$0", since it won't work in some environments, such as Bats
+			local __basalt_file="${BASH_SOURCE[0]}"
+			if [ -L "$__basalt_file" ]; then
+				local __basalt_target="$(readlink "$__basalt_file")"
+				if ! cd "${__basalt_target%/*}"; then
+					printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_target%/*}'" >&2
 					exit 1
 				fi
-			done
+			else
+				if ! cd "${__basalt_file%/*}"; then
+					printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_file%/*}'" >&2
+					exit 1
+				fi
+			fi
 
-			if [ "$PWD" = / ]; then
+			# Note that this variable should not be exported. It can cause weird things to occur. For example,
+			# if a Basalt local package called a command from a global package, things won't work since
+			# 'BASALT_PACKAGE_DIR' would already be defined and won't be properly set for the global package
+			if ! BASALT_PACKAGE_DIR="$(
+				while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
+					if ! cd ..; then
+						exit 1
+					fi
+				done
+
+				if [ "$PWD" = / ]; then
+					exit 1
+				fi
+
+				printf '%s' "$PWD"
+			)"; then
+				printf '%s\n' "Error: basalt.package-init: Could not find basalt.toml" >&2
+				if ! cd "$__old_cd"; then
+					printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'" >&2
+					exit 1
+				fi
 				exit 1
 			fi
 
-			printf '%s' "$PWD"
-		)"; then
-			printf '%s\n' "Error: basalt.package-init: Could not find basalt.toml" >&2
 			if ! cd "$__old_cd"; then
 				printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'" >&2
 				exit 1
 			fi
-			exit 1
-		fi
-
-		if ! cd "$__old_cd"; then
-			printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'" >&2
-			exit 1
 		fi
 	fi
 }

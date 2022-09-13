@@ -15,8 +15,15 @@ basalt-bundle() {
 
 	basalt-install
 
-	cp -r "$project_dir/pkg" "$final_dir/share" || :
+	cp "$project_dir/basalt.toml" "$final_dir"
+	sleep 1
+
+	cp -r --preserve=all "$project_dir/pkg" "$final_dir/pkg" || :
 	rm -rf "$final_dir/share/bin"
+
+	# if ! (cd "$final_dir" && basalt-install); then
+	# 	print.die "Failed to run 'basalt install'"
+	# fi
 
 	if bash_toml.quick_array_get "$project_dir/basalt.toml" 'package.binDirs'; then
 		local -a bin_dirs="${REPLY[@]}"
@@ -40,6 +47,7 @@ basalt-bundle() {
 					print.die "Failed to write to file: $bin_file"
 				fi
 				if ! printf '%s\n' "
+export BASALT_BUNDLED=yes
 basalt.package-init || exit
 basalt.package-load
 

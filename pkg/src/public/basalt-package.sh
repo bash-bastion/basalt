@@ -11,7 +11,12 @@ basalt.package-load() {
 		exit 1
 	fi
 
-	# These checks always ensure the generated files are in sync the 'basalt.toml'
+	# These checks always ensure the generated files are in sync with 'basalt.toml'
+	if [ ! -f "$BASALT_PACKAGE_DIR/.basalt/" ]; then
+		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran in '$BASALT_PACKAGE_DIR'" >&2
+		exit 1
+	fi
+
 	if [ ! -f "$BASALT_PACKAGE_DIR/.basalt/generated/done.sh" ]; then
 		printf '%s\n' "Error: basalt.package-load: Command 'basalt install' must be ran again in '$BASALT_PACKAGE_DIR'" >&2
 		exit 1
