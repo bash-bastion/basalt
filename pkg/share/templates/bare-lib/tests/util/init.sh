@@ -7,8 +7,6 @@ basalt.package-load
 
 load './util/test_util.sh'
 
-export NO_COLOR=
-
 setup() {
 	cd "$BATS_TEST_TMPDIR"
 }
