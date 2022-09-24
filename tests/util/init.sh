@@ -14,9 +14,6 @@ init.common_init "$REPO_ROOT"
 # Rather than append '$REPO_ROOT/bin' to the path, create functions with
 # the same name. This way, the shell execution context remains the same, which
 # allows us to actually mock functions
-for f in "$REPO_ROOT"/pkg/src/bin/?*.sh; do
-	source "$f"
-done; unset -v f
 source "$REPO_ROOT/pkg/src/bin/basalt-package-init.sh"
 source "$REPO_ROOT/pkg/src/bin/basalt.sh"
 basalt-package-init() { main.basalt-package-init "$@"; }
