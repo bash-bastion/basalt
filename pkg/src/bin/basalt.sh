@@ -12,9 +12,13 @@ main.basalt() {
 		fi
 		source "$__basalt_dirname/pkg/src/util/init.sh"
 	fi
-
 	init.ensure_bash_version
-	init.full_initialization
+
+	# Don't re-source files when doing testing. This speeds up testing and also
+	# ensures function stubs are not overriden
+	if [ "$BASALT_IS_TESTING" != 'yes' ]; then
+		init.common_init "$__basalt_dirname"
+	fi
 
 	local arg=
 	for arg; do case $arg in

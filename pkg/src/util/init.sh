@@ -7,24 +7,6 @@ init.ensure_bash_version() {
 	fi
 }
 
-init.full_initialization() {
-	# All files are already sourced when testing. This ensures stubs are not overriden
-	if [ "$BASALT_IS_TESTING" != 'yes' ]; then
-		init.common_init
-
-		if [ -z "$__basalt_dirname" ]; then
-			printf '%s\n' "Fatal: Basalt: Variable '__basalt_dirname' is empty"
-			exit 1
-		fi
-		for f in "$__basalt_dirname"/pkg/vendor/bash-{core,std,term,toml}/pkg/src/**/?*.sh; do
-			source "$f"
-		done; unset -v f
-		for f in "$__basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
-			source "$f"
-		done; unset -v f
-	fi
-}
-
 init.get_global_repo_path() {
 	unset -v REPLY; REPLY=
 
@@ -57,10 +39,19 @@ _____pacakge_init() {
 }
 
 init.common_init() {
+	local basalt_dirname="$1"
+
 	set -eo pipefail
 	shopt -s extglob globasciiranges nullglob shift_verbose
 	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
 		LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
 		LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
 	export GIT_TERMINAL_PROMPT=0
+
+	for f in "$basalt_dirname"/pkg/vendor/bash-{core,std,term,toml}/pkg/src/**/?*.sh; do
+		source "$f"
+	done; unset -v f
+	for f in "$basalt_dirname"/pkg/src/{commands,plumbing,util}/?*.sh; do
+		source "$f"
+	done; unset -v f
 }

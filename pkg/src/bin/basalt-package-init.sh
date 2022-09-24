@@ -16,7 +16,6 @@ main.basalt-package-init() {
 		fi
 		source "$__basalt_dirname/pkg/src/util/init.sh"
 	fi
-
 	init.ensure_bash_version
 
 	init.print_package_init
