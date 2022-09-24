@@ -19,18 +19,5 @@ main.basalt-package-init() {
 
 	init.ensure_bash_version
 
-	# Set main variables (WET)
-	local basalt_global_repo=
-	if [ -L "$0" ]; then # Only subshell when necessary
-		if ! basalt_global_repo=$(readlink -f "$0"); then
-			printf '%s\n' "printf '%s\n' \"Error: basalt-package-init: Invocation of readlink failed\" >&2"
-			printf '%s\n' 'exit 1'
-		fi
-		basalt_global_repo=${basalt_global_repo%/*}
-	else
-		basalt_global_repo=${0%/*}
-	fi
-	basalt_global_repo=${basalt_global_repo%/*}; basalt_global_repo=${basalt_global_repo%/*}
-
-	init.print_package_init "$basalt_global_repo"
+	init.print_package_init
 }
