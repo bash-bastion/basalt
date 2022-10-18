@@ -49,9 +49,11 @@ See [Installation](./docs/tutorials/installation.md) and [Getting Started](./doc
 
 Because of Basalt, I've been able to make
 
-- [bash-object](https://github.com/hyperupcall/bash-object) - Manipulate heterogenous data hierarchies in Bash
 - [bake](https://github.com/hyperupcall/bake) - A Bash-based Make alternative
-- [shelltest](https://github.com/hyperupcall/shelltest) - A test runner for POSIX shells
+- [woof](https://github.com/hyperupcall/woof) - The version manager to end all version managers
+- [hookah](https://github.com/hyperupcall/hookah) - An elegantly minimal solution for Git hooks
+- [bash-object](https://github.com/hyperupcall/bash-object) - Manipulate heterogenous data hierarchies in Bash
+- [bash-term](https://github.com/hyperupcall/bash-term) - Bash library for terminal escape sequences
 
 See the full list [awesome-basalt](https://github.com/hyperupcall/awesome-basalt)
 
