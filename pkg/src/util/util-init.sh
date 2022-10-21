@@ -83,7 +83,16 @@ util.init_lock() {
 		if mkdir "$___basalt_lock_dir" 2>/dev/null; then
 			trap 'util.init_deinit' INT TERM EXIT
 		else
-			print.die "Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
+			local msg="Cannot run Basalt at this time because another Basalt process is already running (lock directory '$___basalt_lock_dir' exists)"
+			if [ -t 0 ]; then
+				print.error "$msg"
+				until [ ! -d "$___basalt_lock_dir" ]; do
+					print.error "$msg (retrying)"
+					sleep 3
+				done
+			else
+				print.die "$msg"
+			fi
 		fi
 	fi
 }
