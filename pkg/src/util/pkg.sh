@@ -231,6 +231,9 @@ pkg.phase_local_integration_nonrecursive() {
 	local content_all='# shellcheck shell=bash
 set -ETeo pipefail
 shopt -s shift_verbose
+if ((BASH_VERSINFO[0] >= 6 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 2))); then
+	shopt -s noexpand_translation
+fi
 
 if [ -z "$BASALT_PACKAGE_DIR" ]; then
 	printf "%s\n" "Fatal: source_packages.sh: \$BASALT_PACKAGE_DIR is empty, but must exist"
