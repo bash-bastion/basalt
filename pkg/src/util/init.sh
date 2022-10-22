@@ -42,7 +42,10 @@ init.common_init() {
 	local basalt_dirname="$1"
 
 	set -eo pipefail
-	shopt -s extglob globasciiranges nullglob shift_verbose
+	shopt -s dotglob extglob globasciiranges globstar lastpipe nullglob shift_verbose
+	if ((BASH_VERSINFO[0] >= 6 || (BASH_VERSINFO[0] == 5 && BASH_VERSINFO[1] >= 2))); then
+		shopt -s noexpand_translation
+	fi
 	export LANG='C' LC_CTYPE='C' LC_NUMERIC='C' LC_TIME='C' LC_COLLATE='C' LC_MONETARY='C' \
 		LC_MESSAGES='C' LC_PAPER='C' LC_NAME='C' LC_ADDRESS='C' LC_TELEPHONE='C' \
 		LC_MEASUREMENT='C' LC_IDENTIFICATION='C' LC_ALL='C'
