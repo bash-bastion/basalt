@@ -24,7 +24,7 @@ print.error() {
 	if std.should_print_color_stderr; then
 		printf "\033[0;31m%11s:\033[0m %s\n" 'Error' "$1" >&2
 	else
-			printf "%11s: %s\n" "Error" "$1" >&2
+		printf "%11s: %s\n" "Error" "$1" >&2
 	fi
 }
 

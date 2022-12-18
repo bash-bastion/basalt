@@ -32,7 +32,7 @@ init.print_package_init() {
 
 	printf '%s\n' "# shellcheck shell=bash
 
-_____pacakge_init() {
+_____package_init() {
 		export BASALT_GLOBAL_REPO=\"$basalt_global_repo\"
 }"
 	cat "$basalt_global_repo/pkg/share/scripts/basalt-package-init.sh"

@@ -4,7 +4,7 @@
 # cat'd. It can only use functions from 'pkg/src/util/init.sh'
 
 basalt.package-init() {
-	_____pacakge_init
+	_____package_init
 
 	export BASALT_GLOBAL_DATA_DIR="${BASALT_GLOBAL_DATA_DIR:-"${XDG_DATA_HOME:-$HOME/.local/share}/basalt"}"
 
@@ -13,13 +13,14 @@ basalt.package-init() {
 		exit 1
 	fi
 
-	# basalt global and internal functions
+	# source public/basalt-global.sh
 	if [ ! -f "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh" ]; then
 		printf '%s\n' "Error: basalt.package-init: Failed to find file 'basalt-global.sh' in '\$BASALT_GLOBAL_REPO'" >&2
 		exit 1
 	fi
 	source "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh"
 
+	# source public/basalt-package.sh
 	if [ ! -f "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-package.sh" ]; then
 		printf '%s\n' "Error: basalt.package-init: Failed to find file 'basalt-package.sh' in '\$BASALT_GLOBAL_REPO'" >&2
 		exit 1
@@ -32,7 +33,8 @@ basalt.package-init() {
 		# Do not use "$0", since it won't work in some environments, such as Bats
 		local __basalt_file="${BASH_SOURCE[0]}"
 		if [ -L "$__basalt_file" ]; then
-			local __basalt_target="$(readlink "$__basalt_file")"
+			local __basalt_target=
+			__basalt_target=$(readlink "$__basalt_file")
 			if ! cd "${__basalt_target%/*}"; then
 				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_target%/*}'" >&2
 				exit 1

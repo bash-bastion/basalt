@@ -10,11 +10,12 @@
 
 main.basalt-package-init() {
 	if [ "$BASALT_IS_TESTING" != 'yes' ]; then
-		if [ -z "$__basalt_dirname" ]; then
-			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
+		if [ -n "$__basalt_dirname" ]; then
+			source "$__basalt_dirname/pkg/src/util/init.sh"
+		else
+			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty" >&2
 			exit 1
 		fi
-		source "$__basalt_dirname/pkg/src/util/init.sh"
 	fi
 	init.ensure_bash_version
 
