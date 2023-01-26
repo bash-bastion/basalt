@@ -12,7 +12,9 @@ main.basalt() {
 		fi
 		source "$__basalt_dirname/pkg/src/util/init.sh"
 	fi
-	init.ensure_bash_version
+	if ! init.assert_bash_version; then
+		exit 1
+	fi
 
 	# Don't re-source files when doing testing. This speeds up testing and also
 	# ensures function stubs are not overriden

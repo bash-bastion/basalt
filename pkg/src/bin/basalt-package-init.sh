@@ -14,10 +14,14 @@ main.basalt-package-init() {
 			source "$__basalt_dirname/pkg/src/util/init.sh"
 		else
 			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty" >&2
+			printf '%s\n' 'exit 1'
 			exit 1
 		fi
 	fi
-	init.ensure_bash_version
+	if ! init.assert_bash_version; then
+		printf '%s\n' 'exit 1'
+		exit 1
+	fi
 
 	init.print_package_init
 }

@@ -1,9 +1,9 @@
 # shellcheck shell=bash
 
-init.ensure_bash_version() {
+init.assert_bash_version() {
 	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
 		printf '%s\n' 'Fatal: Basalt: Basalt requires at least Bash version 4.3' >&2
-		exit 1
+		return 1
 	fi
 }
 
