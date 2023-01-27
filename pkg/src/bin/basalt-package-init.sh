@@ -9,19 +9,46 @@
 # since these functions must only be called in a fresh Bash context
 
 main.basalt-package-init() {
-	if [ "$BASALT_IS_TESTING" != 'yes' ]; then
+	# Ensure 'init.sh' is sourced
+	if [ "$BASALT_INTERNAL_IS_TESTING" != 'yes' ]; then
 		if [ -n "$__basalt_dirname" ]; then
+			# shellcheck source=../../../pkg/share/scripts/basalt-package-init.sh
 			source "$__basalt_dirname/pkg/src/util/init.sh"
 		else
-			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty" >&2
+			printf '%s\n' "Fatal: main.basalt-package-init: Variable '__basalt_dirname' is empty" >&2
+			if (( $# > 0)); then
+				exit 1
+			else
+				printf '%s\n' 'exit 1'
+				exit 1
+			fi
+		fi
+	fi
+
+	if (( $# > 0 )); then
+		if ! init.get_global_repo_path; then
+			printf '%s\n' "Fatal: Basalt: Failed to find Basalt repository" >&2
+			exit 1
+		fi
+		local global_basalt_global_repo="$REPLY"
+
+		printf '%s\n' 'BASALT_INTERNAL_NEWINIT=yes'
+		printf '%s\n' "BASALT_INTERNAL_ARGS=($*)"
+		printf '%s\n' "BASALT_GLOBAL_REPO=\"$global_basalt_global_repo\""
+		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/src/util/init.sh"\"
+		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/share/scripts/basalt-package-init.sh"\"
+	else
+		if ! init.get_global_repo_path; then
+			printf '%s\n' "Fatal: Basalt: Failed to find Basalt repository" >&2
 			printf '%s\n' 'exit 1'
 			exit 1
 		fi
-	fi
-	if ! init.assert_bash_version; then
-		printf '%s\n' 'exit 1'
-		exit 1
-	fi
+		local global_basalt_global_repo="$REPLY"
 
-	init.print_package_init
+		printf '%s\n' 'BASALT_INTERNAL_NEWINIT=no'
+		printf '%s\n' "BASALT_INTERNAL_ARGS=($*)"
+		printf '%s\n' "BASALT_GLOBAL_REPO=\"$global_basalt_global_repo\""
+		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/src/util/init.sh"\"
+		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/share/scripts/basalt-package-init.sh"\"
+	fi
 }

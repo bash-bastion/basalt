@@ -5,7 +5,7 @@
 # on Basalt, and Basalt doesn't bootstrap itself, we must setup the environment here.
 
 main.basalt() {
-	if [ "$BASALT_IS_TESTING" != 'yes' ]; then
+	if [ "$BASALT_INTERNAL_IS_TESTING" != 'yes' ]; then
 		if [ -z "$__basalt_dirname" ]; then
 			printf '%s\n' "Fatal: main.basalt: Variable '__basalt_dirname' is empty"
 			exit 1
@@ -13,12 +13,13 @@ main.basalt() {
 		source "$__basalt_dirname/pkg/src/util/init.sh"
 	fi
 	if ! init.assert_bash_version; then
+		printf '%s\n' 'Fatal: main.basalt: Basalt requires at least Bash version 4.3' >&2
 		exit 1
 	fi
 
 	# Don't re-source files when doing testing. This speeds up testing and also
 	# ensures function stubs are not overriden
-	if [ "$BASALT_IS_TESTING" != 'yes' ]; then
+	if [ "$BASALT_INTERNAL_IS_TESTING" != 'yes' ]; then
 		init.common_init "$__basalt_dirname"
 	fi
 

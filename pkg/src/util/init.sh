@@ -2,7 +2,6 @@
 
 init.assert_bash_version() {
 	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
-		printf '%s\n' 'Fatal: Basalt: Basalt requires at least Bash version 4.3' >&2
 		return 1
 	fi
 }
@@ -13,8 +12,7 @@ init.get_global_repo_path() {
 	local basalt_global_repo=
 	if [ -L "$0" ]; then # Only subshell when necessary
 		if ! basalt_global_repo=$(readlink -f "$0"); then
-			printf '%s\n' "printf '%s\n' \"Fatal: Basalt: Invocation of readlink failed\" >&2"
-			printf '%s\n' 'exit 1'
+			return 1
 		fi
 		basalt_global_repo=${basalt_global_repo%/*}
 	else
@@ -26,16 +24,23 @@ init.get_global_repo_path() {
 	REPLY=$basalt_global_repo
 }
 
-init.print_package_init() {
-	init.get_global_repo_path
-	local basalt_global_repo="$REPLY"
+init.get_basalt_package_dir() {
+	if ! REPLY=$(
+		while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
+			if ! cd ..; then
+				exit 1
+			fi
+		done
 
-	printf '%s\n' "# shellcheck shell=bash
+		if [ "$PWD" = / ]; then
+			exit 1
+		fi
 
-_____package_init() {
-		export BASALT_GLOBAL_REPO=\"$basalt_global_repo\"
-}"
-	cat "$basalt_global_repo/pkg/share/scripts/basalt-package-init.sh"
+		printf '%s' "$PWD"
+	); then
+		printf '%s\n' "Error: basalt.package-init: Could not find basalt.toml" >&2
+		exit 1
+	fi
 }
 
 init.common_init() {

@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # Source testing dependencies
-export BASALT_IS_TESTING='yes'
+export BASALT_INTERNAL_IS_TESTING='yes'
 load './util/test_util.sh'
 load './vendor/bats-all/load.bash'
 test_util.get_repo_root
