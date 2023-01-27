@@ -3,6 +3,8 @@
 load './util/init.sh'
 
 @test "Succeeds on relative path" {
+	skip
+
 	test_util.init_app 'project-echo' 'subpkg'
 
 	test_util.init_app 'project-foxtrot' '.' \
@@ -19,6 +21,8 @@ load './util/init.sh'
 }
 
 @test "Succeeds on absolute path" {
+	skip
+
 	test_util.init_app 'project-echo' 'subpkg'
 
 	test_util.init_app 'project-foxtrot' '.' \

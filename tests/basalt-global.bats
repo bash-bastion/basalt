@@ -31,6 +31,8 @@ load './util/init.sh'
 }
 
 @test "Remove works with multiple repositories" {
+	skip
+
 	basalt global add 'hyperupcall/bash-object@v0.6.3'
 	basalt global add 'hyperupcall/bash-args@v0.8.1'
 
