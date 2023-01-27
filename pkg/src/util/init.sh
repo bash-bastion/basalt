@@ -38,7 +38,7 @@ init.get_basalt_package_dir() {
 
 		printf '%s' "$PWD"
 	); then
-		printf '%s\n' "Error: basalt.package-init: Could not find basalt.toml" >&2
+		printf '%s\n' "Error: basalt: Could not find basalt.toml" >&2
 		exit 1
 	fi
 }

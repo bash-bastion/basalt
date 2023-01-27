@@ -16,7 +16,7 @@ basalt-global-init() {
 	local basalt_global_repo=
 	if [ -L "$0" ]; then
 		if ! basalt_global_repo=$(readlink -f "$0"); then
-			printf '%s\n' "printf '%s\n' \"Error: basalt-package-init: Invocation of readlink failed\""
+			printf '%s\n' "printf '%s\n' \"Error: basalt-package-init: Invocation of readlink failed\" >&2"
 			printf '%s\n' 'exit 1'
 		fi
 		basalt_global_repo=${basalt_global_repo%/*}

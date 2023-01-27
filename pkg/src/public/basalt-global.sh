@@ -37,14 +37,14 @@ basalt.load() {
 		return
 		;;
 	-*)
-		printf '%s\n' "Error: basalt.load: Flag '$arg' not recognized"
+		printf '%s\n' "Error: basalt: Flag '$arg' not recognized" >&2
 		return 1
 		;;
 	esac done
 
 	if (($# == 0)); then
 		# WET (gamma)
-		printf '%s\n' "Error: basalt.load: Must specify arguments
+		printf '%s\n' "Error: basalt: Must specify arguments >&2
 
 Usage:
   basalt.load [flags] <package> <file>
@@ -71,7 +71,7 @@ Pass '--help' for more info"
 	local __basalt_file="${2:-}"
 
 	if [ -z "$__basalt_pkg_path" ]; then
-		printf '%s\n' "Error: basalt.load: Missing package as first parameter"
+		printf '%s\n' "Error: basalt: Missing package as first parameter" >&2
 		if [ "$__basalt_flag_global" = 'yes' ]; then
 			return 1
 		else
@@ -95,7 +95,7 @@ Pass '--help' for more info"
 	fi
 
 	if ((${#__basalt_pkg_path_full_array[@]} > 1)); then
-		printf '%s\n' "Error: basalt.load: Multiple versions of the package '$__basalt_pkg_path' exists"
+		printf '%s\n' "Error: basalt: Multiple versions of the package '$__basalt_pkg_path' exists" >&2
 
 		if [ "$__basalt_flag_global" = 'yes' ]; then
 			return 1
@@ -120,9 +120,9 @@ Pass '--help' for more info"
 
 		local regex="^[^/]+/[^/]+$"
 		if [[ "$__basalt_pkg_path" =~ $regex ]]; then
-			printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not a valid. It must include the website domain"
+			printf '%s\n' "Error: basalt: Package '$__basalt_pkg_path' is not a valid. It must include the website domain" >&2
 		else
-			printf '%s\n' "Error: basalt.load: Package '$__basalt_pkg_path' is not installed $__basalt_str"
+			printf '%s\n' "Error: basalt: Package '$__basalt_pkg_path' is not installed $__basalt_str" >&2
 		fi
 
 		if [ "$__basalt_flag_global" = 'yes' ]; then
@@ -133,7 +133,7 @@ Pass '--help' for more info"
 	fi
 
 	if [ ! -f "$__basalt_pkg_path_full/$__basalt_file" ]; then
-		printf '%s\n' "Error: basalt.load: File '$__basalt_file' not found in package '$__basalt_pkg_path'"
+		printf '%s\n' "Error: basalt: File '$__basalt_file' not found in package '$__basalt_pkg_path'"f >&2
 		if [ "$__basalt_flag_global" = 'yes' ]; then
 			return 1
 		else

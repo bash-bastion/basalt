@@ -5,19 +5,19 @@
 
 basalt.package-init() {
 	if [ -z "$BASALT_GLOBAL_REPO" ]; then
-		printf '%s\n' "Error: basalt.package-init: Variable '\$BASALT_GLOBAL_REPO' is empty" >&2
+		printf '%s\n' "Error: basalt: Variable '\$BASALT_GLOBAL_REPO' is empty" >&2
 		exit 1
 	fi
 
 	if [ ! -f "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh" ]; then
-		printf '%s\n' "Error: basalt.package-init: Failed to find file 'basalt-global.sh' in '\$BASALT_GLOBAL_REPO'" >&2
+		printf '%s\n' "Error: basalt: Failed to find file 'basalt-global.sh' in '\$BASALT_GLOBAL_REPO'" >&2
 		exit 1
 	fi
 	# shellcheck source=../../../pkg/src/public/basalt-global.sh
 	source "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-global.sh"
 
 	if [ ! -f "$BASALT_GLOBAL_REPO/pkg/src/public/basalt-package.sh" ]; then
-		printf '%s\n' "Error: basalt.package-init: Failed to find file 'basalt-package.sh' in '\$BASALT_GLOBAL_REPO'" >&2
+		printf '%s\n' "Error: basalt: Failed to find file 'basalt-package.sh' in '\$BASALT_GLOBAL_REPO'" >&2
 		exit 1
 	fi
 	# shellcheck source=../../../pkg/src/public/basalt-package.sh
@@ -32,18 +32,18 @@ basalt.package-init() {
 			local __basalt_target=
 			__basalt_target=$(readlink "$__basalt_file")
 			if ! cd "${__basalt_target%/*}"; then
-				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_target%/*}'" >&2
+				printf '%s\n' "Error: basalt: Could not cd to '${__basalt_target%/*}'" >&2
 				exit 1
 			fi
 		else
 			if ! cd "${__basalt_file%/*}"; then
-				printf '%s\n' "Error: basalt.package-init: Could not cd to '${__basalt_file%/*}'" >&2
+				printf '%s\n' "Error: basalt: Could not cd to '${__basalt_file%/*}'" >&2
 				exit 1
 			fi
 		fi
 
 		if ! cd "$__old_cd"; then
-			printf '%s\n' "Error: basalt.package-init: Could not cd back to '$__old_cd'" >&2
+			printf '%s\n' "Error: basalt: Could not cd back to '$__old_cd'" >&2
 			exit 1
 		fi
 

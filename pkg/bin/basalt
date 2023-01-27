@@ -34,7 +34,7 @@ readlinkf_posix() {
 }
 
 if [ "$0" != "${BASH_SOURCE[0]}" ]; then
-	printf '%s\n' "Error: basalt: Script must not be sourced"
+	printf '%s\n' "Error: basalt: Script must not be sourced" >&2
 	return 1
 fi
 
