@@ -33,7 +33,7 @@ Simplify the boilerplate to a single line. Like so:
 #!/usr/bin/env bash
 
 eval "$(basalt-package-init woof)"
-main.woof "$@"
+__run "$@"
 ```
 
 ## Consequences

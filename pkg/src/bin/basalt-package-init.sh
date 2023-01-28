@@ -25,30 +25,19 @@ main.basalt-package-init() {
 		fi
 	fi
 
-	if (( $# > 0 )); then
-		if ! init.get_global_repo_path; then
-			printf '%s\n' "Fatal: Basalt: Failed to find Basalt repository" >&2
-			exit 1
-		fi
-		local global_basalt_global_repo="$REPLY"
-
-		printf '%s\n' 'BASALT_INTERNAL_NEWINIT=yes'
-		printf '%s\n' "BASALT_INTERNAL_ARGS=($*)"
-		printf '%s\n' "BASALT_GLOBAL_REPO=\"$global_basalt_global_repo\""
-		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/src/util/init.sh"\"
-		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/share/scripts/basalt-package-init.sh"\"
-	else
-		if ! init.get_global_repo_path; then
-			printf '%s\n' "Fatal: Basalt: Failed to find Basalt repository" >&2
-			printf '%s\n' 'exit 1'
-			exit 1
-		fi
-		local global_basalt_global_repo="$REPLY"
-
-		printf '%s\n' 'BASALT_INTERNAL_NEWINIT=no'
-		printf '%s\n' "BASALT_INTERNAL_ARGS=($*)"
-		printf '%s\n' "BASALT_GLOBAL_REPO=\"$global_basalt_global_repo\""
-		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/src/util/init.sh"\"
-		printf '%s\n' "source \"\$BASALT_GLOBAL_REPO/pkg/share/scripts/basalt-package-init.sh"\"
+	if ! init.get_global_repo_path; then
+		printf '%s\n' "Fatal: Basalt: Failed to find Basalt repository" >&2
+		printf '%s\n' 'exit 1'
+		exit 1
 	fi
+	local __basalt_global_repo="$REPLY"
+	if (( $# > 0 )); then
+		printf '%s\n' 'BASALT_INTERNAL_NEWINIT=yes'
+	else
+		printf '%s\n' 'BASALT_INTERNAL_NEWINIT=no'
+	fi
+	printf '%s\n' "BASALT_INTERNAL_ARGS=($*)
+BASALT_GLOBAL_REPO=\"$__basalt_global_repo\"
+source \"\$BASALT_GLOBAL_REPO/pkg/src/util/init.sh\"
+source \"\$BASALT_GLOBAL_REPO/pkg/share/scripts/basalt-package-init.sh\""
 }

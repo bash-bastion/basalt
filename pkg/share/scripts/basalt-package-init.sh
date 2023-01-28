@@ -86,51 +86,54 @@ else
 	# #!/usr/bin/env bash
 	#
 	# eval "$(basalt-package-init 'woof')"
-	# "$_" "$@"
+	# __run "$@"
+	__run() {
+		if [ "${BASALT_INTERNAL_ARGS[0]}" = '--no-assert-version' ]; then
+			__flag_assert_version='no'
+			__bin_name="${BASALT_INTERNAL_ARGS[1]}"
+		else
+			__flag_assert_version='yes'
+			__bin_name="${BASALT_INTERNAL_ARGS[0]}"
+		fi
 
-	if [ "${BASALT_INTERNAL_ARGS[0]}" = '--no-assert-version' ]; then
-		__flag_assert_version='no'
-		__bin_name="${BASALT_INTERNAL_ARGS[1]}"
-	else
-		__flag_assert_version='yes'
-		__bin_name="${BASALT_INTERNAL_ARGS[0]}"
-	fi
+		if [ -z "$__bin_name" ]; then
+			printf '%s\n' 'Fatal: main.basalt-package-init: Passed binary name cannot be empty' >&2
+			exit 1
+		fi
 
-	if [ -z "$__bin_name" ]; then
-		printf '%s\n' 'Fatal: main.basalt-package-init: Passed binary name cannot be empty' >&2
-		exit 1
-	fi
+		__have_min_version='no'
+		if init.assert_bash_version; then
+			__have_min_version='yes'
+		fi
 
-	__have_min_version='no'
-	if init.assert_bash_version; then
-		__have_min_version='yes'
-	fi
+		if [ "$__have_min_version" = 'no' ] && [ "$__flag_assert_version" = 'yes' ]; then
+			printf '%s\n' 'Fatal: main.basalt-package-init: Basalt requires at least Bash version 4.3' >&2
+			exit 1
+		fi
+		unset -v __flag_assert_version
 
-	if [ "$__have_min_version" = 'no' ] && [ "$__flag_assert_version" = 'yes' ]; then
-		printf '%s\n' 'Fatal: main.basalt-package-init: Basalt requires at least Bash version 4.3' >&2
-		exit 1
-	fi
-	unset -v __flag_assert_version
+		if [ "$__have_min_version" = 'yes' ]; then
+			__init() { :; }
+			basalt.package-init || exit
+			basalt.package-load
+		else
+			init.get_basalt_package_dir
+			BASALT_PACKAGE_DIR=$REPLY
+		fi
 
-	if [ "$__have_min_version" = 'yes' ]; then
-		__init() { :; }
-		basalt.package-init || exit
-		basalt.package-load
-	else
-		init.get_basalt_package_dir
-		BASALT_PACKAGE_DIR=$REPLY
-	fi
+		__bin_file="$BASALT_PACKAGE_DIR/pkg/src/bin/$__bin_name.sh"
+		if [ ! -f "$__bin_file" ]; then
+			printf '%s\n' "Fatal: main.basalt-package-init: No file found at: $__bin_file" >&2
+			exit 1
+		fi
+		source "$__bin_file"
+		unset -v __bin_file
 
-	__bin_file="$BASALT_PACKAGE_DIR/pkg/src/bin/$__bin_name.sh"
-	if [ ! -f "$__bin_file" ]; then
-		printf '%s\n' "Fatal: main.basalt-package-init: No file found at: $__bin_file" >&2
-		exit 1
-	fi
-	source "$__bin_file"
-	unset -v __bin_file
+		if ! declare -f "main.$__bin_name" &>/dev/null; then
+			printf '%s\n' "Fatal: main.basalt-package-init: Failed to find declared function: main.$__bin_name" >&2
+			exit 1
+		fi
 
-	if ! declare -f "main.$__bin_name" &>/dev/null; then
-		printf '%s\n' "Fatal: main.basalt-package-init: Failed to find declared function: main.$__bin_name" >&2
-		exit 1
-	fi
+		"main.$__bin_name" "$@"
+	}
 fi
