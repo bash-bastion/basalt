@@ -27,7 +27,7 @@ basalt.package-init() {
 		local __old_cd="$PWD"
 
 		# Do not use "$0", since it won't work in some environments, such as Bats
-		local __basalt_file="${BASH_SOURCE[0]}"
+		local __basalt_file="${BASH_SOURCE[1]}"
 		if [ -L "$__basalt_file" ]; then
 			local __basalt_target=
 			__basalt_target=$(readlink "$__basalt_file")
@@ -42,19 +42,15 @@ basalt.package-init() {
 			fi
 		fi
 
+		init.get_basalt_package_dir
+		# Note that this variable should not be exported. It can cause weird things to occur. For example,
+		# if a Basalt local package called a command from a global package, things won't work since
+		# 'BASALT_PACKAGE_DIR' would already be defined and won't be properly set for the global package
+		BASALT_PACKAGE_DIR=$REPLY
+
 		if ! cd "$__old_cd"; then
 			printf '%s\n' "Error: basalt: Could not cd back to '$__old_cd'" >&2
 			exit 1
-		fi
-
-		# TODO: is this needed here
-		if [ -z "$BASALT_PACKAGE_DIR" ]; then
-			init.get_basalt_package_dir
-
-			# Note that this variable should not be exported. It can cause weird things to occur. For example,
-			# if a Basalt local package called a command from a global package, things won't work since
-			# 'BASALT_PACKAGE_DIR' would already be defined and won't be properly set for the global package
-			BASALT_PACKAGE_DIR=$REPLY
 		fi
 	fi
 }
