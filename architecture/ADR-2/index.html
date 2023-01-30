@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Edwin Kofler" /><link rel="canonical" href="https://hyperupcall.github.io/basalt/reference/commands/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Edwin Kofler" /><link rel="canonical" href="https://hyperupcall.github.io/basalt/architecture/ADR-2/" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Commands - basalt</title>
+    <title>ADR 2: Simplify project initialization setup - basalt</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Commands";
-        var mkdocs_page_input_path = "reference/commands.md";
-        var mkdocs_page_url = "/basalt/reference/commands/";
+        var mkdocs_page_name = "ADR 2: Simplify project initialization setup";
+        var mkdocs_page_input_path = "architecture/ADR-2.md";
+        var mkdocs_page_url = "/basalt/architecture/ADR-2/";
       </script>
     
     <script src="../../js/jquery-3.6.0.min.js" defer></script>
@@ -49,10 +49,26 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Architecture</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/ADR-1/">ADR 1: Restructure per-project dependencies</a>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../ADR-1/">ADR 1: Restructure per-project dependencies</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/ADR-2/">ADR 2: Simplify project initialization setup</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">ADR 2: Simplify project initialization setup</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#status">Status</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#context">Context</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#decision">Decision</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#consequences">Consequences</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#negatives">Negatives</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#positives">Positives</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">How to</span></p>
@@ -72,24 +88,14 @@
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Reference</span></p>
-              <ul class="current">
-                  <li class="toctree-l1"><a class="reference internal" href="../api/">Environment</a>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/api/">Environment</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../basalt_conf/">`basalt.conf`</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/basalt_conf/">`basalt.conf`</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Commands</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#basalt-add">basalt add</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#local">Local</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#remote">Remote</a>
-    </li>
-        </ul>
-    </li>
-    </ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/commands/">Commands</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../executables/">Executables</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../../reference/executables/">Executables</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Tutorials</span></p>
@@ -113,10 +119,10 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
-          <li>Reference &raquo;</li>
-      <li>Commands</li>
+          <li>Architecture &raquo;</li>
+      <li>ADR 2: Simplify project initialization setup</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/hyperupcall/basalt/edit/main/docs/reference/commands.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/hyperupcall/basalt/edit/main/docs/architecture/ADR-2.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -124,24 +130,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="commands">Commands</h1>
-<h2 id="basalt-add"><code>basalt add</code></h2>
-<p>Add a local dependency to your project. The following types of dependencies are supported</p>
-<h3 id="local">Local</h3>
-<p>Local dependencies begin with <code>file://</code> in the <code>basalt.toml</code>. When adding, the dependency must begin with <code>/</code> or <code>./</code></p>
-<h3 id="remote">Remote</h3>
-<p>Remote dependencies begin with <code>https://</code> in the <code>basalt.toml</code>. The following forms are accepted:</p>
+                <h1 id="adr-2-simplify-project-initialization-setup">ADR 2: Simplify project initialization setup</h1>
+<h2 id="status">Status</h2>
+<p>Accepted</p>
+<h2 id="context">Context</h2>
+<p>When initializing a local project, there are several lines of boilerplate code to write.</p>
+<p>For example, if a package <code>woof</code> has executable <code>./pkg/bin/woof</code>), its content must look something like this:</p>
+<pre><code class="language-sh"># shellcheck shell=bash
+
+eval &quot;$(basalt-package-init)&quot;
+basalt.package-init || exit
+basalt.package-load
+
+. &quot;$BASALT_PACKAGE_DIR/pkg/src/bin/woof.sh&quot;
+main.woof &quot;$@&quot;
+</code></pre>
+<p>Although 10 lines may not seem that much, there is already quite a bit of "boilerplate drift". For example, some packages don't have an <code>|| exit</code> after <code>basalt.package-init</code>. And, some do, after the <code>eval "$(basalt-package-init)"</code>.</p>
+<p>The multiple lines originated from the early days of Basalt, when the structure of a Bash application or library were still being explored. Now that this question has been answered, there is no utility for the verbosity.</p>
+<h2 id="decision">Decision</h2>
+<p>Simplify the boilerplate to a single line. Like so:</p>
+<pre><code class="language-sh">#!/usr/bin/env bash
+
+eval &quot;$(basalt-package-init woof)&quot;
+__run &quot;$@&quot;
+</code></pre>
+<h2 id="consequences">Consequences</h2>
+<h3 id="negatives">Negatives</h3>
 <ul>
-<li><code>hyperupcall/bash-object</code></li>
-<li><code>github.com/hyperupcall/bash-object</code></li>
-<li><code>https://github.com/hyperupcall/bash-object</code></li>
+<li>
+<p>There'll be two ways to initialize a project in the wild. This can be confusing, since there are two ways to do the same thing. Detailed documentation about the old and new way mitigates this downside.</p>
+</li>
+<li>
+<p>Basalt must be backwards-compatible with the old initialization method for an indefinite period of time.</p>
+</li>
 </ul>
+<h3 id="positives">Positives</h3>
+<p>The simplified boilerplate streamlines the setup process for people new to Basalt. Additionally, the extra abstraction makes it easier to change things around internally.</p>
+<p>Furthermore, the single line of setup makes it easier to add features. For example, a <code>--no-assert-version</code> flag to not <code>exit 1</code> if the current Bash version doesn't meet the minimum requirements.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../basalt_conf/" class="btn btn-neutral float-left" title="`basalt.conf`"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../executables/" class="btn btn-neutral float-right" title="Executables">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../ADR-1/" class="btn btn-neutral float-left" title="ADR 1: Restructure per-project dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../how-to/local-projects/" class="btn btn-neutral float-right" title="Local Projects">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -169,10 +200,10 @@
         </span>
     
     
-      <span><a href="../basalt_conf/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../ADR-1/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../executables/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../../how-to/local-projects/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

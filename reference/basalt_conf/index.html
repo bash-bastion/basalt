@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Edwin Kofler" /><link rel="canonical" href="https://hyperupcall.github.io/basalt/reference/basalt_conf/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>`basalt.conf` - basalt</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "`basalt.conf`";
+        var mkdocs_page_input_path = "reference/basalt_conf.md";
+        var mkdocs_page_url = "/basalt/reference/basalt_conf/";
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> basalt
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Basalt</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../support/">Support</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Architecture</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/ADR-1/">ADR 1: Restructure per-project dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../architecture/ADR-2/">ADR 2: Simplify project initialization setup</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">How to</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../how-to/local-projects/">Local Projects</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Internals</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../internals/history/">History</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../internals/motivation/">Motivation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../internals/package-installation/">Package Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../internals/testing/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Reference</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../api/">Environment</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">`basalt.conf`</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#packagetype">[package].type</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#packagename">[package].name</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#packagenamespace">[package].namespace</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#packageversion">[package].version</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#packageauthor">[package].author</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#packagedescription">[package].description</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rundependency">[run].dependency</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runbindir">[run].binDir</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runsourcedir">[run].sourceDir</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runbuiltindir">[run].builtinDir</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runcompletiondir">[run].completionDir</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runmandir">[run].manDir</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runenv">[run.env].*</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runsetoptions">[run.setOptions].*</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#runshoptoptions">[run.shoptOptions].*</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-configuration">Example Configuration</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executables/">Executables</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/getting-started/">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/">Installation</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">basalt</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Reference &raquo;</li>
+      <li>`basalt.conf`</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/hyperupcall/basalt/edit/main/docs/reference/basalt_conf.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="basaltconf"><code>basalt.conf</code></h1>
+<p>This is a complete reference to the <code>basalt.conf</code> file, found in Bash packages. There are currently two top-level objects: <code>package</code> and <code>run</code></p>
+<p>Note that none of these options have any defaults, and arrays <em><strong>must</strong></em> only span single lines</p>
+<h2 id="configuration">Configuration</h2>
+<p>There are two sections to the configuration:</p>
+<ol>
+<li><code>[package]</code>: Metadata that describes the package and its purpose.</li>
+<li><code>[run]</code>: Metadata that affects how the package is ran (either as a library or executable).</li>
+</ol>
+<p>When the description of a configuration field mentions <code>a list</code>, it means the field can be specified multiples times. Internally, the field is represented as an array.</p>
+<p>An example configuration is shown at the way end.</p>
+<h3 id="packagetype"><code>[package].type</code></h3>
+<p>Required. The type of package. Currently, only <code>bash</code> is supported.</p>
+<h3 id="packagename"><code>[package].name</code></h3>
+<p>Required. The name of the package.</p>
+<h2 id="packagenamespace"><code>[package].namespace</code></h2>
+<p>Required. The namespace used to prefix all functions.</p>
+<h3 id="packageversion"><code>[package].version</code></h3>
+<p>Required. The current version of the package.</p>
+<h3 id="packageauthor"><code>[package].author</code></h3>
+<p>Required. A list of authors.</p>
+<h3 id="packagedescription"><code>[package].description</code></h3>
+<p>Required. The package description.</p>
+<h3 id="rundependency"><code>[run].dependency</code></h3>
+<p>Optional. A list of dependencies.</p>
+<p>By default, it's empty.</p>
+<pre><code class="language-conf">dependency = https://github.com/hyperupcall/bats-all@v4.6.0
+dependency = https://github.com/hyperupcall/bash-core@v0.12.0
+dependency = https://github.com/hyperupcall/bash-term@v0.6.3
+dependency = https://github.com/hyperupcall/bash-utility@v0.4.0
+</code></pre>
+<h3 id="runbindir"><code>[run].binDir</code></h3>
+<p>Optional. A list of binary directories.</p>
+<p>By default, it has a value of <code>pkg/bin</code></p>
+<p>Array of directories that contain executable files. Locally, these files will be symlinked under <code>.basalt/bin</code>; globally, these files wil be symlinked and available to the current user.</p>
+<h3 id="runsourcedir"><code>[run].sourceDir</code></h3>
+<p>Optional. A list of directories to source files from.</p>
+<p>By default, it's empty.</p>
+<p>Each file in these directories are sourced during the initialization process. In other words, after a package calls <code>basalt.package-init</code>, Basalt will source each file in each directory, for each <code>sourceDir</code>, for each declared package dependency.</p>
+<h3 id="runbuiltindir"><code>[run].builtinDir</code></h3>
+<p>Optional. A list of directories to use as custom dynamic builtins.</p>
+<p>By default, it has a value of <code>pkg/builtins</code></p>
+<p>Array of directories that contain C source code for custom dynamic builtins. These files will automatically be loaded, somewhat analogous to <code>sourceDirs</code></p>
+<h3 id="runcompletiondir"><code>[run].completionDir</code></h3>
+<p>Optional. A list of directories to use as completion files.</p>
+<p>By default, it has a value of <code>pkg/completions</code></p>
+<p>Array of directories that contain completion scripts. Locally, these files will be symlinked under <code>.basalt/completion</code>; globally, these files will automatically be made available to the shell after <code>basalt global init &lt;shell&gt;</code></p>
+<h3 id="runmandir"><code>[run].manDir</code></h3>
+<p>Optional. A list of directories that contain man files.</p>
+<p>By default, it has a value of <code>pkg/man</code></p>
+<p>It does not traverse subdirectories, including <code>man1</code>, <code>man3</code>, etc. These files will be symlinked under a <code>man</code> directory in <code>.basalt</code>. Currently, the <code>MANPATH</code> is not modified for global installations; the manpages should be detected automatically</p>
+<h3 id="runenv"><code>[run.env].*</code></h3>
+<p>Optional. An object of environment variables to inject into your application.</p>
+<p>By default, it is empty. # TODO</p>
+<pre><code class="language-conf">[run.env]
+LANG = C
+LC_ALL = C
+</code></pre>
+<h3 id="runsetoptions"><code>[run.setOptions].*</code></h3>
+<p>Optional. An object of what shell options to enable or disable</p>
+<p>By default, it is empty. # TODO</p>
+<pre><code class="language-conf">[run.setOptions]
+errexit = on
+pipefail = on
+</code></pre>
+<h3 id="runshoptoptions"><code>[run.shoptOptions].*</code></h3>
+<p>Optional. An object of bash-specific shell options to enable or disable</p>
+<p>By default, it is empty. # TODO</p>
+<pre><code class="language-conf">[run.shoptOptions]
+extglob = on
+nullglob = on
+</code></pre>
+<h2 id="example-configuration">Example Configuration</h2>
+<pre><code class="language-conf">[package]
+type = bash
+name = woof
+slug = woof
+version = 0.4.0
+author = Edwin Kofler &lt;edwin@kofler.dev&gt;
+description = The version manager to end all version managers
+
+[run]
+dependency = https://github.com/hyperupcall/bats-all@v4.6.0
+dependency = https://github.com/hyperupcall/bash-core@v0.12.0
+dependency = https://github.com/hyperupcall/bash-term@v0.6.3
+dependency = https://github.com/hyperupcall/bash-utility@v0.4.0
+sourceDir = pkg/src/util
+builtinDir = pkg/builtins
+binDir = pkg/bin
+completionDir = pkg/completions
+
+[run.setOptions]
+errexit = on
+pipefail = on
+
+[run.shoptOptions]
+shift_verbose = on
+
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../api/" class="btn btn-neutral float-left" title="Environment"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../commands/" class="btn btn-neutral float-right" title="Commands">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>© Edwin Kofler</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/hyperupcall/basalt" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../api/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../commands/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
