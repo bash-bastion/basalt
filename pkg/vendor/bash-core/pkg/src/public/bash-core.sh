@@ -25,7 +25,7 @@ core.trap_add() {
 
 		___global_trap_table___["$signal_spec"]="${___global_trap_table___[$signal_spec]}"$'\x1C'"$function"
 
-		# rho (WET)
+		# rho (DUPLICATE)
 		local global_trap_handler_name=
 		printf -v global_trap_handler_name '%q' "core.private.trap_handler_${signal_spec}"
 
@@ -85,7 +85,7 @@ core.trap_remove() {
 		# If there are no more user-provided trap-handlers (for the particular signal spec in the global trap table),
 		# then remove our handler from 'trap'
 		if [ -z "$new_trap_handlers" ]; then
-			# rho (WET)
+			# rho (DUPLICATE)
 			local global_trap_handler_name=
 			printf -v global_trap_handler_name '%q' "core.private.trap_handler_${signal_spec}"
 			trap -- "$signal_spec"

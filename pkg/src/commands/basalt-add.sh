@@ -18,7 +18,7 @@ basalt-add() {
 		print.warn 'No packages were specified'
 	fi
 
-	# Package parsing (WET)
+	# Package parsing
 	for pkg in "${pkgs[@]}"; do
 		if [ "${pkg:0:1}" = '/' ] || [ "${pkg:0:2}" = './' ]; then
 			pkg="${pkg%/}"

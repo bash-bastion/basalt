@@ -19,7 +19,7 @@ basalt.load() {
 		shift
 		;;
 	--help|-h)
-		# WET (gamma)
+		# DUPLICATE (gamma)
 		cat <<-"EOF"
 		Usage:
 		  basalt.load [flags] <package> <file>
@@ -43,7 +43,7 @@ basalt.load() {
 	esac done
 
 	if (($# == 0)); then
-		# WET (gamma)
+		# DUPLICATE (gamma)
 		printf '%s\n' "Error: basalt: Must specify arguments >&2
 
 Usage:
