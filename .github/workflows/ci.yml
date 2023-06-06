@@ -60,7 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['macos-10.15'] # macos-10.15, macos-11, macos-latest
+        os: ['macos-latest']
 
     runs-on: '${{ matrix.os }}'
 
