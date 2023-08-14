@@ -1,6 +1,6 @@
 # Executables
 
-When creating a Bash application, executables are placed in `./pkg/bin/<NAME>`. There are two ways this file can properly execute its corresponding file in `./pkg/src/bin/<NAME>.sh`; an new way and an old way.
+Wen creating a Bash application, executables are placed in `./pkg/bin/<NAME>`. There are two ways this file can properly execute its corresponding file in `./pkg/src/bin/<NAME>.sh`; an new way and an old way.
 
 ## New Way
 
@@ -8,7 +8,7 @@ When creating a Bash application, executables are placed in `./pkg/bin/<NAME>`. 
 #!/usr/bin/env bash
 
 eval "$(basalt-package-init --no-assert-version woof)"
-main.woof "$@"
+__run "$@"
 ```
 
 The new way _must_ have at least one argument to `basalt-package-init`. There are also optional flags, which must come first:

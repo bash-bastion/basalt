@@ -8,4 +8,4 @@ test_util.init_app 'project-foxtrot' '.' \
   '_'
 ```
 
-Makes tests go faster since basalt does less processing on the basalt.toml
+Makes tests go faster since basalt does less processing on the basalt.toml.

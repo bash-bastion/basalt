@@ -12,7 +12,7 @@ If you are on macOS, you need to install the latest `Bash` and `coreutils`:
 brew install bash coreutils
 ```
 
-See the full list of supported operating systems in [Support](./docs/support.md)
+See the full list of supported operating systems in [Support](./docs/support.md).
 
 ## Install
 
@@ -30,11 +30,11 @@ curl -Lo- https://raw.githubusercontent.com/hyperupcall/basalt/main/scripts/inst
 git clone https://github.com/hyperupcall/basalt "${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"
 ```
 
-By default, this installs basalt to `$HOME/.local/share/basalt/source`
+By default, this installs basalt to `$HOME/.local/share/basalt/source`.
 
 ##### 2. Add initialization script to shell profile
 
-This enables basalt to automatically setup your `PATH`, set completion variables, source completion files, and other things
+This enables basalt to automatically setup your `PATH`, set completion variables, source completion files, and other things.
 
 For `bash`, `zsh`, `sh`
 
@@ -55,4 +55,4 @@ end
 basalt init fish | source
 ```
 
-And now you're done! Move on to [Getting Started](./docs/tutorials/getting-started.md) to learn the basics
+And now you're done! Move on to [Getting Started](./docs/tutorials/getting-started.md) to learn the basics.
