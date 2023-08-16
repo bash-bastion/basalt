@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 init.assert_bash_version() {
-	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 3) )); then
+	if ! ((BASH_VERSINFO[0] >= 5 || (BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] >= 3) )); then
 		return 1
 	fi
 }
