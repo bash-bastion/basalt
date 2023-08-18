@@ -44,7 +44,7 @@ main.basalt() {
 	esac done; unset -v arg
 
 	if [ -z "$GITHUB_TOKEN" ]; then
-		local github_token_file="${XDG_CONFIG_HOME}/basalt/token" # TODO: XDG library
+		local github_token_file="${XDG_CONFIG_HOME:-$HOME/.config}/basalt/token" # TODO: XDG library
 		if [ -f "$github_token_file" ]; then
 			GITHUB_TOKEN=$(<"$github_token_file")
 			export GITHUB_TOKEN

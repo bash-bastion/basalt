@@ -51,11 +51,10 @@ Because of Basalt, I've been able to make
 
 - [bake](https://github.com/hyperupcall/bake) - A Bash-based Make alternative
 - [woof](https://github.com/hyperupcall/woof) - The version manager to end all version managers
-- [hookah](https://github.com/hyperupcall/hookah) - An elegantly minimal solution for Git hooks
 - [bash-object](https://github.com/hyperupcall/bash-object) - Manipulate heterogenous data hierarchies in Bash
-- [bash-term](https://github.com/hyperupcall/bash-term) - Bash library for terminal escape sequences
+- [bash-term](https://github.com/hyperupcall/bash-term) - Bash library for terminal escape sequences.
 
-See the full list [awesome-basalt](https://github.com/hyperupcall/awesome-basalt)
+See the full list [awesome-basalt](https://github.com/hyperupcall/awesome-basalt) and at the GitHub organization [bash-bastion](https://github.com/bash-bastion).
 
 ## License
 
