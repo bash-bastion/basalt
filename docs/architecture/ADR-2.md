@@ -42,7 +42,7 @@ __run "$@"
 
 - There'll be two ways to initialize a project in the wild. This can be confusing, since there are two ways to do the same thing. Detailed documentation about the old and new way mitigates this downside.
 
-- Basalt must be backwards-compatible with the old initialization method for an indefinite period of time.
+- Basalt must be backwards-compatible with the old initialization method indefinitely.
 
 ### Positives
 

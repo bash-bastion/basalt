@@ -44,7 +44,7 @@ In short, `name` is the pretty name for the package. Often, it has the same name
 
 A detailed description for each key can be found at [`reference/basalt_toml`](./docs/reference/basalt_toml.md)
 
-To execute this program, simply run
+To execute this program, run
 
 ```sh
 $ basalt run fox-track --help
@@ -68,7 +68,7 @@ Flags:
     Shows the help menu
 ```
 
-This is similar to running `./bin/fox-track` directly, but using `basalt run` has another benefit: Basalt will look for commands of the specified name not just for the current project, but for all subdependencies as well
+This is similar to running `./bin/fox-track` directly, but using `basalt run` has another benefit: Basalt will look for commands of the specified name not only for the current project, but for all subdependencies as well
 
 If you wish to add a dependency to the project, use the `add` subcommand
 

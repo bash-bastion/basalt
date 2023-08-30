@@ -8,13 +8,15 @@ STATUS: BETA (expect breaking changes until a post-beta release)
 
 `basalt` is a rewritten fork of [basher](https://github.com/basherpm/basher) that adds a _ton_ of new functionality. It makes it significantly easier to install Bash, Zsh, etc. projects to your computer. Often, these projects/scripts are _not_ available through official `apt`, `DNF`, `pacman` repositories, or even from unofficial sources like third-party apt repositories or the [AUR](https://aur.archlinux.org)
 
+<!--alex ignore simple-->
+
 Let's say you want to install [rupa/z](https://github.com/rupa/z), [tj/git-extras](https://github.com/tj/git-extras), [aristocratos/bashtop](https://github.com/aristocratos/bashtop), and [JosefZIla/bash2048](https://github.com/JosefZIla/bash2048). Simply run the following
 
 ```sh
 $ basalt global add rupa/z tj/git-extras aristocratos/bashtop JosefZIla/bash2048
 ```
 
-This symlinks all executable scripts to a common directory. It does this for completion files and man pages as well
+This symlinks all executable scripts to a common directory. It does this for completion files and manpages as well
 
 ```sh
 $ exa -l --no-permissions --no-filesize --no-user ~/.local/share/basalt/global/bin/
@@ -25,7 +27,7 @@ git-archive-file -> .../.local/share/basalt/store/packages/github.com/tj/git-ext
 ...
 ```
 
-To be able to access the binaries, completion files, and man pages in your shell, simply add a two-liner in your shell configuration. The [installation script](./scripts/install.sh) already does this for you
+To be able to access the binaries, completion files, and manpages in your shell, add a two-liner in your shell configuration. The [installation script](./scripts/install.sh) already does this for you
 
 ```sh
 # ~/.bashrc

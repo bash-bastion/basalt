@@ -3,7 +3,7 @@
 (TODO: add output for functions)
 (TODO: only provide output for newly added files?)
 
-Succinctly, basalt is a fancy combination of `curl`, `tar xaf` and `ln -s`. It clones repositories (usually in the form of tarballs), and puts all of its man pages, completion scripts, and binaries in common folders. Let's see it in action.
+Succinctly, basalt is a fancy combination of `curl`, `tar xaf` and `ln -s`. It clones repositories (usually in the form of tarballs), and puts all of its manpages, completion scripts, and binaries in common folders. Let's see it in action.
 
 This page assumes you have completed the [Installation](./installation.md) properly.
 
@@ -51,7 +51,7 @@ $ basalt global add rupa/z
 This does the following
 
 - It clones and extracts similarly to `bash2048`, but instead of creating a symlink to `bash2048.sh`, it...
-- Adds a symlink from the repository's `z.1` man page to `$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/man/man1/z.1`
+- Adds a symlink from the repository's `z.1` manpage to `$BASALT_GLOBAL_DATA_DIR/global/.basalt/packages/man/man1/z.1`
 
 Now, you can display the manual right away.
 
@@ -88,7 +88,7 @@ common:    /tmp/tmp.MBF063fdlK/completions
 
 Note that if `z` does not show output, that's normal. You may need to `cd` to some directories to build the database.
 
-If you want to do this persistently, just add this to your `~/.bashrc` (or `~/.zshrc`).
+If you want to do this persistently, add this to your `~/.bashrc` (or `~/.zshrc`).
 
 ## Remove packages
 

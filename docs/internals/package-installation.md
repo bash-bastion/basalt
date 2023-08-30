@@ -21,7 +21,7 @@ Sometimes, a package consumer may want to use a revision that is not a release (
 
 ## 2. Package extraction
 
-During this stage, tarball files located in `$BASALT_GLOBAL_DATA_DIR/store/tarballs` are simply extracted and placed in `$BASALT_GLOBAL_DATA_DIR/store/packages`.
+During this stage, tarball files located in `$BASALT_GLOBAL_DATA_DIR/store/tarballs` are extracted and placed in `$BASALT_GLOBAL_DATA_DIR/store/packages`.
 
 ### 3. Global integration (recursive)
 

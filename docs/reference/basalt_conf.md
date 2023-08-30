@@ -86,7 +86,7 @@ Array of directories that contain completion scripts. Locally, these files will 
 
 ### `[run].manDir`
 
-Optional. A list of directories that contain man files.
+Optional. A list of directories that contain manpages.
 
 By default, it has a value of `pkg/man`
 
