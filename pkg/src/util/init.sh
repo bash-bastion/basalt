@@ -26,6 +26,11 @@ init.get_global_repo_path() {
 
 init.get_basalt_package_dir() {
 	if ! REPLY=$(
+		if [ -n "$1" ]; then
+			if ! cd "$1"; then
+				exit 1
+			fi
+		fi
 		while [ ! -f 'basalt.toml' ] && [ "$PWD" != / ]; do
 			if ! cd ..; then
 				exit 1

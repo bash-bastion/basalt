@@ -83,6 +83,39 @@ else
 	#
 	# eval "$(basalt-package-init 'woof')"
 	# __run "$@"
+
+	# TODO: Handle this in a better way
+	readlinkf_posix() {
+		[ "${1:-}" ] || return 1
+		max_symlinks=40
+		CDPATH='' # to avoid changing to an unexpected directory
+
+		target=$1
+		[ -e "${target%/}" ] || target=${1%"${1##*[!/]}"} # trim trailing slashes
+		[ -d "${target:-/}" ] && target="$target/"
+
+		cd -P . 2>/dev/null || return 1
+		while [ "$max_symlinks" -ge 0 ] && max_symlinks=$((max_symlinks - 1)); do
+			if [ ! "$target" = "${target%/*}" ]; then
+			case $target in
+				/*) cd -P "${target%/*}/" 2>/dev/null || break ;;
+				*) cd -P "./${target%/*}" 2>/dev/null || break ;;
+			esac
+			target=${target##*/}
+			fi
+
+			if [ ! -L "$target" ]; then
+			target="${PWD%/}${target:+/}${target}"
+			printf '%s\n' "${target:-/}"
+			return 0
+			fi
+
+			link=$(ls -dl -- "$target" 2>/dev/null) || break
+			target=${link#*" $target -> "}
+		done
+		return 1
+	}
+
 	__run() {
 		if [ "${BASALT_INTERNAL_ARGS[0]}" = '--no-assert-version' ]; then
 			__flag_assert_version='no'
@@ -108,14 +141,10 @@ else
 		fi
 		unset -v __flag_assert_version
 
-		if [ "$__have_min_version" = 'yes' ]; then
-			__init() { :; }
-			basalt.package-init || exit
-			basalt.package-load
-		else
-			init.get_basalt_package_dir
-			BASALT_PACKAGE_DIR=$REPLY
-		fi
+		__zero="$(readlinkf_posix "$0")"
+		init.get_basalt_package_dir "${__zero%/*}"
+		BASALT_PACKAGE_DIR=$REPLY
+		unset -v __zero
 
 		__bin_file="$BASALT_PACKAGE_DIR/pkg/src/bin/$__bin_name.sh"
 		if [ ! -f "$__bin_file" ]; then
