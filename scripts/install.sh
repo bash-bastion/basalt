@@ -7,8 +7,8 @@ info() {
 clone_dir="${XDG_DATA_HOME:-$HOME/.local/share}/basalt/source"
 
 if [ -d "$clone_dir" ]; then
-	printf '%s\n' "Error: Basalt already installed to '$clone_dir'" >&2
-	exit 1
+	printf '%s\n' "Warn: Basalt already installed to '$clone_dir'" >&2
+	exit 0
 fi
 
 if git clone 'https://github.com/hyperupcall/basalt' "$clone_dir"; then :; else
