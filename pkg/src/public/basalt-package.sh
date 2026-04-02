@@ -79,7 +79,7 @@ basalt.package-load() {
 						fi
 					fi
 
-					shopt -s nullglob # TODO: unecessary and can put at bottom?
+					shopt -s nullglob # TODO: unnecessary and can put at bottom?
 				done; unset -v __basalt_package
 			done; unset -v __basalt_repository_owner
 		done; unset -v __basalt_site

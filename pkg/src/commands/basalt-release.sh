@@ -69,7 +69,7 @@ basalt-release() {
 	fi
 
 	if [ "$version_string" = '0.0.0' ]; then
-		print.info "Unnable to publish a '0.0.0' version"
+		print.info "Unable to publish a '0.0.0' version"
 	fi
 
 	# TODO: after self-bootstrap, add additional validation checks

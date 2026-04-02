@@ -54,7 +54,7 @@ case $state in
 		(upgrade)
 			local subcommandOptions=()
 			subcommandOptions=("${(@f)$(basalt complete upgrade)}")
-			# TODO: Check if basalt complete upgrade was successfull?
+			# TODO: Check if basalt complete upgrade was successful?
 			_describe -t commands "gem subcommand" subcommandOptions
 			;;
 	esac

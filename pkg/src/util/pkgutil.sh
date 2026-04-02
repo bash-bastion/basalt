@@ -254,7 +254,7 @@ pkgutil.get_latest_package_version() {
 
 	# TODO: will it get beta/alpha/pre-releases??
 
-	# Get the latest pacakge version that has been released
+	# Get the latest package version that has been released
 	if [ "$repo_type" = remote ]; then
 		if [ "$site" = 'github.com' ]; then
 			local latest_package_version=

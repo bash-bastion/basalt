@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
 # Usually, a Basalt package won't have calls to `set`, `shopt`, `source`, etc., since
-# that is specified declaritively in `basalt.toml`. But, since that behavior is dependent
+# that is specified declaratively in `basalt.toml`. But, since that behavior is dependent
 # on Basalt, and Basalt doesn't bootstrap itself, we must setup the environment here.
 
 main.basalt() {
@@ -18,7 +18,7 @@ main.basalt() {
 	fi
 
 	# Don't re-source files when doing testing. This speeds up testing and also
-	# ensures function stubs are not overriden
+	# ensures function stubs are not overridden
 	if [ "$BASALT_INTERNAL_IS_TESTING" != 'yes' ]; then
 		init.common_init "$__basalt_dirname"
 	fi

@@ -56,7 +56,7 @@ basalt.package-init() {
 }
 
 if [ "$BASALT_INTERNAL_NEWINIT" = 'no' ]; then
-	# The old-style way of initing with no arguments
+	# The old-style way of initializing with no arguments
 	# Expect the developer to call setup functions manually
 
 	# #!/usr/bin/env bash
@@ -76,7 +76,7 @@ if [ "$BASALT_INTERNAL_NEWINIT" = 'no' ]; then
 
 	# Since things are done manually, the user calls basalt.package-init, etc. and things work
 else
-	# The new-style way of initing with arguments
+	# The new-style way of initializing with arguments
 	# Everything is handled automatically
 
 	# #!/usr/bin/env bash

@@ -4,7 +4,7 @@ pkg.list_packages() {
 	:
 }
 
-# @description Installs a pacakge and all its dependencies, relative to a
+# @description Installs a package and all its dependencies, relative to a
 # particular project_dir. symlink_mode changes how components of its direct
 # dependencies are synced
 pkg.install_packages() {
@@ -292,8 +292,8 @@ fi"
 		# Set options
 		local str=
 		for option in allexport braceexpand emacs errexit errtrace functrace hashall histexpand \
-				history ignoreeof interactive-commants keyword monitor noclobber noexec noglob nolog \
-				notify nounset onecmd physical pipefail posix priviledged verbose vi xtrace; do
+				history ignoreeof interactive-comments keyword monitor noclobber noexec noglob nolog \
+				notify nounset onecmd physical pipefail posix privileged verbose vi xtrace; do
 			if bash_toml.quick_string_get "$project_dir/basalt.toml" "run.setOptions.$option"; then
 				if [ "$REPLY" = 'on' ]; then
 					str+="set -o $option"$'\n'

@@ -30,5 +30,5 @@ complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOpti
 
 set subcmd upgrade
 set -l subcommandOptions
-# TODO: only complete if (basalt complete upgrade) was successfull
+# TODO: only complete if (basalt complete upgrade) was successful
 complete -c $cmd -f -n "__fish_seen_subcommand_from $subcmd" -a "$subcommandOptions (basalt complete upgrade)"
